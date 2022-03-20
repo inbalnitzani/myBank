@@ -6,4 +6,8 @@ public class client {
     protected void setName(String name){
         this.fullName = name;
     };
+
+    client(String fullName){
+        this.fullName = fullName;
+    }
 }
