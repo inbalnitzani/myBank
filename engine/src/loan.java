@@ -1,31 +1,73 @@
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
+enum e_status{
+    PENDING,ACTIVE,RISK,FINISHED
+}
 public class loan {
-    private client loanTaker;
+    //DATA MEMBERS
+    private String id;
+    private client owner;
+    private int category;
+    private double originalAmount,paid,left;
+    private int interestRate;
+    private e_status status;
+    private int startingTimeUnit,endingTimeUnit,pace;
     private List <client> givers;
     private List <payment> payments;
-    private double originalSum;
-    private int status;
-    private int pace;
-    private int interestRate;
-    private int category;
 
-    loan(client newTaker, int sum,int rate){
-        this.loanTaker = newTaker;
-        this.originalSum = sum;
+    //CTOR
+    loan(client owner, int amount,int rate){
+        this.owner = owner;
+        this.originalAmount = amount;
         this.interestRate = rate;
 
     }
-
-   private String getTakersName(){
-        return loanTaker.getFullName();
+    //GETTERS
+    public String getLoansID(){
+        return this.id;
     };
-    private int getStatus(){
-        return status;
+    public String getOwnersName(){
+        return this.owner.getFullName();
+    };
+    public e_status getStatus(){
+        return this.status;
+    };
+    public int getCategory(){
+        return this.category;
+    };
+    public double getOriginalAmount(){
+        return this.originalAmount;
+    };
+    public double getPaidAmount(){
+        return this.paid;
+    };
+    public double getAmountLeft(){
+        return this.left;
+    };
+    public int getInterestRate(){
+        return this.interestRate;
+    };
+    public int getStartingTimeUnit(){return this.startingTimeUnit};
+    public int getEndingTimeUnit(){
+        return this.endingTimeUnit;
     }
-   private int getCategory(){
-        return status;
+    public int getPace(){
+        return this.pace;
+    };
+    public Collection <client> getGivers(){
+        return this.givers;
+    };
+    public Collection <payment> getPayments(){
+        return this.payments;
     }
+
+
+
+
+
+
    public void printLoansInfo(){
         System.out.println("loan's info:");
         System.out.println("loan's owner is:");
