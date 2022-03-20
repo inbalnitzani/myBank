@@ -68,22 +68,7 @@ public class loan {
     public int getTotalTU(){
         return this.endingTimeUnit - this.startingTimeUnit;
     };
-
-
-
-
-
-
-
-
-   public void printLoansInfo(){
-        System.out.println("loan's info:");
-        System.out.println("loan's owner is:");
-        System.out.println(this.getTakersName());
-        System.out.println("loan's status is:");
-        System.out.println(this.getStatus());
-    }
-
+    
 
 
 }
