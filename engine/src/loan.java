@@ -42,6 +42,7 @@ public class loan {
     };
     public double getPaidAmount(){
         return this.paid;
+
     };
     public double getAmountLeft(){
         return this.left;
@@ -49,10 +50,12 @@ public class loan {
     public int getInterestRate(){
         return this.interestRate;
     };
-    public int getStartingTimeUnit(){return this.startingTimeUnit};
+    public int getStartingTimeUnit(){
+        return this.startingTimeUnit;
+    };
     public int getEndingTimeUnit(){
         return this.endingTimeUnit;
-    }
+    };
     public int getPace(){
         return this.pace;
     };
@@ -61,7 +64,12 @@ public class loan {
     };
     public Collection <payment> getPayments(){
         return this.payments;
-    }
+    };
+    public int getTotalTU(){
+        return this.endingTimeUnit - this.startingTimeUnit;
+    };
+
+
 
 
 
