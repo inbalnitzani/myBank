@@ -1,2 +1,2 @@
-public class taker {
+public class taker extends client{
 }

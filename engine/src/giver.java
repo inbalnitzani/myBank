@@ -1,2 +1,3 @@
-public class giver {
+public class giver extends client{
+
 }
