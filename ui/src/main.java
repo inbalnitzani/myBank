@@ -10,5 +10,15 @@ public class main {
        a= hi.func(a);
 System.out.println(a);
 
+//////////////////////////////////////////////
+        giver giv = new giver();
+        giv.setName("givgiv");
+        taker take = new taker();
+        take.setName("toktok");
+        loan myLoan = new loan(take,10,2);
+
+
+
     }
+
 }
