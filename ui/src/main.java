@@ -1,6 +1,7 @@
 import java.util.Scanner;
 
 public class main {
+    static int timeInWorld =1;
     public static void main(String[] args) {
         menu menu = new menu();
         bank myBank = new bank();
