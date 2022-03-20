@@ -11,5 +11,6 @@ public class main {
 System.out.println(a);
 //hiushhhhhhh
         //ma nishma
+        ///ji
     }
 }
