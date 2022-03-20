@@ -61,7 +61,10 @@ public class loan {
     };
     public Collection <payment> getPayments(){
         return this.payments;
-    }
+    };
+    public int getTotalTU(){
+        return this.endingTimeUnit - this.startingTimeUnit;
+    };
 
 
 

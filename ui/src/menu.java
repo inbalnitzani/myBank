@@ -51,17 +51,22 @@ public class menu{
     private void printLoansInfo(Collection <loan> loans) {
         for (loan curLoan:loans) {
            printSingleLoanInfo(curLoan);
-
         }
     }
-    public void printSingleLoanInfo(loan curLoan){
-        System.out.print("Loans ID:");
-        System.out.println(curLoan.getLoansID());
-        System.out.println(curLoan.getOwnersName());
-        System.out.println(curLoan.getCategory());
-        System.out.println(curLoan.getOriginalAmount());
-        System.out.println(curLoan.getStatus());
 
+    public void printSingleLoanInfo(loan curLoan){
+        System.out.print("Loans ID: ");
+        System.out.println(curLoan.getLoansID());
+        System.out.print("Owner: ");
+        System.out.println(curLoan.getOwnersName());
+        System.out.print("Category: ");
+        System.out.println(curLoan.getCategory());
+        System.out.print("Amount: ");
+        System.out.print(curLoan.getOriginalAmount());
+        System.out.print("Original total time units: ");
+        System.out.println(curLoan.getTotalTU());
+        System.out.print("Status: ");
+        System.out.println(curLoan.getStatus());
     }
 }
 
