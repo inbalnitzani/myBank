@@ -10,5 +10,6 @@ public class main {
        a= hi.func(a);
 System.out.println(a);
 //hiushhhhhhh
+        //ma nishma
     }
 }
