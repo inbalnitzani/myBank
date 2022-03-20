@@ -1,8 +1,8 @@
 import java.util.List;
 
 public class loan {
-    private taker loanTaker;
-    private List <giver> givers;
+    private client loanTaker;
+    private List <client> givers;
     private List <payment> payments;
     private double originalSum;
     private int status;
@@ -10,7 +10,7 @@ public class loan {
     private int interestRate;
     private int category;
 
-    loan(taker newTaker, int sum,int rate){
+    loan(client newTaker, int sum,int rate){
         this.loanTaker = newTaker;
         this.originalSum = sum;
         this.interestRate = rate;
