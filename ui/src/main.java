@@ -9,5 +9,6 @@ public class main {
         firstTalk hi= new firstTalk();
        a= hi.func(a);
 System.out.println(a);
+//hiushhhhhhh
     }
 }
