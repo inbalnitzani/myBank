@@ -54,7 +54,7 @@ public class menu{
         System.out.println(client.getFullName() + ":");
         System.out.println("Client account movements:");
         for (int i = 0; i < globals.worldTime; i++) {
-            Set<movement> movements = client.getMovements(i);
+            Set<movement> movements = client.getMovementsByTime(i);
             if (movements != null) {
                 printMovementsInfo(movements);
             }

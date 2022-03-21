@@ -33,7 +33,7 @@ public class client {
         }
     }
 
-    public Set<movement> getMovements(int executeTime){
+    public Set<movement> getMovementsByTime(int executeTime){
         if (movements.containsKey(executeTime))
                 return movements.get(executeTime);
         else

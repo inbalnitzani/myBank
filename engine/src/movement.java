@@ -1,17 +1,14 @@
 import static java.lang.Math.abs;
 
 public class movement {
-    public enum kindOfMovement {INSERT_MONEY, PAY_MONEY}
-
-    ;
+    public enum kindOfMovement {INSERT_MONEY, PAY_MONEY};
     public static final int INSERT_MONEY = 1;
     public static final int PAY_MONEY = -1;
 
     private int executeTime;
     private int amountBeforeMovement;
-    private int kindOfExecute;
     private int amountAfterMovement;
-
+    private int kindOfExecute;
     //ctor
     public movement(int currBalance, int amountChange, int time) {
         executeTime = time;
