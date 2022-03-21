@@ -9,7 +9,7 @@ import java.util.Set;
 public class Menu {
     private Bank bank;
 
-    public Menu(Bank bank){
+   public Menu(Bank bank){
         this.bank = bank;
     }
 
@@ -25,8 +25,9 @@ public class Menu {
         System.out.println("7. promote timeline and make payments");
         System.out.println("8. Exit");
     }
+
     public void getUsersChoice(){
-        Scanner sc= new Scanner(System.in);
+       Scanner sc= new Scanner(System.in);
         int usersChoice=sc.nextInt();
         switch (usersChoice) {
             case 1:
@@ -59,6 +60,7 @@ public class Menu {
         }
 
     }
+
     public void printOneClientInfo(Client client) {
         System.out.println(client.getFullName() + ":");
         System.out.println("Client account movements:");
@@ -76,6 +78,7 @@ public class Menu {
         for (Loan loan : client.getLoanSet("asBorrower")) {
             printSingleLoanInfo(loan);
         }
+
     }
     public void printMovementsInfo(Set<Movement> movements){
         System.out.println("Time: " + Globals.worldTime + ":");
@@ -88,9 +91,10 @@ public class Menu {
     }
     private void printLoansInfo(Collection <Loan> loans) {
         for (Loan curLoan:loans) {
-            printSingleLoanInfo(curLoan);
+           printSingleLoanInfo(curLoan);
         }
     }
+
     public void printSingleLoanInfo(Loan curLoan){
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwnersName());
@@ -132,3 +136,5 @@ public class Menu {
 
     }
 }
+
+

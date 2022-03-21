@@ -1,24 +1,26 @@
+package abs;
+
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 
-enum e_status{
-    PENDING,ACTIVE,RISK,FINISHED
-}
-public class loan {
+
+public class Loan {
+    public enum Status {
+        PENDING,ACTIVE,RISK,FINISHED
+    }
     //DATA MEMBERS
     private String id;
-    private client owner;
+    private Client owner;
     private int category;
-    private double originalAmount,paid,left;
+    private double originalAmount,amountPaidBack,amountCollected;
     private int interestRate;
-    private e_status status;
-    private int startingTimeUnit,endingTimeUnit,pace;
-    private List <client> givers;
-    private List <payment> payments;
+    private Status status;
+    private int startingTimeUnit,endingTimeUnit,pace,nextPayment;
+    private List <Client> givers;
+    private List <Payment> payments;
 
     //CTOR
-    loan(client owner, int amount,int rate){
+    Loan(Client owner, int amount, int rate){
         this.owner = owner;
         this.originalAmount = amount;
         this.interestRate = rate;
@@ -31,7 +33,7 @@ public class loan {
     public String getOwnersName(){
         return this.owner.getFullName();
     };
-    public e_status getStatus(){
+    public Status getStatus(){
         return this.status;
     };
     public int getCategory(){
@@ -40,12 +42,11 @@ public class loan {
     public double getOriginalAmount(){
         return this.originalAmount;
     };
-    public double getPaidAmount(){
-        return this.paid;
-
+    public double getAmountPaidBack(){
+        return this.amountPaidBack;
     };
-    public double getAmountLeft(){
-        return this.left;
+    public double getAmountCollected(){
+        return this.amountCollected;
     };
     public int getInterestRate(){
         return this.interestRate;
@@ -59,16 +60,23 @@ public class loan {
     public int getPace(){
         return this.pace;
     };
-    public Collection <client> getGivers(){
+    public Collection <Client> getGivers(){
         return this.givers;
     };
-    public Collection <payment> getPayments(){
+    public Collection <Payment> getPayments(){
         return this.payments;
     };
     public int getTotalTU(){
         return this.endingTimeUnit - this.startingTimeUnit;
     };
-    
+    public int getNextPayment(){
+        return nextPayment;
+    }
 
+    //SETTERS
+    public void setNextPayment() {
+        //if(status.equals(abs.e_status.ACTIVE))
+
+    }
 
 }

@@ -25,6 +25,7 @@ public class Client {
     public String getFullName() {
         return fullName;
     }
+
     public void addMovement(Movement oneMove) {
         int time = oneMove.getExecuteTime();
         if (movements.containsKey(time)) {
@@ -50,6 +51,7 @@ public class Client {
         else
             return asBorrower;
     }
+
     public void addMoneyToAccount(int moneyToAdd) {
         //create abs.movement
         Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);

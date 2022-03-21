@@ -1,4 +1,6 @@
-public class globals {
+package abc;
+
+public class Globals {
     public static int worldTime = 1;
 
     public void setWorldTime(int time){
