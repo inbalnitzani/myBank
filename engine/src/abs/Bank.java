@@ -6,8 +6,8 @@ import java.util.Set;
 
 public class Bank {
     //DATA MEMBERS
-   private Set <Client> clients;
     private Set <Loan> loans;
+    private Set <Client> clients;
 
     //CTOR
     public Bank(){
