@@ -1,27 +1,27 @@
 package abs;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Bank {
     //DATA MEMBERS
     private Set <Loan> loans;
-   private Set <Client> clients;
+   private List<Client> clients;
 
     //CTOR
     public Bank(){
-       clients = new HashSet<Client>();
+       clients = new ArrayList<Client>();
       //  loans = new HashSet<Loan>();
     }
 
     //GETTERS
-    public Collection<Client> getClients(){
+    public List<Client> getClients(){
+
         return this.clients;
     }
 
-    public Collection<Loan> getLoans(){
+    public Set<Loan> getLoans(){
         return this.loans;
     }
+
 
 }

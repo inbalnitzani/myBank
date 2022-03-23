@@ -9,10 +9,9 @@ import java.util.Set;
 
 public class Menu {
     private Bank bank;
-
-private TaskManager manager;
-
+    private TaskManager manager;
     private boolean fileRead = false;
+    Scanner sc = new Scanner(System.in);
 
 
     public Menu(Bank bank) {
@@ -48,7 +47,7 @@ private TaskManager manager;
                 break;
             case 4:
                 System.out.println("4. load money to account");
-manager.loadMoneyToAccount();
+
                 break;
             case 5:
                 System.out.println("5. Withdraw money to account");
@@ -64,6 +63,59 @@ manager.loadMoneyToAccount();
                 break;
 
         }
+
+    }
+
+    public void printClientsNames() {
+        int clientIndex = 1;
+        for (Client client : bank.getClients()) {
+            System.out.println(clientIndex + ". " + client.getFullName());
+        }
+    }
+
+    public void loadMoneyToAccount() {
+        System.out.println("Please choose a client from the next list:");
+        System.out.println("(Enter the number of the client)");
+        Client clientToLoadMoney = getClient();
+        System.out.println("Enter the amount you want to charge your account");
+        int amountToCharge = scanAmountFromUser();
+        manager.loadMoneyToAccount(clientToLoadMoney, amountToCharge);
+    }
+
+    public int scanAmountFromUser() {
+        boolean validInput = false;
+        int amountToCharge = 0;
+        while (!validInput) {
+            amountToCharge = sc.nextInt();
+            if (checkAmountToCharge(amountToCharge))
+                validInput = true;
+            else {
+                System.out.println("Invalid input! Please enter a positive integerEnter!");
+            }
+        }
+        return amountToCharge;
+    }
+
+    public Client getClient() {
+        boolean validInput = false;
+        Client client = null;
+        while (!validInput) {
+            printClientsNames();
+            int numberOfClient = sc.nextInt();
+            if (checkClientNumber(numberOfClient)) {
+                client = bank.getClients().get(numberOfClient - 1);
+                validInput = true;
+            }
+        }
+        return client;
+    }
+
+    public boolean checkAmountToCharge(int number) {
+        return (number > 0);
+    }
+
+    public boolean checkClientNumber(int number) {
+        return number > 0 && number < bank.getClients().size();
 
     }
 
@@ -108,7 +160,7 @@ manager.loadMoneyToAccount();
         System.out.println("Owner: " + curLoan.getOwnersName());
         System.out.println("Category: " + curLoan.getCategory());
         System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
-        System.out.println("Interest: " + curLoan.getInterestRate()+ "Rate: " + curLoan.getPace());
+        System.out.println("Interest: " + curLoan.getInterestRate() + "Rate: " + curLoan.getPace());
         Loan.Status status = curLoan.getStatus();
         System.out.println("Status: " + status);
 
@@ -145,38 +197,32 @@ manager.loadMoneyToAccount();
         }
 
     }
-public int validationCheck(){
+
+    public int validationCheck() {
         boolean valid = false;
         int usersChoice = 0;
-        while (!valid){
+        while (!valid) {
             boolean skipSecondIf = false;
             try {
-                Scanner sc = new Scanner(System.in);
                 usersChoice = sc.nextInt();
-            }
-
-            catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("Invalid input, Please enter an integer between 1 - 8.");
                 skipSecondIf = true;
             }
 
-            if (usersChoice>=2 && usersChoice <= 8 && !fileRead) {
+            if (usersChoice >= 2 && usersChoice <= 8 && !fileRead) {
                 System.out.println("Invalid input, Please scan a file first.");
                 usersChoice = 0;//init choice back to 0
-            }
-            else if ((usersChoice<1 || usersChoice >8) && (skipSecondIf == false)) {
+            } else if ((usersChoice < 1 || usersChoice > 8) && (skipSecondIf == false)) {
                 System.out.println("Invalid input, Please enter an integer between 1 - 8.");
                 usersChoice = 0;//init choice back to 0
-            }
-            else if(skipSecondIf == false)
+            } else if (skipSecondIf == false)
                 valid = true;
 
         }
 
-            return usersChoice;
+        return usersChoice;
 
     }
 
 }
-
-
