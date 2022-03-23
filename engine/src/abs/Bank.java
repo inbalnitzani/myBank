@@ -6,13 +6,13 @@ import java.util.Set;
 
 public class Bank {
     //DATA MEMBERS
-   private Set <Client> clients;
     private Set <Loan> loans;
+   private Set <Client> clients;
 
     //CTOR
     public Bank(){
-        clients = new HashSet<>(clients);
-        loans = new HashSet(loans);
+       clients = new HashSet<Client>();
+      //  loans = new HashSet<Loan>();
     }
 
     //GETTERS

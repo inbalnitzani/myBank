@@ -9,7 +9,7 @@ import java.util.Set;
 public class Menu {
     private Bank bank;
 
-   public Menu(Bank bank){
+    public Menu(Bank bank) {
         this.bank = bank;
     }
 
@@ -26,9 +26,9 @@ public class Menu {
         System.out.println("8. Exit");
     }
 
-    public void getUsersChoice(){
-       Scanner sc= new Scanner(System.in);
-        int usersChoice=sc.nextInt();
+    public void getUsersChoice() {
+        Scanner sc = new Scanner(System.in);
+        int usersChoice = sc.nextInt();
         switch (usersChoice) {
             case 1:
                 System.out.println("1. read a file");
@@ -80,22 +80,24 @@ public class Menu {
         }
 
     }
-    public void printMovementsInfo(Set<Movement> movements){
+
+    public void printMovementsInfo(Set<Movement> movements) {
         System.out.println("Time: " + Globals.worldTime + ":");
-        for(Movement movement:movements) {
+        for (Movement movement : movements) {
             System.out.println("Account balance before abs.movement: " + movement.getAmountBeforeMovement());
-            System.out.println(movement.getKindOfExecute()+" " +movement.getAmount());
+            System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
             System.out.println("Account balance after abs.movement: " + movement.getAmountBeforeMovement());
         }
 
     }
-    private void printLoansInfo(Collection <Loan> loans) {
-        for (Loan curLoan:loans) {
-           printSingleLoanInfo(curLoan);
+
+    private void printLoansInfo(Collection<Loan> loans) {
+        for (Loan curLoan : loans) {
+            printSingleLoanInfo(curLoan);
         }
     }
 
-    public void printSingleLoanInfo(Loan curLoan){
+    public void printSingleLoanInfo(Loan curLoan) {
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwnersName());
         System.out.println("Category: " + curLoan.getCategory());
@@ -129,8 +131,9 @@ public class Menu {
                 break;
         }
     }
-    public void printClientsInfo(){
-        for(Client client:bank.getClients()) {
+
+    public void printClientsInfo() {
+        for (Client client : bank.getClients()) {
             printOneClientInfo(client);
         }
 
