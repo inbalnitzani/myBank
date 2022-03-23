@@ -20,12 +20,9 @@ public class Client {
         this.fullName = name;
     }
 
-    ;
-
     public String getFullName() {
         return fullName;
     }
-
     public void addMovement(Movement oneMove) {
         int time = oneMove.getExecuteTime();
         if (movements.containsKey(time)) {

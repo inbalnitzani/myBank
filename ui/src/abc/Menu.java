@@ -8,11 +8,11 @@ import java.util.Set;
 
 public class Menu {
     private Bank bank;
+private TaskManager manager;
 
     public Menu(Bank bank) {
         this.bank = bank;
     }
-
 
     public void printMenu() {
         System.out.println("choose a number");
@@ -43,6 +43,7 @@ public class Menu {
                 break;
             case 4:
                 System.out.println("4. load money to account");
+manager.loadMoneyToAccount();
                 break;
             case 5:
                 System.out.println("5. Withdraw money to account");
