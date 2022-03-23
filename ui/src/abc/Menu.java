@@ -3,12 +3,17 @@ package abc;
 import abs.*;
 
 import java.util.Collection;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Menu {
     private Bank bank;
+
 private TaskManager manager;
+
+    private boolean fileRead = false;
+
 
     public Menu(Bank bank) {
         this.bank = bank;
@@ -27,8 +32,8 @@ private TaskManager manager;
     }
 
     public void getUsersChoice() {
-        Scanner sc = new Scanner(System.in);
-        int usersChoice = sc.nextInt();
+
+        int usersChoice = validationCheck();
         switch (usersChoice) {
             case 1:
                 System.out.println("1. read a file");
@@ -103,6 +108,7 @@ manager.loadMoneyToAccount();
         System.out.println("Owner: " + curLoan.getOwnersName());
         System.out.println("Category: " + curLoan.getCategory());
         System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
+        System.out.println("Interest: " + curLoan.getInterestRate()+ "Rate: " + curLoan.getPace());
         Loan.Status status = curLoan.getStatus();
         System.out.println("Status: " + status);
 
@@ -139,6 +145,38 @@ manager.loadMoneyToAccount();
         }
 
     }
+public int validationCheck(){
+        boolean valid = false;
+        int usersChoice = 0;
+        while (!valid){
+            boolean skipSecondIf = false;
+            try {
+                Scanner sc = new Scanner(System.in);
+                usersChoice = sc.nextInt();
+            }
+
+            catch (InputMismatchException e){
+                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
+                skipSecondIf = true;
+            }
+
+            if (usersChoice>=2 && usersChoice <= 8 && !fileRead) {
+                System.out.println("Invalid input, Please scan a file first.");
+                usersChoice = 0;//init choice back to 0
+            }
+            else if ((usersChoice<1 || usersChoice >8) && (skipSecondIf == false)) {
+                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
+                usersChoice = 0;//init choice back to 0
+            }
+            else if(skipSecondIf == false)
+                valid = true;
+
+        }
+
+            return usersChoice;
+
+    }
+
 }
 
 
