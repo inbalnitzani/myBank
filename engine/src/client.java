@@ -20,6 +20,8 @@ public class Client {
         this.fullName = name;
     }
 
+    ;
+
     public String getFullName() {
         return fullName;
     }
@@ -48,7 +50,6 @@ public class Client {
         else
             return asBorrower;
     }
-
     public void addMoneyToAccount(int moneyToAdd) {
         //create abs.movement
         Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);

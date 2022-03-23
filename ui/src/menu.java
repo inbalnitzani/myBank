@@ -3,21 +3,16 @@ package abc;
 import abs.*;
 
 import java.util.Collection;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Menu {
     private Bank bank;
 
-private TaskManager manager;
-
-    private boolean fileRead = false;
-
-
-    public Menu(Bank bank) {
+    public Menu(Bank bank){
         this.bank = bank;
     }
+
 
     public void printMenu() {
         System.out.println("choose a number");
@@ -30,10 +25,9 @@ private TaskManager manager;
         System.out.println("7. promote timeline and make payments");
         System.out.println("8. Exit");
     }
-
-    public void getUsersChoice() {
-
-        int usersChoice = validationCheck();
+    public void getUsersChoice(){
+        Scanner sc= new Scanner(System.in);
+        int usersChoice=sc.nextInt();
         switch (usersChoice) {
             case 1:
                 System.out.println("1. read a file");
@@ -48,7 +42,6 @@ private TaskManager manager;
                 break;
             case 4:
                 System.out.println("4. load money to account");
-manager.loadMoneyToAccount();
                 break;
             case 5:
                 System.out.println("5. Withdraw money to account");
@@ -66,7 +59,6 @@ manager.loadMoneyToAccount();
         }
 
     }
-
     public void printOneClientInfo(Client client) {
         System.out.println(client.getFullName() + ":");
         System.out.println("Client account movements:");
@@ -84,31 +76,26 @@ manager.loadMoneyToAccount();
         for (Loan loan : client.getLoanSet("asBorrower")) {
             printSingleLoanInfo(loan);
         }
-
     }
-
-    public void printMovementsInfo(Set<Movement> movements) {
+    public void printMovementsInfo(Set<Movement> movements){
         System.out.println("Time: " + Globals.worldTime + ":");
-        for (Movement movement : movements) {
+        for(Movement movement:movements) {
             System.out.println("Account balance before abs.movement: " + movement.getAmountBeforeMovement());
-            System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
+            System.out.println(movement.getKindOfExecute()+" " +movement.getAmount());
             System.out.println("Account balance after abs.movement: " + movement.getAmountBeforeMovement());
         }
 
     }
-
-    private void printLoansInfo(Collection<Loan> loans) {
-        for (Loan curLoan : loans) {
+    private void printLoansInfo(Collection <Loan> loans) {
+        for (Loan curLoan:loans) {
             printSingleLoanInfo(curLoan);
         }
     }
-
-    public void printSingleLoanInfo(Loan curLoan) {
+    public void printSingleLoanInfo(Loan curLoan){
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwnersName());
         System.out.println("Category: " + curLoan.getCategory());
         System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
-        System.out.println("Interest: " + curLoan.getInterestRate()+ "Rate: " + curLoan.getPace());
         Loan.Status status = curLoan.getStatus();
         System.out.println("Status: " + status);
 
@@ -138,45 +125,10 @@ manager.loadMoneyToAccount();
                 break;
         }
     }
-
-    public void printClientsInfo() {
-        for (Client client : bank.getClients()) {
+    public void printClientsInfo(){
+        for(Client client:bank.getClients()) {
             printOneClientInfo(client);
         }
 
     }
-public int validationCheck(){
-        boolean valid = false;
-        int usersChoice = 0;
-        while (!valid){
-            boolean skipSecondIf = false;
-            try {
-                Scanner sc = new Scanner(System.in);
-                usersChoice = sc.nextInt();
-            }
-
-            catch (InputMismatchException e){
-                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                skipSecondIf = true;
-            }
-
-            if (usersChoice>=2 && usersChoice <= 8 && !fileRead) {
-                System.out.println("Invalid input, Please scan a file first.");
-                usersChoice = 0;//init choice back to 0
-            }
-            else if ((usersChoice<1 || usersChoice >8) && (skipSecondIf == false)) {
-                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                usersChoice = 0;//init choice back to 0
-            }
-            else if(skipSecondIf == false)
-                valid = true;
-
-        }
-
-            return usersChoice;
-
-    }
-
 }
-
-
