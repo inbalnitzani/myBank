@@ -7,12 +7,16 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
+import static abc.Menu.operationType.LOADTOACCOUNT;
+
 public class Menu {
     private Bank bank;
     private TaskManager manager;
     private boolean fileRead = false;
-    Scanner sc = new Scanner(System.in);
+    private boolean goal;
 
+    public enum operationType {WITHDRAW,LOADTOACCOUNT};
+    Scanner sc = new Scanner(System.in);
 
     public Menu(Bank bank) {
         this.bank = bank;
@@ -43,11 +47,11 @@ public class Menu {
                 break;
             case 3:
                 System.out.println("3. get clients information");
-                printClientsInfo();
+                loadMoneyToAccount();
                 break;
             case 4:
                 System.out.println("4. load money to account");
-
+                pullMoneyFromAccount();
                 break;
             case 5:
                 System.out.println("5. Withdraw money to account");
@@ -72,10 +76,30 @@ public class Menu {
             System.out.println(clientIndex + ". " + client.getFullName());
         }
     }
+public int chooseAmountByBalance(int currBalance){
+    boolean validInput=false;
+        int amount=0;
+        while (!validInput){
+            amount=scanAmountFromUser();
+            if(amount<=currBalance)
+            {
+                validInput=true;
+            }
+            else{
+                System.out.println("The maximum amount you can withdraw is "+currBalance);
+            }
+
+        }
+}
+    public void pullMoneyFromAccount() {
+        Client clientToLoadMoney = getClient();
+        System.out.println("Enter the amount you want to withdraw from your account");
+        int amountToWithdraw = chooseAmountByBalance(clientToLoadMoney.getCurrBalance());
+        clientToLoadMoney.WithdrawingMoney(amountToWithdraw);
+    }
 
     public void loadMoneyToAccount() {
-        System.out.println("Please choose a client from the next list:");
-        System.out.println("(Enter the number of the client)");
+
         Client clientToLoadMoney = getClient();
         System.out.println("Enter the amount you want to charge your account");
         int amountToCharge = scanAmountFromUser();
@@ -87,7 +111,7 @@ public class Menu {
         int amountToCharge = 0;
         while (!validInput) {
             amountToCharge = sc.nextInt();
-            if (checkAmountToCharge(amountToCharge))
+            if (checkAmount(amountToCharge))
                 validInput = true;
             else {
                 System.out.println("Invalid input! Please enter a positive integerEnter!");
@@ -96,22 +120,35 @@ public class Menu {
         return amountToCharge;
     }
 
-    public Client getClient() {
+    public Client getClientInstance() {
         boolean validInput = false;
         Client client = null;
+        int numberOfClient = -1, numOfClient = bank.getClients().size();
         while (!validInput) {
-            printClientsNames();
-            int numberOfClient = sc.nextInt();
-            if (checkClientNumber(numberOfClient)) {
-                client = bank.getClients().get(numberOfClient - 1);
-                validInput = true;
+            try {
+                numberOfClient = sc.nextInt();
+                if (checkClientNumber(numberOfClient)) {
+                    client = bank.getClients().get(numberOfClient - 1);
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid Input!! Please enter a number between 1 to " + numOfClient);
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid Input!! Please enter a number between 1 to " + numOfClient);
             }
         }
         return client;
     }
 
-    public boolean checkAmountToCharge(int number) {
-        return (number > 0);
+    public Client getClient() {
+        System.out.println("Please choose a client from the next list:");
+        System.out.println("(Enter the number of the client)");
+        printClientsNames();
+        return getClientInstance();
+    }
+
+    public boolean checkAmount(int number) {
+      return (number > 0);
     }
 
     public boolean checkClientNumber(int number) {
@@ -212,6 +249,7 @@ public class Menu {
 
             if (usersChoice >= 2 && usersChoice <= 8 && !fileRead) {
                 System.out.println("Invalid input, Please scan a file first.");
+                System.out.println("Choose again!");
                 usersChoice = 0;//init choice back to 0
             } else if ((usersChoice < 1 || usersChoice > 8) && (skipSecondIf == false)) {
                 System.out.println("Invalid input, Please enter an integer between 1 - 8.");

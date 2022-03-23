@@ -7,8 +7,9 @@ public class Main {
         Bank myBank = new Bank();
         Menu menu = new Menu(myBank);
 
-        menu.printMenu();
-        menu.getUsersChoice();
+        //menu.printMenu();
+        //menu.getUsersChoice();
+        menu.loadMoneyToAccount();
     }
 
 }

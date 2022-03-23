@@ -41,6 +41,7 @@ public class Client {
             return null;
     }
 
+    public int getCurrBalance(){return currBalance;}
 
     public Set<Loan> getLoanSet(String kindOfLoan) {
         if (kindOfLoan.equals("asGiver"))
@@ -50,7 +51,6 @@ public class Client {
     }
 
     public void addMoneyToAccount(int moneyToAdd) {
-        //create abs.movement
         Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);
         addMovement(movement);
         currBalance += moneyToAdd;
