@@ -6,7 +6,7 @@
 //
 
 
-package abs.mai;
+package abs.schemaClasses;
 
 import java.util.ArrayList;
 import java.util.List;
