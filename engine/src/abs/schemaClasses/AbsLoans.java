@@ -6,11 +6,12 @@
 //
 
 
-package abs.mai;
+package abs.schemaClasses;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -26,9 +27,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
- *         &lt;element ref="{}abs-balance"/>
+ *         &lt;element ref="{}abs-loan" maxOccurs="unbounded"/>
  *       &lt;/sequence>
- *       &lt;attribute name="name" use="required" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
@@ -38,54 +38,41 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "absBalance"
+    "absLoan"
 })
-@XmlRootElement(name = "abs-customer")
-public class AbsCustomer {
+@XmlRootElement(name = "abs-loans")
+public class AbsLoans {
 
-    @XmlElement(name = "abs-balance")
-    protected int absBalance;
-    @XmlAttribute(name = "name", required = true)
-    protected String name;
+    @XmlElement(name = "abs-loan", required = true)
+    protected List<AbsLoan> absLoan;
 
     /**
-     * Gets the value of the absBalance property.
+     * Gets the value of the absLoan property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the absLoan property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getAbsLoan().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link AbsLoan }
+     * 
      * 
      */
-    public int getAbsBalance() {
-        return absBalance;
-    }
-
-    /**
-     * Sets the value of the absBalance property.
-     * 
-     */
-    public void setAbsBalance(int value) {
-        this.absBalance = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
+    public List<AbsLoan> getAbsLoan() {
+        if (absLoan == null) {
+            absLoan = new ArrayList<AbsLoan>();
+        }
+        return this.absLoan;
     }
 
 }

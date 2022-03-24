@@ -3,23 +3,22 @@ package abs;
 import java.util.*;
 
 public class Bank {
-    //DATA MEMBERS
-    private Set <Loan> loans;
-   private List<Client> clients;
+
+    private Set<Loan> loans;
+    private List<Client> clients;
 
     //CTOR
-    public Bank(){
-       clients = new ArrayList<Client>();
-      //  loans = new HashSet<Loan>();
+    public Bank() {
+        clients = new ArrayList<Client>();
+        //  loans = new HashSet<Loan>();
     }
 
     //GETTERS
-    public List<Client> getClients(){
-
+    public List<Client> getClients() {
         return this.clients;
     }
 
-    public Set<Loan> getLoans(){
+    public Set<Loan> getLoans() {
         return this.loans;
     }
 

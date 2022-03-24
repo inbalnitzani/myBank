@@ -1,26 +1,26 @@
 package abc;
 
 import abs.*;
+import abs.schemaClasses.AbsDescriptor;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Set;
 
-import static abc.Menu.operationType.LOADTOACCOUNT;
 
 public class Menu {
-    private Bank bank;
-    private TaskManager manager;
     private boolean fileRead = false;
-    private boolean goal;
+    Scanner scanner = new Scanner(System.in);
 
-    public enum operationType {WITHDRAW,LOADTOACCOUNT};
-    Scanner sc = new Scanner(System.in);
-
-    public Menu(Bank bank) {
-        this.bank = bank;
-    }
+    public Menu() {}
 
     public void printMenu() {
         System.out.println("choose a number");
@@ -34,126 +34,115 @@ public class Menu {
         System.out.println("8. Exit");
     }
 
-    public void getUsersChoice() {
-
-        int usersChoice = validationCheck();
-        switch (usersChoice) {
-            case 1:
-                System.out.println("1. read a file");
-                break;
-            case 2:
-                System.out.println("2. get loans information");
-                printLoansInfo(bank.getLoans());
-                break;
-            case 3:
-                System.out.println("3. get clients information");
-                loadMoneyToAccount();
-                break;
-            case 4:
-                System.out.println("4. load money to account");
-                pullMoneyFromAccount();
-                break;
-            case 5:
-                System.out.println("5. Withdraw money to account");
-                break;
-            case 6:
-                System.out.println("6. Activate inlay");
-                break;
-            case 7:
-                System.out.println("7. promote timeline and make payments");
-                break;
-            case 8:
-                System.out.println("8. Exit");
-                break;
-
-        }
-
-    }
-
-    public void printClientsNames() {
-        int clientIndex = 1;
-        for (Client client : bank.getClients()) {
-            System.out.println(clientIndex + ". " + client.getFullName());
+    public void getXMLFile() throws FileNotFoundException {
+        try {
+            InputStream inputStream =new FileInputStream(new File("engine/src/abs/ex1-small(1).xml"));
+            AbsDescriptor info=deserializeFrom(inputStream);
+        } catch (JAXBException |FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
-public int chooseAmountByBalance(int currBalance){
-    boolean validInput=false;
-        int amount=0;
-        while (!validInput){
-            amount=scanAmountFromUser();
-            if(amount<=currBalance)
-            {
+    private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
+        JAXBContext jc=JAXBContext.newInstance("abs.schemaClasses");
+        Unmarshaller u=jc.createUnmarshaller();
+        return (AbsDescriptor) u.unmarshal(inputStream);
+    }
+
+    public boolean verifyExit() {
+        System.out.println("You just arrived! Are you sure you want to exit??");
+        System.out.println("1.NO - I want to stay!!");
+        System.out.println("2.YES - Exit.");
+        int userChoice = 0;
+        boolean wantToStay=true;
+        boolean validInput = false;
+        while (!validInput) {
+            try {
+                if (userChoice == 2)
+                {
+                    validInput=true;
+                    wantToStay=false;
+                }
+                userChoice = scanner.nextInt();
+            } catch (Exception e) {
+                scanner.next();
+            }
+            if (userChoice != 1) {
+                System.out.println("Please choose 1 for stay or 2 for exit!");
+            } else {
+                wantToStay=true;
                 validInput=true;
             }
-            else{
-                System.out.println("The maximum amount you can withdraw is "+currBalance);
-            }
-
         }
-}
-    public void pullMoneyFromAccount() {
-        Client clientToLoadMoney = getClient();
-        System.out.println("Enter the amount you want to withdraw from your account");
-        int amountToWithdraw = chooseAmountByBalance(clientToLoadMoney.getCurrBalance());
-        clientToLoadMoney.WithdrawingMoney(amountToWithdraw);
+        return wantToStay;
     }
 
-    public void loadMoneyToAccount() {
 
-        Client clientToLoadMoney = getClient();
-        System.out.println("Enter the amount you want to charge your account");
-        int amountToCharge = scanAmountFromUser();
-        manager.loadMoneyToAccount(clientToLoadMoney, amountToCharge);
+    public void printClientsNames(Collection<Client> clients) {
+        int clientIndex = 1;
+        for (Client client : clients) {
+            System.out.println(clientIndex + ". " + client.getFullName());
+            clientIndex++;
+        }
     }
 
-    public int scanAmountFromUser() {
+    public int chooseAmountByBalance(int currBalance) {
+        boolean validInput = false;
+        int amount = 0;
+        while (!validInput) {
+            amount = scanAmountFromUser();
+            if (amount <= currBalance) {
+                validInput = true;
+            } else {
+                System.out.println("The maximum amount you can withdraw is " + currBalance +".");
+                System.out.println("Please try again");
+            }
+        }
+        return amount;
+    }
+
+      public int scanAmountFromUser() {
         boolean validInput = false;
         int amountToCharge = 0;
         while (!validInput) {
-            amountToCharge = sc.nextInt();
-            if (checkAmount(amountToCharge))
-                validInput = true;
-            else {
-                System.out.println("Invalid input! Please enter a positive integerEnter!");
+            try {
+                amountToCharge = scanner.nextInt();
+                if (amountToCharge > 0) {
+                    validInput = true;
+                }
+            } catch (InputMismatchException e) {
+                scanner.next();
+            }
+            if (!validInput) {
+                System.out.println("Invalid input! Please enter a positive integer!");
             }
         }
         return amountToCharge;
     }
 
-    public Client getClientInstance() {
+    public int getClientNumber(int maxClients) {
         boolean validInput = false;
-        Client client = null;
-        int numberOfClient = -1, numOfClient = bank.getClients().size();
+        int numberOfClient = 0;
         while (!validInput) {
             try {
-                numberOfClient = sc.nextInt();
-                if (checkClientNumber(numberOfClient)) {
-                    client = bank.getClients().get(numberOfClient - 1);
+                numberOfClient = scanner.nextInt();
+                if (numberOfClient>0&&numberOfClient<maxClients){
                     validInput = true;
-                } else {
-                    System.out.println("Invalid Input!! Please enter a number between 1 to " + numOfClient);
                 }
             } catch (Exception e) {
-                System.out.println("Invalid Input!! Please enter a number between 1 to " + numOfClient);
+                scanner.next();
+            }
+            finally {
+                if (!validInput)
+                {
+                    System.out.println("Invalid Input!! Please enter a number between 1 to " + maxClients);
+                }
             }
         }
-        return client;
-    }
-
-    public Client getClient() {
-        System.out.println("Please choose a client from the next list:");
-        System.out.println("(Enter the number of the client)");
-        printClientsNames();
-        return getClientInstance();
+        return (numberOfClient-1);
     }
 
     public boolean checkAmount(int number) {
-      return (number > 0);
-    }
-
-    public boolean checkClientNumber(int number) {
-        return number > 0 && number < bank.getClients().size();
-
+        return (number > 0);
     }
 
     public void printOneClientInfo(Client client) {
@@ -186,12 +175,6 @@ public int chooseAmountByBalance(int currBalance){
 
     }
 
-    private void printLoansInfo(Collection<Loan> loans) {
-        for (Loan curLoan : loans) {
-            printSingleLoanInfo(curLoan);
-        }
-    }
-
     public void printSingleLoanInfo(Loan curLoan) {
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwnersName());
@@ -211,7 +194,6 @@ public int chooseAmountByBalance(int currBalance){
                 // need to print each lender's name and invesment
                 System.out.println("abs.loan was activated at :" + curLoan.getStartingTimeUnit());
                 System.out.println("next abs.payment is at :" + curLoan.getNextPayment());
-
                 break;
             case PENDING:
                 System.out.println("status: pending");
@@ -229,38 +211,32 @@ public int chooseAmountByBalance(int currBalance){
     }
 
     public void printClientsInfo() {
+        /*
         for (Client client : bank.getClients()) {
             printOneClientInfo(client);
         }
-
+*/
     }
 
-    public int validationCheck() {
-        boolean valid = false;
+    public int getUserChoice() {
+        boolean validInput= false;
         int usersChoice = 0;
-        while (!valid) {
-            boolean skipSecondIf = false;
+        while (!validInput) {
             try {
-                usersChoice = sc.nextInt();
+                usersChoice = scanner.nextInt();
+                if (usersChoice < 1 || usersChoice > 8) {
+                    System.out.println("Invalid input, Please enter an integer between 1 - 8.");
+                }
+                else if (usersChoice != 1 && !fileRead) {
+                    System.out.println("Invalid input, There is no file scanned. Please choose again.");
+                } else {
+                    validInput = true;
+                }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                skipSecondIf = true;
+                scanner.next();
             }
-
-            if (usersChoice >= 2 && usersChoice <= 8 && !fileRead) {
-                System.out.println("Invalid input, Please scan a file first.");
-                System.out.println("Choose again!");
-                usersChoice = 0;//init choice back to 0
-            } else if ((usersChoice < 1 || usersChoice > 8) && (skipSecondIf == false)) {
-                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                usersChoice = 0;//init choice back to 0
-            } else if (skipSecondIf == false)
-                valid = true;
-
         }
-
         return usersChoice;
-
     }
-
 }

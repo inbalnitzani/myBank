@@ -57,9 +57,7 @@ public class Client {
     }
 
     public int WithdrawingMoney(int sumToPull) {
-        if (sumToPull <= currBalance)
-            currBalance -= sumToPull;
-        else return 0;
+        currBalance -= sumToPull;
         return sumToPull;
     }
 }
