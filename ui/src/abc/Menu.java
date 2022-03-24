@@ -17,7 +17,7 @@ import java.util.Set;
 
 
 public class Menu {
-    private boolean fileRead = false;
+
     Scanner scanner = new Scanner(System.in);
 
     public Menu() {}
@@ -34,20 +34,34 @@ public class Menu {
         System.out.println("8. Exit");
     }
 
-    public void getXMLFile() throws FileNotFoundException {
-        try {
-            InputStream inputStream =new FileInputStream(new File("engine/src/abs/ex1-small(1).xml"));
-            AbsDescriptor info=deserializeFrom(inputStream);
-        } catch (JAXBException |FileNotFoundException e) {
-            e.printStackTrace();
+public boolean FileNotExist(){
+    System.out.println("Error! File does not exist.");
+    System.out.println("If you want to go back to menu - press 1");
+    System.out.println("If you want to try load file again - press 2");
+    boolean validInput=false, loadAgain=false;
+    int userChoice=0;
+    while (!validInput){
+        try{
+            userChoice=scanner.nextInt();
+            if(userChoice==1){
+                loadAgain=false;
+                validInput=true;
+            }
+            else if(userChoice==2){
+                loadAgain=true;
+                validInput=true;
+            }
+        } catch (Exception e){
+            scanner.next();
+        }
+        finally {
+            if(!validInput){
+                System.out.println("Invalid input. Please try again.");
+            }
         }
     }
-    private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
-        JAXBContext jc=JAXBContext.newInstance("abs.schemaClasses");
-        Unmarshaller u=jc.createUnmarshaller();
-        return (AbsDescriptor) u.unmarshal(inputStream);
-    }
-
+    return loadAgain;
+}
     public boolean verifyExit() {
         System.out.println("You just arrived! Are you sure you want to exit??");
         System.out.println("1.NO - I want to stay!!");
@@ -218,7 +232,7 @@ public class Menu {
 */
     }
 
-    public int getUserChoice() {
+    public int getUserChoice(boolean fileInSystem) {
         boolean validInput= false;
         int usersChoice = 0;
         while (!validInput) {
@@ -227,7 +241,7 @@ public class Menu {
                 if (usersChoice < 1 || usersChoice > 8) {
                     System.out.println("Invalid input, Please enter an integer between 1 - 8.");
                 }
-                else if (usersChoice != 1 && !fileRead) {
+                else if (usersChoice != 1 && !fileInSystem) {
                     System.out.println("Invalid input, There is no file scanned. Please choose again.");
                 } else {
                     validInput = true;
