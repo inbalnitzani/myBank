@@ -3,14 +3,22 @@ package abc;
 import abs.Bank;
 import abs.Client;
 import abs.Loan;
+import abs.schemaClasses.AbsDescriptor;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Collection;
 
 public class TaskManager {
     private final Bank bank = new Bank();
-    private Menu menu = new Menu();
+    private final Menu menu = new Menu();
     int currentAction = 0;
-
+    private boolean fileInSystem = false;
     public TaskManager() {
     }
 
@@ -18,6 +26,7 @@ public class TaskManager {
         switch (currentAction) {
             case 1:
                 System.out.println("1. read a file");
+                getXMLFile();
                 break;
             case 2:
                 System.out.println("2. get loans information");
@@ -53,6 +62,30 @@ public class TaskManager {
         }
     }
 
+    public void getXMLFile() {
+        boolean validInput = false, loadFile = true;
+        while (!validInput) {
+            try {
+                InputStream inputStream = new FileInputStream(new File("engine/src/abs/ex1small.xml"));
+                AbsDescriptor info = deserializeFrom(inputStream);
+                validInput = true;
+                fileInSystem = true;
+                System.out.println("File read successfully");
+            } catch (JAXBException | FileNotFoundException e) {
+                loadFile = menu.FileNotExist();
+            }
+            if (!loadFile) {
+                validInput = true;
+            }
+        }
+        return;
+    }
+    private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
+        JAXBContext jc=JAXBContext.newInstance("abs.schemaClasses");
+        Unmarshaller u=jc.createUnmarshaller();
+        return (AbsDescriptor) u.unmarshal(inputStream);
+    }
+
     //checked
     public void manageSystem() {
         final int EXIT_SYSTEM = 8;
@@ -60,7 +93,7 @@ public class TaskManager {
         while (stillInSystem) {
             while (currentAction != EXIT_SYSTEM) {
                 menu.printMenu();
-                currentAction = menu.getUserChoice();
+                currentAction = menu.getUserChoice(fileInSystem);
                 actToUserChoice();
             }
             stillInSystem = menu.verifyExit();
