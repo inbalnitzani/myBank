@@ -12,6 +12,55 @@ public class Menu {
     public Menu() {
     }
 
+    public int getMinInterest() {
+        System.out.println("Please enter the minimum interest you want to get for your loans.");
+        System.out.println("If you don't have any preference, enter -1");
+        boolean validInput = false;
+        int minInterest = 0;
+        while (!validInput) {
+            try {
+                minInterest = scanner.nextInt();
+                if (0 < minInterest && minInterest < 100) {
+                    validInput = true;
+                }
+                else if (minInterest == END_OF_INPUT) {
+                    minInterest = 0;
+                    validInput=true;
+                }
+            } catch (Exception e) {
+                scanner.next();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Please enter a number between 0 to 100, or -1 if you don't have any preference.");
+                }
+            }
+        }
+        return minInterest;
+    }
+
+    public int getMinTimeForLoan(){
+        System.out.println("Please enter the minimum time (to get back the money) for your loans.");
+        System.out.println("If you don't have any preference, enter -1");
+
+        boolean validInput = false;
+        int minTime = 0;
+        while (!validInput) {
+            try {
+                minTime = scanner.nextInt();
+                if (0 < minTime) {
+                    validInput = true;
+                }
+                if(minTime==END_OF_INPUT){
+                    minTime=0;
+                }
+            } catch (Exception e) {
+                scanner.next();
+                System.out.println("Please enter an integer, more than 0, or -1 if you don't have any preference.");
+            }
+        }
+        return minTime;
+    }
+
     public void printMenu() {
         System.out.println("choose a number");
         System.out.println("1. read a file");

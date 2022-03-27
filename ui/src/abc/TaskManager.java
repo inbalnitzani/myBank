@@ -63,8 +63,11 @@ public class TaskManager {
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + currBalance + ".");
         int amountToInvest = menu.chooseAmountByBalance(currBalance);
-        List<String> categoriesToInvest=menu.chooseCategory(bank.getCategories());
+        List<String> categoriesToInvest = menu.chooseCategory(bank.getCategories());
+        int mimInterest = menu.getMinInterest();
+        int minTimeForLoan= menu.getMinTimeForLoan();
 
+        //find loan
     }
     private void printLoansInfo(Collection<Loan> loans) {
         for (Loan currLoan : loans) {
