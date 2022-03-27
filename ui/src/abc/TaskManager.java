@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.List;
 
 public class TaskManager {
     private final Bank bank = new Bank();
@@ -30,7 +31,7 @@ public class TaskManager {
                 break;
             case 2:
                 System.out.println("2. get loans information");
-                printLoansInfo(bank.getLoans());
+            //    printLoansInfo(bank.getLoans());
                 break;
             case 3:
                 System.out.println("3. get clients information");
@@ -56,6 +57,15 @@ public class TaskManager {
         }
     }
 
+    public void startOfInlay() {
+        Client client = getClientForAction();
+        int currBalance = client.getCurrBalance();
+        System.out.println("Please enter the amount you want to invest.");
+        System.out.println("Pay attention - you can't invest more than " + currBalance + ".");
+        int amountToInvest = menu.chooseAmountByBalance(currBalance);
+        List<String> categoriesToInvest=menu.chooseCategory(bank.getCategories());
+
+    }
     private void printLoansInfo(Collection<Loan> loans) {
         for (Loan currLoan : loans) {
             menu.printSingleLoanInfo(currLoan);
@@ -80,6 +90,7 @@ public class TaskManager {
         }
         return;
     }
+
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
         JAXBContext jc=JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u=jc.createUnmarshaller();
@@ -101,25 +112,25 @@ public class TaskManager {
     }
 
     public void loadMoneyToAccount() {
-        Client client = getClient();
+        Client client = getClientForAction();
         System.out.println("Enter the amount you want to charge your account");
         int amountToCharge = menu.scanAmountFromUser();
         client.addMoneyToAccount(amountToCharge);
     }
 
     public void withdrawMoney() {
-        Client client = getClient();
+        Client client = getClientForAction();
         System.out.println("Enter the amount you want to withdraw from your account");
         int amountToWithdraw = menu.chooseAmountByBalance(client.getCurrBalance());
         client.WithdrawingMoney(amountToWithdraw);
     }
 
-    public Client getClient() {
+    public Client getClientForAction() {
         System.out.println("Please choose a client from the next list:");
         System.out.println("(Enter the number of the client)");
-        menu.printClientsNames(bank.getClients());
-        int numberOfClient = menu.getClientNumber(bank.getClients().size());
-        return bank.getClients().get(numberOfClient);
+        menu.printClientsNames(bank.getClients(),false);
+        int clientIndex = menu.getClientNumber(bank.getClients().size());
+        return bank.getClients().get(clientIndex);
     }
 
 

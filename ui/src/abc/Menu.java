@@ -1,26 +1,16 @@
 package abc;
 
 import abs.*;
-import abs.schemaClasses.AbsDescriptor;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 
 public class Menu {
 
     Scanner scanner = new Scanner(System.in);
+    static final int END_OF_INPUT = -1; //Minimum age requirement
 
-    public Menu() {}
+    public Menu() {
+    }
 
     public void printMenu() {
         System.out.println("choose a number");
@@ -34,47 +24,45 @@ public class Menu {
         System.out.println("8. Exit");
     }
 
-public boolean FileNotExist(){
-    System.out.println("Error! File does not exist.");
-    System.out.println("If you want to go back to menu - press 1");
-    System.out.println("If you want to try load file again - press 2");
-    boolean validInput=false, loadAgain=false;
-    int userChoice=0;
-    while (!validInput){
-        try{
-            userChoice=scanner.nextInt();
-            if(userChoice==1){
-                loadAgain=false;
-                validInput=true;
+    public boolean FileNotExist() {
+        System.out.println("Error! File does not exist.");
+        System.out.println("If you want to go back to menu - press 1");
+        System.out.println("If you want to try load file again - press 2");
+        boolean validInput = false, loadAgain = false;
+        int userChoice = 0;
+        while (!validInput) {
+            try {
+                userChoice = scanner.nextInt();
+                if (userChoice == 1) {
+                    loadAgain = false;
+                    validInput = true;
+                } else if (userChoice == 2) {
+                    loadAgain = true;
+                    validInput = true;
+                }
+            } catch (Exception e) {
+                scanner.next();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Invalid input. Please try again.");
+                }
             }
-            else if(userChoice==2){
-                loadAgain=true;
-                validInput=true;
-            }
-        } catch (Exception e){
-            scanner.next();
         }
-        finally {
-            if(!validInput){
-                System.out.println("Invalid input. Please try again.");
-            }
-        }
+        return loadAgain;
     }
-    return loadAgain;
-}
+
     public boolean verifyExit() {
         System.out.println("You just arrived! Are you sure you want to exit??");
         System.out.println("1.NO - I want to stay!!");
         System.out.println("2.YES - Exit.");
         int userChoice = 0;
-        boolean wantToStay=true;
+        boolean wantToStay = true;
         boolean validInput = false;
         while (!validInput) {
             try {
-                if (userChoice == 2)
-                {
-                    validInput=true;
-                    wantToStay=false;
+                if (userChoice == 2) {
+                    validInput = true;
+                    wantToStay = false;
                 }
                 userChoice = scanner.nextInt();
             } catch (Exception e) {
@@ -83,18 +71,65 @@ public boolean FileNotExist(){
             if (userChoice != 1) {
                 System.out.println("Please choose 1 for stay or 2 for exit!");
             } else {
-                wantToStay=true;
-                validInput=true;
+                wantToStay = true;
+                validInput = true;
             }
         }
         return wantToStay;
     }
 
+    public List<String> chooseCategory(List<String> categories) {
+        printCategories(categories);
+        boolean validInput = false;
+        List<String> userCategoriesChoice = new ArrayList<String>();
+        int numberOfCategories = categories.size(), currCategory = 0;
+        while (currCategory != -END_OF_INPUT) {
+            currCategory = scanCategoryNumber(numberOfCategories);
+            if (currCategory != END_OF_INPUT)
+                userCategoriesChoice.add(categories.get(currCategory));
+        }
+        if (userCategoriesChoice.size() == 0)
+            userCategoriesChoice = categories;
+        return userCategoriesChoice;
+    }
 
-    public void printClientsNames(Collection<Client> clients) {
+    public int scanCategoryNumber(int maxNumOfCategories) {
+        boolean validInput = false;
+        int numberOfCtegory = 0;
+        while (!validInput) {
+            try {
+                numberOfCtegory = scanner.nextInt();
+                if (numberOfCtegory < maxNumOfCategories + 1) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input! There are only " + maxNumOfCategories + "categories.");
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid input! Please enter an integer between 1 to " + maxNumOfCategories + ".");
+                scanner.next();
+            }
+        }
+        return (numberOfCtegory - 1);
+    }
+
+    public void printCategories(List<String> categories) {
+        System.out.println("Please choose categories from the next list:");
+        System.out.println("Enter the categories numbers, and finish with -1.");
+        System.out.println("If you don't have any preference, please enter -1");
+        int index = 0;
+        for (String category : categories) {
+            System.out.println(index + ". " + category);
+            index++;
+        }
+    }
+
+    public void printClientsNames(Collection<Client> clients, boolean includeBalance) {
         int clientIndex = 1;
         for (Client client : clients) {
             System.out.println(clientIndex + ". " + client.getFullName());
+            if (includeBalance) {
+                System.out.println("Client balance: " + client.getCurrBalance());
+            }
             clientIndex++;
         }
     }
@@ -107,14 +142,14 @@ public boolean FileNotExist(){
             if (amount <= currBalance) {
                 validInput = true;
             } else {
-                System.out.println("The maximum amount you can withdraw is " + currBalance +".");
+                System.out.println("Current amount in balance is " + currBalance + ". You can't choose more than " + currBalance + ".");
                 System.out.println("Please try again");
             }
         }
         return amount;
     }
 
-      public int scanAmountFromUser() {
+    public int scanAmountFromUser() {
         boolean validInput = false;
         int amountToCharge = 0;
         while (!validInput) {
@@ -139,20 +174,18 @@ public boolean FileNotExist(){
         while (!validInput) {
             try {
                 numberOfClient = scanner.nextInt();
-                if (numberOfClient>0&&numberOfClient<maxClients){
+                if (numberOfClient > 0 && numberOfClient < maxClients) {
                     validInput = true;
                 }
             } catch (Exception e) {
                 scanner.next();
-            }
-            finally {
-                if (!validInput)
-                {
+            } finally {
+                if (!validInput) {
                     System.out.println("Invalid Input!! Please enter a number between 1 to " + maxClients);
                 }
             }
         }
-        return (numberOfClient-1);
+        return (numberOfClient - 1);
     }
 
     public boolean checkAmount(int number) {
@@ -233,15 +266,14 @@ public boolean FileNotExist(){
     }
 
     public int getUserChoice(boolean fileInSystem) {
-        boolean validInput= false;
+        boolean validInput = false;
         int usersChoice = 0;
         while (!validInput) {
             try {
                 usersChoice = scanner.nextInt();
                 if (usersChoice < 1 || usersChoice > 8) {
                     System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                }
-                else if (usersChoice != 1 && !fileInSystem) {
+                } else if (usersChoice != 1 && !fileInSystem) {
                     System.out.println("Invalid input, There is no file scanned. Please choose again.");
                 } else {
                     validInput = true;
