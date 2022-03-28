@@ -3,6 +3,7 @@ package abc;
 import abs.Bank;
 import abs.Client;
 import abs.Loan;
+import abs.LoanTerms;
 import abs.schemaClasses.AbsDescriptor;
 
 import javax.xml.bind.JAXBContext;
@@ -12,18 +13,21 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class TaskManager {
     private final Bank bank = new Bank();
     private final Menu menu = new Menu();
-    int currentAction = 0;
     private boolean fileInSystem = false;
+    private LoanTerms currentLoan;
+
     public TaskManager() {
     }
 
     public void actToUserChoice() {
+        int currentAction = 0;
         switch (currentAction) {
             case 1:
                 System.out.println("1. read a file");
@@ -31,7 +35,7 @@ public class TaskManager {
                 break;
             case 2:
                 System.out.println("2. get loans information");
-            //    printLoansInfo(bank.getLoans());
+                //    printLoansInfo(bank.getLoans());
                 break;
             case 3:
                 System.out.println("3. get clients information");
@@ -59,16 +63,46 @@ public class TaskManager {
 
     public void startOfInlay() {
         Client client = getClientForAction();
+        getLoanProperties(client);
+        List<Loan> matchLoans = findMatchLoans(client);
+        matchLoans = menu.chooseLoansToInvest(matchLoans);
+    }
+
+
+    public List<Loan> findMatchLoans(Client client) {
+        List<Loan> matchLoan = new ArrayList<Loan>();
+        matchLoan = checkRelevantLoans(matchLoan, bank.getNewLoans(), client);
+        matchLoan = checkRelevantLoans(matchLoan, bank.getPendingLoansLoans(),client);
+        return matchLoan;
+    }
+
+    public List<Loan> checkRelevantLoans(List<Loan> matchLoans, List<Loan> loansToCheck,Client client) {
+        for (Loan loan : loansToCheck) {
+            if (loan.getOwner().equals(client)) {
+                continue;
+            }else if (!currentLoan.getCategories().contains(loan.getCategory())) {
+                continue;
+            } else if (loan.getInterestRate() < currentLoan.getMinInterestForTimeUnit()) {
+                continue;
+            } else if (loan.getTotalTU() < currentLoan.getMinTimeForLoan()) {
+                continue;
+            } else {
+                matchLoans.add(loan);
+            }}
+        return matchLoans;
+    }
+
+    public void getLoanProperties(Client client) {
         int currBalance = client.getCurrBalance();
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + currBalance + ".");
-        int amountToInvest = menu.chooseAmountByBalance(currBalance);
-        List<String> categoriesToInvest = menu.chooseCategory(bank.getCategories());
-        int mimInterest = menu.getMinInterest();
-        int minTimeForLoan= menu.getMinTimeForLoan();
+        currentLoan.setMaxAmount(menu.chooseAmountByBalance(currBalance));
+        currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
+        currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
+        currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
 
-        //find loan
     }
+
     private void printLoansInfo(Collection<Loan> loans) {
         for (Loan currLoan : loans) {
             menu.printSingleLoanInfo(currLoan);
@@ -95,14 +129,15 @@ public class TaskManager {
     }
 
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
-        JAXBContext jc=JAXBContext.newInstance("abs.schemaClasses");
-        Unmarshaller u=jc.createUnmarshaller();
+        JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
+        Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
 
     //checked
     public void manageSystem() {
         final int EXIT_SYSTEM = 8;
+        int currentAction=0;
         boolean stillInSystem = true;
         while (stillInSystem) {
             while (currentAction != EXIT_SYSTEM) {
@@ -131,7 +166,7 @@ public class TaskManager {
     public Client getClientForAction() {
         System.out.println("Please choose a client from the next list:");
         System.out.println("(Enter the number of the client)");
-        menu.printClientsNames(bank.getClients(),false);
+        menu.printClientsNames(bank.getClients(), false);
         int clientIndex = menu.getClientNumber(bank.getClients().size());
         return bank.getClients().get(clientIndex);
     }

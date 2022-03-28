@@ -22,10 +22,9 @@ public class Menu {
                 minInterest = scanner.nextInt();
                 if (0 < minInterest && minInterest < 100) {
                     validInput = true;
-                }
-                else if (minInterest == END_OF_INPUT) {
+                } else if (minInterest == END_OF_INPUT) {
                     minInterest = 0;
-                    validInput=true;
+                    validInput = true;
                 }
             } catch (Exception e) {
                 scanner.next();
@@ -38,7 +37,7 @@ public class Menu {
         return minInterest;
     }
 
-    public int getMinTimeForLoan(){
+    public int getMinTimeForLoan() {
         System.out.println("Please enter the minimum time (to get back the money) for your loans.");
         System.out.println("If you don't have any preference, enter -1");
 
@@ -50,8 +49,8 @@ public class Menu {
                 if (0 < minTime) {
                     validInput = true;
                 }
-                if(minTime==END_OF_INPUT){
-                    minTime=0;
+                if (minTime == END_OF_INPUT) {
+                    minTime = 0;
                 }
             } catch (Exception e) {
                 scanner.next();
@@ -125,6 +124,47 @@ public class Menu {
             }
         }
         return wantToStay;
+    }
+
+    public List<Loan> chooseLoansToInvest(List<Loan> optionalLoans) {
+        System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
+        System.out.println("If you don't want any loan, insert -1.");
+        printLoansInfo(optionalLoans);
+        List<Integer> loansIndex=scanLoansFromUser(optionalLoans.size());
+        List<Loan> loansToInvest=new ArrayList<Loan>();
+        for (int index:loansIndex){
+            loansToInvest.add(optionalLoans.get(index));
+        }
+        return loansToInvest;
+    }
+
+    public List<Integer> scanLoansFromUser(int maxLoans) {
+        int currLoan = 0;
+        List<Integer> loansToInvest = new ArrayList<>();
+        System.out.println("Please");
+        while (currLoan != END_OF_INPUT) {
+            try {
+                currLoan = scanner.nextInt();
+                if (currLoan <= maxLoans + 1 && currLoan > 0) {
+                    loansToInvest.add(currLoan - 1);
+                }
+                if (currLoan != END_OF_INPUT) {
+                    System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
+                }
+            } catch (Exception e) {
+                scanner.next();
+                System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
+            }
+        }
+        return loansToInvest;
+    }
+
+    public void printLoansInfo(List<Loan> optionalLoans) {
+        int index = 1;
+        for (Loan loan : optionalLoans) {
+            System.out.println("loan number " + index + ": ");
+            printSingleLoanInfo(loan);
+        }
     }
 
     public List<String> chooseCategory(List<String> categories) {
@@ -296,22 +336,14 @@ public class Menu {
 
                 //curLoan.getGivers();
                 // need to print each lender's name and invesment
-                System.out.println("current amount is :" + curLoan.getAmountCollected());
-                System.out.println("amount left to activate abs.loan :" + (curLoan.getOriginalAmount() - curLoan.getAmountCollected()));
+                System.out.println("current amount is :" + curLoan.getAmountCollectedPending());
+                System.out.println("amount left to activate abs.loan :" + (curLoan.getOriginalAmount() - curLoan.getAmountCollectedPending()));
                 break;
             case FINISHED:
                 System.out.println("status: finished");
 
                 break;
         }
-    }
-
-    public void printClientsInfo() {
-        /*
-        for (Client client : bank.getClients()) {
-            printOneClientInfo(client);
-        }
-*/
     }
 
     public int getUserChoice(boolean fileInSystem) {

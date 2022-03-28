@@ -28,9 +28,16 @@ public class Bank {
     public List<Client> getClients() {
         return this.clients;
     }
-public List<String> getCategories()
-{
-    return categories;
-}
 
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public List<Loan> getNewLoans() {
+        return newLoans;
+    }
+
+    public List<Loan> getPendingLoansLoans() {
+        return pendingLoans;
+    }
 }

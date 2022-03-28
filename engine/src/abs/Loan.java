@@ -12,7 +12,7 @@ public class Loan {
     private String id;
     private Client owner;
     private int category;
-    private double originalAmount,amountPaidBack,amountCollected;
+    private double originalAmount,amountPaidBack, amountCollectedPending;
     private int interestRate;
     private Status status;
     private int startingTimeUnit,endingTimeUnit,pace,nextPayment;
@@ -45,8 +45,8 @@ public class Loan {
     public double getAmountPaidBack(){
         return this.amountPaidBack;
     };
-    public double getAmountCollected(){
-        return this.amountCollected;
+    public double getAmountCollectedPending(){
+        return this.amountCollectedPending;
     };
     public int getInterestRate(){
         return this.interestRate;
@@ -72,7 +72,7 @@ public class Loan {
     public int getNextPayment(){
         return nextPayment;
     }
-
+public Client getOwner(){return owner;}
     //SETTERS
     public void setNextPayment() {
         //if(status.equals(abs.e_status.ACTIVE))
