@@ -1,5 +1,7 @@
 package abc;
 
+import abs.DTO.ClientDTO;
+import abs.DTO.LoanDTO;
 import abs.*;
 import abs.schemaClasses.AbsDescriptor;
 
@@ -10,7 +12,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Collection;
 import java.util.List;
 
 public class TaskManager {

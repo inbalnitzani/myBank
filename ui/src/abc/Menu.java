@@ -1,5 +1,8 @@
 package abc;
 
+import abs.DTO.CategoryDTO;
+import abs.DTO.ClientDTO;
+import abs.DTO.LoanDTO;
 import abs.*;
 import java.util.*;
 

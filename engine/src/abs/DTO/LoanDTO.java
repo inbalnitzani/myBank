@@ -1,4 +1,7 @@
-package abs;
+package abs.DTO;
+
+import abs.Client;
+import abs.Loan;
 
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +19,7 @@ public class LoanDTO {
     //private List <Payment> payments;
 
     //CTOR
-    LoanDTO(Loan loan) {
+    public LoanDTO(Loan loan) {
         this.owner = loan.getOwner();
         this.id = loan.getLoansID();
         this.category = loan.getCategory();

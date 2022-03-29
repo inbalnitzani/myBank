@@ -1,11 +1,13 @@
 package abs;
 
+import abs.DTO.CategoryDTO;
+
 import java.util.List;
 
 public class LoanTerms {
 
     public int maxAmount;
-    public List<CategoryDTO> categories;
+    public List<String> categories;
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
 
@@ -16,7 +18,9 @@ public class LoanTerms {
     }
     public void setCategories(List<CategoryDTO> categories)
     {
-        this.categories=categories;
+        for (CategoryDTO category:categories) {
+            this.categories.add(category.getCategoryName());
+        }
     }
     public void setMinInterestForTimeUnit(int minInterestForTimeUnit){
         this.minInterestForTimeUnit =minInterestForTimeUnit;

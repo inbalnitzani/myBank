@@ -1,4 +1,8 @@
-package abs;
+package abs.DTO;
+
+import abs.Client;
+import abs.Loan;
+import abs.Movement;
 
 import java.util.Map;
 import java.util.Set;
