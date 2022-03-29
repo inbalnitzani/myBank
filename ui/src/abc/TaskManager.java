@@ -1,9 +1,6 @@
 package abc;
 
-import abs.Bank;
-import abs.Client;
-import abs.Loan;
-import abs.LoanTerms;
+import abs.*;
 import abs.schemaClasses.AbsDescriptor;
 
 import javax.xml.bind.JAXBContext;
@@ -13,12 +10,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 public class TaskManager {
-    private final Bank bank = new Bank();
+    private final BankInterface bank = new Bank();
     private final Menu menu = new Menu();
     private boolean fileInSystem = false;
     private LoanTerms currentLoan;
@@ -62,51 +58,21 @@ public class TaskManager {
     }
 
     public void startOfInlay() {
-        Client client = getClientForAction();
-        getLoanProperties(client);
-        List<Loan> matchLoans = findMatchLoans(client);
-        matchLoans = menu.chooseLoansToInvest(matchLoans);
+        int clientIndex = getClientIndexForAction();
+        getLoanProperties(bank.getCurrBalance(clientIndex));
+        List<LoanDTO> loans = bank.findMatchLoans(clientIndex, currentLoan);
+        loans = menu.chooseLoansToInvest(loans);
+        bank.addInvestorsToLoans(loans,clientIndex);
+
     }
 
-
-    public List<Loan> findMatchLoans(Client client) {
-        List<Loan> matchLoan = new ArrayList<Loan>();
-        matchLoan = checkRelevantLoans(matchLoan, bank.getNewLoans(), client);
-        matchLoan = checkRelevantLoans(matchLoan, bank.getPendingLoansLoans(),client);
-        return matchLoan;
-    }
-
-    public List<Loan> checkRelevantLoans(List<Loan> matchLoans, List<Loan> loansToCheck,Client client) {
-        for (Loan loan : loansToCheck) {
-            if (loan.getOwner().equals(client)) {
-                continue;
-            }else if (!currentLoan.getCategories().contains(loan.getCategory())) {
-                continue;
-            } else if (loan.getInterestRate() < currentLoan.getMinInterestForTimeUnit()) {
-                continue;
-            } else if (loan.getTotalTU() < currentLoan.getMinTimeForLoan()) {
-                continue;
-            } else {
-                matchLoans.add(loan);
-            }}
-        return matchLoans;
-    }
-
-    public void getLoanProperties(Client client) {
-        int currBalance = client.getCurrBalance();
+    public void getLoanProperties(int clientBalance) {
         System.out.println("Please enter the amount you want to invest.");
-        System.out.println("Pay attention - you can't invest more than " + currBalance + ".");
-        currentLoan.setMaxAmount(menu.chooseAmountByBalance(currBalance));
+        System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
+        currentLoan.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
         currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
         currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
         currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
-
-    }
-
-    private void printLoansInfo(Collection<Loan> loans) {
-        for (Loan currLoan : loans) {
-            menu.printSingleLoanInfo(currLoan);
-        }
     }
 
     public void getXMLFile() {
@@ -150,25 +116,27 @@ public class TaskManager {
     }
 
     public void loadMoneyToAccount() {
-        Client client = getClientForAction();
+        int clientIndex = getClientIndexForAction();
         System.out.println("Enter the amount you want to charge your account");
         int amountToCharge = menu.scanAmountFromUser();
-        client.addMoneyToAccount(amountToCharge);
+      ///////////////////////////////////////////////////////////////////////////////////////////////
+        bank.loanMoneyToAccount(clientIndex,amountToCharge);
+        //client.addMoneyToAccount(amountToCharge);
     }
 
     public void withdrawMoney() {
-        Client client = getClientForAction();
+        int clientIndex = getClientIndexForAction();
         System.out.println("Enter the amount you want to withdraw from your account");
-        int amountToWithdraw = menu.chooseAmountByBalance(client.getCurrBalance());
-        client.WithdrawingMoney(amountToWithdraw);
+        int amountToWithdraw = menu.chooseAmountByBalance(bank.getCurrBalance(clientIndex));
+        bank.withdrawMoneyFromAccount(clientIndex,amountToWithdraw);
     }
 
-    public Client getClientForAction() {
+    public int getClientIndexForAction() {
         System.out.println("Please choose a client from the next list:");
         System.out.println("(Enter the number of the client)");
-        menu.printClientsNames(bank.getClients(), false);
-        int clientIndex = menu.getClientNumber(bank.getClients().size());
-        return bank.getClients().get(clientIndex);
+        List<ClientDTO> clients=bank.getClients();
+        menu.printClientsNames(clients, false);
+        return menu.getClientNumber(clients.size());
     }
 
 

@@ -126,12 +126,12 @@ public class Menu {
         return wantToStay;
     }
 
-    public List<Loan> chooseLoansToInvest(List<Loan> optionalLoans) {
+    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
         System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
         System.out.println("If you don't want any loan, insert -1.");
         printLoansInfo(optionalLoans);
         List<Integer> loansIndex=scanLoansFromUser(optionalLoans.size());
-        List<Loan> loansToInvest=new ArrayList<Loan>();
+        List<LoanDTO> loansToInvest=new ArrayList<LoanDTO>();
         for (int index:loansIndex){
             loansToInvest.add(optionalLoans.get(index));
         }
@@ -159,18 +159,18 @@ public class Menu {
         return loansToInvest;
     }
 
-    public void printLoansInfo(List<Loan> optionalLoans) {
-        int index = 1;
-        for (Loan loan : optionalLoans) {
-            System.out.println("loan number " + index + ": ");
-            printSingleLoanInfo(loan);
+    public void printLoansInfo(List<LoanDTO> optionalLoans) {
+        int sizeOfList = optionalLoans.size();
+        for (int index = 0; index < sizeOfList; index++) {
+            System.out.println("loan number " + (index + 1) + ": ");
+            printSingleLoanInfo(optionalLoans.get(index));
         }
     }
 
-    public List<String> chooseCategory(List<String> categories) {
+    public List<CategoryDTO> chooseCategory(List<CategoryDTO> categories) {
         printCategories(categories);
         boolean validInput = false;
-        List<String> userCategoriesChoice = new ArrayList<String>();
+        List<CategoryDTO> userCategoriesChoice = new ArrayList<CategoryDTO>();
         int numberOfCategories = categories.size(), currCategory = 0;
         while (currCategory != -END_OF_INPUT) {
             currCategory = scanCategoryNumber(numberOfCategories);
@@ -201,20 +201,20 @@ public class Menu {
         return (numberOfCtegory - 1);
     }
 
-    public void printCategories(List<String> categories) {
+    public void printCategories(List<CategoryDTO> categories) {
         System.out.println("Please choose categories from the next list:");
         System.out.println("Enter the categories numbers, and finish with -1.");
         System.out.println("If you don't have any preference, please enter -1");
         int index = 0;
-        for (String category : categories) {
+        for (CategoryDTO category : categories) {
             System.out.println(index + ". " + category);
             index++;
         }
     }
 
-    public void printClientsNames(Collection<Client> clients, boolean includeBalance) {
+    public void printClientsNames(Collection<ClientDTO> clients, boolean includeBalance) {
         int clientIndex = 1;
-        for (Client client : clients) {
+        for (ClientDTO client : clients) {
             System.out.println(clientIndex + ". " + client.getFullName());
             if (includeBalance) {
                 System.out.println("Client balance: " + client.getCurrBalance());
@@ -290,14 +290,15 @@ public class Menu {
                 printMovementsInfo(movements);
             }
         }
+        /*
         System.out.println("loans to get money:");
-        for (Loan loan : client.getLoanSet("asGiver")) {
+        for (Loan loan : client.getLoanSetAsGiver()) {
             printSingleLoanInfo(loan);
         }
         System.out.println("loans give money");
-        for (Loan loan : client.getLoanSet("asBorrower")) {
+        for (Loan loan : client.getLoanSetAsBorrower()) {
             printSingleLoanInfo(loan);
-        }
+        }*/
 
     }
 
@@ -311,15 +312,15 @@ public class Menu {
 
     }
 
-    public void printSingleLoanInfo(Loan curLoan) {
+    public void printSingleLoanInfo(LoanDTO curLoan) {
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwnersName());
         System.out.println("Category: " + curLoan.getCategory());
         System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
         System.out.println("Interest: " + curLoan.getInterestRate() + "Rate: " + curLoan.getPace());
-        Loan.Status status = curLoan.getStatus();
-        System.out.println("Status: " + status);
-
+        //Loan.Status status = curLoan.getStatus();
+        //System.out.println("Status: " + status);
+        /*
         switch (status) {
             case RISK:
                 System.out.println("status: in risk");
@@ -341,9 +342,8 @@ public class Menu {
                 break;
             case FINISHED:
                 System.out.println("status: finished");
-
                 break;
-        }
+        }*/
     }
 
     public int getUserChoice(boolean fileInSystem) {
@@ -366,4 +366,5 @@ public class Menu {
         }
         return usersChoice;
     }
+
 }
