@@ -5,18 +5,17 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BankInterface {
 
      List<ClientDTO> getClients() ;
 
      List<CategoryDTO> getCategories();
-
+/*
      Map<Integer, Loan> getNewLoans() ;
 
      Map<Integer, Loan> getPendingLoansLoans() ;
-
+*/
      void withdrawMoneyFromAccount(int clientIndex, int amountToWithdraw) ;
 
      void loanMoneyToAccount(int clientIndex, int amountToLoad) ;
@@ -25,5 +24,5 @@ public interface BankInterface {
 
      List<LoanDTO> findMatchLoans(int clientIndex, LoanTerms terms);
 
-     void addInvestorsToLoans(List<LoanDTO> loansToInvest,int clientIndex) ;
+     void startInlayProcess(List<LoanDTO> loansToInvest, int clientIndex) ;
 }

@@ -63,4 +63,11 @@ public class Client {
     }
 
     public  Map<Integer, Set<Movement>> getMovements(){return movements;}
+
+    public void setAsGiver(Loan loan){
+        asGiver.add(loan);
+    }
+    public void setCurrBalance(int amountToDeducted){
+        currBalance-=amountToDeducted;
+    }
 }

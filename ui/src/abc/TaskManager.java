@@ -63,7 +63,7 @@ public class TaskManager {
         getLoanProperties(bank.getCurrBalance(clientIndex));
         List<LoanDTO> loans = bank.findMatchLoans(clientIndex, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
-        bank.addInvestorsToLoans(loans,clientIndex);
+        bank.startInlayProcess(loans,clientIndex);
 
     }
 

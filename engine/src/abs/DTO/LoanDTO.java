@@ -11,7 +11,7 @@ public class LoanDTO {
     private String id;
     private Client owner;
     private int category;
-    private double originalAmount, amountPaidBack, amountCollectedPending;
+    private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private int status;
     private int startingTimeUnit, endingTimeUnit, pace, nextPayment;
@@ -52,19 +52,19 @@ public class LoanDTO {
 
     ;
 
-    public double getOriginalAmount() {
+    public int getOriginalAmount() {
         return this.originalAmount;
     }
 
     ;
 
-    public double getAmountPaidBack() {
+    public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
 
     ;
 
-    public double getAmountCollectedPending() {
+    public int getAmountCollectedPending() {
         return this.amountCollectedPending;
     }
 
