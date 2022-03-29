@@ -36,7 +36,7 @@ public class TaskManager {
                 break;
             case 3:
                 System.out.println("3. get clients information");
-                loadMoneyToAccount();
+                //menu.();
                 break;
             case 4:
                 System.out.println("4. load money to account");
