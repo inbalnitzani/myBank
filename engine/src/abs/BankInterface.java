@@ -5,6 +5,7 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BankInterface {
 
@@ -16,13 +17,13 @@ public interface BankInterface {
 
      Map<Integer, Loan> getPendingLoansLoans() ;
 */
-     void withdrawMoneyFromAccount(int clientIndex, int amountToWithdraw) ;
+     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) ;
 
-     void loanMoneyToAccount(int clientIndex, int amountToLoad) ;
+     void loanMoneyToAccount(String clientName, int amountToLoad) ;
 
-     int getCurrBalance(int clientIndex);
+     int getCurrBalance(String clientName);
 
-     List<LoanDTO> findMatchLoans(int clientIndex, LoanTerms terms);
+     List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 
-     void startInlayProcess(List<LoanDTO> loansToInvest, int clientIndex) ;
+     void startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 }

@@ -7,13 +7,13 @@ import java.util.*;
 
 public class Bank implements BankInterface {
 
-    private List<String> categories;
+    private Set<String> categories;
     private List<Loan> activeLoans;
     private List<Loan> inRiskLoans;
     //private Map<Integer, Loan> newLoans;
     //private Map<Integer, Loan> pendingLoans;
     private Map<String, Loan> waitingLoans;
-    private List<Client> clients;
+    private Map<String,Client> clients;
     private MatchLoans matchLoans;
     public static int worldTime = 1;
     public static int PENDING = 2;
@@ -21,26 +21,36 @@ public class Bank implements BankInterface {
 
     //CTOR
     public Bank() {
-        clients = new ArrayList<Client>();
+        clients = new HashMap<String,Client>();
         activeLoans = new ArrayList<Loan>();
         inRiskLoans = new ArrayList<Loan>();
         //   newLoans = new HashMap<Integer, Loan>();
         //    pendingLoans = new HashMap<Integer, Loan>();
         waitingLoans = new HashMap<String, Loan>();
+categories=new HashSet<String>();
+        Client client = new Client("Menash", 5000);
+        Client client1 = new Client("Avrum", 1000);
+        Client client2 = new Client("Tikva", 10000);
+        Client client3 = new Client("Shosh", 20000);
+        clients.put(client.getFullName(),client);
+        clients.put(client1.getFullName(),client1);
+        clients.put(client2.getFullName(),client2);
+        clients.put(client3.getFullName(),client3);
+
+        Loan loan = new Loan(client1, 2500, 15);
+        Loan loan1 = new Loan(client, 3000, 3);
+        waitingLoans.put("bar mitzva", loan);
+        waitingLoans.put("build a room", loan1);
+        categories.add("Setup a business");
+        categories.add("Investment");
+
+
     }
 
     //GETTERS
     public List<ClientDTO> getClients() {
         List<ClientDTO> clientDTO = new ArrayList<ClientDTO>();
-        /*
-        Collection<Client> clientCollection=clients.values();
-         for(Client client:clientCollection)
-        {
-            ClientDTO clientDto=new ClientDTO(client);
-            clientDTO.add(clientDto);
-        }
-*/
-        for (Client client : clients) {
+         for (Client client : clients.values()) {
             ClientDTO clientDto = new ClientDTO(client);
             clientDTO.add(clientDto);
         }
@@ -67,26 +77,25 @@ public class Bank implements BankInterface {
         return pendingLoans;
     }*/
 
-    public void withdrawMoneyFromAccount(int clientIndex, int amountToWithdraw) {
-        clients.get(clientIndex).WithdrawingMoney(amountToWithdraw);
+    public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
+        clients.get(clientName).WithdrawingMoney(amountToWithdraw);
         ///זה בדיוק כמו שדיברנו בשיעור האחרון - רק מעביר טיפול מגורם אחד לשני
         //בנוסף לא מקבלים client  אמיתי/
     }
 
-    public void loanMoneyToAccount(int clientIndex, int amountToLoad) {
-        clients.get(clientIndex).addMoneyToAccount(amountToLoad);
+    public void loanMoneyToAccount(String clientName, int amountToLoad) {
+        clients.get(clientName).addMoneyToAccount(amountToLoad);
     }
 
-    public int getCurrBalance(int indexOfClient) {
-        ClientDTO clientDTO = new ClientDTO(clients.get(indexOfClient));
+    public int getCurrBalance(String clientName) {
+        ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
         return clientDTO.getCurrBalance();
     }
 
-    public List<LoanDTO> findMatchLoans(int clientIndex, LoanTerms terms) {
-        matchLoans = new MatchLoans(clients.get(clientIndex), terms);
+    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
+        matchLoans = new MatchLoans(clients.get(clientName), terms);
         List<Loan> loans = new ArrayList<>();
-        //loans = matchLoans.checkRelevantLoans(loans, newLoans);
-        //loans = matchLoans.checkRelevantLoans(loans, pendingLoans);
+        loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
         for (Loan loan : loans) {
             loanDTOS.add(new LoanDTO(loan));
@@ -147,8 +156,8 @@ public class Bank implements BankInterface {
         });
     }
 
-    public void startInlayProcess(List<LoanDTO> loansDTOToInvest, int clientIndex) {
-        Client client = clients.get(clientIndex);
+    public void startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
+        Client client = clients.get(clientName);
         List<Loan> loansToInvest = createSortedListOfLoans(loansDTOToInvest);
         addInvestorToLoans(loansToInvest, client);
     }

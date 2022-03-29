@@ -1,8 +1,11 @@
 package abs;
 
 import abs.DTO.CategoryDTO;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LoanTerms {
 
@@ -14,9 +17,10 @@ public class LoanTerms {
     public LoanTerms(){}
 
     public void setMaxAmount(int amount){
+        categories=new ArrayList<String>();
         maxAmount=amount;
     }
-    public void setCategories(List<CategoryDTO> categories)
+    public void setCategories(@NotNull Set<CategoryDTO> categories)
     {
         for (CategoryDTO category:categories) {
             this.categories.add(category.getCategoryName());
