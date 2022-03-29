@@ -4,10 +4,11 @@ import abs.DTO.CategoryDTO;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Bank implements BankInterface {
 
-    private Set<String> categories;
+    private Set<Category> categories;
     private List<Loan> activeLoans;
     private List<Loan> inRiskLoans;
     //private Map<Integer, Loan> newLoans;
@@ -27,7 +28,7 @@ public class Bank implements BankInterface {
         //   newLoans = new HashMap<Integer, Loan>();
         //    pendingLoans = new HashMap<Integer, Loan>();
         waitingLoans = new HashMap<String, Loan>();
-categories=new HashSet<String>();
+        categories=new HashSet<Category>();
         Client client = new Client("Menash", 5000);
         Client client1 = new Client("Avrum", 1000);
         Client client2 = new Client("Tikva", 10000);
@@ -41,8 +42,9 @@ categories=new HashSet<String>();
         Loan loan1 = new Loan(client, 3000, 3);
         waitingLoans.put("bar mitzva", loan);
         waitingLoans.put("build a room", loan1);
-        categories.add("Setup a business");
-        categories.add("Investment");
+        categories.add(new Category("Setup a business"));
+        categories.add(new Category("Investment"));
+
 
 
     }
@@ -59,8 +61,8 @@ categories=new HashSet<String>();
 
     public List<CategoryDTO> getCategories() {
         List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>();
-        for (String category : categories) {
-            categoriesDTO.add(new CategoryDTO(category));
+        for (Category category : categories.stream().collect(Collectors.toList())) {
+            categoriesDTO.add(new CategoryDTO(category.getCategoryName()));
         }
         return categoriesDTO;
     }

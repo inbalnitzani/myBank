@@ -10,20 +10,21 @@ import java.util.Set;
 public class LoanTerms {
 
     public int maxAmount;
-    public List<String> categories;
+    public List<Category> categories;
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
 
-    public LoanTerms(){}
+    public LoanTerms(){
+        categories=new ArrayList<Category>();
+    }
 
     public void setMaxAmount(int amount){
-        categories=new ArrayList<String>();
         maxAmount=amount;
     }
     public void setCategories(@NotNull Set<CategoryDTO> categories)
     {
         for (CategoryDTO category:categories) {
-            this.categories.add(category.getCategoryName());
+            this.categories.add(new Category(category.getCategoryName()));
         }
     }
     public void setMinInterestForTimeUnit(int minInterestForTimeUnit){
@@ -33,7 +34,7 @@ public class LoanTerms {
     {
         this.minTimeForLoan=minTimeForLoan;
     }
-    public List<String> getCategories(){return categories;}
+    public List<Category> getCategories(){return categories;}
     public int getMinInterestForTimeUnit(){return minInterestForTimeUnit;}
     public int getMinTimeForLoan(){return minTimeForLoan;}
 }
