@@ -5,7 +5,7 @@ import java.util.List;
 public class LoanTerms {
 
     public int maxAmount;
-    public List<String> categories;
+    public List<CategoryDTO> categories;
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
 
@@ -14,7 +14,7 @@ public class LoanTerms {
     public void setMaxAmount(int amount){
         maxAmount=amount;
     }
-    public void setCategories(List<String> categories)
+    public void setCategories(List<CategoryDTO> categories)
     {
         this.categories=categories;
     }
