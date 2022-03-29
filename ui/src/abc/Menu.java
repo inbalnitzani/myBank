@@ -10,7 +10,7 @@ import java.util.*;
 public class Menu {
 
     Scanner scanner = new Scanner(System.in);
-    static final int END_OF_INPUT = -1; //Minimum age requirement
+    static final int END_OF_INPUT = -2; //Minimum age requirement
 
     public Menu() {
     }
@@ -56,8 +56,11 @@ public class Menu {
                     minTime = 0;
                 }
             } catch (Exception e) {
-                scanner.next();
-                System.out.println("Please enter an integer, more than 0, or -1 if you don't have any preference.");
+                scanner.nextLine();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Invalid input! Please enter an integer, more than 0, or -1 if you don't have any preference.");
+                }
             }
         }
         return minTime;
@@ -92,7 +95,7 @@ public class Menu {
                     validInput = true;
                 }
             } catch (Exception e) {
-                scanner.next();
+                scanner.nextLine();
             } finally {
                 if (!validInput) {
                     System.out.println("Invalid input. Please try again.");
@@ -117,7 +120,7 @@ public class Menu {
                 }
                 userChoice = scanner.nextInt();
             } catch (Exception e) {
-                scanner.next();
+                scanner.nextLine();
             }
             if (userChoice != 1) {
                 System.out.println("Please choose 1 for stay or 2 for exit!");
@@ -155,7 +158,7 @@ public class Menu {
                     System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
                 }
             } catch (Exception e) {
-                scanner.next();
+                scanner.nextLine();
                 System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
             }
         }
@@ -170,18 +173,29 @@ public class Menu {
         }
     }
 
-    public List<CategoryDTO> chooseCategory(List<CategoryDTO> categories) {
+    public Set<CategoryDTO> chooseCategory(List<CategoryDTO> categories) {
         printCategories(categories);
+        CategoryDTO categoryDTO;
         boolean validInput = false;
-        List<CategoryDTO> userCategoriesChoice = new ArrayList<CategoryDTO>();
+        Set<CategoryDTO> userCategoriesChoice = new HashSet<CategoryDTO>();
         int numberOfCategories = categories.size(), currCategory = 0;
-        while (currCategory != -END_OF_INPUT) {
+        while (currCategory != -END_OF_INPUT && userCategoriesChoice.size()<numberOfCategories) {
             currCategory = scanCategoryNumber(numberOfCategories);
-            if (currCategory != END_OF_INPUT)
-                userCategoriesChoice.add(categories.get(currCategory));
+
+            if (currCategory != END_OF_INPUT) {
+                categoryDTO = categories.get(currCategory);
+                if (userCategoriesChoice.contains(categoryDTO)) {
+                    System.out.println("You have already chose this category. Please choose again.");
+                } else {
+                    userCategoriesChoice.add(categoryDTO);
+                }
+            }
         }
-        if (userCategoriesChoice.size() == 0)
-            userCategoriesChoice = categories;
+        if (userCategoriesChoice.size() == 0) {
+            for (CategoryDTO category : categories) {
+                userCategoriesChoice.add(category);
+            }
+        }
         return userCategoriesChoice;
     }
 
@@ -194,11 +208,11 @@ public class Menu {
                 if (numberOfCtegory < maxNumOfCategories + 1) {
                     validInput = true;
                 } else {
-                    System.out.println("Invalid input! There are only " + maxNumOfCategories + "categories.");
+                    System.out.println("Invalid input! There are only " + maxNumOfCategories + " categories.");
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input! Please enter an integer between 1 to " + maxNumOfCategories + ".");
-                scanner.next();
+                scanner.nextLine();
             }
         }
         return (numberOfCtegory - 1);
@@ -206,13 +220,13 @@ public class Menu {
 
     public void printCategories(List<CategoryDTO> categories) {
         System.out.println("Please choose categories from the next list:");
+        int numOfCategories=categories.size();
+
+        for (int index=1; index<= numOfCategories; index++) {
+            System.out.println(index+ ". " + categories.get(index - 1).getCategoryName());
+        }
         System.out.println("Enter the categories numbers, and finish with -1.");
         System.out.println("If you don't have any preference, please enter -1");
-        int index = 0;
-        for (CategoryDTO category : categories) {
-            System.out.println(index + ". " + category);
-            index++;
-        }
     }
 
     public void printClientsNames(Collection<ClientDTO> clients, boolean includeBalance) {
@@ -251,7 +265,7 @@ public class Menu {
                     validInput = true;
                 }
             } catch (InputMismatchException e) {
-                scanner.next();
+                scanner.nextLine();
             }
             if (!validInput) {
                 System.out.println("Invalid input! Please enter a positive integer!");
@@ -266,11 +280,11 @@ public class Menu {
         while (!validInput) {
             try {
                 numberOfClient = scanner.nextInt();
-                if (numberOfClient > 0 && numberOfClient < maxClients) {
+                if (numberOfClient > 0 && numberOfClient < maxClients+1) {
                     validInput = true;
                 }
             } catch (Exception e) {
-                scanner.next();
+                scanner.nextLine();
             } finally {
                 if (!validInput) {
                     System.out.println("Invalid Input!! Please enter a number between 1 to " + maxClients);
@@ -364,7 +378,7 @@ public class Menu {
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                scanner.next();
+                scanner.nextLine();
             }
         }
         return usersChoice;

@@ -1,6 +1,7 @@
 package abs;
 
 import java.util.List;
+import java.util.Map;
 
 public class MatchLoans {
     private Client client;
@@ -12,9 +13,9 @@ public class MatchLoans {
         this.loanTerms=loanTerms;
     }
 
-    public List<Loan> checkRelevantLoans(List<Loan> matchLoans, List<Loan> loansToCheck) {
+    public List<Loan> checkRelevantLoans(List<Loan> matchLoans, Map<String,Loan> loansToCheck) {
         if (loansToCheck != null) {
-            for (Loan loan : loansToCheck) {
+            for (Loan loan : loansToCheck.values()) {
                 if (loan.getOwner().equals(client)) {
                     continue;
                 } else if (!loanTerms.getCategories().contains(loan.getCategory())) {

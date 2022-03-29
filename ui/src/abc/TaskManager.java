@@ -21,10 +21,10 @@ public class TaskManager {
     private LoanTerms currentLoan;
 
     public TaskManager() {
+        currentLoan=new LoanTerms();
     }
 
-    public void actToUserChoice() {
-        int currentAction = 0;
+    public void actToUserChoice(int currentAction) {
         switch (currentAction) {
             case 1:
                 System.out.println("1. read a file");
@@ -48,6 +48,7 @@ public class TaskManager {
                 break;
             case 6:
                 System.out.println("6. Activate inlay");
+                startOfInlay();
                 break;
             case 7:
                 System.out.println("7. promote timeline and make payments");
@@ -59,11 +60,11 @@ public class TaskManager {
     }
 
     public void startOfInlay() {
-        int clientIndex = getClientIndexForAction();
-        getLoanProperties(bank.getCurrBalance(clientIndex));
-        List<LoanDTO> loans = bank.findMatchLoans(clientIndex, currentLoan);
+        String clientName = getClientNameForAction();
+        getLoanProperties(bank.getCurrBalance(clientName));
+        List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
-        bank.startInlayProcess(loans,clientIndex);
+        bank.startInlayProcess(loans,clientName);
 
     }
 
@@ -110,34 +111,33 @@ public class TaskManager {
             while (currentAction != EXIT_SYSTEM) {
                 menu.printMenu();
                 currentAction = menu.getUserChoice(fileInSystem);
-                actToUserChoice();
+                actToUserChoice(currentAction);
             }
             stillInSystem = menu.verifyExit();
         }
     }
 
     public void loadMoneyToAccount() {
-        int clientIndex = getClientIndexForAction();
+        String clientName = getClientNameForAction();
         System.out.println("Enter the amount you want to charge your account");
         int amountToCharge = menu.scanAmountFromUser();
-      ///////////////////////////////////////////////////////////////////////////////////////////////
-        bank.loanMoneyToAccount(clientIndex,amountToCharge);
-        //client.addMoneyToAccount(amountToCharge);
+        bank.loanMoneyToAccount(clientName,amountToCharge);
     }
 
     public void withdrawMoney() {
-        int clientIndex = getClientIndexForAction();
+        String clientName = getClientNameForAction();
         System.out.println("Enter the amount you want to withdraw from your account");
-        int amountToWithdraw = menu.chooseAmountByBalance(bank.getCurrBalance(clientIndex));
-        bank.withdrawMoneyFromAccount(clientIndex,amountToWithdraw);
+        int amountToWithdraw = menu.chooseAmountByBalance(bank.getCurrBalance(clientName));
+        bank.withdrawMoneyFromAccount(clientName,amountToWithdraw);
     }
 
-    public int getClientIndexForAction() {
+    public String getClientNameForAction() {
         System.out.println("Please choose a client from the next list:");
         System.out.println("(Enter the number of the client)");
         List<ClientDTO> clients=bank.getClients();
         menu.printClientsNames(clients, false);
-        return menu.getClientNumber(clients.size());
+        int clientNumber= menu.getClientNumber(clients.size());
+        return clients.get(clientNumber).getFullName();
     }
 
 
