@@ -1,4 +1,4 @@
-package abs;
+package abs.DTO;
 
 public class CategoryDTO {
     private String categoryName;
@@ -6,4 +6,5 @@ public class CategoryDTO {
     public CategoryDTO(String name){
         categoryName=name;
     }
+    public String getCategoryName(){return categoryName;}
 }

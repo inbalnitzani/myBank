@@ -1,5 +1,9 @@
 package abs;
 
+import abs.DTO.CategoryDTO;
+import abs.DTO.ClientDTO;
+import abs.DTO.LoanDTO;
+
 import java.util.List;
 import java.util.Map;
 
