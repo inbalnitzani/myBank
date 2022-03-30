@@ -10,7 +10,7 @@ import java.util.List;
 public class TaskManager {
     private final BankInterface bank = new Bank();
     private final Menu menu = new Menu();
-    private boolean fileInSystem = true;
+    private boolean fileInSystem = false;
     private LoanTerms currentLoan;
     private int currentAction;
 
@@ -35,7 +35,7 @@ public class TaskManager {
     public void actToUserChoice() {
         switch (currentAction) {
             case 1:
-             //   getXMLFile();
+                getXMLFile();
                 break;
             case 2:
                 System.out.println("2. get loans information");
