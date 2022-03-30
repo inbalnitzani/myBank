@@ -1,9 +1,10 @@
 package abs;
 
 import abs.DTO.CategoryDTO;
+import abs.DTO.LoanTermsDTO;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Set;
 
@@ -14,28 +15,35 @@ public class LoanTerms {
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
 
-    public LoanTerms(){
-        categories=new ArrayList<Category>();
+    public LoanTerms(LoanTermsDTO loanTermsDTO,List<Category>categoryList) {
+        this.maxAmount=loanTermsDTO.maxAmount;
+        this.minTimeForLoan=loanTermsDTO.minTimeForLoan;
+        this.minInterestForTimeUnit=loanTermsDTO.minInterestForTimeUnit;
+        this.categories=categoryList;
     }
 
-    public void setMaxAmount(int amount){
-        maxAmount=amount;
+    public void setMaxAmount(int amount) {
+        maxAmount = amount;
     }
-    public void setCategories(@NotNull Set<CategoryDTO> categories)
-    {
-        for (CategoryDTO category:categories) {
-            this.categories.add(new Category(category.getCategoryName()));
-        }
+
+    public void setMinInterestForTimeUnit(int minInterestForTimeUnit) {
+        this.minInterestForTimeUnit = minInterestForTimeUnit;
     }
-    public void setMinInterestForTimeUnit(int minInterestForTimeUnit){
-        this.minInterestForTimeUnit =minInterestForTimeUnit;
+
+    public void setMinTimeForLoan(int minTimeForLoan) {
+        this.minTimeForLoan = minTimeForLoan;
     }
-    public void setMinTimeForLoan(int minTimeForLoan)
-    {
-        this.minTimeForLoan=minTimeForLoan;
+
+    public int getMinInterestForTimeUnit() {
+        return minInterestForTimeUnit;
     }
-    public List<Category> getCategories(){return categories;}
-    public int getMinInterestForTimeUnit(){return minInterestForTimeUnit;}
-    public int getMinTimeForLoan(){return minTimeForLoan;}
+
+    public int getMinTimeForLoan() {
+        return minTimeForLoan;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
 }
 

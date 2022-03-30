@@ -13,7 +13,7 @@ public class Loan {
     //DATA MEMBERS
     private String id;
     private Client owner;
-    private int category;
+    private Category category;
     private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private Status status;
@@ -22,14 +22,15 @@ public class Loan {
     private List<Payment> payments;
 
     //CTOR
-    public Loan(Client owner, int amount, int rate) {
+    public Loan(Client owner, int amount, int rate, String categoryName) {
         this.owner = owner;
         this.originalAmount = amount;
         this.interestRate = rate;
+        this.category=new Category(categoryName);
     }
 
     public Loan(LoanDTO loanDTO){
-      new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate());
+      new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory().getCategoryName());
     }
 
     //GETTERS
@@ -45,7 +46,7 @@ public class Loan {
         return this.status;
     }
 
-    public int getCategory() {
+    public Category getCategory() {
         return this.category;
     }
 

@@ -1,5 +1,6 @@
 package abs.DTO;
 
+import abs.Category;
 import abs.Client;
 import abs.Loan;
 
@@ -10,7 +11,7 @@ public class LoanDTO {
     //DATA MEMBERS
     private String id;
     private Client owner;
-    private int category;
+    private CategoryDTO category;
     private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private int status;
@@ -22,7 +23,7 @@ public class LoanDTO {
     public LoanDTO(Loan loan) {
         this.owner = loan.getOwner();
         this.id = loan.getLoansID();
-        this.category = loan.getCategory();
+        this.category = new CategoryDTO(loan.getCategory());
         this.originalAmount = loan.getOriginalAmount();
         this.startingTimeUnit = loan.getStartingTimeUnit();
         this.endingTimeUnit = loan.getEndingTimeUnit();
@@ -46,7 +47,7 @@ public class LoanDTO {
     public int getStatus(){
        return this.status;
      };
-    public int getCategory() {
+    public CategoryDTO getCategory() {
         return this.category;
     }
 
