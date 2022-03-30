@@ -3,6 +3,7 @@ package abc;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
+import abs.DTO.LoanTermsDTO;
 import abs.schemaClasses.AbsDescriptor;
 
 import javax.xml.bind.JAXBContext;
@@ -18,10 +19,10 @@ public class TaskManager {
     private final BankInterface bank = new Bank();
     private final Menu menu = new Menu();
     private boolean fileInSystem = false;
-    private LoanTerms currentLoan;
+    private LoanTermsDTO currentLoan;
 
     public TaskManager() {
-        currentLoan=new LoanTerms();
+        currentLoan=new LoanTermsDTO();
     }
 
     public void actToUserChoice(int currentAction) {
@@ -64,8 +65,9 @@ public class TaskManager {
         getLoanProperties(bank.getCurrBalance(clientName));
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
-        bank.startInlayProcess(loans,clientName);
-
+        if (!loans.isEmpty()) {
+            bank.startInlayProcess(loans, clientName);
+        }
     }
 
     public void getLoanProperties(int clientBalance) {

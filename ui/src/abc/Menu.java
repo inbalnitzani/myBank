@@ -10,7 +10,7 @@ import java.util.*;
 public class Menu {
 
     Scanner scanner = new Scanner(System.in);
-    static final int END_OF_INPUT = -2; //Minimum age requirement
+    static final int END_OF_INPUT = -1; //Minimum age requirement
 
     public Menu() {
     }
@@ -23,7 +23,7 @@ public class Menu {
         while (!validInput) {
             try {
                 minInterest = scanner.nextInt();
-                if (0 < minInterest && minInterest < 100) {
+                if (0 <= minInterest && minInterest < 100) {
                     validInput = true;
                 } else if (minInterest == END_OF_INPUT) {
                     minInterest = 0;
@@ -49,11 +49,11 @@ public class Menu {
         while (!validInput) {
             try {
                 minTime = scanner.nextInt();
-                if (0 < minTime) {
+                if (END_OF_INPUT <= minTime) {
                     validInput = true;
-                }
-                if (minTime == END_OF_INPUT) {
-                    minTime = 0;
+                    if (minTime == END_OF_INPUT) {
+                        minTime = 0;
+                    }
                 }
             } catch (Exception e) {
                 scanner.nextLine();
@@ -133,36 +133,43 @@ public class Menu {
     }
 
     public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
-        System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
-        System.out.println("If you don't want any loan, insert -1.");
-        printLoansInfo(optionalLoans);
-        List<Integer> loansIndex=scanLoansFromUser(optionalLoans.size());
-        List<LoanDTO> loansToInvest=new ArrayList<LoanDTO>();
-        for (int index:loansIndex){
-            loansToInvest.add(optionalLoans.get(index));
+        List<LoanDTO> loansToInvest = null;
+        if (optionalLoans.isEmpty()) {
+            System.out.println("There are no loans suitable for your requirements. ");
+        } else {
+            System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
+            System.out.println("If you don't want any loan, insert -1.");
+            printLoansInfo(optionalLoans);
+            Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
+            loansToInvest = new ArrayList<LoanDTO>();
+            for (int index : loansIndex) {
+                loansToInvest.add(optionalLoans.get(index));
+            }
         }
         return loansToInvest;
     }
 
-    public List<Integer> scanLoansFromUser(int maxLoans) {
+    public Set<Integer> scanLoansFromUser(int maxLoans) {
         int currLoan = 0;
-        List<Integer> loansToInvest = new ArrayList<>();
-        System.out.println("Please");
-        while (currLoan != END_OF_INPUT) {
+        Set<Integer> loansToInvestIndex = new HashSet<Integer>();
+        while (currLoan != END_OF_INPUT && loansToInvestIndex.size()<maxLoans) {
             try {
                 currLoan = scanner.nextInt();
-                if (currLoan <= maxLoans + 1 && currLoan > 0) {
-                    loansToInvest.add(currLoan - 1);
+                if (currLoan <= maxLoans && currLoan > 0) {
+                    if(loansToInvestIndex.contains(currLoan-1)){
+                        System.out.println("You have already chose this loan, please choose another loan, or finish with -1.");
+                    }
+                    else loansToInvestIndex.add(currLoan - 1);
                 }
-                if (currLoan != END_OF_INPUT) {
-                    System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
+                else if (currLoan != END_OF_INPUT) {
+                    System.out.println("Invalid input. Please insert an integer between 1 to " + maxLoans + ", or -1 for continue without loans.");
                 }
             } catch (Exception e) {
                 scanner.nextLine();
                 System.out.println("Please insert an integer between 1 to " + maxLoans + ".");
             }
         }
-        return loansToInvest;
+        return loansToInvestIndex;
     }
 
     public void printLoansInfo(List<LoanDTO> optionalLoans) {
@@ -179,10 +186,10 @@ public class Menu {
         boolean validInput = false;
         Set<CategoryDTO> userCategoriesChoice = new HashSet<CategoryDTO>();
         int numberOfCategories = categories.size(), currCategory = 0;
-        while (currCategory != -END_OF_INPUT && userCategoriesChoice.size()<numberOfCategories) {
-            currCategory = scanCategoryNumber(numberOfCategories);
+        while (currCategory != (END_OF_INPUT-1) && userCategoriesChoice.size()<numberOfCategories) {
+            currCategory = scanCategoryIndex(numberOfCategories);
 
-            if (currCategory != END_OF_INPUT) {
+            if (currCategory != (END_OF_INPUT-1) ){
                 categoryDTO = categories.get(currCategory);
                 if (userCategoriesChoice.contains(categoryDTO)) {
                     System.out.println("You have already chose this category. Please choose again.");
@@ -199,16 +206,17 @@ public class Menu {
         return userCategoriesChoice;
     }
 
-    public int scanCategoryNumber(int maxNumOfCategories) {
+    public int scanCategoryIndex(int maxNumOfCategories) {
         boolean validInput = false;
         int numberOfCtegory = 0;
         while (!validInput) {
             try {
                 numberOfCtegory = scanner.nextInt();
-                if (numberOfCtegory < maxNumOfCategories + 1) {
+                if((numberOfCtegory>0 && numberOfCtegory < maxNumOfCategories + 1 )|| (numberOfCtegory==-1)){
                     validInput = true;
                 } else {
                     System.out.println("Invalid input! There are only " + maxNumOfCategories + " categories.");
+                    System.out.println("Please try again.");
                 }
             } catch (Exception e) {
                 System.out.println("Invalid input! Please enter an integer between 1 to " + maxNumOfCategories + ".");
