@@ -160,7 +160,7 @@ public class Menu {
     public String getFileFullNamePath() {
         String filePath = null;
         boolean validInput = false;
-        System.out.println("Please insert a full path name of your XML");
+           System.out.println("Please insert a full path name of your XML");
         while (!validInput) {
             try {
                 filePath = scanner.next();
@@ -218,17 +218,17 @@ public class Menu {
         }
     }
 
-    public Set<String> chooseCategory(List<String> categories) {
-        printCategories(categories);
+    public Set<String> chooseCategory(List<String> existCategories) {
+        printCategories(existCategories);
         String  categoryDTO;
         boolean validInput = false;
         Set<String> userCategoriesChoice = new HashSet<String>();
-        int numberOfCategories = categories.size(), currCategory = 0;
-        while (currCategory != (END_OF_INPUT - 1) && userCategoriesChoice.size() < numberOfCategories) {
-            currCategory = scanCategoryIndex(numberOfCategories);
+        int sumCategories = existCategories.size(), currCategory = 0;
+        while (currCategory != (END_OF_INPUT - 1) && userCategoriesChoice.size() < sumCategories) {
+            currCategory = scanCategoryIndex(sumCategories);
 
             if (currCategory != (END_OF_INPUT - 1)) {
-                categoryDTO = categories.get(currCategory);
+                categoryDTO = existCategories.get(currCategory);
                 if (userCategoriesChoice.contains(categoryDTO)) {
                     System.out.println("You have already chose this category. Please choose again.");
                 } else {
@@ -237,7 +237,7 @@ public class Menu {
             }
         }
         if (userCategoriesChoice.size() == 0) {
-            for (String category : categories) {
+            for (String category : existCategories) {
                 userCategoriesChoice.add(category);
             }
         }
@@ -246,11 +246,11 @@ public class Menu {
 
     public int scanCategoryIndex(int maxNumOfCategories) {
         boolean validInput = false;
-        int numberOfCtegory = 0;
+        int numberOfCategory = 0;
         while (!validInput) {
             try {
-                numberOfCtegory = scanner.nextInt();
-                if ((numberOfCtegory > 0 && numberOfCtegory < maxNumOfCategories + 1) || (numberOfCtegory == -1)) {
+                numberOfCategory = scanner.nextInt();
+                if ((numberOfCategory > 0 && numberOfCategory < maxNumOfCategories + 1) || (numberOfCategory == -1)) {
                     validInput = true;
                 } else {
                     System.out.println("Invalid input! There are only " + maxNumOfCategories + " categories.");
@@ -261,7 +261,7 @@ public class Menu {
                 scanner.nextLine();
             }
         }
-        return (numberOfCtegory - 1);
+        return (numberOfCategory - 1);
     }
 
     public void printCategories(List<String> categories) {

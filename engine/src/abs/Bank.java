@@ -44,8 +44,8 @@ public class Bank implements BankInterface {
         Loan loan1 = new Loan(client, 3000, 3, "Setup a business");
         waitingLoans.put("bar mitzva", loan);
         waitingLoans.put("build a room", loan1);
-       //categories.put("Setup a business",new Category("Setup a business"));
-        //categories.put("Investment",new Category("Investment"));
+        categories.add("Setup a business");
+        categories.add("Investment");
     }
 
     //GETTERS
@@ -83,30 +83,29 @@ public class Bank implements BankInterface {
         return clientDTO.getCurrBalance();
     }
 
-    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO){
+    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
 
-        List<String> categories=new ArrayList<String>();
-        for (String string: loanTermsDTO.categories)
-        {
+        List<String> categories = new ArrayList<String>();
+        for (String string : loanTermsDTO.categories) {
             //categories.add(this.categories.get(categoryDTO.getCategoryName()));
         }
         return categories;
     }
 
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
-        //  LoanTerms loanTerms=new LoanTerms(terms,createCategoryListFromLoanTermsDto(terms));
-    //    matchLoans = new MatchLoans(clients.get(clientName), loanTerms);
+        matchLoans = new MatchLoans(clients.get(clientName), terms);
         List<Loan> loans = new ArrayList<>();
         loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
+        List<LoanDTO> loanDTOS = createListLoanDto(loans);
+        return loanDTOS;
+    }
+
+    public List<LoanDTO> createListLoanDto(List<Loan> loans) {
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
         for (Loan loan : loans) {
             loanDTOS.add(new LoanDTO(loan));
         }
         return loanDTOS;
-    }
-
-    public Loan changeLoanDtoToLoan(LoanDTO loanDTO) {
-        return new Loan(loanDTO);
     }
 
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
@@ -143,7 +142,7 @@ public class Bank implements BankInterface {
     public List<Loan> createSortedListOfLoans(List<LoanDTO> loansDTOToInvest) {
         List<Loan> loansToInvest = new ArrayList<Loan>();
         for (LoanDTO loanDTO : loansDTOToInvest) {
-            loansToInvest.add(changeLoanDtoToLoan(loanDTO));
+            loansToInvest.add(changeListLoanDtoListLoanDTO(loanDTO));
         }
         sortLoanListByLeftAmount(loansToInvest);
         return loansToInvest;
