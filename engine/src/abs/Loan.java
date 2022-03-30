@@ -6,14 +6,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-
 public class Loan {
-
 
     //DATA MEMBERS
     private String id;
     private Client owner;
-    private Category category;
+    private String category;
     private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private Status status;
@@ -26,11 +24,11 @@ public class Loan {
         this.owner = owner;
         this.originalAmount = amount;
         this.interestRate = rate;
-        this.category=new Category(categoryName);
+        this.category=categoryName;
     }
 
     public Loan(LoanDTO loanDTO){
-      new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory().getCategoryName());
+      new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
     }
 
     //GETTERS
@@ -46,7 +44,7 @@ public class Loan {
         return this.status;
     }
 
-    public Category getCategory() {
+    public String getCategory() {
         return this.category;
     }
 

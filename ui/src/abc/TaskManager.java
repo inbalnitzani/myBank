@@ -3,7 +3,7 @@ package abc;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
-import abs.DTO.LoanTermsDTO;
+import abs.LoanTerms;
 
 import java.util.List;
 
@@ -11,8 +11,12 @@ public class TaskManager {
     private final BankInterface bank = new Bank();
     private final Menu menu = new Menu();
     private boolean fileInSystem = false;
-    private LoanTermsDTO currentLoan;
+    private LoanTerms currentLoan;
     private int currentAction;
+
+    public TaskManager() {
+        currentLoan = new LoanTerms();
+    }
 
     public void manageSystem() {
         final int EXIT_SYSTEM = 8;
@@ -28,30 +32,10 @@ public class TaskManager {
         }
     }
 
-    public TaskManager() {
-        currentLoan = new LoanTermsDTO();
-    }
-
-    public void getXMLFile() {
-        String fileName = null;
-        boolean tryLoadFile = true, succeed = false;
-        while (tryLoadFile) {
-            fileName = menu.getFileFullNamePath();
-            succeed = bank.getXMLFile(fileName);
-            if (succeed)
-                System.out.println("File read successfully");
-            else {
-                if (!menu.checkTryAgain(fileName))
-                    tryLoadFile = false;
-            }
-        }
-    }
-
     public void actToUserChoice() {
         switch (currentAction) {
             case 1:
                 getXMLFile();
-
                 break;
             case 2:
                 System.out.println("2. get loans information");
@@ -83,6 +67,21 @@ public class TaskManager {
         }
     }
 
+    public void getXMLFile() {
+        String fileName = null;
+        boolean tryLoadFile = true, succeed = false;
+        while (tryLoadFile) {
+            fileName = menu.getFileFullNamePath();
+            succeed = bank.getXMLFile(fileName);
+            if (succeed)
+                System.out.println("File read successfully");
+            else {
+                if (!menu.checkTryAgain(fileName))
+                    tryLoadFile = false;
+            }
+        }
+    }
+
     public void startOfInlay() {
         String clientName = getClientNameForAction();
         getLoanProperties(bank.getCurrBalance(clientName));
@@ -101,8 +100,6 @@ public class TaskManager {
         currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
         currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
     }
-
-    //checked
 
     public void loadMoneyToAccount() {
         String clientName = getClientNameForAction();

@@ -1,6 +1,5 @@
 package abc;
 
-import abs.DTO.CategoryDTO;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
@@ -157,15 +156,16 @@ public class Menu {
         }
         return tryAgain;
     }
-    public String getFileFullNamePath(){
+
+    public String getFileFullNamePath() {
         String filePath = null;
-        boolean validInput=false;
+        boolean validInput = false;
         System.out.println("Please insert a full path name of your XML");
-        while (!validInput){
+        while (!validInput) {
             try {
-                filePath=scanner.next();
-                validInput=true;
-            }catch (Exception e){
+                filePath = scanner.next();
+                validInput = true;
+            } catch (Exception e) {
                 System.out.println("Invalid input! Please try again");
             }
         }
@@ -192,16 +192,14 @@ public class Menu {
     public Set<Integer> scanLoansFromUser(int maxLoans) {
         int currLoan = 0;
         Set<Integer> loansToInvestIndex = new HashSet<Integer>();
-        while (currLoan != END_OF_INPUT && loansToInvestIndex.size()<maxLoans) {
+        while (currLoan != END_OF_INPUT && loansToInvestIndex.size() < maxLoans) {
             try {
                 currLoan = scanner.nextInt();
                 if (currLoan <= maxLoans && currLoan > 0) {
-                    if(loansToInvestIndex.contains(currLoan-1)){
+                    if (loansToInvestIndex.contains(currLoan - 1)) {
                         System.out.println("You have already chose this loan, please choose another loan, or finish with -1.");
-                    }
-                    else loansToInvestIndex.add(currLoan - 1);
-                }
-                else if (currLoan != END_OF_INPUT) {
+                    } else loansToInvestIndex.add(currLoan - 1);
+                } else if (currLoan != END_OF_INPUT) {
                     System.out.println("Invalid input. Please insert an integer between 1 to " + maxLoans + ", or -1 for continue without loans.");
                 }
             } catch (Exception e) {
@@ -220,16 +218,16 @@ public class Menu {
         }
     }
 
-    public Set<CategoryDTO> chooseCategory(List<CategoryDTO> categories) {
+    public Set<String> chooseCategory(List<String> categories) {
         printCategories(categories);
-        CategoryDTO categoryDTO;
+        String  categoryDTO;
         boolean validInput = false;
-        Set<CategoryDTO> userCategoriesChoice = new HashSet<CategoryDTO>();
+        Set<String> userCategoriesChoice = new HashSet<String>();
         int numberOfCategories = categories.size(), currCategory = 0;
-        while (currCategory != (END_OF_INPUT-1) && userCategoriesChoice.size()<numberOfCategories) {
+        while (currCategory != (END_OF_INPUT - 1) && userCategoriesChoice.size() < numberOfCategories) {
             currCategory = scanCategoryIndex(numberOfCategories);
 
-            if (currCategory != (END_OF_INPUT-1) ){
+            if (currCategory != (END_OF_INPUT - 1)) {
                 categoryDTO = categories.get(currCategory);
                 if (userCategoriesChoice.contains(categoryDTO)) {
                     System.out.println("You have already chose this category. Please choose again.");
@@ -239,7 +237,7 @@ public class Menu {
             }
         }
         if (userCategoriesChoice.size() == 0) {
-            for (CategoryDTO category : categories) {
+            for (String category : categories) {
                 userCategoriesChoice.add(category);
             }
         }
@@ -252,7 +250,7 @@ public class Menu {
         while (!validInput) {
             try {
                 numberOfCtegory = scanner.nextInt();
-                if((numberOfCtegory>0 && numberOfCtegory < maxNumOfCategories + 1 )|| (numberOfCtegory==-1)){
+                if ((numberOfCtegory > 0 && numberOfCtegory < maxNumOfCategories + 1) || (numberOfCtegory == -1)) {
                     validInput = true;
                 } else {
                     System.out.println("Invalid input! There are only " + maxNumOfCategories + " categories.");
@@ -266,12 +264,12 @@ public class Menu {
         return (numberOfCtegory - 1);
     }
 
-    public void printCategories(List<CategoryDTO> categories) {
+    public void printCategories(List<String> categories) {
         System.out.println("Please choose categories from the next list:");
-        int numOfCategories=categories.size();
+        int numOfCategories = categories.size();
 
-        for (int index=1; index<= numOfCategories; index++) {
-            System.out.println(index+ ". " + categories.get(index - 1).getCategoryName());
+        for (int index = 1; index <= numOfCategories; index++) {
+            System.out.println(index + ". " + categories.get(index - 1));
         }
         System.out.println("Enter the categories numbers, and finish with -1.");
         System.out.println("If you don't have any preference, please enter -1");
@@ -328,7 +326,7 @@ public class Menu {
         while (!validInput) {
             try {
                 numberOfClient = scanner.nextInt();
-                if (numberOfClient > 0 && numberOfClient < maxClients+1) {
+                if (numberOfClient > 0 && numberOfClient < maxClients + 1) {
                     validInput = true;
                 }
             } catch (Exception e) {
@@ -419,7 +417,7 @@ public class Menu {
                 usersChoice = scanner.nextInt();
                 if (usersChoice < 1 || usersChoice > 8) {
                     System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                } else if(usersChoice != 1  && usersChoice!=8 && !fileInSystem)  {
+                } else if (usersChoice != 1 && usersChoice != 8 && !fileInSystem) {
                     System.out.println("Invalid input, There is no file scanned. Please choose again.");
                 } else {
                     validInput = true;
