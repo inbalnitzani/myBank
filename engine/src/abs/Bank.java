@@ -66,10 +66,6 @@ public class Bank implements BankInterface {
         return categoriesDTO;
     }
 
-    public Map<String, Loan> getWaitingLoans() {
-        return waitingLoans;
-    }
-
     public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
         clients.get(clientName).WithdrawingMoney(amountToWithdraw);
     }
@@ -81,15 +77,6 @@ public class Bank implements BankInterface {
     public int getCurrBalance(String clientName) {
         ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
         return clientDTO.getCurrBalance();
-    }
-
-    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
-
-        List<String> categories = new ArrayList<String>();
-        for (String string : loanTermsDTO.categories) {
-            //categories.add(this.categories.get(categoryDTO.getCategoryName()));
-        }
-        return categories;
     }
 
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
@@ -139,15 +126,6 @@ public class Bank implements BankInterface {
         }
     }
 
-    public List<Loan> createSortedListOfLoans(List<LoanDTO> loansDTOToInvest) {
-        List<Loan> loansToInvest = new ArrayList<Loan>();
-        for (LoanDTO loanDTO : loansDTOToInvest) {
-            loansToInvest.add(changeListLoanDtoListLoanDTO(loanDTO));
-        }
-        sortLoanListByLeftAmount(loansToInvest);
-        return loansToInvest;
-    }
-
     public void sortLoanListByLeftAmount(List<Loan> loansToInvest) {
         Collections.sort(loansToInvest, new Comparator<Loan>() {
             public int compare(Loan loan1, Loan loan2) {
@@ -160,12 +138,17 @@ public class Bank implements BankInterface {
 
     public void startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
         Client client = clients.get(clientName);
-        List<Loan> loansToInvest = new ArrayList<Loan>();
-        for (LoanDTO loanDTO : loansDTOToInvest) {
-            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
-        }
+        List<Loan> loansToInvest=createListLoan(loansDTOToInvest);
         sortLoanListByLeftAmount(loansToInvest);
         addInvestorToLoans(loansToInvest, client);
+    }
+
+    public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
+        List<Loan> loansToInvest = new ArrayList<Loan>();
+        for (LoanDTO loanDTO : loanDTOList) {
+            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
+        }
+        return loansToInvest;
     }
 
     public boolean getXMLFile(String filePath) {
@@ -185,4 +168,17 @@ public class Bank implements BankInterface {
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
 
+
+    public Map<String, Loan> getWaitingLoans() {
+        return waitingLoans;
+    }
+
+    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
+
+        List<String> categories = new ArrayList<String>();
+        for (String string : loanTermsDTO.categories) {
+            //categories.add(this.categories.get(categoryDTO.getCategoryName()));
+        }
+        return categories;
+    }
 }

@@ -181,10 +181,14 @@ public class Menu {
             System.out.println("If you don't want any loan, insert -1.");
             printLoansInfo(optionalLoans);
             Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
-            loansToInvest = new ArrayList<LoanDTO>();
-            for (int index : loansIndex) {
-                loansToInvest.add(optionalLoans.get(index));
-            }
+            loansToInvest = createListLoanDTOToInvest(optionalLoans, loansIndex);
+        }
+        return loansToInvest;
+    }
+    public List<LoanDTO> createListLoanDTOToInvest(List<LoanDTO> optional, Set<Integer> indexOfLoans){
+        List<LoanDTO> loansToInvest = new ArrayList<LoanDTO>();
+        for (int index : indexOfLoans) {
+            loansToInvest.add(optional.get(index));
         }
         return loansToInvest;
     }

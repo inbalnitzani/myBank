@@ -15,7 +15,6 @@ public class TaskManager {
     private int currentAction;
 
     public TaskManager() {
-        currentLoan = new LoanTerms();
     }
 
     public void manageSystem() {
