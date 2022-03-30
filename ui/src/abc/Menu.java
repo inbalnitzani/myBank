@@ -133,8 +133,8 @@ public class Menu {
         return wantToExit;
     }
 
-    public boolean CheckNotTryAgain(String fileName) {
-        System.out.println(fileName + "isn't exist. Do you want to try another file?");
+    public boolean checkTryAgain(String fileName) {
+        System.out.println(fileName + " isn't exist. Do you want to try another file?");
         System.out.println("Press 1 for try again, 2 for go back to menu.");
         boolean validInput = false, tryAgain = false;
         int userChoice = 0;
@@ -160,10 +160,10 @@ public class Menu {
     public String getFileFullNamePath(){
         String filePath = null;
         boolean validInput=false;
+        System.out.println("Please insert a full path name of your XML");
         while (!validInput){
-            System.out.println("Please insert a full path name of your XML");
             try {
-                filePath=scanner.nextLine();
+                filePath=scanner.next();
                 validInput=true;
             }catch (Exception e){
                 System.out.println("Invalid input! Please try again");

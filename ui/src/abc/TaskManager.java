@@ -41,7 +41,7 @@ public class TaskManager {
             if (succeed)
                 System.out.println("File read successfully");
             else {
-                if (menu.CheckNotTryAgain(fileName))
+                if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;
             }
         }
