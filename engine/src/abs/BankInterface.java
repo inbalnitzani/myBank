@@ -1,9 +1,7 @@
 package abs;
 
-import abs.DTO.CategoryDTO;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
-import abs.DTO.LoanTermsDTO;
 
 import java.util.List;
 
@@ -11,7 +9,7 @@ public interface BankInterface {
 
      List<ClientDTO> getClients() ;
 
-     List<CategoryDTO> getCategories();
+     List<String> getCategories();
 
      void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) ;
 
@@ -19,7 +17,7 @@ public interface BankInterface {
 
      int getCurrBalance(String clientName);
 
-     List<LoanDTO> findMatchLoans(String clientName, LoanTermsDTO terms);
+     List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 
      void startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 

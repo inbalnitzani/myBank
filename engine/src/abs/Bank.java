@@ -1,15 +1,12 @@
 package abs;
 
-import abs.DTO.CategoryDTO;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
-import abs.DTO.LoanTermsDTO;
 import abs.schemaClasses.AbsDescriptor;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -17,7 +14,7 @@ import java.util.*;
 
 public class Bank implements BankInterface {
 
-    private Map<String,Category> categories;
+    private Set<String> categories;//
     private List<Loan> activeLoans;
     private List<Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
@@ -32,7 +29,7 @@ public class Bank implements BankInterface {
         activeLoans = new ArrayList<Loan>();
         inRiskLoans = new ArrayList<Loan>();
         waitingLoans = new HashMap<String, Loan>();
-        categories = new HashMap<String,Category>();
+        categories = new HashSet<String>();
 
         Client client = new Client("Menash", 5000);
         Client client1 = new Client("Avrum", 1000);
@@ -47,8 +44,8 @@ public class Bank implements BankInterface {
         Loan loan1 = new Loan(client, 3000, 3, "Setup a business");
         waitingLoans.put("bar mitzva", loan);
         waitingLoans.put("build a room", loan1);
-        categories.put("Setup a business",new Category("Setup a business"));
-        categories.put("Investment",new Category("Investment"));
+       //categories.put("Setup a business",new Category("Setup a business"));
+        //categories.put("Investment",new Category("Investment"));
     }
 
     //GETTERS
@@ -61,10 +58,10 @@ public class Bank implements BankInterface {
         return clientDTO;
     }
 
-    public List<CategoryDTO> getCategories() {
-        List<CategoryDTO> categoriesDTO = new ArrayList<CategoryDTO>();
-        for (Category category : categories.values()) {
-            categoriesDTO.add(new CategoryDTO(category.getCategoryName()));
+    public List<String> getCategories() {
+        List<String> categoriesDTO = new ArrayList<String>();
+        for (String category : categories) {
+            categoriesDTO.add(category);
         }
         return categoriesDTO;
     }
@@ -75,8 +72,6 @@ public class Bank implements BankInterface {
 
     public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
         clients.get(clientName).WithdrawingMoney(amountToWithdraw);
-        ///זה בדיוק כמו שדיברנו בשיעור האחרון - רק מעביר טיפול מגורם אחד לשני
-        //בנוסף לא מקבלים client  אמיתי/
     }
 
     public void loanMoneyToAccount(String clientName, int amountToLoad) {
@@ -88,19 +83,19 @@ public class Bank implements BankInterface {
         return clientDTO.getCurrBalance();
     }
 
-    public List<Category> createCategoryListFromLoanTermsDto(LoanTermsDTO loanTermsDTO){
+    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO){
 
-        List<Category> categories=new ArrayList<Category>();
-        for (CategoryDTO categoryDTO: loanTermsDTO.categories)
+        List<String> categories=new ArrayList<String>();
+        for (String string: loanTermsDTO.categories)
         {
-            categories.add(this.categories.get(categoryDTO.getCategoryName()));
+            //categories.add(this.categories.get(categoryDTO.getCategoryName()));
         }
         return categories;
     }
 
-    public List<LoanDTO> findMatchLoans(String clientName, LoanTermsDTO terms) {
-        LoanTerms loanTerms=new LoanTerms(terms,createCategoryListFromLoanTermsDto(terms));
-        matchLoans = new MatchLoans(clients.get(clientName), loanTerms);
+    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
+        //  LoanTerms loanTerms=new LoanTerms(terms,createCategoryListFromLoanTermsDto(terms));
+    //    matchLoans = new MatchLoans(clients.get(clientName), loanTerms);
         List<Loan> loans = new ArrayList<>();
         loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
