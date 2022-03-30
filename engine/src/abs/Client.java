@@ -20,9 +20,6 @@ public class Client {
         this.fullName = name;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
     public void addMovement(Movement oneMove) {
         int time = oneMove.getExecuteTime();
         if (movements.containsKey(time)) {
@@ -34,6 +31,10 @@ public class Client {
         }
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
     public Set<Movement> getMovementsByTime(int executeTime) {
         if (movements.containsKey(executeTime))
             return movements.get(executeTime);
@@ -43,13 +44,13 @@ public class Client {
 
     public int getCurrBalance(){return currBalance;}
 
-    public Set<Loan> getLoanSet(String kindOfLoan) {
-        if (kindOfLoan.equals("asGiver"))
+    public Set<Loan> getLoanSetAsGiver() {
             return asGiver;
-        else
-            return asBorrower;
     }
 
+    public Set<Loan> getLoanSetAsBorrower() {
+        return asBorrower;
+    }
     public void addMoneyToAccount(int moneyToAdd) {
         Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);
         addMovement(movement);
@@ -59,5 +60,14 @@ public class Client {
     public int WithdrawingMoney(int sumToPull) {
         currBalance -= sumToPull;
         return sumToPull;
+    }
+
+    public  Map<Integer, Set<Movement>> getMovements(){return movements;}
+
+    public void setAsGiver(Loan loan){
+        asGiver.add(loan);
+    }
+    public void setCurrBalance(int amountToDeducted){
+        currBalance-=amountToDeducted;
     }
 }
