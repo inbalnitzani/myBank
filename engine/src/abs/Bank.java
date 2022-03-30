@@ -4,7 +4,15 @@ import abs.DTO.CategoryDTO;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.DTO.LoanTermsDTO;
+import abs.schemaClasses.AbsDescriptor;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.*;
 
 public class Bank implements BankInterface {
@@ -89,6 +97,7 @@ public class Bank implements BankInterface {
         }
         return categories;
     }
+
     public List<LoanDTO> findMatchLoans(String clientName, LoanTermsDTO terms) {
         LoanTerms loanTerms=new LoanTerms(terms,createCategoryListFromLoanTermsDto(terms));
         matchLoans = new MatchLoans(clients.get(clientName), loanTerms);
@@ -164,4 +173,22 @@ public class Bank implements BankInterface {
         sortLoanListByLeftAmount(loansToInvest);
         addInvestorToLoans(loansToInvest, client);
     }
+
+    public boolean getXMLFile(String filePath) {
+        boolean readFile = false;
+        try {
+            InputStream inputStream = new FileInputStream(filePath);
+            AbsDescriptor info = deserializeFrom(inputStream);
+            readFile = true;
+        } catch (JAXBException | FileNotFoundException e) {
+        }
+        return readFile;
+    }
+
+    private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
+        JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
+        Unmarshaller u = jc.createUnmarshaller();
+        return (AbsDescriptor) u.unmarshal(inputStream);
+    }
+
 }

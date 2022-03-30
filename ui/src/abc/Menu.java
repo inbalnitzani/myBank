@@ -110,26 +110,66 @@ public class Menu {
         System.out.println("1.NO - I want to stay!!");
         System.out.println("2.YES - Exit.");
         int userChoice = 0;
-        boolean wantToStay = true;
+        boolean wantToExit = true;
         boolean validInput = false;
         while (!validInput) {
             try {
-                if (userChoice == 2) {
-                    validInput = true;
-                    wantToStay = false;
-                }
                 userChoice = scanner.nextInt();
+                if (userChoice == 2 || userChoice == 1) {
+                    validInput = true;
+                    if (userChoice == 1) {
+                        wantToExit = false;
+                    }
+                }
+
             } catch (Exception e) {
                 scanner.nextLine();
-            }
-            if (userChoice != 1) {
-                System.out.println("Please choose 1 for stay or 2 for exit!");
-            } else {
-                wantToStay = true;
-                validInput = true;
+            } finally {
+                if (!validInput) {
+                    System.out.println("Please choose 1 for stay or 2 for exit!");
+                }
             }
         }
-        return wantToStay;
+        return wantToExit;
+    }
+
+    public boolean CheckNotTryAgain(String fileName) {
+        System.out.println(fileName + "isn't exist. Do you want to try another file?");
+        System.out.println("Press 1 for try again, 2 for go back to menu.");
+        boolean validInput = false, tryAgain = false;
+        int userChoice = 0;
+        while (!validInput) {
+            try {
+                userChoice = scanner.nextInt();
+                if (userChoice == 1 || userChoice == 2) {
+                    validInput = true;
+                    if (userChoice == 1) {
+                        tryAgain = true;
+                    }
+                }
+            } catch (Exception e) {
+                scanner.nextLine();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Invalid input. Please insert 1 for try again, 2 for continue.");
+                }
+            }
+        }
+        return tryAgain;
+    }
+    public String getFileFullNamePath(){
+        String filePath = null;
+        boolean validInput=false;
+        while (!validInput){
+            System.out.println("Please insert a full path name of your XML");
+            try {
+                filePath=scanner.nextLine();
+                validInput=true;
+            }catch (Exception e){
+                System.out.println("Invalid input! Please try again");
+            }
+        }
+        return filePath;
     }
 
     public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
@@ -379,7 +419,7 @@ public class Menu {
                 usersChoice = scanner.nextInt();
                 if (usersChoice < 1 || usersChoice > 8) {
                     System.out.println("Invalid input, Please enter an integer between 1 - 8.");
-                } else if (usersChoice != 1 && !fileInSystem) {
+                } else if(usersChoice != 1  && usersChoice!=8 && !fileInSystem)  {
                     System.out.println("Invalid input, There is no file scanned. Please choose again.");
                 } else {
                     validInput = true;

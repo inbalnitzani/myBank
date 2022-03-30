@@ -23,4 +23,5 @@ public interface BankInterface {
 
      void startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 
+     boolean getXMLFile(String filePath) ;
 }
