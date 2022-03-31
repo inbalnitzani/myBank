@@ -34,22 +34,6 @@ public class Bank implements BankInterface {
         inRiskLoans = new ArrayList<Loan>();
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
-
-        Client client = new Client("Menash", 5000);
-        Client client1 = new Client("Avrum", 1000);
-        Client client2 = new Client("Tikva", 10000);
-        Client client3 = new Client("Shosh", 20000);
-        clients.put(client.getFullName(), client);
-        clients.put(client1.getFullName(), client1);
-        clients.put(client2.getFullName(), client2);
-        clients.put(client3.getFullName(), client3);
-
-        Loan loan = new Loan("234567",client1, 2500, 15, "Investment");
-        Loan loan1 = new Loan("0984"client, 3000, 3, "Setup a business");
-        waitingLoans.put("bar mitzva", loan);
-        waitingLoans.put("build a room", loan1);
-        categories.add("Setup a business");
-        categories.add("Investment");
     }
 
     public List<ClientDTO> createListClientDTO() {
@@ -180,29 +164,7 @@ public class Bank implements BankInterface {
         addInvestorToLoans(loansToInvest, client);
     }
 
-    public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
-        List<Loan> loansToInvest = new ArrayList<Loan>();
-        for (LoanDTO loanDTO : loanDTOList) {
-            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
-        }
-        return loansToInvest;
-    }
-
-    public boolean getXMLFile(String filePath) {
-        boolean readFile = false;
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            AbsDescriptor info = deserializeFrom(inputStream);
-            readFile = true;
-            ;
-
-        } catch (JAXBException | FileNotFoundException e) {
-        }
-        return readFile;
-    }
-
-
-    private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
+     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
