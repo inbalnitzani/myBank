@@ -2,16 +2,21 @@ package abs.DTO;
 
 import abs.Client;
 import abs.Loan;
+import abs.Payment;
+import abs.Status;
+
+import java.util.List;
+import java.util.Map;
 
 public class LoanDTO {
     //DATA MEMBERS
     private String id;
     private String owner;
     private String category;
-    private int originalAmount, amountPaidBack, amountCollectedPending;
+    private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private int status;
-    private int startingTimeUnit, endingTimeUnit, pace, nextPayment;
+    private int totalYazTime, pace, nextPayment,intristPerPayment;
     //private List<Client> givers;
     //private List <Payment> payments;
 
@@ -20,11 +25,11 @@ public class LoanDTO {
         this.owner = loan.getOwner();
         this.id = loan.getLoansID();
         this.category = loan.getCategory();
-        this.originalAmount = loan.getOriginalAmount();
-        this.startingTimeUnit = loan.getStartingTimeUnit();
-        this.endingTimeUnit = loan.getEndingTimeUnit();
+        this.capital = loan.getCapital();
+        this.totalYazTime = loan.getTotalYazTime();
         this.pace = loan.getPace();
         this.interestRate = loan.getInterestRate();
+        this.totalYazTime = loan.getTotalYazTime();
     }
     //GETTERS
 
@@ -45,7 +50,7 @@ public class LoanDTO {
     ;
 
     public int getOriginalAmount() {
-        return this.originalAmount;
+        return this.capital;
     }
 
     ;
@@ -68,14 +73,8 @@ public class LoanDTO {
 
     ;
 
-    public int getStartingTimeUnit() {
-        return this.startingTimeUnit;
-    }
-
-    ;
-
-    public int getEndingTimeUnit() {
-        return this.endingTimeUnit;
+    public int getTotalYazTime() {
+        return this.totalYazTime;
     }
 
     ;
@@ -92,9 +91,6 @@ public class LoanDTO {
     //public Collection <Payment> getPayments(){
     //   return this.payments;
     //};
-    public int getTotalTU() {
-        return this.endingTimeUnit - this.startingTimeUnit;
-    }
 
     ;
 
