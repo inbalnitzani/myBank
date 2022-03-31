@@ -56,14 +56,6 @@ public class Bank implements BankInterface {
         return categoriesDTO;
     }
 
-    public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
-        List<Loan> loansToInvest = new ArrayList<Loan>();
-        for (LoanDTO loanDTO : loanDTOList) {
-            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
-        }
-        return loansToInvest;
-    }
-
     //GETTERS
 
     public List<ClientDTO> getClients() {
@@ -83,6 +75,8 @@ public class Bank implements BankInterface {
         try {
             InputStream inputStream = new FileInputStream(filePath);
             AbsDescriptor info = deserializeFrom(inputStream);
+            file file = new file();
+            
             readFile = true;
         } catch (JAXBException | FileNotFoundException e) {
         }
@@ -167,20 +161,6 @@ public class Bank implements BankInterface {
         return loansToInvest;
     }
 
-    public boolean getXMLFile(String filePath) {
-        boolean readFile = false;
-        try {
-            InputStream inputStream = new FileInputStream(filePath);
-            AbsDescriptor info = deserializeFrom(inputStream);
-            readFile = true;
-            ;
-
-        } catch (JAXBException | FileNotFoundException e) {
-        }
-        return readFile;
-    }
-
-
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u = jc.createUnmarshaller();
@@ -216,5 +196,7 @@ public class Bank implements BankInterface {
             this.waitingLoans.put(id,newLoan);
         }
     }
+
+
 
 }
