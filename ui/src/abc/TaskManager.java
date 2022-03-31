@@ -14,8 +14,6 @@ public class TaskManager {
     private int currentAction;
 
     public TaskManager() {
-
-
     }
 
     public void manageSystem() {
@@ -89,7 +87,8 @@ public class TaskManager {
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
-            bank.startInlayProcess(loans, clientName);///////////////add amount
+            int amountLeft = bank.startInlayProcess(loans, clientName);
+            menu.updateUserInvest(currentLoan.getMaxAmount(), amountLeft);
         }
     }
 

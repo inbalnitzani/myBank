@@ -182,12 +182,25 @@ public class Menu {
         return loadAgain;
     }
 
-    public List<LoanDTO> createListLoanDTOToInvest(List<LoanDTO> optional, Set<Integer> indexOfLoans){
+    public List<LoanDTO> createListLoanDTOToInvest(List<LoanDTO> optional, Set<Integer> indexOfLoans) {
         List<LoanDTO> loansToInvest = new ArrayList<LoanDTO>();
         for (int index : indexOfLoans) {
             loansToInvest.add(optional.get(index));
         }
         return loansToInvest;
+    }
+
+    public void updateUserInvest(int amountToInvest, int amountLeft) {
+        if (amountLeft == 0) {
+            System.out.println("Your investments have been successfully completed");
+        } else {
+            if (amountToInvest == amountLeft) {
+                System.out.println("Sorry, an unknown error has occurred, please try again..");
+            } else {
+                System.out.println("Invested " + (amountToInvest - amountLeft) + " out of " + amountToInvest + " successfully");
+                System.out.println("There is no more money to invest in loans that fit your requirements");
+            }
+        }
     }
 
     public Set<Integer> scanLoansFromUser(int maxLoans) {
@@ -222,7 +235,7 @@ public class Menu {
 
     public Set<String> chooseCategory(List<String> existCategories) {
         printCategories(existCategories);
-        String  categoryDTO;
+        String categoryDTO;
         boolean validInput = false;
         Set<String> userCategoriesChoice = new HashSet<String>();
         int sumCategories = existCategories.size(), currCategory = 0;
