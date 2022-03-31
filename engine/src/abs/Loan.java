@@ -1,6 +1,7 @@
 package abs;
 
 import abs.DTO.LoanDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Loan {
         this.category=categoryName;
     }
 
-    public Loan(LoanDTO loanDTO){
+    public Loan(@NotNull LoanDTO loanDTO){
       new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
     }
 

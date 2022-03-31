@@ -4,7 +4,6 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
 import abs.LoanTerms;
-
 import java.util.List;
 
 public class TaskManager {
@@ -122,6 +121,5 @@ public class TaskManager {
         int clientNumber = menu.getClientNumber(clients.size());
         return clients.get(clientNumber).getFullName();
     }
-
 
 }
