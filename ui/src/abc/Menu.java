@@ -22,11 +22,11 @@ public class Menu {
         while (!validInput) {
             try {
                 minInterest = scanner.nextInt();
-                if (0 <= minInterest && minInterest < 100) {
+                if (END_OF_INPUT <= minInterest && minInterest < 100) {
                     validInput = true;
-                } else if (minInterest == END_OF_INPUT) {
-                    minInterest = 0;
-                    validInput = true;
+                    if (minInterest == END_OF_INPUT) {
+                        minInterest = 0;
+                    }
                 }
             } catch (Exception e) {
                 scanner.next();
@@ -42,7 +42,6 @@ public class Menu {
     public int getMinTimeForLoan() {
         System.out.println("Please enter the minimum time (to get back the money) for your loans.");
         System.out.println("If you don't have any preference, enter -1");
-
         boolean validInput = false;
         int minTime = 0;
         while (!validInput) {
@@ -65,6 +64,20 @@ public class Menu {
         return minTime;
     }
 
+    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
+        List<LoanDTO> loansToInvest = null;
+        if (optionalLoans.isEmpty()) {
+            System.out.println("There are no loans suitable for your requirements. ");
+        } else {
+            System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
+            System.out.println("If you don't want any loan, insert -1.");
+            printLoansInfo(optionalLoans);
+            Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
+            loansToInvest = createListLoanDTOToInvest(optionalLoans, loansIndex);
+        }
+        return loansToInvest;
+    }
+
     public void printMenu() {
         System.out.println("choose a number");
         System.out.println("1. read a file");
@@ -75,6 +88,72 @@ public class Menu {
         System.out.println("6. Activate inlay");
         System.out.println("7. promote timeline and make payments");
         System.out.println("8. Exit");
+    }
+
+    public boolean verifyExit() {
+        System.out.println("You just arrived! Are you sure you want to exit??");
+        System.out.println("1.NO - I want to stay!!");
+        System.out.println("2.YES - Exit.");
+        boolean wantToExit = true, validInput = false;
+        while (!validInput) {
+            try {
+                int userChoice = scanner.nextInt();
+                if (userChoice == 2 || userChoice == 1) {
+                    validInput = true;
+                    if (userChoice == 1) {
+                        wantToExit = false;
+                    }
+                }
+            } catch (Exception e) {
+                scanner.nextLine();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Please choose 1 for stay or 2 for exit!");
+                }
+            }
+        }
+        return wantToExit;
+    }
+
+    public boolean checkTryAgain(String fileName) {
+        System.out.println(fileName + " isn't exist. Do you want to try another file?");
+        System.out.println("Press 1 for try again, 2 for go back to menu.");
+        boolean validInput = false, tryAgain = false;
+        while (!validInput) {
+            try {
+                int userChoice = scanner.nextInt();
+                if (userChoice == 1 || userChoice == 2) {
+                    validInput = true;
+                    if (userChoice == 1) {
+                        tryAgain = true;
+                    }
+                }
+            } catch (Exception e) {
+                scanner.nextLine();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Invalid input. Please insert 1 for try again, 2 for continue.");
+                }
+            }
+        }
+        return tryAgain;
+    }
+
+
+
+    public String getFileFullNamePath() {
+        String filePath = null;
+        boolean validInput = false;
+        System.out.println("Please insert a full path name of your XML");
+        while (!validInput) {
+            try {
+                filePath = scanner.next();
+                    validInput = true;
+            } catch (Exception e) {
+                System.out.println("Invalid input! Please try again");
+            }
+        }
+        return filePath;
     }
 
     public boolean FileNotExist() {
@@ -104,87 +183,6 @@ public class Menu {
         return loadAgain;
     }
 
-    public boolean verifyExit() {
-        System.out.println("You just arrived! Are you sure you want to exit??");
-        System.out.println("1.NO - I want to stay!!");
-        System.out.println("2.YES - Exit.");
-        int userChoice = 0;
-        boolean wantToExit = true;
-        boolean validInput = false;
-        while (!validInput) {
-            try {
-                userChoice = scanner.nextInt();
-                if (userChoice == 2 || userChoice == 1) {
-                    validInput = true;
-                    if (userChoice == 1) {
-                        wantToExit = false;
-                    }
-                }
-
-            } catch (Exception e) {
-                scanner.nextLine();
-            } finally {
-                if (!validInput) {
-                    System.out.println("Please choose 1 for stay or 2 for exit!");
-                }
-            }
-        }
-        return wantToExit;
-    }
-
-    public boolean checkTryAgain(String fileName) {
-        System.out.println(fileName + " isn't exist. Do you want to try another file?");
-        System.out.println("Press 1 for try again, 2 for go back to menu.");
-        boolean validInput = false, tryAgain = false;
-        int userChoice = 0;
-        while (!validInput) {
-            try {
-                userChoice = scanner.nextInt();
-                if (userChoice == 1 || userChoice == 2) {
-                    validInput = true;
-                    if (userChoice == 1) {
-                        tryAgain = true;
-                    }
-                }
-            } catch (Exception e) {
-                scanner.nextLine();
-            } finally {
-                if (!validInput) {
-                    System.out.println("Invalid input. Please insert 1 for try again, 2 for continue.");
-                }
-            }
-        }
-        return tryAgain;
-    }
-
-    public String getFileFullNamePath() {
-        String filePath = null;
-        boolean validInput = false;
-           System.out.println("Please insert a full path name of your XML");
-        while (!validInput) {
-            try {
-                filePath = scanner.next();
-                    validInput = true;
-            } catch (Exception e) {
-                System.out.println("Invalid input! Please try again");
-            }
-        }
-        return filePath;
-    }
-
-    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
-        List<LoanDTO> loansToInvest = null;
-        if (optionalLoans.isEmpty()) {
-            System.out.println("There are no loans suitable for your requirements. ");
-        } else {
-            System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
-            System.out.println("If you don't want any loan, insert -1.");
-            printLoansInfo(optionalLoans);
-            Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
-            loansToInvest = createListLoanDTOToInvest(optionalLoans, loansIndex);
-        }
-        return loansToInvest;
-    }
     public List<LoanDTO> createListLoanDTOToInvest(List<LoanDTO> optional, Set<Integer> indexOfLoans){
         List<LoanDTO> loansToInvest = new ArrayList<LoanDTO>();
         for (int index : indexOfLoans) {
@@ -219,6 +217,7 @@ public class Menu {
         for (int index = 0; index < sizeOfList; index++) {
             System.out.println("loan number " + (index + 1) + ": ");
             printSingleLoanInfo(optionalLoans.get(index));
+            System.out.println("\n");
         }
     }
 

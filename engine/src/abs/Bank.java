@@ -2,7 +2,11 @@ package abs;
 
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
+
+import abs.schemaClasses.AbsDescriptor;
+
 import abs.schemaClasses.*;
+
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -48,8 +52,7 @@ public class Bank implements BankInterface {
         categories.add("Investment");
     }
 
-    //GETTERS
-    public List<ClientDTO> getClients() {
+    public List<ClientDTO> createListClientDTO() {
         List<ClientDTO> clientDTO = new ArrayList<ClientDTO>();
         for (Client client : clients.values()) {
             ClientDTO clientDto = new ClientDTO(client);
@@ -58,13 +61,60 @@ public class Bank implements BankInterface {
         return clientDTO;
     }
 
-    public List<String> getCategories() {
+    public List<LoanDTO> createListLoanDto(List<Loan> loans) {
+        List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
+        for (Loan loan : loans) {
+            loanDTOS.add(new LoanDTO(loan));
+        }
+        return loanDTOS;
+    }
+
+    public List<String> createListCategories() {
         List<String> categoriesDTO = new ArrayList<String>();
         for (String category : categories) {
             categoriesDTO.add(category);
         }
         return categoriesDTO;
     }
+
+    public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
+        List<Loan> loansToInvest = new ArrayList<Loan>();
+        for (LoanDTO loanDTO : loanDTOList) {
+            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
+        }
+        return loansToInvest;
+    }
+
+    //GETTERS
+
+    public List<ClientDTO> getClients() {
+        return createListClientDTO();
+    }
+
+    public List<String> getCategories() {
+        return createListCategories();
+    }
+
+    public int getCurrBalance(String clientName) {
+        return clients.get(clientName).getCurrBalance();
+    }
+
+    public boolean getXMLFile(String filePath) {
+        boolean readFile = false;
+        try {
+            InputStream inputStream = new FileInputStream(filePath);
+            AbsDescriptor info = deserializeFrom(inputStream);
+            readFile = true;
+        } catch (JAXBException | FileNotFoundException e) {
+        }
+        return readFile;
+    }
+
+    public Map<String, Loan> getWaitingLoans() {
+        return waitingLoans;
+    }
+
+    //GETTERS
 
     public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
         clients.get(clientName).WithdrawingMoney(amountToWithdraw);
@@ -74,24 +124,11 @@ public class Bank implements BankInterface {
         clients.get(clientName).addMoneyToAccount(amountToLoad);
     }
 
-    public int getCurrBalance(String clientName) {
-        ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
-        return clientDTO.getCurrBalance();
-    }
-
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
         matchLoans = new MatchLoans(clients.get(clientName), terms);
         List<Loan> loans = new ArrayList<>();
         loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
         List<LoanDTO> loanDTOS = createListLoanDto(loans);
-        return loanDTOS;
-    }
-
-    public List<LoanDTO> createListLoanDto(List<Loan> loans) {
-        List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
-        for (Loan loan : loans) {
-            loanDTOS.add(new LoanDTO(loan));
-        }
         return loanDTOS;
     }
 
@@ -138,7 +175,7 @@ public class Bank implements BankInterface {
 
     public void startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
         Client client = clients.get(clientName);
-        List<Loan> loansToInvest=createListLoan(loansDTOToInvest);
+        List<Loan> loansToInvest = createListLoan(loansDTOToInvest);
         sortLoanListByLeftAmount(loansToInvest);
         addInvestorToLoans(loansToInvest, client);
     }
@@ -164,15 +201,11 @@ public class Bank implements BankInterface {
         return readFile;
     }
 
+
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
-    }
-
-
-    public Map<String, Loan> getWaitingLoans() {
-        return waitingLoans;
     }
 
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
