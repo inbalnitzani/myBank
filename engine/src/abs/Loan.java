@@ -10,7 +10,7 @@ public class Loan {
 
     //DATA MEMBERS
     private String id;
-    private Client owner;
+    private String owner;
     private String category;
     private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
@@ -20,7 +20,7 @@ public class Loan {
     private List<Payment> payments;
 
     //CTOR
-    public Loan(Client owner, int amount, int rate, String categoryName) {
+    public Loan(String id,String owner, int amount, int rate, String categoryName) {
         this.owner = owner;
         this.originalAmount = amount;
         this.interestRate = rate;
