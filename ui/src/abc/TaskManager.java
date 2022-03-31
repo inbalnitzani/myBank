@@ -15,10 +15,6 @@ public class TaskManager {
     private int currentAction;
 
     public TaskManager() {
-<<<<<<< HEAD
-       // currentLoan = new LoanTerms();
-=======
->>>>>>> main
     }
 
     public void manageSystem() {
