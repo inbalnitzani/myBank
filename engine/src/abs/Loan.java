@@ -1,8 +1,10 @@
 package abs;
 
 import abs.DTO.LoanDTO;
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -13,23 +15,26 @@ public class Loan {
     private String id;
     private String owner;
     private String category;
-    private int originalAmount, amountPaidBack, amountCollectedPending;
+    private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate;
     private Status status;
-    private int startingTimeUnit, endingTimeUnit, pace, nextPayment;
+    private int totalYazTime,pace, nextPayment,IntristPerPayment;
     private Map<Client,Integer> givers;
     private List<Payment> payments;
 
     //CTOR
-    public Loan(String id,String owner, int amount, int rate, String categoryName) {
+    public Loan(String id,String owner, int amount, int rate, String categoryName,int totalYazTime,int pace) {
+        this.id = id;
         this.owner = owner;
-        this.originalAmount = amount;
+        this.capital = amount;
         this.interestRate = rate;
         this.category=categoryName;
+        this.totalYazTime = totalYazTime;
+        this.pace = pace;
     }
 
     public Loan(LoanDTO loanDTO){
-      new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
+      new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
     }
 
     //GETTERS
@@ -45,8 +50,8 @@ public class Loan {
         return this.category;
     }
 
-    public int getOriginalAmount() {
-        return this.originalAmount;
+    public int getCapital() {
+        return this.capital;
     }
 
     public int getAmountPaidBack() {
@@ -61,14 +66,14 @@ public class Loan {
         return this.interestRate;
     }
 
-    public int getStartingTimeUnit() {
+    /*public int getStartingTimeUnit() {
         return this.startingTimeUnit;
     }
 
     public int getEndingTimeUnit() {
         return this.endingTimeUnit;
     }
-
+*/
     public int getPace() {
         return this.pace;
     }
@@ -81,8 +86,8 @@ public class Loan {
         return this.payments;
     }
 
-    public int getTotalTU() {
-        return this.endingTimeUnit - this.startingTimeUnit;
+    public int getTotalYazTime() {
+        return totalYazTime;
     }
 
     public int getNextPayment() {
@@ -99,13 +104,13 @@ public class Loan {
     }
 
     public int getLeftAmountToInvest() {
-        return originalAmount - amountCollectedPending;
+        return capital - amountCollectedPending;
     }
 
     public Status addNewInvestor(Client client, int newAmountForLoan) {
         givers.put(client,newAmountForLoan);
         amountCollectedPending+=newAmountForLoan;
-        if(amountCollectedPending==originalAmount)
+        if(amountCollectedPending== capital)
             status=Status.ACTIVE;
         return status;
     }

@@ -21,7 +21,7 @@ public class MatchLoans {
                     continue;*/
                 } else if (loan.getInterestRate() < loanTerms.getMinInterestForTimeUnit()) {
                     continue;
-                } else if (loan.getTotalTU() < loanTerms.getMinTimeForLoan()) {
+                } else if (loan.getTotalYazTime() < loanTerms.getMinTimeForLoan()) {
                     continue;
                 } else {
                     matchLoans.put(loan.getLoansID(), loan);

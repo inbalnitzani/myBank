@@ -1,6 +1,6 @@
 package abs;
 
-import org.jetbrains.annotations.NotNull;
+//import org.jetbrains.annotations.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,9 +19,9 @@ public class LoanTerms {
             maxAmount = amount;
         }
 
-        public void setCategories(@NotNull Set<String> categories) {
+       /* public void setCategories(@NotNull Set<String> categories) {
             this.categories=categories;
-        }
+        }*/
 
         public void setMinInterestForTimeUnit(int minInterestForTimeUnit) {
             this.minInterestForTimeUnit = minInterestForTimeUnit;

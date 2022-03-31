@@ -95,7 +95,7 @@ public class TaskManager {
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
         currentLoan.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
-        currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
+        //currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
         currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
         currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
     }

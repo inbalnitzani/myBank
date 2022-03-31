@@ -23,8 +23,10 @@ public class File {
                 if (category.equals(curCategory))
                     valid = true;
             }
-            if (valid == false)
+            if (valid == false) {
+                throw
                 return false;
+            }
         }
         return true;
     }
@@ -56,7 +58,7 @@ public class File {
         return true;    }
     public boolean checkPace(Collection<LoanDTO> loans){
         for (LoanDTO loan:loans) {
-            if(loan.getTotalTU() % loan.getPace() != 0)
+            if(loan.getTotalYazTime() % loan.getPace() != 0)
                 return false;
         }
         return true;

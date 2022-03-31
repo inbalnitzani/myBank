@@ -380,7 +380,7 @@ public class Menu {
         System.out.println("Loans ID: " + curLoan.getLoansID());
         System.out.println("Owner: " + curLoan.getOwner());
         System.out.println("Category: " + curLoan.getCategory());
-        System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
+        System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalYazTime());
         System.out.println("Interest: " + curLoan.getInterestRate() + "Rate: " + curLoan.getPace());
         //Loan.Status status = curLoan.getStatus();
         //System.out.println("Status: " + status);
