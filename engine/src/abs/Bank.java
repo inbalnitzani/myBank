@@ -1,13 +1,8 @@
 package abs;
-
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
-
 import abs.schemaClasses.AbsDescriptor;
-
 import abs.schemaClasses.*;
-
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
