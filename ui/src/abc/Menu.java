@@ -378,7 +378,7 @@ public class Menu {
 
     public void printSingleLoanInfo(LoanDTO curLoan) {
         System.out.println("Loans ID: " + curLoan.getLoansID());
-        System.out.println("Owner: " + curLoan.getOwnersName());
+        System.out.println("Owner: " + curLoan.getOwner());
         System.out.println("Category: " + curLoan.getCategory());
         System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalTU());
         System.out.println("Interest: " + curLoan.getInterestRate() + "Rate: " + curLoan.getPace());
@@ -431,8 +431,5 @@ public class Menu {
         return usersChoice;
     }
 
-    public boolean isXmlFile(String fileName){
-        int index = fileName.indexOf(".");
-        return fileName.substring(index + 1).equals("xml");
-    }
+
 }

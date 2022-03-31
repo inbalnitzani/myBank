@@ -28,16 +28,12 @@ public class Loan {
     }
 
     public Loan(LoanDTO loanDTO){
-      new Loan(loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
+      new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
     }
 
     //GETTERS
     public String getLoansID() {
         return this.id;
-    }
-
-    public String getOwnersName() {
-        return this.owner.getFullName();
     }
 
     public Status getStatus() {
@@ -92,7 +88,7 @@ public class Loan {
         return nextPayment;
     }
 
-    public Client getOwner() {
+    public String getOwner() {
         return owner;
     }
 
