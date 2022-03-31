@@ -6,7 +6,7 @@ import abs.Loan;
 public class LoanDTO {
     //DATA MEMBERS
     private String id;
-    private Client owner;
+    private String owner;
     private String category;
     private int originalAmount, amountPaidBack, amountCollectedPending;
     private int interestRate;
@@ -32,11 +32,6 @@ public class LoanDTO {
         return this.id;
     }
 
-    ;
-
-    public String getOwnersName() {
-        return this.owner.getFullName();
-    }
 
     ;
 
@@ -106,7 +101,7 @@ public class LoanDTO {
     //public int getNextPayment(){
     //   return nextPayment;
     //}
-    public Client getOwner() {
+    public String getOwner() {
         return owner;
     }
     //SETTERS

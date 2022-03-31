@@ -14,6 +14,7 @@ public class TaskManager {
     private int currentAction;
 
     public TaskManager() {
+
     }
 
     public void manageSystem() {
