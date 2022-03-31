@@ -4,7 +4,6 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
 import abs.LoanTerms;
-
 import java.util.List;
 
 public class TaskManager {
@@ -88,7 +87,7 @@ public class TaskManager {
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
-            bank.startInlayProcess(loans, clientName);
+            bank.startInlayProcess(loans, clientName);///////////////add amount
         }
     }
 
@@ -123,6 +122,5 @@ public class TaskManager {
         int clientNumber = menu.getClientNumber(clients.size());
         return clients.get(clientNumber).getFullName();
     }
-
 
 }

@@ -17,6 +17,8 @@ public class Bank implements BankInterface {
     private Map<String,Loan> activeLoans;
     private Map<String,Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
+
+
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
     public static int worldTime = 1;
@@ -118,23 +120,30 @@ public class Bank implements BankInterface {
         }
     }
 
-    public void addInvestorToLoans(List<Loan> loans, Client client) {
+    public void addInvestorToLoans(List<Loan> loans, Client client,int amountToInvest) {
         if (loans != null) {
-            int currBalance = client.getCurrBalance();
-            int numOfLoansToInvest = loans.size();
-            int amountToInvestPerLoan = currBalance / numOfLoansToInvest;
-
-            while (numOfLoansToInvest > 0) {
+            int sumLoans = loans.size();
+            int amountPerLoan = amountToInvest / sumLoans;
+            int firstPayment=amountPerLoan+amountToInvest%sumLoans;
+            while (sumLoans > 0) {
                 Loan currLoan = loans.get(0);
-                if (currLoan.getLeftAmountToInvest() >= amountToInvestPerLoan) {
+                int amountLeftCurrLoan = currLoan.getLeftAmountToInvest();
+                if (amountLeftCurrLoan >= firstPayment) {
+                    if (firstPayment != amountPerLoan) {
+                        addInvestorToLoan(currLoan, client, firstPayment);
+                        loans.remove(0);
+                    }
                     for (Loan loan : loans) {
-                        addInvestorToLoan(loan, client, amountToInvestPerLoan);
+                        addInvestorToLoan(loan, client, amountPerLoan);
+                        loans.remove(0);
                     }
                 } else {
-                    addInvestorToLoan(currLoan, client, amountToInvestPerLoan);
-                    currBalance = client.getCurrBalance();
-                    numOfLoansToInvest--;
-                    amountToInvestPerLoan = currBalance / numOfLoansToInvest;
+                    addInvestorToLoan(currLoan, client, amountLeftCurrLoan);
+                    loans.remove(0);
+                    amountToInvest =amountToInvest-amountLeftCurrLoan;
+                    sumLoans--;
+                    amountPerLoan = amountToInvest / sumLoans;
+                    firstPayment = amountPerLoan + amountToInvest % sumLoans;
                 }
             }
         }
@@ -154,7 +163,7 @@ public class Bank implements BankInterface {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = createListLoan(loansDTOToInvest);
         sortLoanListByLeftAmount(loansToInvest);
-        addInvestorToLoans(loansToInvest, client);
+        addInvestorToLoans(loansToInvest, client,matchLoans.getAmountToInvest());
     }
 
     public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {

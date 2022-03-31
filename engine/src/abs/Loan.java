@@ -1,10 +1,10 @@
 package abs;
 
 import abs.DTO.LoanDTO;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 public class Loan {
 
@@ -25,7 +25,9 @@ public class Loan {
         this.originalAmount = amount;
         this.interestRate = rate;
         this.category=categoryName;
+        this.status =new NEWLOAN();
     }
+
 
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
@@ -108,4 +110,10 @@ public class Loan {
             status=Status.ACTIVE;
         return status;
     }
+
+    public void addMoney(){
+        if (status.getClass()==NEWLOAN.class)
+            status=new
+    }
+
 }

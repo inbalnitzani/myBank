@@ -33,5 +33,5 @@ public class MatchLoans {
         return matchLoans;
     }
 
-
+public int getAmountToInvest(){return loanTerms.maxAmount;}
 }
