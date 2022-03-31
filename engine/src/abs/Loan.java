@@ -28,7 +28,6 @@ public class Loan {
         this.status =new NEWLOAN();
     }
 
-
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory());
     }

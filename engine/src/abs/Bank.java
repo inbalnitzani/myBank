@@ -17,8 +17,6 @@ public class Bank implements BankInterface {
     private Map<String,Loan> activeLoans;
     private Map<String,Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
-
-
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
     public static int worldTime = 1;
