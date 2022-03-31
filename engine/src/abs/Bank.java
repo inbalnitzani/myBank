@@ -149,8 +149,8 @@ public class Bank implements BankInterface {
     public void sortListByLeftAmount(List<Loan> loansToInvest) {
         Collections.sort(loansToInvest, new Comparator<Loan>() {
             public int compare(Loan loan1, Loan loan2) {
-                int sumLeftToInvestLoan1 = loan1.getOriginalAmount() - loan1.getAmountCollectedPending();
-                int sumLeftToInvestLoan2 = loan2.getOriginalAmount() - loan2.getAmountCollectedPending();
+                int sumLeftToInvestLoan1 = loan1.getCapital() - loan1.getAmountCollectedPending();
+                int sumLeftToInvestLoan2 = loan2.getCapital() - loan2.getAmountCollectedPending();
                 return sumLeftToInvestLoan1 - sumLeftToInvestLoan2;
             }
         });
@@ -207,7 +207,7 @@ public class Bank implements BankInterface {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         for (AbsLoan loan:loanList) {
             String id =loan.getId();
-            Loan newLoan = new Loan(id,loan.getAbsOwner(),loan.getAbsIntristPerPayment(),loan.getAbsCapital(),loan.getAbsCategory());
+            Loan newLoan = new Loan(id,loan.getAbsOwner(),loan.getAbsIntristPerPayment(),loan.getAbsCapital(),loan.getAbsCategory(),loan.getAbsTotalYazTime(),loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id,newLoan);
         }
     }
