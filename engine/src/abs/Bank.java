@@ -103,7 +103,7 @@ public class Bank implements BankInterface {
 
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
         matchLoans = new MatchLoans(clients.get(clientName), terms);
-        List<Loan> loans = new ArrayList<>();
+        Map<String,Loan> loans = new HashMap<>();
         loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
         List<LoanDTO> loanDTOS = createListLoanDto(loans);
         return loanDTOS;
@@ -114,15 +114,14 @@ public class Bank implements BankInterface {
         client.setAsGiver(loan);
         client.setCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
-            activeLoans.put(loan.getLoansID(),loan);
+            activeLoans.put(loan.getLoansID(),waitingLoans.get(loan.getLoansID()));
         }
     }
 
     public void addInvestorToLoans(List<Loan> loans, Client client,int amountToInvest) {
         if (loans != null) {
-            int sumLoans = loans.size();
-            int amountPerLoan = amountToInvest / sumLoans;
-            int firstPayment=amountPerLoan+amountToInvest%sumLoans;
+            int sumLoans = loans.size(), amountPerLoan = amountToInvest / sumLoans;
+            int firstPayment = amountPerLoan + amountToInvest % sumLoans;
             while (sumLoans > 0) {
                 Loan currLoan = loans.get(0);
                 int amountLeftCurrLoan = currLoan.getLeftAmountToInvest();
@@ -138,7 +137,7 @@ public class Bank implements BankInterface {
                 } else {
                     addInvestorToLoan(currLoan, client, amountLeftCurrLoan);
                     loans.remove(0);
-                    amountToInvest =amountToInvest-amountLeftCurrLoan;
+                    amountToInvest = amountToInvest - amountLeftCurrLoan;
                     sumLoans--;
                     amountPerLoan = amountToInvest / sumLoans;
                     firstPayment = amountPerLoan + amountToInvest % sumLoans;
@@ -147,7 +146,7 @@ public class Bank implements BankInterface {
         }
     }
 
-    public void sortLoanListByLeftAmount(List<Loan> loansToInvest) {
+    public void sortListByLeftAmount(List<Loan> loansToInvest) {
         Collections.sort(loansToInvest, new Comparator<Loan>() {
             public int compare(Loan loan1, Loan loan2) {
                 int sumLeftToInvestLoan1 = loan1.getOriginalAmount() - loan1.getAmountCollectedPending();
@@ -160,7 +159,7 @@ public class Bank implements BankInterface {
     public void startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = createListLoan(loansDTOToInvest);
-        sortLoanListByLeftAmount(loansToInvest);
+        sortListByLeftAmount(loansToInvest);
         addInvestorToLoans(loansToInvest, client,matchLoans.getAmountToInvest());
     }
 
@@ -212,7 +211,5 @@ public class Bank implements BankInterface {
             this.waitingLoans.put(id,newLoan);
         }
     }
-
-
 
 }

@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public class Loan {
 
@@ -16,7 +17,7 @@ public class Loan {
     private int interestRate;
     private Status status;
     private int startingTimeUnit, endingTimeUnit, pace, nextPayment;
-    private List<Client> givers;
+    private Map<Client,Integer> givers;
     private List<Payment> payments;
 
     //CTOR
@@ -25,7 +26,6 @@ public class Loan {
         this.originalAmount = amount;
         this.interestRate = rate;
         this.category=categoryName;
-        this.status =new NEWLOAN();
     }
 
     public Loan(LoanDTO loanDTO){
@@ -73,7 +73,7 @@ public class Loan {
         return this.pace;
     }
 
-    public Collection<Client> getGivers() {
+    public Map<Client,Integer> getGivers() {
         return this.givers;
     }
 
@@ -103,16 +103,11 @@ public class Loan {
     }
 
     public Status addNewInvestor(Client client, int newAmountForLoan) {
-        givers.add(client);
+        givers.put(client,newAmountForLoan);
         amountCollectedPending+=newAmountForLoan;
         if(amountCollectedPending==originalAmount)
             status=Status.ACTIVE;
         return status;
     }
 
-    public void addMoney(){
-        if (status.getClass()==NEWLOAN.class)
-            status=new
-    }
-
-}
+ }

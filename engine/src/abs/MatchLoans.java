@@ -1,20 +1,19 @@
 package abs;
 
-import java.util.List;
 import java.util.Map;
 
 public class MatchLoans {
     private Client client;
     private LoanTerms loanTerms;
-    private List<Loan> matchLoans;
+    private Map<String, Loan> matchLoans;
 
-    public MatchLoans(Client client, LoanTerms loanTerms){
-        this.client=client;
-        this.loanTerms=loanTerms;
+    public MatchLoans(Client client, LoanTerms loanTerms) {
+        this.client = client;
+        this.loanTerms = loanTerms;
     }
 
-    public List<Loan> checkRelevantLoans(List<Loan> matchLoans, Map<String,Loan> loansToCheck) {
-          if (loansToCheck != null) {
+    public Map<String, Loan> checkRelevantLoans(Map<String, Loan> matchLoans, Map<String, Loan> loansToCheck) {
+        if (loansToCheck != null) {
             for (Loan loan : loansToCheck.values()) {
                 if (loan.getOwner().equals(client)) {
                     continue;
@@ -25,7 +24,7 @@ public class MatchLoans {
                 } else if (loan.getTotalTU() < loanTerms.getMinTimeForLoan()) {
                     continue;
                 } else {
-                    matchLoans.add(loan);
+                    matchLoans.put(loan.getLoansID(), loan);
                 }
             }
         }
@@ -33,5 +32,7 @@ public class MatchLoans {
         return matchLoans;
     }
 
-public int getAmountToInvest(){return loanTerms.maxAmount;}
+    public int getAmountToInvest() {
+        return loanTerms.maxAmount;
+    }
 }
