@@ -164,7 +164,7 @@ public class Menu {
         while (!validInput) {
             try {
                 filePath = scanner.next();
-                validInput = true;
+                    validInput = true;
             } catch (Exception e) {
                 System.out.println("Invalid input! Please try again");
             }
@@ -434,4 +434,8 @@ public class Menu {
         return usersChoice;
     }
 
+    public boolean isXmlFile(String fileName){
+        int index = fileName.indexOf(".");
+        return fileName.substring(index + 1).equals("xml");
+    }
 }
