@@ -139,8 +139,6 @@ public class Menu {
         return tryAgain;
     }
 
-
-
     public String getFileFullNamePath() {
         String filePath = null;
         boolean validInput = false;
