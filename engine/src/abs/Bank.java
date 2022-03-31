@@ -14,8 +14,8 @@ import java.util.*;
 public class Bank implements BankInterface {
 
     private Set<String> categories;//
-    private List<Loan> activeLoans;
-    private List<Loan> inRiskLoans;
+    private Map<String,Loan> activeLoans;
+    private Map<String,Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
@@ -25,8 +25,8 @@ public class Bank implements BankInterface {
     //CTOR
     public Bank() {
         clients = new HashMap<String, Client>();
-        activeLoans = new ArrayList<Loan>();
-        inRiskLoans = new ArrayList<Loan>();
+        activeLoans = new HashMap<String, Loan>();
+        inRiskLoans = new HashMap<String, Loan>();
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
     }
@@ -40,9 +40,9 @@ public class Bank implements BankInterface {
         return clientDTO;
     }
 
-    public List<LoanDTO> createListLoanDto(List<Loan> loans) {
+    public List<LoanDTO> createListLoanDto(Map<String,Loan> loans) {
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
-        for (Loan loan : loans) {
+        for (Loan loan : loans.values()) {
             loanDTOS.add(new LoanDTO(loan));
         }
         return loanDTOS;
@@ -58,6 +58,9 @@ public class Bank implements BankInterface {
 
     //GETTERS
 
+    public List<LoanDTO> getLoansDTO(){
+        return createListLoanDto(waitingLoans);
+    }
     public List<ClientDTO> getClients() {
         return createListClientDTO();
     }
@@ -75,8 +78,9 @@ public class Bank implements BankInterface {
         try {
             InputStream inputStream = new FileInputStream(filePath);
             AbsDescriptor info = deserializeFrom(inputStream);
-            file file = new file();
-            
+            convertToBank(info);
+            File file = new File();
+            if(file.checkFile(this.getCategories(),this.getLoansDTO(),this.getClients())&&file.isXmlFile(filePath))
             readFile = true;
         } catch (JAXBException | FileNotFoundException e) {
         }
@@ -110,7 +114,7 @@ public class Bank implements BankInterface {
         client.setAsGiver(loan);
         client.setCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
-            activeLoans.add(waitingLoans.remove(loan.getLoansID()));
+            activeLoans.put(loan.getLoansID(),loan);
         }
     }
 
@@ -174,6 +178,11 @@ public class Bank implements BankInterface {
             //categories.add(this.categories.get(categoryDTO.getCategoryName()));
         }
         return categories;
+    }
+    public void convertToBank(AbsDescriptor info){
+        setCategories(info.getAbsCategories());
+        setClients(info.getAbsCustomers());
+        setLoans(info.getAbsLoans());
     }
     public void setCategories(AbsCategories absCategories){
         List<String> categories = absCategories.getAbsCategory();

@@ -1,13 +1,22 @@
 package abs;
 
+import abs.DTO.ClientDTO;
+import abs.DTO.LoanDTO;
+import abs.schemaClasses.AbsDescriptor;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class file {
-    public boolean checkCategories(Collection<String> categories,Collection<Loan> loans){
+public class File {
+
+    public boolean checkFile(Collection<String> categories, Collection<LoanDTO> loans, Collection<ClientDTO> clients){
+        return (checkCategories(categories,loans)&&checkCustomer(clients,loans)&&checkNames(clients)&&checkPace(loans));
+    }
+
+    public boolean checkCategories(Collection<String> categories,Collection<LoanDTO> loans){
        boolean valid;
-        for (Loan loan:loans) {
+        for (LoanDTO loan:loans) {
             valid = false;
             String curCategory = loan.getCategory();
             for (String category:categories) {
@@ -19,10 +28,10 @@ public class file {
         }
         return true;
     }
-    public boolean checkNames(Collection<Client> clients){
+    public boolean checkNames(Collection<ClientDTO> clients){
         Set<String> names = new HashSet<>();
         String name;
-        for (Client client:clients) {
+        for (ClientDTO client:clients) {
             name = client.getFullName();
            if (names.contains(name))
                return false;
@@ -32,12 +41,12 @@ public class file {
         }
         return true;
     }
-    public boolean checkCustomer(Collection<Client> customers,Collection<Loan> loans){
+    public boolean checkCustomer(Collection<ClientDTO> customers,Collection<LoanDTO> loans){
         boolean valid;
-        for (Loan loan:loans) {
+        for (LoanDTO loan:loans) {
             valid = false;
             String customer = loan.getOwner();
-            for (Client curCustomer:customers) {
+            for (ClientDTO curCustomer:customers) {
                 if (curCustomer.getFullName().equals(customer))
                     valid = true;
             }
@@ -45,8 +54,8 @@ public class file {
                 return false;
         }
         return true;    }
-    public boolean checkPace(Collection<Loan> loans){
-        for (Loan loan:loans) {
+    public boolean checkPace(Collection<LoanDTO> loans){
+        for (LoanDTO loan:loans) {
             if(loan.getTotalTU() % loan.getPace() != 0)
                 return false;
         }
