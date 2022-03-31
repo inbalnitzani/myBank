@@ -12,7 +12,7 @@
 			<abs-category>Investment</abs-category>
 			<abs-capital>2400</abs-capital>
 			<abs-total-yaz-time>12</abs-total-yaz-time>
-			<abs-pays-every-yaz>1</abs-pays-every-yaz>
+			<abs-pays-every-yaz>10</abs-pays-every-yaz>
 			<abs-intrist-per-payment>5</abs-intrist-per-payment>
 		</abs-loan>
 		<abs-loan id="build a room">
@@ -20,7 +20,7 @@
 			<abs-category>Renovate</abs-category>
 			<abs-capital>3000</abs-capital>
 			<abs-total-yaz-time>10</abs-total-yaz-time>
-			<abs-pays-every-yaz>2</abs-pays-every-yaz>
+			<abs-pays-every-yaz>20</abs-pays-every-yaz>
 			<abs-intrist-per-payment>3</abs-intrist-per-payment>
 		</abs-loan>
 		<abs-loan id="Bar Mitzva !">
@@ -28,7 +28,7 @@
 			<abs-category>Happy Event</abs-category>
 			<abs-capital>2500</abs-capital>
 			<abs-total-yaz-time>25</abs-total-yaz-time>
-			<abs-pays-every-yaz>5</abs-pays-every-yaz>
+			<abs-pays-every-yaz>50</abs-pays-every-yaz>
 			<abs-intrist-per-payment>15</abs-intrist-per-payment>
 		</abs-loan>
 	</abs-loans>

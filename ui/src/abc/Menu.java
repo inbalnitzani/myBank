@@ -143,10 +143,11 @@ public class Menu {
         String filePath = null;
         boolean validInput = false;
         System.out.println("Please insert a full path name of your XML");
+        filePath = scanner.nextLine();
         while (!validInput) {
             try {
-                filePath = scanner.next();
-                    validInput = true;
+                filePath = scanner.nextLine();
+                validInput = true;
             } catch (Exception e) {
                 System.out.println("Invalid input! Please try again");
             }
