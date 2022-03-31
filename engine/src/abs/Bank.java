@@ -2,7 +2,12 @@ package abs;
 
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
+
 import abs.schemaClasses.AbsDescriptor;
+
+import abs.schemaClasses.*;
+
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -39,8 +44,8 @@ public class Bank implements BankInterface {
         clients.put(client2.getFullName(), client2);
         clients.put(client3.getFullName(), client3);
 
-        Loan loan = new Loan(client1, 2500, 15, "Investment");
-        Loan loan1 = new Loan(client, 3000, 3, "Setup a business");
+        Loan loan = new Loan("234567",client1, 2500, 15, "Investment");
+        Loan loan1 = new Loan("0984"client, 3000, 3, "Setup a business");
         waitingLoans.put("bar mitzva", loan);
         waitingLoans.put("build a room", loan1);
         categories.add("Setup a business");
@@ -175,6 +180,28 @@ public class Bank implements BankInterface {
         addInvestorToLoans(loansToInvest, client);
     }
 
+    public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
+        List<Loan> loansToInvest = new ArrayList<Loan>();
+        for (LoanDTO loanDTO : loanDTOList) {
+            loansToInvest.add(waitingLoans.get(loanDTO.getLoansID()));
+        }
+        return loansToInvest;
+    }
+
+    public boolean getXMLFile(String filePath) {
+        boolean readFile = false;
+        try {
+            InputStream inputStream = new FileInputStream(filePath);
+            AbsDescriptor info = deserializeFrom(inputStream);
+            readFile = true;
+            ;
+
+        } catch (JAXBException | FileNotFoundException e) {
+        }
+        return readFile;
+    }
+
+
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
         JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u = jc.createUnmarshaller();
@@ -189,4 +216,26 @@ public class Bank implements BankInterface {
         }
         return categories;
     }
+    public void setCategories(AbsCategories absCategories){
+        List<String> categories = absCategories.getAbsCategory();
+        for (String category:categories) {
+            this.categories.add(category);
+        }
+    }
+    public void setClients(AbsCustomers absCustomers){
+        List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
+        for (AbsCustomer customer:customerList) {
+            Client newClient = new Client(customer.getName(),customer.getAbsBalance());
+            this.clients.put(customer.getName(),newClient);
+        }
+    }
+    public void setLoans(AbsLoans absLoans){
+        List<AbsLoan> loanList = absLoans.getAbsLoan();
+        for (AbsLoan loan:loanList) {
+            String id =loan.getId();
+            Loan newLoan = new Loan(id,loan.getAbsOwner(),loan.getAbsIntristPerPayment(),loan.getAbsCapital(),loan.getAbsCategory());
+            this.waitingLoans.put(id,newLoan);
+        }
+    }
+
 }
