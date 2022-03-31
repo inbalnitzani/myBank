@@ -36,7 +36,7 @@ public class file {
         boolean valid;
         for (Loan loan:loans) {
             valid = false;
-            String customer = loan.getOwnersName();
+            String customer = loan.getOwner();
             for (Client curCustomer:customers) {
                 if (curCustomer.getFullName().equals(customer))
                     valid = true;
@@ -50,6 +50,10 @@ public class file {
             if(loan.getTotalTU() % loan.getPace() != 0)
                 return false;
         }
+        return true;
     }
-
+    public boolean isXmlFile(String fileName){
+        int index = fileName.indexOf(".");
+        return fileName.substring(index + 1).equals("xml");
+    }
 }
