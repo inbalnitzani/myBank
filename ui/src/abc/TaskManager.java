@@ -86,7 +86,7 @@ public class TaskManager {
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
-            bank.startInlayProcess(loans, clientName);
+            bank.startInlayProcess(loans, clientName);///////////////add amount
         }
     }
 

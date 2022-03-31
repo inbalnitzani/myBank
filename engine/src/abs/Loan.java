@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 public class Loan {
 
@@ -26,6 +25,7 @@ public class Loan {
         this.originalAmount = amount;
         this.interestRate = rate;
         this.category=categoryName;
+        this.status =new NEWLOAN();
     }
 
     public Loan(@NotNull LoanDTO loanDTO){
@@ -113,4 +113,10 @@ public class Loan {
             status=Status.ACTIVE;
         return status;
     }
+
+    public void addMoney(){
+        if (status.getClass()==NEWLOAN.class)
+            status=new
+    }
+
 }
