@@ -41,6 +41,10 @@ public class LoanTerms {
     public void setCategories(Set<String> categories) {
         this.categories = categories;
     }
+
+    public int getMaxAmount() {
+        return maxAmount;
+    }
 }
 
 

@@ -19,7 +19,7 @@ public interface BankInterface {
 
      List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 
-     void startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
+     int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 
      boolean getXMLFile(String filePath) ;
 }
