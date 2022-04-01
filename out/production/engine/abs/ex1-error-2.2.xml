@@ -8,14 +8,14 @@
 	<abs-loans>
 		<abs-loan id="stock market introduction">
 			<abs-owner>Menash</abs-owner>
-			<abs-category>Investment</abs-category>
+			<abs-category>Setup a business</abs-category>
 			<abs-capital>2400</abs-capital>
 			<abs-total-yaz-time>12</abs-total-yaz-time>
 			<abs-pays-every-yaz>1</abs-pays-every-yaz>
 			<abs-intrist-per-payment>5</abs-intrist-per-payment>
 		</abs-loan>
 		<abs-loan id="build a room">
-			<abs-owner>Avrum</abs-owner>
+			<abs-owner>Shosh</abs-owner>
 			<abs-category>Renovate</abs-category>
 			<abs-capital>3000</abs-capital>
 			<abs-total-yaz-time>10</abs-total-yaz-time>
@@ -35,11 +35,11 @@
 		<abs-customer name="Menash">
 			<abs-balance>5000</abs-balance>
 		</abs-customer>
-		<abs-customer name="Avrum">
+		<abs-customer name="Shosh">
 			<abs-balance>1000</abs-balance>
 		</abs-customer>
-		<abs-customer name="Tikva">
-			<abs-balance>10000</abs-balance>
+		<abs-customer name="Avrum">
+			<abs-balance>4000</abs-balance>
 		</abs-customer>
 		<abs-customer name="Shosh">
 			<abs-balance>20000</abs-balance>
