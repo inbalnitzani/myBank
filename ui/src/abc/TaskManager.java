@@ -4,6 +4,10 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
 import abs.LoanTerms;
+import abs.exception.*;
+
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class TaskManager {
@@ -64,12 +68,46 @@ public class TaskManager {
         }
     }
 
-    public void getXMLFile() {
+    public void getXMLFile()  {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
         while (tryLoadFile) {
             fileName = menu.getFileFullNamePath();
-            succeed = bank.getXMLFile(fileName);
+            try {
+                succeed = bank.getXMLFile(fileName);
+            }
+            catch (CategoriesException e){
+                System.out.println("The loan " + e.getLoansID());
+                System.out.println("contains a category that is not included in the list of categories: " + e.getLoansCategory());
+                System.out.println("These are the optional categories:");
+                List<String> categories = e.getCategories();
+                for (String category:categories) {
+                    System.out.println(category);
+                }
+
+            }
+            catch (CustomerException e){
+                System.out.println("The loan " + e.getLoansID() + " contains an owner that is not included in the list of customers:");
+                System.out.println("The owner is" + e.getLoansOwner());
+                System.out.println("These are the names in our system:");
+                for (String name:e.getNamesList()) {
+                    System.out.println(name);
+                }
+
+            }
+            catch (NamesException e){
+                System.out.println( "The customer " + e.getName() +" appears more than once in the customer list");
+            }
+            catch (XmlException e){
+                System.out.println("The file : " + e.getFileName() + " is not an XML file");
+            }
+            catch (PaceException e){
+                System.out.println("The loan " + e.getLoansID() +" shows a rate of payments that is not fully divided by the total yaz of the loan:/n rate is :" +e.getLoansPace() + "/n total yaz is: "+e.getLoansTotalYaz());
+
+            }
+            catch (JAXBException | FileNotFoundException e) {
+                System.out.println("file does not exist.");
+            }
             if (succeed) {
                 System.out.println("File read successfully");
                 tryLoadFile = false;

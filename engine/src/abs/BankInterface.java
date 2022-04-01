@@ -2,7 +2,10 @@ package abs;
 
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
+import abs.exception.*;
 
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public interface BankInterface {
@@ -21,5 +24,5 @@ public interface BankInterface {
 
      int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 
-     boolean getXMLFile(String filePath) ;
+     boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException;
 }
