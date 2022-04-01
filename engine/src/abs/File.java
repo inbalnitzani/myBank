@@ -24,7 +24,6 @@ public class File {
                     valid = true;
             }
             if (valid == false) {
-                throw
                 return false;
             }
         }
