@@ -14,6 +14,8 @@ public class Client {
     public Client(String name, int accountBalance) {
         fullName = name;
         currBalance = accountBalance;
+        asGiver=new HashSet<Loan>() ;
+
     }
 
     protected void setName(String name) {

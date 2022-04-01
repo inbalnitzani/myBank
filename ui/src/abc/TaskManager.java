@@ -14,7 +14,6 @@ public class TaskManager {
     private int currentAction;
 
     public TaskManager() {
-
     }
 
     public void manageSystem() {
@@ -53,7 +52,6 @@ public class TaskManager {
                 withdrawMoney();
                 break;
             case 6:
-                System.out.println("6. Activate inlay");
                 startOfInlay();
                 break;
             case 7:
@@ -72,9 +70,11 @@ public class TaskManager {
         while (tryLoadFile) {
             fileName = menu.getFileFullNamePath();
             succeed = bank.getXMLFile(fileName);
-            if (succeed)
+            if (succeed) {
                 System.out.println("File read successfully");
-            else {
+                tryLoadFile = false;
+                fileInSystem=true;
+            } else {
                 if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;
             }
@@ -87,15 +87,17 @@ public class TaskManager {
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
-            bank.startInlayProcess(loans, clientName);///////////////add amount
+            int amountLeft = bank.startInlayProcess(loans, clientName);
+            menu.updateUserInvest(currentLoan.getMaxAmount(), amountLeft);
         }
     }
 
     public void getLoanProperties(int clientBalance) {
+        currentLoan=new LoanTerms();
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
         currentLoan.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
-        //currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
+        currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
         currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
         currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
     }

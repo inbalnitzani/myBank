@@ -114,11 +114,11 @@ public class Bank implements BankInterface {
         client.setAsGiver(loan);
         client.setCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
-            activeLoans.put(loan.getLoansID(),waitingLoans.get(loan.getLoansID()));
+            activeLoans.put(loan.getLoansID(),waitingLoans.remove(loan.getLoansID()));
         }
     }
 
-    public void addInvestorToLoans(List<Loan> loans, Client client,int amountToInvest) {
+    public int addInvestorToLoans(List<Loan> loans, Client client,int amountToInvest) {
         if (loans != null) {
             int sumLoans = loans.size(), amountPerLoan = amountToInvest / sumLoans;
             int firstPayment = amountPerLoan + amountToInvest % sumLoans;
@@ -139,11 +139,14 @@ public class Bank implements BankInterface {
                     loans.remove(0);
                     amountToInvest = amountToInvest - amountLeftCurrLoan;
                     sumLoans--;
+                    if (sumLoans!=0){
                     amountPerLoan = amountToInvest / sumLoans;
                     firstPayment = amountPerLoan + amountToInvest % sumLoans;
+                    }
                 }
             }
-        }
+
+        }return amountToInvest;
     }
 
     public void sortListByLeftAmount(List<Loan> loansToInvest) {
@@ -156,11 +159,12 @@ public class Bank implements BankInterface {
         });
     }
 
-    public void startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
+    public int startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = createListLoan(loansDTOToInvest);
         sortListByLeftAmount(loansToInvest);
-        addInvestorToLoans(loansToInvest, client,matchLoans.getAmountToInvest());
+        int amountLeft=addInvestorToLoans(loansToInvest, client,matchLoans.getAmountToInvest());
+        return amountLeft;
     }
 
     public List<Loan> createListLoan(List<LoanDTO> loanDTOList) {
