@@ -116,7 +116,7 @@ public class Menu {
     }
 
     public boolean checkTryAgain(String fileName) {
-        System.out.println(fileName + " isn't exist. Do you want to try another file?");
+        System.out.println( "Do you want to try another file?");
         System.out.println("Press 1 for try again, 2 for go back to menu.");
         boolean validInput = false, tryAgain = false;
         while (!validInput) {

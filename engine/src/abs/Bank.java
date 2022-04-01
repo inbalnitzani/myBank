@@ -1,6 +1,7 @@
 package abs;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
+import abs.exception.*;
 import abs.schemaClasses.AbsDescriptor;
 import abs.schemaClasses.*;
 import javax.xml.bind.JAXBContext;
@@ -73,17 +74,22 @@ public class Bank implements BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
-    public boolean getXMLFile(String filePath) {
+    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException {
         boolean readFile = false;
-        try {
             InputStream inputStream = new FileInputStream(filePath);
             AbsDescriptor info = deserializeFrom(inputStream);
             convertToBank(info);
             File file = new File();
-            if(file.checkFile(this.getCategories(),this.getLoansDTO(),this.getClients())&&file.isXmlFile(filePath))
+            file.checkFile(this.getCategories(),this.getLoansDTO(),this.getClients(),filePath);
             readFile = true;
-        } catch (JAXBException | FileNotFoundException e) {
-        }
+
+
+
+
+
+
+
+
         return readFile;
     }
 
