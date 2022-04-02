@@ -4,6 +4,10 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
 import abs.LoanTerms;
+import abs.exception.*;
+
+import javax.xml.bind.JAXBException;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class TaskManager {
@@ -64,12 +68,20 @@ public class TaskManager {
         }
     }
 
-    public void getXMLFile() {
+    public void getXMLFile()  {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
         while (tryLoadFile) {
             fileName = menu.getFileFullNamePath();
-            succeed = bank.getXMLFile(fileName);
+            try {
+                succeed = bank.getXMLFile(fileName);
+            }
+            catch (FileException e){
+                System.out.println(e);
+            }
+            catch (JAXBException | FileNotFoundException e) {
+                System.out.println("file does not exist.");
+            }
             if (succeed) {
                 System.out.println("File read successfully");
                 tryLoadFile = false;
