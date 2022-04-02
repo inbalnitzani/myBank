@@ -3,6 +3,8 @@ package abc;
 import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
+import abs.DTO.PayBackDTO;
+
 import java.util.*;
 
 
@@ -403,14 +405,14 @@ public class Menu {
             case RISK:
                 break;
             case ACTIVE:
-
-                //curLoan.getGivers();
-                // need to print each lender's name and invesment
-               // System.out.println("abs.loan was activated at :" + loan.getStartingTimeUnit());
-               // System.out.println("next abs.payment is at :" + loan.getNextPayment());
+                System.out.println("Active time is : "+loan.getActiveTime());
                 break;
             case PENDING:
-               // for (Object obj:loan.)
+                System.out.println("List of lenders on this loan:");
+                List<PayBackDTO> payBackDTO = loan.getPayBacks();
+                for (PayBackDTO payBack : payBackDTO) {
+                    System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
+                }
                 System.out.println("Total amount invested :" + loan.getAmountCollected());
                 System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
                 break;

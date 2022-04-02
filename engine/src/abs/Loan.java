@@ -1,14 +1,10 @@
 package abs;
 
 import abs.DTO.LoanDTO;
+import abs.DTO.PaymentDTO;
 //import org.jetbrains.annotations.NotNull;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Loan {
 
@@ -17,11 +13,14 @@ public class Loan {
     private String owner;
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
-    private int interestRate;
+    private int interestRate,pace;
     private Status status;
-    private int totalYazTime,pace, nextPayment,IntristPerPayment;
-    private Map<Client,Integer> givers;
-    private List<Payment> payments;
+    private int totalYazTime,activeTime;
+    private List<PayBack> payBacks;
+    //private Map<Client,Integer> givers;
+    private Map<Integer, PaymentDTO> payments;
+
+
 
     //CTOR
     public Loan(String id,String owner, int amount, int rate, String categoryName,int totalYazTime,int pace) {
@@ -29,12 +28,13 @@ public class Loan {
         this.owner = owner;
         this.capital = amount;
         this.interestRate = rate;
-        this.category=categoryName;
+        this.category = categoryName;
         this.totalYazTime = totalYazTime;
         this.pace = pace;
-        this.givers=new HashMap<Client,Integer>();
+        payBacks = new ArrayList<PayBack>();
+//        this.givers=new HashMap<Client,Integer>();
     }
-
+    public int getActiveTime(){return activeTime;}
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
     }
@@ -79,21 +79,28 @@ public class Loan {
     public int getPace() {
         return this.pace;
     }
+//
+//    public Map<Client,Integer> getGivers() {
+//        return this.givers;
+//    }
+//
+//    public Collection<Payment> getPayments() {
+//        return this.payments;
+//    }
 
-    public Map<Client,Integer> getGivers() {
-        return this.givers;
-    }
-
-    public Collection<Payment> getPayments() {
-        return this.payments;
-    }
-
+    public List<PayBack> getPayBacks(){return payBacks;}
     public int getTotalYazTime() {
         return totalYazTime;
     }
 
-    public int getNextPayment() {
-        return nextPayment;
+    public void changeToActive() {
+        payments = new HashMap<>();
+        for (int i = 0; i < totalYazTime; i += pace) {
+         //   payments.put(i, /*new Payment()*/);
+        }
+    }
+    public int getNextTimePayment() {
+        return 0;
     }
 
     public String getOwner() {
@@ -110,11 +117,17 @@ public class Loan {
     }
 
     public Status addNewInvestor(Client client, int newAmountForLoan) {
-        givers.put(client,newAmountForLoan);
+        createNewGiver(client,newAmountForLoan);
         amountCollectedPending+=newAmountForLoan;
         if(amountCollectedPending== capital)
             status=Status.ACTIVE;
         return status;
+    }
+    public void createNewGiver(Client client,int amount){
+        PayBack payBack=new PayBack();
+        payBack.setGivesALoan(client);
+        payBack.setOriginalAmount(amount);
+        payBacks.add(payBack);
     }
 
  }
