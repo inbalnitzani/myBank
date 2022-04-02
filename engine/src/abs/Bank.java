@@ -78,9 +78,9 @@ public class Bank implements BankInterface {
         boolean readFile = false;
             InputStream inputStream = new FileInputStream(filePath);
             AbsDescriptor info = deserializeFrom(inputStream);
-            convertToBank(info);
             File file = new File();
-            file.checkFile(this.getCategories(),this.getLoansDTO(),this.getClients(),filePath);
+            file.checkFile(info.getAbsCategories().getAbsCategory(),info.getAbsLoans().getAbsLoan(),info.getAbsCustomers().getAbsCustomer(),filePath);
+            convertToBank(info);
             readFile = true;
 
 
