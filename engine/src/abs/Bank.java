@@ -21,8 +21,7 @@ public class Bank implements BankInterface {
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
     public static int worldTime = 1;
-    public static int PENDING = 2;
-
+    
     //CTOR
     public Bank() {
         clients = new HashMap<String, Client>();
