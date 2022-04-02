@@ -16,6 +16,8 @@ public interface BankInterface {
 
      void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) ;
 
+     List<LoanDTO> getAllLoans();
+
      void loanMoneyToAccount(String clientName, int amountToLoad) ;
 
      int getWorldTime();

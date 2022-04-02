@@ -41,9 +41,9 @@ public class Bank implements BankInterface {
         return clientDTO;
     }
 
-    public List<LoanDTO> createListLoanDto(Map<String,Loan> loans) {
+    public List<LoanDTO> createListLoanDto(Collection<Loan> loans) {
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
-        for (Loan loan : loans.values()) {
+        for (Loan loan : loans) {
             loanDTOS.add(new LoanDTO(loan));
         }
         return loanDTOS;
@@ -60,7 +60,7 @@ public class Bank implements BankInterface {
     //GETTERS
 
     public List<LoanDTO> getLoansDTO(){
-        return createListLoanDto(waitingLoans);
+        return createListLoanDto(waitingLoans.values());
     }
     public List<ClientDTO> getClients() {
         return createListClientDTO();
@@ -185,6 +185,17 @@ public class Bank implements BankInterface {
         JAXBContext jc = JAXBContext.newInstance("abs.schemaClasses");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
+    }
+    public List<LoanDTO> getAllLoans() {
+        Map<String, Loan> loans = new HashMap<>();
+        for (Loan loan : waitingLoans.values())
+            loans.put(loan.getLoansID(), loan);
+        for (Loan loan : activeLoans.values())
+            loans.put(loan.getLoansID(), loan);
+        for (Loan loan : inRiskLoans.values())
+            loans.put(loan.getLoansID(), loan);
+
+        return createListLoanDto(loans);
     }
 
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {

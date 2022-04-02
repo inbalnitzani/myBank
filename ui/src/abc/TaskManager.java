@@ -40,8 +40,7 @@ public class TaskManager {
                 getXMLFile();
                 break;
             case 2:
-                System.out.println("2. get loans information");
-           //     menu.printLoansInfo(bank.getLoans());
+                menu.printLoansInfo(bank.getAllLoans(),bank.getWorldTime());
                 break;
             case 3:
                 System.out.println("3. get clients information");
@@ -59,7 +58,6 @@ public class TaskManager {
                 startOfInlay();
                 break;
             case 7:
-                System.out.println("7. promote timeline and make payments");
                 break;
             case 8:
                 if (!menu.verifyExit())

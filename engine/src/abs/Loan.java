@@ -1,10 +1,6 @@
 package abs;
 
 import abs.DTO.LoanDTO;
-import abs.DTO.PaymentDTO;
-import com.sun.javaws.Globals;
-//import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class Loan {
@@ -30,14 +26,14 @@ public class Loan {
         this.totalYazTime = totalYazTime;
         this.pace = pace;
         payBacks = new ArrayList<PayBack>();
-//        this.givers=new HashMap<Client,Integer>();
     }
+
     public int getActiveTime(){return activeTime;}
+
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
     }
 
-    //GETTERS
     public String getLoansID() {
         return this.id;
     }
@@ -66,27 +62,12 @@ public class Loan {
         return this.interestRate;
     }
 
-    /*public int getStartingTimeUnit() {
-        return this.startingTimeUnit;
-    }
-
-    public int getEndingTimeUnit() {
-        return this.endingTimeUnit;
-    }
-*/
     public int getPace() {
         return this.pace;
     }
-//
-//    public Map<Client,Integer> getGivers() {
-//        return this.givers;
-//    }
-//
-//    public Collection<Payment> getPayments() {
-//        return this.payments;
-//    }
 
     public List<PayBack> getPayBacks(){return payBacks;}
+
     public int getTotalYazTime() {
         return totalYazTime;
     }
@@ -106,7 +87,6 @@ public class Loan {
         return owner;
     }
 
-    //SETTERS
     public void setNextPayment() {
         //if(status.equals(abs.e_status.ACTIVE))
     }
@@ -124,6 +104,7 @@ public class Loan {
         }
         return status;
     }
+
     public void createNewGiver(Client client,int amount){
         PayBack payBack=new PayBack();
         payBack.setGivesALoan(client);
