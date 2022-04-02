@@ -21,7 +21,6 @@ public class Bank implements BankInterface {
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
     public static int worldTime = 1;
-    public static int PENDING = 2;
 
     //CTOR
     public Bank() {
@@ -82,14 +81,6 @@ public class Bank implements BankInterface {
             file.checkFile(info.getAbsCategories().getAbsCategory(),info.getAbsLoans().getAbsLoan(),info.getAbsCustomers().getAbsCustomer(),filePath);
             convertToBank(info);
             readFile = true;
-
-
-
-
-
-
-
-
         return readFile;
     }
 
@@ -186,7 +177,6 @@ public class Bank implements BankInterface {
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
-
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
 
         List<String> categories = new ArrayList<String>();
