@@ -1,20 +1,18 @@
 package abs;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Client {
     private String fullName;
     private int currBalance;
-    private Set<Loan> asGiver;
-    private Set<Loan> asBorrower;
+    private List<Loan> asGiver;
+    private List<Loan> asBorrower;
     private Map<Integer, Set<Movement>> movements;
 
     public Client(String name, int accountBalance) {
         fullName = name;
         currBalance = accountBalance;
-        asGiver = new HashSet<Loan>();
+        asGiver = new ArrayList<>();
     }
 
     protected void setName(String name) {
@@ -47,11 +45,11 @@ public class Client {
         return currBalance;
     }
 
-    public Set<Loan> getLoanSetAsGiver() {
+    public List<Loan> getLoanSetAsGiver() {
         return asGiver;
     }
 
-    public Set<Loan> getLoanSetAsBorrower() {
+    public List<Loan> getLoanSetAsBorrower() {
         return asBorrower;
     }
 

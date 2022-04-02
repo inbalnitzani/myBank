@@ -14,9 +14,9 @@
 			<abs-pays-every-yaz>1</abs-pays-every-yaz>
 			<abs-intrist-per-payment>5</abs-intrist-per-payment>
 		</abs-loan>
-		<abs-loan id="build a room">
+		<abs-loan id="loo">
 			<abs-owner>Shosh</abs-owner>
-			<abs-category>Renovate</abs-category>
+			<abs-category>lolo</abs-category>
 			<abs-capital>3000</abs-capital>
 			<abs-total-yaz-time>10</abs-total-yaz-time>
 			<abs-pays-every-yaz>2</abs-pays-every-yaz>
@@ -35,7 +35,7 @@
 		<abs-customer name="Menash">
 			<abs-balance>5000</abs-balance>
 		</abs-customer>
-		<abs-customer name="Shosh">
+		<abs-customer name="mimi">
 			<abs-balance>1000</abs-balance>
 		</abs-customer>
 		<abs-customer name="Avrum">

@@ -35,7 +35,16 @@ public class LoanDTO {
     public int getActiveTime() {
         return activeTime;
     }
+public double getTotalMoneyForPayingBack() {
+    double precentage = interestRate / 100;
+    return (precentage + 1) * capital;
+}
+    public double getTotalAmountPerPayment(){
+        int fundPer1Payment=capital/pace;
+        double precentage=interestRate/100;
 
+        return fundPer1Payment*interestRate;
+    }
     public int getNextPaymentTime() {
         boolean findNextPayment = false;
         int nextPayment = Globals.worldTime + 1;
@@ -62,7 +71,7 @@ public class LoanDTO {
     public int getOriginalAmount() {
         return this.capital;
     }
-public int getFirstPayment() {
+public int getFirstPaymentTime() {
     int firstPayment = activeTime;
     boolean findFirstPayment = false;
     while (!findFirstPayment) {
@@ -72,7 +81,7 @@ public int getFirstPayment() {
     }
     return firstPayment;
 }
-    public int getLastPayment() {
+    public int getLastPaymentTime() {
         int lastPayment = activeTime + totalYazTime;
         return payments.get(lastPayment).getActualPaymentTime();
     }
