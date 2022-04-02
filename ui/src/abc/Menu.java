@@ -67,14 +67,14 @@ public class Menu {
         return minTime;
     }
 
-    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans,int worldTime) {
+    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
         List<LoanDTO> loansToInvest = null;
         if (optionalLoans.isEmpty()) {
             System.out.println("There are no loans suitable for your requirements. ");
         } else {
             System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
             System.out.println("If you don't want any loan, insert -1.");
-            printLoansInfo(optionalLoans,worldTime);
+            printLoansInfo(optionalLoans);
             Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
             loansToInvest = createListLoanDTOToInvest(optionalLoans, loansIndex);
         }
@@ -119,7 +119,7 @@ public class Menu {
     }
 
     public boolean checkTryAgain(String fileName) {
-        System.out.println( "Do you want to try another file?");
+        System.out.println("Do you want to try another file?");
         System.out.println("Press 1 for try again, 2 for go back to menu.");
         boolean validInput = false, tryAgain = false;
         while (!validInput) {
@@ -227,11 +227,11 @@ public class Menu {
         return loansToInvestIndex;
     }
 
-    public void printLoansInfo(List<LoanDTO> optionalLoans,int worldTime) {
+    public void printLoansInfo(List<LoanDTO> optionalLoans) {
         int sizeOfList = optionalLoans.size();
         for (int index = 0; index < sizeOfList; index++) {
             System.out.println("loan number " + (index + 1) + ": ");
-            printSingleLoanInfo(optionalLoans.get(index),worldTime);
+            printSingleLoanInfo(optionalLoans.get(index));
             System.out.println("\n");
         }
     }
@@ -364,7 +364,7 @@ public class Menu {
         for (int i = 0; i < Globals.worldTime; i++) {
             Set<Movement> movements = client.getMovementsByTime(i);
             if (movements != null) {
-                printMovementsInfo(movements);
+                printClientDetails(movements);
             }
         }
         /*
@@ -379,17 +379,8 @@ public class Menu {
 
     }
 
-    public void printMovementsInfo(Set<Movement> movements) {
-        System.out.println("Time: " + Globals.worldTime + ":");
-        for (Movement movement : movements) {
-            System.out.println("Account balance before abs.movement: " + movement.getAmountBeforeMovement());
-            System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
-            System.out.println("Account balance after abs.movement: " + movement.getAmountBeforeMovement());
-        }
 
-    }
-
-    public void printSingleLoanInfo(LoanDTO loan,int worldTime) {
+    public void printSingleLoanInfo(LoanDTO loan) {
         System.out.println("Loans ID: " + loan.getLoansID());
         System.out.println("Owner: " + loan.getOwner());
         System.out.println("Category: " + loan.getCategory());
@@ -401,10 +392,10 @@ public class Menu {
         switch (status) {
             case ACTIVE:
                 printLenderDetail(loan);
-                //printActiveLoanDetails(loan, worldTime);
+                //printActiveLoanDetails(loan);
                 //break;
             case RISK:
-                printActiveLoanDetails(loan, worldTime);
+                printActiveLoanDetails(loan);
                 break;
             case FINISHED:
                 //printLenderDetail(loan);
@@ -417,45 +408,51 @@ public class Menu {
                 break;
         }
     }
-    public void printPayingTime(LoanDTO loan){
-        System.out.println("First payment: "+loan.getFirstPayment() +", Last pament: " +loan.getLastPayment() + ".");
-    }
-public void printPaymentPaid(LoanDTO loan){
-    System.out.println("Payments made so far:");
-    int fundPayBack = 0;
-    double interestPayBack = 0;
-    for (PaymentDTO payment : loan.getPayments().values()) {
-        double fund = payment.getFund();
-        double interest = payment.getInterest();
-        System.out.println("Payment time: " + payment.getActualPaymentTime() +
-                ", fund part: " + fund + ", interest part: " + interest);
-        fundPayBack += fund;
-        interestPayBack += interest;
-    }
-    double loanPrecentage=loan.getInterestRate()/100;
-    int originalAmount=loan.getOriginalAmount(),fundLeft=originalAmount-fundPayBack;
-    double interesetLeft=fundLeft*loanPrecentage;
-    System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack+".");
-    System.out.println("Fund amount left to pay: " + fundLeft+" Interest amount left to pay: " + interesetLeft+" .");
 
-}
-    public void printActiveLoanDetails(LoanDTO loan,int worldTime){
+    public void printPayingTime(LoanDTO loan) {
+        System.out.println("First payment: " + loan.getFirstPayment() + ", Last pament: " + loan.getLastPayment() + ".");
+    }
+
+    public void printPaymentPaid(LoanDTO loan) {
+        System.out.println("Payments made so far:");
+        int fundPayBack = 0;
+        double interestPayBack = 0;
+        for (PaymentDTO payment : loan.getPayments().values()) {
+            double fund = payment.getFund();
+            double interest = payment.getInterest();
+            System.out.println("Payment time: " + payment.getActualPaymentTime() +
+                    ", fund part: " + fund + ", interest part: " + interest);
+            fundPayBack += fund;
+            interestPayBack += interest;
+        }
+        double loanPrecentage = loan.getInterestRate() / 100;
+        int originalAmount = loan.getOriginalAmount(), fundLeft = originalAmount - fundPayBack;
+        double interesetLeft = fundLeft * loanPrecentage;
+        System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
+        System.out.println("Fund amount left to pay: " + fundLeft + " Interest amount left to pay: " + interesetLeft + " .");
+
+    }
+
+    public void printActiveLoanDetails(LoanDTO loan) {
         System.out.println("Active time is : " + loan.getActiveTime());
-        System.out.println("Next payment time: " + loan.getNextPaymentTime(worldTime));
+        System.out.println("Next payment time: " + loan.getNextPaymentTime());
         printPaymentPaid(loan);
 
     }
-    public void printMoneyPayed(LoanDTO loan){
+
+    public void printMoneyPayed(LoanDTO loan) {
         System.out.println("Total amount invested :" + loan.getAmountCollected());
         System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
     }
-    public void printLenderDetail(LoanDTO loan){
+
+    public void printLenderDetail(LoanDTO loan) {
         System.out.println("List of lenders on this loan:");
         List<PayBackDTO> payBackDTO = loan.getPayBacks();
         for (PayBackDTO payBack : payBackDTO) {
             System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
         }
     }
+
     public int getUserChoice(boolean fileInSystem) {
         boolean validInput = false;
         int usersChoice = 0;
@@ -477,5 +474,30 @@ public void printPaymentPaid(LoanDTO loan){
         return usersChoice;
     }
 
+    public void printClientDetails(Map<Integer, Set<Movement>> movements) {
+        printAllMovements(movements);
 
+    }
+
+    public void printAllMovements(Map<Integer, Set<Movement>> movements) {
+        Collection<Set<Movement>> movementsByTime = movements.values();
+        for (Set<Movement> set : movementsByTime) {
+            for (Movement movement : set) {
+                System.out.println("Movement time: " + movement.getExecuteTime());
+                System.out.println("Account balance before movement: " + movement.getAmountBeforeMovement());
+                System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
+                System.out.println("Account balance after movement: " + movement.getAmountAfterMovement());
+            }
+        }
+    }
+
+    public void printClientInfo(List<ClientDTO> clientDTOS) {
+        System.out.println("Client movements:");
+        for (ClientDTO clientDTO : clientDTOS) {
+            printClientDetails(clientDTO.getMovements());
+        }
+    }
+    public void printClientLoans(List<LoanDTO>loanDTOS){
+
+    }
 }

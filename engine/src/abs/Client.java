@@ -56,7 +56,7 @@ public class Client {
     }
 
     public void addMoneyToAccount(int moneyToAdd) {
-        Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);
+        Movement movement = new Movement(currBalance, moneyToAdd, Globals.worldTime);
         addMovement(movement);
         currBalance += moneyToAdd;
     }

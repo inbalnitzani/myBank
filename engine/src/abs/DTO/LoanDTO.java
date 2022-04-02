@@ -36,9 +36,9 @@ public class LoanDTO {
         return activeTime;
     }
 
-    public int getNextPaymentTime(int worldTime) {
+    public int getNextPaymentTime() {
         boolean findNextPayment = false;
-        int nextPayment = worldTime + 1;
+        int nextPayment = Globals.worldTime + 1;
         while (!findNextPayment) {
             if (payments.containsKey(nextPayment)) {
                 findNextPayment = true;

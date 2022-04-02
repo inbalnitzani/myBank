@@ -40,18 +40,15 @@ public class TaskManager {
                 getXMLFile();
                 break;
             case 2:
-                menu.printLoansInfo(bank.getAllLoans(),bank.getWorldTime());
+                menu.printLoansInfo(bank.getAllLoans());
                 break;
             case 3:
-                System.out.println("3. get clients information");
-                //menu.();
+                menu.printClientInfo(bank.getClients());
                 break;
             case 4:
-                System.out.println("4. load money to account");
                 loadMoneyToAccount();
                 break;
             case 5:
-                System.out.println("5. Withdraw money to account");
                 withdrawMoney();
                 break;
             case 6:
@@ -95,7 +92,7 @@ public class TaskManager {
         String clientName = getClientNameForAction();
         getLoanProperties(bank.getCurrBalance(clientName));
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
-        loans = menu.chooseLoansToInvest(loans,bank.getWorldTime());
+        loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
             int amountLeft = bank.startInlayProcess(loans, clientName);
             menu.updateUserInvest(currentLoan.getMaxAmount(), amountLeft);

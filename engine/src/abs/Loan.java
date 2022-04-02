@@ -72,10 +72,10 @@ public class Loan {
         return totalYazTime;
     }
 
-    public void changeToActive(int worldTime) {
+    public void changeToActive() {
         payments = new HashMap<>();
-        int lastPayment = worldTime + totalYazTime;
-        for (int i = worldTime; i < lastPayment; i += pace) {
+        int lastPayment = Globals.worldTime + totalYazTime;
+        for (int i = Globals.worldTime; i < lastPayment; i += pace) {
             payments.put(i, new Payment(i));
         }
     }
@@ -95,12 +95,12 @@ public class Loan {
         return capital - amountCollectedPending;
     }
 
-    public Status addNewInvestor(Client client, int newAmountForLoan, int worldTime) {
+    public Status addNewInvestor(Client client, int newAmountForLoan) {
         createNewGiver(client, newAmountForLoan);
         amountCollectedPending += newAmountForLoan;
         if (amountCollectedPending == capital) {
             status = Status.ACTIVE;
-            changeToActive(worldTime);
+            changeToActive();
         }
         return status;
     }
