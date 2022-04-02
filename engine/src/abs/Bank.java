@@ -15,12 +15,11 @@ import java.util.*;
 public class Bank implements BankInterface {
 
     private Set<String> categories;//
-    private Map<String,Loan> activeLoans;
-    private Map<String,Loan> inRiskLoans;
+    private Map<String, Loan> activeLoans;
+    private Map<String, Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
-    public static int worldTime = 1;
 
     //CTOR
     public Bank() {
@@ -40,9 +39,9 @@ public class Bank implements BankInterface {
         return clientDTO;
     }
 
-    public List<LoanDTO> createListLoanDto(Map<String,Loan> loans) {
+    public List<LoanDTO> createListLoanDto(Collection<Loan> loans) {
         List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
-        for (Loan loan : loans.values()) {
+        for (Loan loan : loans) {
             loanDTOS.add(new LoanDTO(loan));
         }
         return loanDTOS;
@@ -58,9 +57,10 @@ public class Bank implements BankInterface {
 
     //GETTERS
 
-    public List<LoanDTO> getLoansDTO(){
-        return createListLoanDto(waitingLoans);
+    public List<LoanDTO> getLoansDTO() {
+        return createListLoanDto(waitingLoans.values());
     }
+
     public List<ClientDTO> getClients() {
         return createListClientDTO();
     }
@@ -88,8 +88,6 @@ public class Bank implements BankInterface {
         return waitingLoans;
     }
 
-    //GETTERS
-
     public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
         clients.get(clientName).WithdrawingMoney(amountToWithdraw);
     }
@@ -100,9 +98,9 @@ public class Bank implements BankInterface {
 
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
         matchLoans = new MatchLoans(clients.get(clientName), terms);
-        Map<String,Loan> loans = new HashMap<>();
+        Map<String, Loan> loans = new HashMap<>();
         loans = matchLoans.checkRelevantLoans(loans, waitingLoans);
-        List<LoanDTO> loanDTOS = createListLoanDto(loans);
+        List<LoanDTO> loanDTOS = createListLoanDto(loans.values());
         return loanDTOS;
     }
 
@@ -111,11 +109,11 @@ public class Bank implements BankInterface {
         client.setAsGiver(loan);
         client.setCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
-            activeLoans.put(loan.getLoansID(),waitingLoans.remove(loan.getLoansID()));
+            activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
         }
     }
 
-    public int addInvestorToLoans(List<Loan> loans, Client client,int amountToInvest) {
+    public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest) {
         if (loans != null) {
             int sumLoans = loans.size(), amountPerLoan = amountToInvest / sumLoans;
             int firstPayment = amountPerLoan + amountToInvest % sumLoans;
@@ -136,14 +134,15 @@ public class Bank implements BankInterface {
                     loans.remove(0);
                     amountToInvest = amountToInvest - amountLeftCurrLoan;
                     sumLoans--;
-                    if (sumLoans!=0){
-                    amountPerLoan = amountToInvest / sumLoans;
-                    firstPayment = amountPerLoan + amountToInvest % sumLoans;
+                    if (sumLoans != 0) {
+                        amountPerLoan = amountToInvest / sumLoans;
+                        firstPayment = amountPerLoan + amountToInvest % sumLoans;
                     }
                 }
             }
 
-        }return amountToInvest;
+        }
+        return amountToInvest;
     }
 
     public void sortListByLeftAmount(List<Loan> loansToInvest) {
@@ -160,7 +159,7 @@ public class Bank implements BankInterface {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = createListLoan(loansDTOToInvest);
         sortListByLeftAmount(loansToInvest);
-        int amountLeft=addInvestorToLoans(loansToInvest, client,matchLoans.getAmountToInvest());
+        int amountLeft = addInvestorToLoans(loansToInvest, client, matchLoans.getAmountToInvest());
         return amountLeft;
     }
 
@@ -177,6 +176,19 @@ public class Bank implements BankInterface {
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
+    public List<LoanDTO> getAllLoans() {
+        Map<String, Loan> loans = new HashMap<>();
+        for (Loan loan : waitingLoans.values())
+            loans.put(loan.getLoansID(), loan);
+        for (Loan loan : activeLoans.values())
+            loans.put(loan.getLoansID(), loan);
+        for (Loan loan : inRiskLoans.values())
+            loans.put(loan.getLoansID(), loan);
+
+        return createListLoanDto(loans.values());
+    }
+
+
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
 
         List<String> categories = new ArrayList<String>();
@@ -185,30 +197,34 @@ public class Bank implements BankInterface {
         }
         return categories;
     }
-    public void convertToBank(AbsDescriptor info){
+
+    public void convertToBank(AbsDescriptor info) {
         setCategories(info.getAbsCategories());
         setClients(info.getAbsCustomers());
         setLoans(info.getAbsLoans());
     }
-    public void setCategories(AbsCategories absCategories){
+
+    public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
-        for (String category:categories) {
+        for (String category : categories) {
             this.categories.add(category);
         }
     }
-    public void setClients(AbsCustomers absCustomers){
+
+    public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
-        for (AbsCustomer customer:customerList) {
-            Client newClient = new Client(customer.getName(),customer.getAbsBalance());
-            this.clients.put(customer.getName(),newClient);
+        for (AbsCustomer customer : customerList) {
+            Client newClient = new Client(customer.getName(), customer.getAbsBalance());
+            this.clients.put(customer.getName(), newClient);
         }
     }
-    public void setLoans(AbsLoans absLoans){
+
+    public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
-        for (AbsLoan loan:loanList) {
-            String id =loan.getId();
-            Loan newLoan = new Loan(id,loan.getAbsOwner(),loan.getAbsIntristPerPayment(),loan.getAbsCapital(),loan.getAbsCategory(),loan.getAbsTotalYazTime(),loan.getAbsPaysEveryYaz());
-            this.waitingLoans.put(id,newLoan);
+        for (AbsLoan loan : loanList) {
+            String id = loan.getId();
+            Loan newLoan = new Loan(id, loan.getAbsOwner(), loan.getAbsIntristPerPayment(), loan.getAbsCapital(), loan.getAbsCategory(), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
+            this.waitingLoans.put(id, newLoan);
         }
     }
 

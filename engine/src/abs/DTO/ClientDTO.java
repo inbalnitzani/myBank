@@ -10,8 +10,8 @@ import java.util.Set;
 public class ClientDTO {
     private String fullName;
     private int currBalance;
-    private Set<Loan> asGiver;
-    private Set<Loan> asBorrower;
+    private List<LoanDTO> asGiver;
+    private List<LoanDTO> asBorrower;
     private Map<Integer, Set<Movement>> movements;
 
     public ClientDTO(Client client){
@@ -32,7 +32,7 @@ public class ClientDTO {
         else
             return null;
     }
-
+public Map<Integer,Set<Movement>> getMovements(){return movements;}
     public int getCurrBalance(){return currBalance;}
 
     public Set<Loan> getLoanSetAsGiver() {
