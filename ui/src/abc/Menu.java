@@ -406,7 +406,6 @@ public class Menu {
                 break;
             case ACTIVE:
                 System.out.println("Active time is : "+loan.getActiveTime());
-
                 break;
             case PENDING:
                 System.out.println("List of lenders on this loan:");

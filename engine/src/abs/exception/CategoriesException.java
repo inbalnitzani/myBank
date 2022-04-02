@@ -1,6 +1,7 @@
 package abs.exception;
 
 import abs.DTO.LoanDTO;
+import abs.schemaClasses.AbsLoan;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,8 +9,8 @@ import java.util.List;
 
 public class CategoriesException extends FileException{
    private List <String> categories = new ArrayList<>();
-   private LoanDTO loan;
-        public CategoriesException(Collection <String> categories, LoanDTO loan){
+   private AbsLoan loan;
+        public CategoriesException(Collection <String> categories, AbsLoan loan){
             for (String category:categories) {
                 this.categories.add(category);
             }
@@ -29,8 +30,8 @@ public class CategoriesException extends FileException{
         @Override
         public String toString() {
 
-            return "The loan :" + loan.getLoansID() + '\n' +
-                    "contains a category that is not included in the list of categories: " + loan.getCategory() + '\n' +
+            return "The loan :" + loan.getId() + '\n' +
+                    "contains a category that is not included in the list of categories: " + loan.getAbsCategory() + '\n' +
                     "These are the optional categories:" + '\n' + categories;
         }
 
