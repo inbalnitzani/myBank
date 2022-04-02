@@ -14,8 +14,7 @@ public class Client {
     public Client(String name, int accountBalance) {
         fullName = name;
         currBalance = accountBalance;
-        asGiver=new HashSet<Loan>() ;
-
+        asGiver = new HashSet<Loan>();
     }
 
     protected void setName(String name) {
@@ -44,15 +43,18 @@ public class Client {
             return null;
     }
 
-    public int getCurrBalance(){return currBalance;}
+    public int getCurrBalance() {
+        return currBalance;
+    }
 
     public Set<Loan> getLoanSetAsGiver() {
-            return asGiver;
+        return asGiver;
     }
 
     public Set<Loan> getLoanSetAsBorrower() {
         return asBorrower;
     }
+
     public void addMoneyToAccount(int moneyToAdd) {
         Movement movement = new Movement(currBalance, moneyToAdd, 1/*worldTime*/);
         addMovement(movement);
@@ -64,12 +66,15 @@ public class Client {
         return sumToPull;
     }
 
-    public  Map<Integer, Set<Movement>> getMovements(){return movements;}
+    public Map<Integer, Set<Movement>> getMovements() {
+        return movements;
+    }
 
-    public void setAsGiver(Loan loan){
+    public void setAsGiver(Loan loan) {
         asGiver.add(loan);
     }
-    public void setCurrBalance(int amountToDeducted){
-        currBalance-=amountToDeducted;
+
+    public void setCurrBalance(int amountToDeducted) {
+        currBalance -= amountToDeducted;
     }
 }

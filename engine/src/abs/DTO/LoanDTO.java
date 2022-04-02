@@ -5,6 +5,8 @@ import abs.Loan;
 import abs.Payment;
 import abs.Status;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,10 +17,11 @@ public class LoanDTO {
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate;
-    private int status;
+    private Status status;
     private int totalYazTime, pace, nextPayment,intristPerPayment;
-    //private List<Client> givers;
-    //private List <Payment> payments;
+    private Map<String,Integer> givers;
+    private List <Payment> payments;
+
 
     //CTOR
     public LoanDTO(Loan loan) {
@@ -30,8 +33,12 @@ public class LoanDTO {
         this.pace = loan.getPace();
         this.interestRate = loan.getInterestRate();
         this.totalYazTime = loan.getTotalYazTime();
+
     }
     //GETTERS
+public void setGiverDto(Map<Client,Integer> givers){
+        
+}
 
     public String getLoansID() {
         return this.id;
@@ -40,7 +47,7 @@ public class LoanDTO {
 
     ;
 
-    public int getStatus(){
+    public Status getStatus(){
        return this.status;
      };
     public String getCategory() {
@@ -61,7 +68,7 @@ public class LoanDTO {
 
     ;
 
-    public int getAmountCollectedPending() {
+    public int getAmountCollected() {
         return this.amountCollectedPending;
     }
 
