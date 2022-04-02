@@ -75,14 +75,12 @@ public class Bank implements BankInterface {
 
     public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException {
         boolean readFile = false;
-        InputStream inputStream = new FileInputStream(filePath);
-        AbsDescriptor info = deserializeFrom(inputStream);
-        convertToBank(info);
-        File file = new File();
-        file.checkFile(this.getCategories(), this.getLoansDTO(), this.getClients(), filePath);
-        readFile = true;
-
-
+            InputStream inputStream = new FileInputStream(filePath);
+            AbsDescriptor info = deserializeFrom(inputStream);
+            File file = new File();
+            file.checkFile(info.getAbsCategories().getAbsCategory(),info.getAbsLoans().getAbsLoan(),info.getAbsCustomers().getAbsCustomer(),filePath);
+            convertToBank(info);
+            readFile = true;
         return readFile;
     }
 
@@ -178,7 +176,6 @@ public class Bank implements BankInterface {
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
-
     public List<LoanDTO> getAllLoans() {
         Map<String, Loan> loans = new HashMap<>();
         for (Loan loan : waitingLoans.values())
@@ -190,6 +187,7 @@ public class Bank implements BankInterface {
 
         return createListLoanDto(loans.values());
     }
+
 
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
 

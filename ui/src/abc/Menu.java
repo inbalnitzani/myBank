@@ -391,11 +391,24 @@ public class Menu {
 
         switch (status) {
             case ACTIVE:
+<<<<<<< HEAD
                 printLenderDetail(loan);
                 //printActiveLoanDetails(loan);
                 //break;
             case RISK:
                 printActiveLoanDetails(loan);
+=======
+                System.out.println("Active time is : "+loan.getActiveTime());
+                break;
+            case PENDING:
+                System.out.println("List of lenders on this loan:");
+                List<PayBackDTO> payBackDTO = loan.getPayBacks();
+                for (PayBackDTO payBack : payBackDTO) {
+                    System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
+                }
+                System.out.println("Total amount invested :" + loan.getAmountCollected());
+                System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+>>>>>>> main
                 break;
             case FINISHED:
                 //printLenderDetail(loan);

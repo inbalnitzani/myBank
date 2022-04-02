@@ -14,7 +14,11 @@ public class Loan {
     private Status status;
     private int totalYazTime,activeTime;
     private List<PayBack> payBacks;
+<<<<<<< HEAD
     private Map<Integer, Payment> payments;
+=======
+    private Map<Integer, PaymentDTO> payments;
+>>>>>>> main
 
     //CTOR
     public Loan(String id,String owner, int amount, int rate, String categoryName,int totalYazTime,int pace) {
@@ -27,11 +31,17 @@ public class Loan {
         this.pace = pace;
         payBacks = new ArrayList<PayBack>();
     }
+<<<<<<< HEAD
 
     public int getActiveTime(){return activeTime;}
 
+=======
+>>>>>>> main
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
+    }
+    public int getActiveTime() {
+        return activeTime;
     }
 
     public String getLoansID() {
@@ -66,7 +76,9 @@ public class Loan {
         return this.pace;
     }
 
-    public List<PayBack> getPayBacks(){return payBacks;}
+    public List<PayBack> getPayBacks(){
+        return payBacks;
+    }
 
     public int getTotalYazTime() {
         return totalYazTime;

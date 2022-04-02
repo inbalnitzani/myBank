@@ -1,8 +1,9 @@
 package abs;
 
-import abs.DTO.ClientDTO;
-import abs.DTO.LoanDTO;
+
 import abs.exception.*;
+import abs.schemaClasses.AbsCustomer;
+import abs.schemaClasses.AbsLoan;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,7 +11,7 @@ import java.util.Set;
 
 public class File {
 
-    public void checkFile(Collection<String> categories, Collection<LoanDTO> loans, Collection<ClientDTO> clients,String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException {
+    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException {
         isXmlFile(fileName);
         checkCategories(categories,loans);
         checkCustomer(clients,loans);
@@ -19,11 +20,11 @@ public class File {
 
     }
 
-    public void checkCategories(Collection<String> categories,Collection<LoanDTO> loans) throws CategoriesException {
+    public void checkCategories(Collection<String> categories,Collection<AbsLoan> loans) throws CategoriesException {
        boolean valid;
-        for (LoanDTO loan:loans) {
+        for (AbsLoan loan:loans) {
             valid = false;
-            String curCategory = loan.getCategory();
+            String curCategory = loan.getAbsCategory();
             for (String category:categories) {
                 if (category.equals(curCategory))
                     valid = true;
@@ -33,11 +34,11 @@ public class File {
             }
         }
     }
-    public void checkNames(Collection<ClientDTO> clients) throws NamesException {
+    public void checkNames(Collection<AbsCustomer> clients) throws NamesException {
         Set<String> names = new HashSet<>();
         String name;
-        for (ClientDTO client:clients) {
-            name = client.getFullName();
+        for (AbsCustomer client:clients) {
+            name = client.getName();
            if (names.contains(name))
                throw new NamesException(name);
            else {
@@ -45,22 +46,22 @@ public class File {
            }
         }
     }
-    public void checkCustomer(Collection<ClientDTO> customers,Collection<LoanDTO> loans) throws CustomerException {
+    public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
         boolean valid;
-        for (LoanDTO loan : loans) {
+        for (AbsLoan loan : loans) {
             valid = false;
-            String customer = loan.getOwner();
-            for (ClientDTO curCustomer : customers) {
-                if (curCustomer.getFullName().equals(customer))
+            String customer = loan.getAbsOwner();
+            for (AbsCustomer curCustomer : customers) {
+                if (curCustomer.getName().equals(customer))
                     valid = true;
             }
             if (valid == false)
                 throw new CustomerException(customers,loan);
         }
     }
-    public void checkPace(Collection<LoanDTO> loans) throws PaceException {
-        for (LoanDTO loan:loans) {
-           if(loan.getTotalYazTime() % loan.getPace() != 0)
+    public void checkPace(Collection<AbsLoan> loans) throws PaceException {
+        for (AbsLoan loan:loans) {
+           if(loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz() != 0)
             throw new PaceException(loan);
         }
     }
