@@ -1,12 +1,8 @@
 package abs.DTO;
 
-import abs.Client;
-import abs.Loan;
-import abs.Payment;
-import abs.Status;
+import abs.*;
 
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,11 +12,13 @@ public class LoanDTO {
     private String owner;
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
-    private int interestRate;
+    private int interestRate,pace;
     private Status status;
-    private int totalYazTime, pace, nextPayment,intristPerPayment;
-    private Map<String,Integer> givers;
-    private List <Payment> payments;
+    private int totalYazTime, activeTime ;
+    private List<PayBackDTO> payBacks;
+
+//    private Map<String, Integer> givers;
+    private Map<Integer,PaymentDTO> payments;
 
 
     //CTOR
@@ -33,74 +31,56 @@ public class LoanDTO {
         this.pace = loan.getPace();
         this.interestRate = loan.getInterestRate();
         this.totalYazTime = loan.getTotalYazTime();
-
     }
+
     //GETTERS
-public void setGiverDto(Map<Client,Integer> givers){
-        
-}
+public int getActiveTime(){return activeTime;}
 
     public String getLoansID() {
         return this.id;
     }
 
+    public Status getStatus() {
+        return this.status;
+    }
 
-    ;
-
-    public Status getStatus(){
-       return this.status;
-     };
     public String getCategory() {
         return this.category;
     }
-
-    ;
 
     public int getOriginalAmount() {
         return this.capital;
     }
 
-    ;
-
     public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
 
-    ;
 
     public int getAmountCollected() {
         return this.amountCollectedPending;
     }
-
-    ;
+public List<PayBackDTO> getPayBacks(){
+        return payBacks;
+}
 
     public int getInterestRate() {
         return this.interestRate;
     }
 
-    ;
-
     public int getTotalYazTime() {
         return this.totalYazTime;
     }
 
-    ;
-
     public int getPace() {
         return this.pace;
     }
-
-    ;
 
     //   public Collection<Client> getGivers(){
     //      return this.givers;
     // };
     //public Collection <Payment> getPayments(){
     //   return this.payments;
-    //};
-
-    ;
-
     //public int getNextPayment(){
     //   return nextPayment;
     //}
