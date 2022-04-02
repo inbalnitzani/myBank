@@ -390,38 +390,33 @@ public class Menu {
 
     }
 
-    public void printSingleLoanInfo(LoanDTO curLoan) {
-        System.out.println("Loans ID: " + curLoan.getLoansID());
-        System.out.println("Owner: " + curLoan.getOwner());
-        System.out.println("Category: " + curLoan.getCategory());
-        System.out.println("Amount: " + curLoan.getOriginalAmount() + "Original total time units: " + curLoan.getTotalYazTime());
-        System.out.println("Interest: " + curLoan.getInterestRate() + "Rate: " + curLoan.getPace());
-        //Loan.Status status = curLoan.getStatus();
-        //System.out.println("Status: " + status);
-        /*
+    public void printSingleLoanInfo(LoanDTO loan) {
+        System.out.println("Loans ID: " + loan.getLoansID());
+        System.out.println("Owner: " + loan.getOwner());
+        System.out.println("Category: " + loan.getCategory());
+        System.out.println("Amount: " + loan.getOriginalAmount() + " Total time units for loan: " + loan.getTotalYazTime());
+        System.out.println("Interest: " + loan.getInterestRate() + " Rate of payments: " + loan.getPace());
+        Status status = loan.getStatus();
+        System.out.println("Status: " + status);
+
         switch (status) {
             case RISK:
-                System.out.println("status: in risk");
                 break;
             case ACTIVE:
-                System.out.println("status: active");
-                //curLoan.getGivers();
-                // need to print each lender's name and invesment
-                System.out.println("abs.loan was activated at :" + curLoan.getStartingTimeUnit());
-                System.out.println("next abs.payment is at :" + curLoan.getNextPayment());
-                break;
-            case PENDING:
-                System.out.println("status: pending");
 
                 //curLoan.getGivers();
                 // need to print each lender's name and invesment
-                System.out.println("current amount is :" + curLoan.getAmountCollectedPending());
-                System.out.println("amount left to activate abs.loan :" + (curLoan.getOriginalAmount() - curLoan.getAmountCollectedPending()));
+                System.out.println("abs.loan was activated at :" + loan.getStartingTimeUnit());
+                System.out.println("next abs.payment is at :" + loan.getNextPayment());
+                break;
+            case PENDING:
+                for (Object obj:loan.)
+                System.out.println("Total amount invested :" + loan.getAmountCollected());
+                System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
                 break;
             case FINISHED:
-                System.out.println("status: finished");
                 break;
-        }*/
+        }
     }
 
     public int getUserChoice(boolean fileInSystem) {

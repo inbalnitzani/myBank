@@ -37,7 +37,7 @@ public class TaskManager {
                 break;
             case 2:
                 System.out.println("2. get loans information");
-                //    printLoansInfo(bank.getLoans());
+                menu.printLoansInfo(bank.getLoans());
                 break;
             case 3:
                 System.out.println("3. get clients information");
