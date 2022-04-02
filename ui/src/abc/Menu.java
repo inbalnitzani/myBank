@@ -406,11 +406,11 @@ public class Menu {
 
                 //curLoan.getGivers();
                 // need to print each lender's name and invesment
-                System.out.println("abs.loan was activated at :" + loan.getStartingTimeUnit());
-                System.out.println("next abs.payment is at :" + loan.getNextPayment());
+     //           System.out.println("abs.loan was activated at :" + loan.getStartingTimeUnit());
+      //          System.out.println("next abs.payment is at :" + loan.getNextPayment());
                 break;
             case PENDING:
-                for (Object obj:loan.)
+              //  for (Object obj:loan)
                 System.out.println("Total amount invested :" + loan.getAmountCollected());
                 System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
                 break;
