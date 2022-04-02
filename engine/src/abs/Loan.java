@@ -96,10 +96,11 @@ public class Loan {
     public void changeToActive() {
         payments = new HashMap<>();
         for (int i = 0; i < totalYazTime; i += pace) {
-            payments.put(i, /*new Payment()*/);
+         //   payments.put(i, /*new Payment()*/);
         }
     }
     public int getNextTimePayment() {
+        return 0;
     }
 
     public String getOwner() {
