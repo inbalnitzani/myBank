@@ -34,9 +34,7 @@ public class Loan {
     public Loan(LoanDTO loanDTO){
       new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
     }
-    public int getActiveTime() {
-        return activeTime;
-    }
+
 
     public String getLoansID() {
         return this.id;
