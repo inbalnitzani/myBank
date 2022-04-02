@@ -4,6 +4,7 @@ import abs.DTO.ClientDTO;
 import abs.DTO.LoanDTO;
 import abs.*;
 import abs.DTO.PayBackDTO;
+import abs.DTO.PaymentDTO;
 
 import java.util.*;
 
@@ -66,14 +67,14 @@ public class Menu {
         return minTime;
     }
 
-    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans) {
+    public List<LoanDTO> chooseLoansToInvest(List<LoanDTO> optionalLoans,int worldTime) {
         List<LoanDTO> loansToInvest = null;
         if (optionalLoans.isEmpty()) {
             System.out.println("There are no loans suitable for your requirements. ");
         } else {
             System.out.println("Please insert the number of all loans you would like to invest,and finish with -1:");
             System.out.println("If you don't want any loan, insert -1.");
-            printLoansInfo(optionalLoans);
+            printLoansInfo(optionalLoans,worldTime);
             Set<Integer> loansIndex = scanLoansFromUser(optionalLoans.size());
             loansToInvest = createListLoanDTOToInvest(optionalLoans, loansIndex);
         }
@@ -226,11 +227,11 @@ public class Menu {
         return loansToInvestIndex;
     }
 
-    public void printLoansInfo(List<LoanDTO> optionalLoans) {
+    public void printLoansInfo(List<LoanDTO> optionalLoans,int worldTime) {
         int sizeOfList = optionalLoans.size();
         for (int index = 0; index < sizeOfList; index++) {
             System.out.println("loan number " + (index + 1) + ": ");
-            printSingleLoanInfo(optionalLoans.get(index));
+            printSingleLoanInfo(optionalLoans.get(index),worldTime);
             System.out.println("\n");
         }
     }
@@ -357,10 +358,6 @@ public class Menu {
         return (numberOfClient - 1);
     }
 
-    public boolean checkAmount(int number) {
-        return (number > 0);
-    }
-
     public void printOneClientInfo(Client client) {
         System.out.println(client.getFullName() + ":");
         System.out.println("Client account movements:");
@@ -392,7 +389,7 @@ public class Menu {
 
     }
 
-    public void printSingleLoanInfo(LoanDTO loan) {
+    public void printSingleLoanInfo(LoanDTO loan,int worldTime) {
         System.out.println("Loans ID: " + loan.getLoansID());
         System.out.println("Owner: " + loan.getOwner());
         System.out.println("Category: " + loan.getCategory());
@@ -402,26 +399,63 @@ public class Menu {
         System.out.println("Status: " + status);
 
         switch (status) {
-            case RISK:
-                break;
             case ACTIVE:
-                System.out.println("Active time is : "+loan.getActiveTime());
-
-                break;
-            case PENDING:
-                System.out.println("List of lenders on this loan:");
-                List<PayBackDTO> payBackDTO = loan.getPayBacks();
-                for (PayBackDTO payBack : payBackDTO) {
-                    System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
-                }
-                System.out.println("Total amount invested :" + loan.getAmountCollected());
-                System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+                printLenderDetail(loan);
+                //printActiveLoanDetails(loan, worldTime);
+                //break;
+            case RISK:
+                printActiveLoanDetails(loan, worldTime);
                 break;
             case FINISHED:
+                //printLenderDetail(loan);
+                //printMoneyPayed(loan);
+                printPayingTime(loan);
+                //break;
+            case PENDING:
+                printLenderDetail(loan);
+                printMoneyPayed(loan);
                 break;
         }
     }
+    public void printPayingTime(LoanDTO loan){
+        System.out.println("First payment: "+loan.getFirstPayment() +", Last pament: " +loan.getLastPayment() + ".");
+    }
+public void printPaymentPaid(LoanDTO loan){
+    System.out.println("Payments made so far:");
+    int fundPayBack = 0;
+    double interestPayBack = 0;
+    for (PaymentDTO payment : loan.getPayments().values()) {
+        double fund = payment.getFund();
+        double interest = payment.getInterest();
+        System.out.println("Payment time: " + payment.getActualPaymentTime() +
+                ", fund part: " + fund + ", interest part: " + interest);
+        fundPayBack += fund;
+        interestPayBack += interest;
+    }
+    double loanPrecentage=loan.getInterestRate()/100;
+    int originalAmount=loan.getOriginalAmount(),fundLeft=originalAmount-fundPayBack;
+    double interesetLeft=fundLeft*loanPrecentage;
+    System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack+".");
+    System.out.println("Fund amount left to pay: " + fundLeft+" Interest amount left to pay: " + interesetLeft+" .");
 
+}
+    public void printActiveLoanDetails(LoanDTO loan,int worldTime){
+        System.out.println("Active time is : " + loan.getActiveTime());
+        System.out.println("Next payment time: " + loan.getNextPaymentTime(worldTime));
+        printPaymentPaid(loan);
+
+    }
+    public void printMoneyPayed(LoanDTO loan){
+        System.out.println("Total amount invested :" + loan.getAmountCollected());
+        System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+    }
+    public void printLenderDetail(LoanDTO loan){
+        System.out.println("List of lenders on this loan:");
+        List<PayBackDTO> payBackDTO = loan.getPayBacks();
+        for (PayBackDTO payBack : payBackDTO) {
+            System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
+        }
+    }
     public int getUserChoice(boolean fileInSystem) {
         boolean validInput = false;
         int usersChoice = 0;

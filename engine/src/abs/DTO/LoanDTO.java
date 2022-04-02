@@ -2,7 +2,6 @@ package abs.DTO;
 
 import abs.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,13 +11,11 @@ public class LoanDTO {
     private String owner;
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
-    private int interestRate,pace;
+    private int interestRate, pace;
     private Status status;
-    private int totalYazTime, activeTime ;
+    private int totalYazTime, activeTime;
     private List<PayBackDTO> payBacks;
-
-//    private Map<String, Integer> givers;
-    private Map<Integer,PaymentDTO> payments;
+    private Map<Integer, PaymentDTO> payments;
 
 
     //CTOR
@@ -34,7 +31,21 @@ public class LoanDTO {
     }
 
     //GETTERS
-public int getActiveTime(){return activeTime;}
+    public Map<Integer,PaymentDTO> getPayments(){return payments;}
+    public int getActiveTime() {
+        return activeTime;
+    }
+
+    public int getNextPaymentTime(int worldTime) {
+        boolean findNextPayment = false;
+        int nextPayment = worldTime + 1;
+        while (!findNextPayment) {
+            if (payments.containsKey(nextPayment)) {
+                findNextPayment = true;
+            } else nextPayment++;
+        }
+        return nextPayment;
+    }
 
     public String getLoansID() {
         return this.id;
@@ -51,7 +62,20 @@ public int getActiveTime(){return activeTime;}
     public int getOriginalAmount() {
         return this.capital;
     }
-
+public int getFirstPayment() {
+    int firstPayment = activeTime;
+    boolean findFirstPayment = false;
+    while (!findFirstPayment) {
+        if (payments.containsKey(firstPayment))
+            findFirstPayment = true;
+        else firstPayment++;
+    }
+    return firstPayment;
+}
+    public int getLastPayment() {
+        int lastPayment = activeTime + totalYazTime;
+        return payments.get(lastPayment).getActualPaymentTime();
+    }
     public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
@@ -60,9 +84,10 @@ public int getActiveTime(){return activeTime;}
     public int getAmountCollected() {
         return this.amountCollectedPending;
     }
-public List<PayBackDTO> getPayBacks(){
+
+    public List<PayBackDTO> getPayBacks() {
         return payBacks;
-}
+    }
 
     public int getInterestRate() {
         return this.interestRate;
@@ -87,6 +112,7 @@ public List<PayBackDTO> getPayBacks(){
     public String getOwner() {
         return owner;
     }
+
     //SETTERS
     // public void setNextPayment() {
     //if(status.equals(abs.e_status.ACTIVE))

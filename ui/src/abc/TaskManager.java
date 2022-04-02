@@ -97,7 +97,7 @@ public class TaskManager {
         String clientName = getClientNameForAction();
         getLoanProperties(bank.getCurrBalance(clientName));
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
-        loans = menu.chooseLoansToInvest(loans);
+        loans = menu.chooseLoansToInvest(loans,bank.getWorldTime());
         if (!loans.isEmpty()) {
             int amountLeft = bank.startInlayProcess(loans, clientName);
             menu.updateUserInvest(currentLoan.getMaxAmount(), amountLeft);

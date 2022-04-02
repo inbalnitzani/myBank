@@ -32,6 +32,7 @@ public class Bank implements BankInterface {
         categories = new HashSet<String>();
     }
 
+    public int getWorldTime(){return worldTime;}
     public List<ClientDTO> createListClientDTO() {
         List<ClientDTO> clientDTO = new ArrayList<ClientDTO>();
         for (Client client : clients.values()) {
@@ -116,7 +117,7 @@ public class Bank implements BankInterface {
     }
 
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
-        Status loanStatus = loan.addNewInvestor(client, amountToInvestPerLoan);
+        Status loanStatus = loan.addNewInvestor(client, amountToInvestPerLoan,worldTime);
         client.setAsGiver(loan);
         client.setCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {

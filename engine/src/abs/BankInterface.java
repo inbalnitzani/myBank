@@ -18,6 +18,7 @@ public interface BankInterface {
 
      void loanMoneyToAccount(String clientName, int amountToLoad) ;
 
+     int getWorldTime();
      int getCurrBalance(String clientName);
 
      List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);

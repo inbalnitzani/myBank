@@ -2,6 +2,7 @@ package abs;
 
 import abs.DTO.LoanDTO;
 import abs.DTO.PaymentDTO;
+import com.sun.javaws.Globals;
 //import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -17,10 +18,7 @@ public class Loan {
     private Status status;
     private int totalYazTime,activeTime;
     private List<PayBack> payBacks;
-    //private Map<Client,Integer> givers;
-    private Map<Integer, PaymentDTO> payments;
-
-
+    private Map<Integer, Payment> payments;
 
     //CTOR
     public Loan(String id,String owner, int amount, int rate, String categoryName,int totalYazTime,int pace) {
@@ -93,10 +91,11 @@ public class Loan {
         return totalYazTime;
     }
 
-    public void changeToActive() {
+    public void changeToActive(int worldTime) {
         payments = new HashMap<>();
-        for (int i = 0; i < totalYazTime; i += pace) {
-         //   payments.put(i, /*new Payment()*/);
+        int lastPayment = worldTime + totalYazTime;
+        for (int i = worldTime; i < lastPayment; i += pace) {
+            payments.put(i, new Payment(i));
         }
     }
     public int getNextTimePayment() {
@@ -116,11 +115,13 @@ public class Loan {
         return capital - amountCollectedPending;
     }
 
-    public Status addNewInvestor(Client client, int newAmountForLoan) {
-        createNewGiver(client,newAmountForLoan);
-        amountCollectedPending+=newAmountForLoan;
-        if(amountCollectedPending== capital)
-            status=Status.ACTIVE;
+    public Status addNewInvestor(Client client, int newAmountForLoan, int worldTime) {
+        createNewGiver(client, newAmountForLoan);
+        amountCollectedPending += newAmountForLoan;
+        if (amountCollectedPending == capital) {
+            status = Status.ACTIVE;
+            changeToActive(worldTime);
+        }
         return status;
     }
     public void createNewGiver(Client client,int amount){
