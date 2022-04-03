@@ -10,15 +10,15 @@ public class Loan {
     private String owner;
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
-    private int interestRate,pace;
-    private Status status;
-    private int totalYazTime,activeTime;
+    private int interestRate, pace;
+    private Status status = Status.NEW;
+    private int totalYazTime, activeTime;
     private List<PayBack> payBacks;
     private Map<Integer, Payment> payments;
 
 
     //CTOR
-    public Loan(String id,String owner, int amount, int rate, String categoryName,int totalYazTime,int pace) {
+    public Loan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace) {
         this.id = id;
         this.owner = owner;
         this.capital = amount;
@@ -29,12 +29,17 @@ public class Loan {
         payBacks = new ArrayList<PayBack>();
     }
 
-    public int getActiveTime(){return activeTime;}
-
-    public Loan(LoanDTO loanDTO){
-      new Loan(loanDTO.getLoansID(),loanDTO.getOwner(),loanDTO.getOriginalAmount(),loanDTO.getInterestRate(),loanDTO.getCategory(),loanDTO.getTotalYazTime(),loanDTO.getPace());
+    public int getActiveTime() {
+        return activeTime;
     }
 
+    public Loan(LoanDTO loanDTO) {
+        new Loan(loanDTO.getLoansID(), loanDTO.getOwner(), loanDTO.getOriginalAmount(), loanDTO.getInterestRate(), loanDTO.getCategory(), loanDTO.getTotalYazTime(), loanDTO.getPace());
+    }
+
+    public Map<Integer, Payment> getPayments() {
+        return payments;
+    }
 
     public String getLoansID() {
         return this.id;
@@ -68,7 +73,7 @@ public class Loan {
         return this.pace;
     }
 
-    public List<PayBack> getPayBacks(){
+    public List<PayBack> getPayBacks() {
         return payBacks;
     }
 
@@ -82,7 +87,9 @@ public class Loan {
         for (int i = Globals.worldTime; i < lastPayment; i += pace) {
             payments.put(i, new Payment(i));
         }
+        activeTime=Globals.worldTime;
     }
+
     public int getNextTimePayment() {
         return 0;
     }
@@ -109,11 +116,11 @@ public class Loan {
         return status;
     }
 
-    public void createNewGiver(Client client,int amount){
-        PayBack payBack=new PayBack();
+    public void createNewGiver(Client client, int amount) {
+        PayBack payBack = new PayBack();
         payBack.setGivesALoan(client);
         payBack.setOriginalAmount(amount);
         payBacks.add(payBack);
     }
 
- }
+}

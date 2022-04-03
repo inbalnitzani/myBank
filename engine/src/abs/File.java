@@ -11,7 +11,8 @@ import java.util.Set;
 
 public class File {
 
-    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException {
+    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName)
+            throws CategoriesException, NamesException, CustomerException, XmlException, PaceException {
         isXmlFile(fileName);
         checkCategories(categories,loans);
         checkCustomer(clients,loans);
@@ -19,6 +20,7 @@ public class File {
         checkPace(loans);
 
     }
+
 
     public void checkCategories(Collection<String> categories,Collection<AbsLoan> loans) throws CategoriesException {
        boolean valid;
@@ -61,13 +63,12 @@ public class File {
     }
     public void checkPace(Collection<AbsLoan> loans) throws PaceException {
         for (AbsLoan loan:loans) {
-           if(loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz() != 0)
+           if((loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz()) != 0)
             throw new PaceException(loan);
         }
     }
     public void isXmlFile(String fileName) throws XmlException {
         if(!fileName.endsWith(".xml"))
             throw new XmlException(fileName);
-
     }
 }
