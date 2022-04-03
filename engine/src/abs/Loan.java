@@ -84,7 +84,7 @@ public class Loan {
     public void changeToActive() {
         payments = new HashMap<>();
         int lastPayment = Globals.worldTime + totalYazTime;
-        for (int i = Globals.worldTime; i < lastPayment; i += pace) {
+        for (int i = Globals.worldTime+pace; i < lastPayment; i += pace) {
             payments.put(i, new Payment(i));
         }
         activeTime=Globals.worldTime;
@@ -117,10 +117,7 @@ public class Loan {
     }
 
     public void createNewGiver(Client client, int amount) {
-        PayBack payBack = new PayBack();
-        payBack.setGivesALoan(client);
-        payBack.setOriginalAmount(amount);
-        payBacks.add(payBack);
+        payBacks.add(new PayBack(client,amount));
     }
 
 }

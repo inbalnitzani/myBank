@@ -116,6 +116,7 @@ public class Bank implements BankInterface {
         if (loans != null) {
             int sumLoans = loans.size(), amountPerLoan = amountToInvest / sumLoans;
             int firstPayment = amountPerLoan + amountToInvest % sumLoans;
+
             while (sumLoans > 0) {
                 Loan currLoan = loans.get(0);
                 int amountLeftCurrLoan = currLoan.getLeftAmountToInvest();
@@ -126,8 +127,8 @@ public class Bank implements BankInterface {
                     }
                     for (Loan loan : loans) {
                         addInvestorToLoan(loan, client, amountPerLoan);
-                        loans.remove(0);
                     }
+                    loans.clear();
                 } else {
                     addInvestorToLoan(currLoan, client, amountLeftCurrLoan);
                     loans.remove(0);
