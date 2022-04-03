@@ -4,7 +4,10 @@ public class PayBack {
 
     private Client givesALoan;
     private int originalAmount;
-
+public PayBack(Client client, int originalAmount) {
+    this.givesALoan = client;
+    this.originalAmount = originalAmount;
+}
     public int getOriginalAmount() {
         return originalAmount;
     }
