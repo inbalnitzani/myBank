@@ -63,24 +63,21 @@ public class TaskManager {
         }
     }
 
-    public void getXMLFile()  {
+    public void getXMLFile() {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
         while (tryLoadFile) {
             fileName = menu.getFileFullNamePath();
             try {
                 succeed = bank.getXMLFile(fileName);
-            }
-            catch (FileException e){
+            } catch (FileException e) {
                 System.out.println(e);
-            }
-            catch (JAXBException | FileNotFoundException e) {
+            } catch (JAXBException | FileNotFoundException e) {
                 System.out.println("file does not exist.");
-            }
-            if (succeed) {
+            } if (succeed) {
                 System.out.println("File read successfully");
                 tryLoadFile = false;
-                fileInSystem=true;
+                fileInSystem = true;
             } else {
                 if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;

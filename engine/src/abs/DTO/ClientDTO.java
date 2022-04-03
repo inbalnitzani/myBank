@@ -1,5 +1,7 @@
 package abs.DTO;
 
+import abs.Client;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,13 +13,13 @@ public class ClientDTO {
     private List<LoanDTO> asBorrower;
     private Map<Integer, Set<MovementDTO>> movements;
 
-//    public ClientDTO(Client client) {
-//        this.fullName = client.getFullName();
-//        this.currBalance = client.getCurrBalance();
-//        //this.asBorrower=client.getLoanSetAsBorrower();
-//        // this.asGiver=client.getLoanSetAsGiver();
-//        this.movements = client.getMovements();
-//    }
+    public ClientDTO(Client client) {
+        this.fullName = client.getFullName();
+        this.currBalance = client.getCurrBalance();
+        //this.asBorrower=client.getLoanSetAsBorrower();
+        // this.asGiver=client.getLoanSetAsGiver();
+        //    this.movements = client.getMovements();
+    }
 
     public String getFullName() {
         return fullName;
