@@ -1,10 +1,11 @@
 package abs.DTO;
 
 import abs.Client;
+import abs.Loan;
+import abs.Movement;
+import abs.Payment;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class ClientDTO {
     private String fullName;
@@ -16,11 +17,36 @@ public class ClientDTO {
     public ClientDTO(Client client) {
         this.fullName = client.getFullName();
         this.currBalance = client.getCurrBalance();
-        //this.asBorrower=client.getLoanSetAsBorrower();
-        // this.asGiver=client.getLoanSetAsGiver();
-        //    this.movements = client.getMovements();
+        this.asBorrower=createLoanDTOList(client.getLoanListAsBorrower());
+        this.asGiver=createLoanDTOList(client.getLoanListAsGiver());
+        setMovements(client.getMovements());
     }
 
+
+    private void setMovements(Map<Integer,Set<Movement>>movements) {
+        if (movements != null) {
+            this.movements = new HashMap<>();
+            for (Collection<Movement> set : movements.values()) {
+                addSetToMovements(set);
+            }
+        }
+    }
+    private void addSetToMovements(Collection<Movement> set) {
+        int time=0,size = set.size();
+        Set<MovementDTO> movementDTOS = new HashSet<>();
+        for (Movement movement : set) {
+            movementDTOS.add(new MovementDTO(movement.getAmountBeforeMovement(), movement.getAmount(), movement.getExecuteTime()));
+            time=movement.getExecuteTime();
+        }
+        this.movements.put(time,movementDTOS);
+    }
+    private List<LoanDTO> createLoanDTOList(List<Loan> loans){
+        List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
+        for (Loan loan : loans) {
+            loanDTOS.add(new LoanDTO(loan));
+        }
+        return loanDTOS;
+    }
     public String getFullName() {
         return fullName;
     }

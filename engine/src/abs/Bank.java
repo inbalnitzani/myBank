@@ -33,8 +33,7 @@ public class Bank implements BankInterface {
     public List<ClientDTO> createListClientDTO() {
         List<ClientDTO> clientDTO = new ArrayList<ClientDTO>();
         for (Client client : clients.values()) {
-            ClientDTO clientDto = new ClientDTO(client);
-            clientDTO.add(clientDto);
+            clientDTO.add(new ClientDTO(client));
         }
         return clientDTO;
     }

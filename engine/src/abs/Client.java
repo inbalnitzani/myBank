@@ -13,6 +13,8 @@ public class Client {
         fullName = name;
         currBalance = accountBalance;
         asGiver = new ArrayList<>();
+        asBorrower = new ArrayList<>();
+        movements=new HashMap<>();
     }
 
     protected void setName(String name) {
@@ -45,11 +47,11 @@ public class Client {
         return currBalance;
     }
 
-    public List<Loan> getLoanSetAsGiver() {
+    public List<Loan> getLoanListAsGiver() {
         return asGiver;
     }
 
-    public List<Loan> getLoanSetAsBorrower() {
+    public List<Loan> getLoanListAsBorrower() {
         return asBorrower;
     }
 
@@ -60,6 +62,8 @@ public class Client {
     }
 
     public int WithdrawingMoney(int sumToPull) {
+        Movement movement = new Movement(currBalance, -sumToPull, Globals.worldTime);
+        addMovement(movement);
         currBalance -= sumToPull;
         return sumToPull;
     }

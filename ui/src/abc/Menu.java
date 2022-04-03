@@ -330,7 +330,7 @@ public class Menu {
         System.out.println("Loans ID: " + loan.getLoansID());
         System.out.println("Owner: " + loan.getOwner());
         System.out.println("Category: " + loan.getCategory());
-        System.out.println("Amount: " + loan.getOriginalAmount() + ",  Total time units for loan: " + loan.getTotalYazTime());
+        System.out.println("Amount: " + loan.getOriginalAmount() + ",  Original total time units for loan: " + loan.getTotalYazTime());
         System.out.println("Interest: " + loan.getInterestRate() + ",  Rate of payments: " + loan.getPace());
         Status status = loan.getStatus();
         System.out.println("Status: " + status);
@@ -421,9 +421,8 @@ public class Menu {
     }
 
     public void printClientInfo(List<ClientDTO> clientDTOS) {
-
         for (ClientDTO clientDTO : clientDTOS) {
-            System.out.println(clientDTO.getFullName() + ":");
+            System.out.println("\n"+clientDTO.getFullName() + ":");
             printClientDetails(clientDTO);
         }
     }
@@ -437,16 +436,20 @@ public class Menu {
     }
 
     public void printClientLoansInfo(List<LoanDTO> loanDTOList) {
-        for (LoanDTO loanDTO : loanDTOList) {
-            System.out.println("Name: " + loanDTO.getLoansID());
-            System.out.println("Category: " + loanDTO.getCategory());
-            System.out.println("Original amount: " + loanDTO.getOriginalAmount());
-            System.out.println("Rate of payments: one payment every " + loanDTO.getPace() + " time unit");
-            System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
-            double interestPrecentage = loanDTO.getInterestRate() / 100;
-            System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * interestPrecentage);
-            System.out.println("Loan status:" + loanDTO.getStatus());
-            printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
+        if (loanDTOList.isEmpty())
+            System.out.println("This list is empty right now");
+        else {
+            for (LoanDTO loanDTO : loanDTOList) {
+                System.out.println("Name: " + loanDTO.getLoansID());
+                System.out.println("Category: " + loanDTO.getCategory());
+                System.out.println("Original amount: " + loanDTO.getOriginalAmount());
+                System.out.println("Rate of payments: one payment every " + loanDTO.getPace() + " time unit");
+                System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
+                double interestPrecentage = loanDTO.getInterestRate() / 100;
+                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * interestPrecentage);
+                System.out.println("Loan status:" + loanDTO.getStatus());
+                printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
+            }
         }
     }
 
@@ -471,15 +474,24 @@ public class Menu {
     }
 
     public void printAllMovements(Map<Integer, Set<MovementDTO>> movements) {
-        Collection<Set<MovementDTO>> movementsByTime = movements.values();
-        for (Set<MovementDTO> set : movementsByTime) {
-            for (MovementDTO movement : set) {
-                System.out.println("Movement time: " + movement.getExecuteTime());
-                System.out.println("Account balance before movement: " + movement.getAmountBeforeMovement());
-                System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
-                System.out.println("Account balance after movement: " + movement.getAmountAfterMovement());
+        if (movements.isEmpty())
+            System.out.println("There are no movements in account right now");
+        else {
+            Collection<Set<MovementDTO>> movementsByTime = movements.values();
+            System.out.println("Account movements:");
+            for (Set<MovementDTO> set : movementsByTime) {
+                for (MovementDTO movement : set) {
+                    printOneMovementInfo(movement);
+                }
             }
         }
+    }
+
+    public void printOneMovementInfo(MovementDTO movement) {
+        System.out.println("Movement time: " + movement.getExecuteTime());
+        System.out.println("Account balance before movement: " + movement.getAmountBeforeMovement());
+        System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
+        System.out.println("Account balance after movement: " + movement.getAmountAfterMovement()+"\n");
     }
 
     public boolean FileNotExist() {
