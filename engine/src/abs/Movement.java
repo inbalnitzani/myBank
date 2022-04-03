@@ -1,7 +1,7 @@
 package abs;
 
 public class Movement {
-    public enum kindOfMovement {INSERT_MONEY, PAY_MONEY};
+    public enum kindOfMovement {INSERT_MONEY, WITHDRAW};
     public static final int INSERT_MONEY = 1;
     public static final int PAY_MONEY = -1;
 
@@ -15,7 +15,7 @@ public class Movement {
         amountBeforeMovement = currBalance;
         amountAfterMovement = amountBeforeMovement + amountChange;
         if (amountChange < 0)
-            kindOfExecute = kindOfMovement.PAY_MONEY;
+            kindOfExecute = kindOfMovement.WITHDRAW;
         else
             kindOfExecute = kindOfMovement.INSERT_MONEY;
     }

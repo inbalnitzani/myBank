@@ -17,7 +17,7 @@ public class MovementDTO {
         amountBeforeMovement = currBalance;
         amountAfterMovement = amountBeforeMovement + amountChange;
         if (amountChange < 0)
-            kindOfExecute = Movement.kindOfMovement.PAY_MONEY;
+            kindOfExecute = Movement.kindOfMovement.WITHDRAW;
         else
             kindOfExecute = Movement.kindOfMovement.INSERT_MONEY;
     }
