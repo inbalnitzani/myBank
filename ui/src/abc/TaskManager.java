@@ -40,26 +40,21 @@ public class TaskManager {
                 getXMLFile();
                 break;
             case 2:
-                System.out.println("2. get loans information");
-           //     menu.printLoansInfo(bank.getLoans());
+                menu.printLoansInfo(bank.getAllLoans());
                 break;
             case 3:
-                System.out.println("3. get clients information");
-                //menu.();
+                menu.printClientInfo(bank.getClients());
                 break;
             case 4:
-                System.out.println("4. load money to account");
                 loadMoneyToAccount();
                 break;
             case 5:
-                System.out.println("5. Withdraw money to account");
                 withdrawMoney();
                 break;
             case 6:
                 startOfInlay();
                 break;
             case 7:
-                System.out.println("7. promote timeline and make payments");
                 break;
             case 8:
                 if (!menu.verifyExit())
@@ -68,24 +63,21 @@ public class TaskManager {
         }
     }
 
-    public void getXMLFile()  {
+    public void getXMLFile() {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
         while (tryLoadFile) {
             fileName = menu.getFileFullNamePath();
             try {
                 succeed = bank.getXMLFile(fileName);
-            }
-            catch (FileException e){
+            } catch (FileException e) {
                 System.out.println(e);
-            }
-            catch (JAXBException | FileNotFoundException e) {
+            } catch (JAXBException | FileNotFoundException e) {
                 System.out.println("file does not exist.");
-            }
-            if (succeed) {
+            } if (succeed) {
                 System.out.println("File read successfully");
                 tryLoadFile = false;
-                fileInSystem=true;
+                fileInSystem = true;
             } else {
                 if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;

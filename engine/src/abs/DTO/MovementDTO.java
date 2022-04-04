@@ -1,23 +1,25 @@
-package abs;
+package abs.DTO;
 
-public class Movement {
-    public enum kindOfMovement {INSERT_MONEY, WITHDRAW};
+import abs.Movement;
+
+public class MovementDTO {
+    public enum kindOfMovement {INSERT_MONEY, PAY_MONEY};
     public static final int INSERT_MONEY = 1;
     public static final int PAY_MONEY = -1;
 
     private int executeTime;
     private int amountBeforeMovement;
     private int amountAfterMovement;
-    private kindOfMovement kindOfExecute;
+    private Movement.kindOfMovement kindOfExecute;
     //ctor
-    public Movement(int currBalance, int amountChange, int time) {
+    public MovementDTO(int currBalance, int amountChange, int time) {
         executeTime = time;
         amountBeforeMovement = currBalance;
         amountAfterMovement = amountBeforeMovement + amountChange;
         if (amountChange < 0)
-            kindOfExecute = kindOfMovement.WITHDRAW;
+            kindOfExecute = Movement.kindOfMovement.WITHDRAW;
         else
-            kindOfExecute = kindOfMovement.INSERT_MONEY;
+            kindOfExecute = Movement.kindOfMovement.INSERT_MONEY;
     }
 
     public int getExecuteTime() {
@@ -35,12 +37,10 @@ public class Movement {
     public int getAmount(){return amountAfterMovement-amountBeforeMovement;}
 
     public String getKindOfExecute() {
-        if (kindOfExecute == kindOfMovement.INSERT_MONEY)
+        if (kindOfExecute == Movement.kindOfMovement.INSERT_MONEY)
             return "Insert Money";
         else
             return "Pay Money";
     }
-
-
 
 }

@@ -1,16 +1,28 @@
 package abs;
 
 public class Payment {
-    private int unitTime;
     private double fund;
     private double percentage;
+    private int payingActualTime;
 
-    public Payment(){
-
+    public Payment(int expectedTime) {
+        payingActualTime =expectedTime;
     }
-public Payment(int ut, double fund, double percentage){
-    this.unitTime = ut;
-    this.fund = fund;
-    this.percentage = percentage;
-}
+
+    public Payment(double fund, double percentage) {
+        this.fund = fund;
+        this.percentage = percentage;
+    }
+
+    public double getPercentage() {
+        return percentage;
+    }
+
+    public double getFund() {
+        return fund;
+    }
+
+    public int getPayingActualTime() {
+        return payingActualTime;
+    }
 }

@@ -1,12 +1,8 @@
 package abc;
 
-import abs.DTO.ClientDTO;
-import abs.DTO.LoanDTO;
+import abs.DTO.*;
 import abs.*;
-import abs.DTO.PayBackDTO;
-
 import java.util.*;
-
 
 public class Menu {
 
@@ -118,7 +114,7 @@ public class Menu {
     }
 
     public boolean checkTryAgain(String fileName) {
-        System.out.println( "Do you want to try another file?");
+        System.out.println("Do you want to try another file?");
         System.out.println("Press 1 for try again, 2 for go back to menu.");
         boolean validInput = false, tryAgain = false;
         while (!validInput) {
@@ -155,33 +151,6 @@ public class Menu {
             }
         }
         return filePath;
-    }
-
-    public boolean FileNotExist() {
-        System.out.println("Error! File does not exist.");
-        System.out.println("If you want to go back to menu - press 1");
-        System.out.println("If you want to try load file again - press 2");
-        boolean validInput = false, loadAgain = false;
-        int userChoice = 0;
-        while (!validInput) {
-            try {
-                userChoice = scanner.nextInt();
-                if (userChoice == 1) {
-                    loadAgain = false;
-                    validInput = true;
-                } else if (userChoice == 2) {
-                    loadAgain = true;
-                    validInput = true;
-                }
-            } catch (Exception e) {
-                scanner.nextLine();
-            } finally {
-                if (!validInput) {
-                    System.out.println("Invalid input. Please try again.");
-                }
-            }
-        }
-        return loadAgain;
     }
 
     public List<LoanDTO> createListLoanDTOToInvest(List<LoanDTO> optional, Set<Integer> indexOfLoans) {
@@ -357,67 +326,76 @@ public class Menu {
         return (numberOfClient - 1);
     }
 
-    public boolean checkAmount(int number) {
-        return (number > 0);
-    }
-
-    public void printOneClientInfo(Client client) {
-        System.out.println(client.getFullName() + ":");
-        System.out.println("Client account movements:");
-        for (int i = 0; i < Globals.worldTime; i++) {
-            Set<Movement> movements = client.getMovementsByTime(i);
-            if (movements != null) {
-                printMovementsInfo(movements);
-            }
-        }
-        /*
-        System.out.println("loans to get money:");
-        for (Loan loan : client.getLoanSetAsGiver()) {
-            printSingleLoanInfo(loan);
-        }
-        System.out.println("loans give money");
-        for (Loan loan : client.getLoanSetAsBorrower()) {
-            printSingleLoanInfo(loan);
-        }*/
-
-    }
-
-    public void printMovementsInfo(Set<Movement> movements) {
-        System.out.println("Time: " + Globals.worldTime + ":");
-        for (Movement movement : movements) {
-            System.out.println("Account balance before abs.movement: " + movement.getAmountBeforeMovement());
-            System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
-            System.out.println("Account balance after abs.movement: " + movement.getAmountBeforeMovement());
-        }
-
-    }
-
     public void printSingleLoanInfo(LoanDTO loan) {
         System.out.println("Loans ID: " + loan.getLoansID());
         System.out.println("Owner: " + loan.getOwner());
         System.out.println("Category: " + loan.getCategory());
-        System.out.println("Amount: " + loan.getOriginalAmount() + " Total time units for loan: " + loan.getTotalYazTime());
-        System.out.println("Interest: " + loan.getInterestRate() + " Rate of payments: " + loan.getPace());
+        System.out.println("Amount: " + loan.getOriginalAmount() + ",  Original total time units for loan: " + loan.getTotalYazTime());
+        System.out.println("Interest: " + loan.getInterestRate() + ",  Rate of payments: " + loan.getPace());
         Status status = loan.getStatus();
         System.out.println("Status: " + status);
 
         switch (status) {
-            case RISK:
-                break;
             case ACTIVE:
-                System.out.println("Active time is : "+loan.getActiveTime());
-                break;
-            case PENDING:
-                System.out.println("List of lenders on this loan:");
-                List<PayBackDTO> payBackDTO = loan.getPayBacks();
-                for (PayBackDTO payBack : payBackDTO) {
-                    System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
-                }
-                System.out.println("Total amount invested :" + loan.getAmountCollected());
-                System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+                printLenderDetail(loan);
+                //printActiveLoanDetails(loan);
+                //break;
+            case RISK:
+                printActiveLoanDetails(loan);
                 break;
             case FINISHED:
+                //printLenderDetail(loan);
+                //printMoneyPayed(loan);
+                printPayingTime(loan);
+                //break;
+            case PENDING:
+                printLenderDetail(loan);
+                printMoneyPayed(loan);
                 break;
+        }
+    }
+
+    public void printPayingTime(LoanDTO loan) {
+        System.out.println("First payment: " + loan.getFirstPaymentTime() + ", Last pament: " + loan.getLastPaymentTime() + ".");
+    }
+
+    public void printPaymentPaid(LoanDTO loan) {
+        System.out.println("Payments made so far:");
+        int fundPayBack = 0;
+        double interestPayBack = 0;
+        for (PaymentDTO payment : loan.getPayments().values()) {
+            double fund = payment.getFund();
+            double interest = payment.getPrecentage();
+            System.out.println("Payment time: " + payment.getActualPaymentTime() +
+                    ", fund part: " + fund + ", interest part: " + interest);
+            fundPayBack += fund;
+            interestPayBack += interest;
+        }
+        double loanPrecentage = loan.getInterestRate() / 100;
+        int originalAmount = loan.getOriginalAmount(), fundLeft = originalAmount - fundPayBack;
+        double interesetLeft = fundLeft * loanPrecentage;
+        System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
+        System.out.println("Fund amount left to pay: " + fundLeft + " Interest amount left to pay: " + interesetLeft + " .");
+
+    }
+
+    public void printActiveLoanDetails(LoanDTO loan) {
+        System.out.println("Active time is : " + loan.getActiveTime());
+        System.out.println("Next payment time: " + loan.getNextPaymentTime());
+        printPaymentPaid(loan);
+
+    }
+
+    public void printMoneyPayed(LoanDTO loan) {
+        System.out.println("Total amount invested :" + loan.getAmountCollected());
+        System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+    }
+
+    public void printLenderDetail(LoanDTO loan) {
+        System.out.println("List of lenders on this loan:");
+        List<PayBackDTO> payBackDTO = loan.getPayBacks();
+        for (PayBackDTO payBack : payBackDTO) {
+            System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
         }
     }
 
@@ -442,5 +420,104 @@ public class Menu {
         return usersChoice;
     }
 
+    public void printClientInfo(List<ClientDTO> clientDTOS) {
+        for (ClientDTO clientDTO : clientDTOS) {
+            System.out.println("\n"+clientDTO.getFullName() + ":");
+            printClientDetails(clientDTO);
+        }
+    }
 
+    public void printClientDetails(ClientDTO clientDTO) {
+        printAllMovements(clientDTO.getMovements());
+        System.out.println(clientDTO.getFullName() + "'s Loans as borrower:");
+        printClientLoansInfo(clientDTO.getLoansAsBorrower());
+        System.out.println(clientDTO.getFullName() + "'s Loans as giver:");
+        printClientLoansInfo(clientDTO.getLoansAsGiver());
+    }
+
+    public void printClientLoansInfo(List<LoanDTO> loanDTOList) {
+        if (loanDTOList.isEmpty())
+            System.out.println("This list is empty right now");
+        else {
+            for (LoanDTO loanDTO : loanDTOList) {
+                System.out.println("Name: " + loanDTO.getLoansID());
+                System.out.println("Category: " + loanDTO.getCategory());
+                System.out.println("Original amount: " + loanDTO.getOriginalAmount());
+                System.out.println("Rate of payments: one payment every " + loanDTO.getPace() + " time unit");
+                System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
+                double interestPrecentage = loanDTO.getInterestRate() / 100;
+                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * interestPrecentage);
+                System.out.println("Loan status:" + loanDTO.getStatus());
+                printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
+            }
+        }
+    }
+
+    public void printLittleInfoByStatus(LoanDTO loanDTO, Status status) {
+        switch (status) {
+            case ACTIVE:
+                System.out.println("Next payment at " + loanDTO.getNextPaymentTime() + " time in amount " + loanDTO.getTotalAmountPerPayment());
+                break;
+            case PENDING:
+                System.out.println("Missing amount to make this loan active: " + (loanDTO.getOriginalAmount() - loanDTO.getAmountCollected()));
+                break;
+            case FINISHED:
+                System.out.println("First payment at " + loanDTO.getFirstPaymentTime() + " time, last payment time at: " + loanDTO.getLastPaymentTime() + ".");
+                break;
+            case RISK:
+                double missingMoney = loanDTO.getTotalMoneyForPayingBack() - loanDTO.getAmountPaidBack();
+                int amountOfPayment = (int) missingMoney / loanDTO.getPace();
+                System.out.println("So far" + loanDTO.getAmountPaidBack() + " NIS have been paid and "
+                        + missingMoney + " are missing, in " + amountOfPayment + " payments");
+                break;
+        }
+    }
+
+    public void printAllMovements(Map<Integer, Set<MovementDTO>> movements) {
+        if (movements.isEmpty())
+            System.out.println("There are no movements in account right now");
+        else {
+            Collection<Set<MovementDTO>> movementsByTime = movements.values();
+            System.out.println("Account movements:");
+            for (Set<MovementDTO> set : movementsByTime) {
+                for (MovementDTO movement : set) {
+                    printOneMovementInfo(movement);
+                }
+            }
+        }
+    }
+
+    public void printOneMovementInfo(MovementDTO movement) {
+        System.out.println("Movement time: " + movement.getExecuteTime());
+        System.out.println("Account balance before movement: " + movement.getAmountBeforeMovement());
+        System.out.println(movement.getKindOfExecute() + " " + movement.getAmount());
+        System.out.println("Account balance after movement: " + movement.getAmountAfterMovement()+"\n");
+    }
+
+    public boolean FileNotExist() {
+        System.out.println("Error! File does not exist.");
+        System.out.println("If you want to go back to menu - press 1");
+        System.out.println("If you want to try load file again - press 2");
+        boolean validInput = false, loadAgain = false;
+        int userChoice = 0;
+        while (!validInput) {
+            try {
+                userChoice = scanner.nextInt();
+                if (userChoice == 1) {
+                    loadAgain = false;
+                    validInput = true;
+                } else if (userChoice == 2) {
+                    loadAgain = true;
+                    validInput = true;
+                }
+            } catch (Exception e) {
+                scanner.nextLine();
+            } finally {
+                if (!validInput) {
+                    System.out.println("Invalid input. Please try again.");
+                }
+            }
+        }
+        return loadAgain;
+    }
 }

@@ -3,6 +3,7 @@ package abs.DTO;
 import abs.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,29 +13,74 @@ public class LoanDTO {
     private String owner;
     private String category;
     private int capital, amountPaidBack, amountCollectedPending;
-    private int interestRate,pace;
+    private int interestRate, pace;
     private Status status;
-    private int totalYazTime, activeTime ;
+    private int totalYazTime, activeTime;
     private List<PayBackDTO> payBacks;
-
-//    private Map<String, Integer> givers;
-    private Map<Integer,PaymentDTO> payments;
-
+    private Map<Integer, PaymentDTO> payments;
 
     //CTOR
     public LoanDTO(Loan loan) {
-        this.owner = loan.getOwner();
         this.id = loan.getLoansID();
+        this.owner = loan.getOwner();
         this.category = loan.getCategory();
         this.capital = loan.getCapital();
-        this.totalYazTime = loan.getTotalYazTime();
-        this.pace = loan.getPace();
         this.interestRate = loan.getInterestRate();
+        this.pace = loan.getPace();
+        this.status = loan.getStatus();
         this.totalYazTime = loan.getTotalYazTime();
+        this.activeTime = loan.getActiveTime();
+        setPayBacks(loan.getPayBacks());
+        setPayments(loan.getPayments());
     }
 
-    //GETTERS
-public int getActiveTime(){return activeTime;}
+    private void setPayBacks(List<PayBack> payBack){
+        List <PayBackDTO> payBackDTOS=new ArrayList<>();
+        for (PayBack pay:payBack){
+            payBackDTOS.add(new PayBackDTO(pay));
+        }
+    }
+
+    private void setPayments(Map<Integer,Payment> payments) {
+        if (payments != null) {
+            Map<Integer, PaymentDTO> paymentDTOMap = new HashMap<>();
+            int firstPay = getFirstPaymentTime(), lastPayment = getLastPaymentTime();
+            for (int i = firstPay; i < lastPayment; i += pace) {
+                paymentDTOMap.put(i, new PaymentDTO(payments.get(i)));
+            }
+        }
+    }
+
+    public Map<Integer, PaymentDTO> getPayments() {
+        return payments;
+    }
+
+    public int getActiveTime() {
+        return activeTime;
+    }
+
+    public double getTotalMoneyForPayingBack() {
+        double precentage = interestRate / 100;
+        return (precentage + 1) * capital;
+    }
+
+    public double getTotalAmountPerPayment() {
+        int fundPer1Payment = capital / pace;
+        double precentage = interestRate / 100;
+
+        return fundPer1Payment * interestRate;
+    }
+
+    public int getNextPaymentTime() {
+        boolean findNextPayment = false;
+        int nextPayment = Globals.worldTime + 1;
+        while (!findNextPayment) {
+            if (payments.containsKey(nextPayment)) {
+                findNextPayment = true;
+            } else nextPayment++;
+        }
+        return nextPayment;
+    }
 
     public String getLoansID() {
         return this.id;
@@ -52,17 +98,33 @@ public int getActiveTime(){return activeTime;}
         return this.capital;
     }
 
+    public int getFirstPaymentTime() {
+        int firstPayment = activeTime;
+        boolean findFirstPayment = false;
+        while (!findFirstPayment) {
+            if (payments.containsKey(firstPayment))
+                findFirstPayment = true;
+            else firstPayment++;
+        }
+        return firstPayment;
+    }
+
+    public int getLastPaymentTime() {
+        int lastPayment = activeTime + totalYazTime;
+        return payments.get(lastPayment).getActualPaymentTime();
+    }
+
     public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
 
-
     public int getAmountCollected() {
         return this.amountCollectedPending;
     }
-public List<PayBackDTO> getPayBacks(){
+
+    public List<PayBackDTO> getPayBacks() {
         return payBacks;
-}
+    }
 
     public int getInterestRate() {
         return this.interestRate;
@@ -76,20 +138,9 @@ public List<PayBackDTO> getPayBacks(){
         return this.pace;
     }
 
-    //   public Collection<Client> getGivers(){
-    //      return this.givers;
-    // };
-    //public Collection <Payment> getPayments(){
-    //   return this.payments;
-    //public int getNextPayment(){
-    //   return nextPayment;
-    //}
     public String getOwner() {
         return owner;
     }
-    //SETTERS
-    // public void setNextPayment() {
-    //if(status.equals(abs.e_status.ACTIVE))
 
-}
+ }
 

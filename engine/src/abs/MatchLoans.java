@@ -5,7 +5,7 @@ import java.util.Map;
 public class MatchLoans {
     private Client client;
     private LoanTerms loanTerms;
-    private Map<String, Loan> matchLoans;
+    private Map<String, Loan> matchingLoans;
 
     public MatchLoans(Client client, LoanTerms loanTerms) {
         this.client = client;
@@ -28,7 +28,7 @@ public class MatchLoans {
                 }
             }
         }
-        this.matchLoans = matchLoans;
+        this.matchingLoans = matchLoans;
         return matchLoans;
     }
 

@@ -1,4 +1,4 @@
-package abc;
+package abs;
 
 public class Globals {
     public static int worldTime = 1;
