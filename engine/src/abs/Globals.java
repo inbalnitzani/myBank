@@ -3,10 +3,10 @@ package abs;
 public class Globals {
     public static int worldTime = 1;
 
-    public void setWorldTime(int time){
+    public static void setWorldTime(int time){
         worldTime=time;
     }
-    public void changeWorldTimeBy(int timeUnitToChange) {
-        worldTime += timeUnitToChange;
+    public static void changeWorldTimeByOne() {
+        worldTime ++;
     }
 }

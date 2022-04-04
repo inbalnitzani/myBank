@@ -9,6 +9,7 @@ import abs.exception.*;
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 public class TaskManager {
     private final BankInterface bank = new Bank();
@@ -55,6 +56,7 @@ public class TaskManager {
                 startOfInlay();
                 break;
             case 7:
+                promoteTimeline();
                 break;
             case 8:
                 if (!menu.verifyExit())
@@ -63,6 +65,13 @@ public class TaskManager {
         }
     }
 
+    public void promoteTimeline(){
+        System.out.println("Yaz time was changed from: " + Globals.worldTime);
+        Globals.changeWorldTimeByOne();
+        System.out.println("To: " +Globals.worldTime);
+
+
+    }
     public void getXMLFile() {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
@@ -78,6 +87,8 @@ public class TaskManager {
                 System.out.println("File read successfully");
                 tryLoadFile = false;
                 fileInSystem = true;
+                Globals.setWorldTime(1);
+
             } else {
                 if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;
