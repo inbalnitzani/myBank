@@ -11,7 +11,7 @@ public class PayBack {
         this.percentage = investorAmount / originalAmount;
         this.originalAmount = originalAmount;
     }
-
+    
     public double getOriginalAmount() {
         return originalAmount;
     }
@@ -20,11 +20,12 @@ public class PayBack {
         return givesALoan;
     }
 
-    public double getPercentage() {
-        return percentage;
-
+    public void setGivesALoan(Client client) {
+        givesALoan = client;
     }
 
-
+    public double getPercentage() {
+        return percentage;
+    }
 
 }
