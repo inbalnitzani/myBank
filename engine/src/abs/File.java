@@ -20,8 +20,6 @@ public class File {
         checkPace(loans);
 
     }
-
-
     public void checkCategories(Collection<String> categories,Collection<AbsLoan> loans) throws CategoriesException {
        boolean valid;
         for (AbsLoan loan:loans) {

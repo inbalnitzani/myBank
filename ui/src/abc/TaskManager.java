@@ -15,7 +15,6 @@ public class TaskManager {
     private final BankInterface bank = new Bank();
     private final Menu menu = new Menu();
     private boolean fileInSystem = false;
-    private LoanTerms currentLoan;
     private int currentAction;
 
     public TaskManager() {
@@ -97,23 +96,23 @@ public class TaskManager {
 
     public void startOfInlay() {
         String clientName = getClientNameForAction();
-        getLoanProperties(bank.getCurrBalance(clientName));
-        List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoan);
+        LoanTerms currentLoanTerms=new LoanTerms();
+        getLoanProperties(currentLoanTerms,bank.getCurrBalance(clientName));
+        List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoanTerms);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
             int amountLeft = bank.startInlayProcess(loans, clientName);
-            menu.updateUserInvest(currentLoan.getMaxAmount(), amountLeft);
+            menu.updateUserInvest(currentLoanTerms.getMaxAmount(), amountLeft);
         }
     }
 
-    public void getLoanProperties(int clientBalance) {
-        currentLoan=new LoanTerms();
+    public void getLoanProperties(LoanTerms loanTerms,int clientBalance) {
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
-        currentLoan.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
-        currentLoan.setCategories(menu.chooseCategory(bank.getCategories()));
-        currentLoan.setMinInterestForTimeUnit(menu.getMinInterest());
-        currentLoan.setMinTimeForLoan(menu.getMinTimeForLoan());
+        loanTerms.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
+        loanTerms.setCategories(menu.chooseCategory(bank.getCategories()));
+        loanTerms.setMinInterestForTimeUnit(menu.getMinInterest());
+        loanTerms.setMinTimeForLoan(menu.getMinTimeForLoan());
     }
 
     public void loadMoneyToAccount() {
