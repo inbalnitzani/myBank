@@ -5,20 +5,21 @@ import abs.Payment;
 public class PaymentDTO {
 
     private double fund;
-    private double precentage;
+    private double percentage;
+    private double totalAmount;
     private int actualPaymentTime;
 
     public PaymentDTO(Payment payment) {
         fund = payment.getFund();
-        precentage = payment.getPercentage();
+        percentage = payment.getPercentage();
         actualPaymentTime = payment.getPayingActualTime();
     }
     public double getFund() {
         return fund;
     }
 
-    public double getPrecentage() {
-        return precentage;
+    public double getPercentage() {
+        return percentage;
     }
 
     public int getActualPaymentTime() {

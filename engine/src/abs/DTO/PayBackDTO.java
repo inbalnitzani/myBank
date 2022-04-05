@@ -5,7 +5,7 @@ import abs.PayBack;
 public class PayBackDTO {
 
     private ClientDTO givesALoan;
-    private int originalAmount;
+    private double originalAmount;
 
     public PayBackDTO(PayBack payBack) {
         originalAmount = payBack.getOriginalAmount();
@@ -24,7 +24,7 @@ public class PayBackDTO {
         return givesALoan;
     }
 
-    public int getOriginalAmount() {
+    public double getOriginalAmount() {
         return originalAmount;
     }
 }

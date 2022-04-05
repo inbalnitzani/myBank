@@ -3,14 +3,16 @@ package abs;
 public class PayBack {
 
     private Client givesALoan;
-    private int originalAmount;
+    private double percentage;
+    private double originalAmount;
 
-    public PayBack(Client client, int originalAmount) {
+    public PayBack(Client client, double originalAmount,int investorAmount) {
         this.givesALoan = client;
+        this.percentage = investorAmount / originalAmount;
         this.originalAmount = originalAmount;
     }
 
-    public int getOriginalAmount() {
+    public double getOriginalAmount() {
         return originalAmount;
     }
 
@@ -18,11 +20,11 @@ public class PayBack {
         return givesALoan;
     }
 
-    public void setGivesALoan(Client client) {
-        givesALoan = client;
+    public double getPercentage() {
+        return percentage;
+
     }
 
-    public void setOriginalAmount(int amount) {
-        originalAmount = amount;
-    }
+
+
 }

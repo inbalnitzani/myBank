@@ -6,11 +6,11 @@ public class Movement {
     public static final int PAY_MONEY = -1;
 
     private int executeTime;
-    private int amountBeforeMovement;
-    private int amountAfterMovement;
+    private double amountBeforeMovement;
+    private double amountAfterMovement;
     private kindOfMovement kindOfExecute;
     //ctor
-    public Movement(int currBalance, int amountChange, int time) {
+    public Movement(double currBalance, double amountChange, int time) {
         executeTime = time;
         amountBeforeMovement = currBalance;
         amountAfterMovement = amountBeforeMovement + amountChange;
@@ -24,15 +24,15 @@ public class Movement {
         return executeTime;
     }
 
-    public int getAmountBeforeMovement() {
+    public double getAmountBeforeMovement() {
         return amountBeforeMovement;
     }
 
-    public int getAmountAfterMovement() {
+    public double getAmountAfterMovement() {
         return amountAfterMovement;
     }
 
-    public int getAmount(){return amountAfterMovement-amountBeforeMovement;}
+    public double getAmount(){return amountAfterMovement-amountBeforeMovement;}
 
     public String getKindOfExecute() {
         if (kindOfExecute == kindOfMovement.INSERT_MONEY)
