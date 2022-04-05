@@ -9,7 +9,7 @@ import abs.exception.*;
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.Map;
+
 
 public class TaskManager {
     private final BankInterface bank = new Bank();
@@ -70,6 +70,7 @@ public class TaskManager {
         System.out.println("To: " +Globals.worldTime);
         bank.payBack();
     }
+
     public void getXMLFile() {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
