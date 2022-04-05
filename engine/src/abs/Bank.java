@@ -129,6 +129,8 @@ public class Bank implements BankInterface {
                         addInvestorToLoan(loan, client, amountPerLoan);
                     }
                     loans.clear();
+                    sumLoans=0;
+                    amountToInvest=0;
                 } else {
                     addInvestorToLoan(currLoan, client, amountLeftCurrLoan);
                     loans.remove(0);
