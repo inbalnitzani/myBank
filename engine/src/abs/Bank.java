@@ -16,7 +16,6 @@ public class Bank implements BankInterface {
 
     private Set<String> categories;//
     private Map<String, Loan> activeLoans;
-    private Map<String, Loan> inRiskLoans;
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
@@ -25,7 +24,6 @@ public class Bank implements BankInterface {
     public Bank() {
         clients = new HashMap<String, Client>();
         activeLoans = new HashMap<String, Loan>();
-        inRiskLoans = new HashMap<String, Loan>();
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
     }
@@ -106,7 +104,7 @@ public class Bank implements BankInterface {
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
         Status loanStatus = loan.addNewInvestor(client, amountToInvestPerLoan);
         client.setAsGiver(loan);
-        client.setCurrBalance(amountToInvestPerLoan);
+        client.subtractCurrBalance(amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
         }
@@ -183,12 +181,9 @@ public class Bank implements BankInterface {
             loans.put(loan.getLoansID(), loan);
         for (Loan loan : activeLoans.values())
             loans.put(loan.getLoansID(), loan);
-        for (Loan loan : inRiskLoans.values())
-            loans.put(loan.getLoansID(), loan);
 
         return createListLoanDto(loans.values());
     }
-
 
     public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
 
@@ -228,5 +223,64 @@ public class Bank implements BankInterface {
             this.waitingLoans.put(id, newLoan);
         }
     }
+
+    public void payBack(){
+
+      Map<Integer,List<Payment>> payments = makePaymentsLists();
+        for (List<Payment> listOfPayments:payments.values()) {
+            for (Payment payment:listOfPayments) {
+                Loan loan = activeLoans.get(payment.getLoanID());
+                double totalAmount =payment.getAmount();
+                if(clients.get(loan.getOwner()).getCurrBalance()<totalAmount) {
+                   setInRisk(loan,totalAmount);
+                }
+                else{
+                    setBackToActive(loan);
+                    for (PayBack investor:loan.getPayBacks()) {
+                        double amount = investor.getPercentage()*payment.getAmount();
+                        Client client = investor.getClientDTOGivers();
+                        loan.setAmountPaidBack(amount);
+                        client.addMovement(new Movement(client.getCurrBalance(),amount,Globals.worldTime));
+                        client.addToCurrBalance(amount);
+                    }
+                    if (loan.getAmountPaidBack()==loan.getCapital()*((loan.getInterestRate()/100)+1)){
+                        loan.setStatus(Status.FINISHED);
+                    }
+                }
+            }
+        }
+
+
+    }
+
+    public Map<Integer,List<Payment>> makePaymentsLists(){
+        Map<Integer,List<Payment>> paymentsByYaz = new HashMap<>();
+
+        for (Loan loan:activeLoans.values()) {
+            Map<Integer,Payment> paymentMap = loan.getPayments();
+            int activeTime = loan.getActiveTime();
+            if(paymentMap.containsKey(Globals.worldTime)){
+                if(!paymentsByYaz.containsKey(activeTime)){
+                    paymentsByYaz.put(activeTime,new ArrayList<>());
+                }
+                paymentsByYaz.get(activeTime).add(paymentMap.get(Globals.worldTime));
+            }
+        }
+        for (List <Payment> payments: paymentsByYaz.values()) {
+            payments.sort(new PaymentsComparator());
+        }
+        return paymentsByYaz;
+    }
+
+    public void setInRisk(Loan loan,double totalAmount){
+        loan.setStatus(Status.RISK);
+        loan.getPayments().get(loan.getPace() + Globals.worldTime).addToAmount(totalAmount);
+    }
+
+    public void setBackToActive(Loan loan){
+        if (loan.getStatus().equals(Status.RISK))
+            loan.setStatus(Status.ACTIVE);
+    }
+
 
 }

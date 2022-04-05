@@ -27,4 +27,5 @@ public interface BankInterface {
      int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
 
      boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException;
+     void payBack();
 }
