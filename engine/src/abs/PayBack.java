@@ -10,7 +10,7 @@ public class PayBack {
         this.percentage = investorAmount / originalAmount;
         this.originalAmount = originalAmount;
     }
-    
+
     public PayBack(Client client, int originalAmount) {
         this.givesALoan = client;
         this.originalAmount = originalAmount;
