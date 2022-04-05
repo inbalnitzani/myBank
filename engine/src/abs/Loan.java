@@ -9,7 +9,7 @@ public class Loan {
     private String id;
     private String owner;
     private String category;
-    private int capital, amountPaidBack, amountCollectedPending;
+    private int capital, amountPaidBack = 0, amountCollectedPending;
     private int interestRate, pace;
     private Status status = Status.NEW;
     private int totalYazTime, activeTime;
@@ -60,6 +60,7 @@ public class Loan {
     public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
+    public void setAmountPaidBack(double amountToAdd){amountPaidBack += amountToAdd;}
 
     public int getAmountCollectedPending() {
         return this.amountCollectedPending;
@@ -85,7 +86,7 @@ public class Loan {
         payments = new HashMap<>();
         int lastPayment = Globals.worldTime + totalYazTime;
         for (int i = Globals.worldTime+pace; i < lastPayment; i += pace) {
-            payments.put(i, new Payment(i));
+            payments.put(i, new Payment(i,id));
         }
         activeTime=Globals.worldTime;
     }
@@ -116,8 +117,9 @@ public class Loan {
         return status;
     }
 
-    public void createNewGiver(Client client, int amount) {
-        payBacks.add(new PayBack(client,amount));
+    public void createNewGiver(Client client, int investorAmount) {
+        payBacks.add(new PayBack(client,this.capital,investorAmount));
     }
 
+    public void setStatus(Status status){this.status = status;}
 }

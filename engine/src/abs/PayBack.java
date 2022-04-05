@@ -3,23 +3,25 @@ package abs;
 public class PayBack {
 
     private Client givesALoan;
-    private int originalAmount;
-public PayBack(Client client, int originalAmount) {
+    private double percentage;
+    private double originalAmount;
+public PayBack(Client client, double originalAmount,int investorAmount) {
     this.givesALoan = client;
+    this.percentage = investorAmount/originalAmount;
     this.originalAmount = originalAmount;
 }
-    public int getOriginalAmount() {
-        return originalAmount;
-    }
-
     public Client getClientDTOGivers() {
         return givesALoan;
     }
     public void setGivesALoan(Client client){
         givesALoan=client;
     }
-
-    public void setOriginalAmount(int amount){
-        originalAmount=amount;
+    public double getPercentage(){
+    return percentage;
     }
+    public double getOriginalAmount(){
+    return originalAmount;
+    }
+
+
 }

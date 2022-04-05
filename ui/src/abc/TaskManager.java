@@ -69,8 +69,7 @@ public class TaskManager {
         System.out.println("Yaz time was changed from: " + Globals.worldTime);
         Globals.changeWorldTimeByOne();
         System.out.println("To: " +Globals.worldTime);
-
-
+        bank.payBack();
     }
     public void getXMLFile() {
         String fileName = null;

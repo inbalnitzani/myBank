@@ -365,7 +365,7 @@ public class Menu {
         double interestPayBack = 0;
         for (PaymentDTO payment : loan.getPayments().values()) {
             double fund = payment.getFund();
-            double interest = payment.getPrecentage();
+            double interest = payment.getPercentage();
             System.out.println("Payment time: " + payment.getActualPaymentTime() +
                     ", fund part: " + fund + ", interest part: " + interest);
             fundPayBack += fund;
