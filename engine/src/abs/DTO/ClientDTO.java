@@ -23,8 +23,8 @@ public class ClientDTO {
     }
 
     private void setMovements(Map<Integer,Set<Movement>>movements) {
+        this.movements = new HashMap<>();
         if (movements != null) {
-            this.movements = new HashMap<>();
             for (Collection<Movement> set : movements.values()) {
                 addSetToMovements(set);
             }
