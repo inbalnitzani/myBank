@@ -13,7 +13,11 @@ public class PayBack implements Serializable {
         this.percentage = investorAmount / originalAmount;
         this.originalAmount = originalAmount;
     }
-    
+
+    public PayBack(Client client, int originalAmount) {
+        this.givesALoan = client.getFullName();
+        this.originalAmount = originalAmount;
+    }
     public double getOriginalAmount() {
         return originalAmount;
     }
