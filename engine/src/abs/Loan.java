@@ -1,9 +1,11 @@
 package abs;
 
 import abs.DTO.LoanDTO;
+
+import java.io.Serializable;
 import java.util.*;
 
-public class Loan {
+public class Loan implements Serializable {
 
     //DATA MEMBERS
     private String id;

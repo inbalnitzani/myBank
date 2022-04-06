@@ -1,6 +1,8 @@
 package abs;
 
-public class Payment {
+import java.io.Serializable;
+
+public class Payment implements Serializable {
     private double amount, fund, percentage;
     private int payingActualTime;
     private String loanID;

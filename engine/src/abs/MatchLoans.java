@@ -1,8 +1,9 @@
 package abs;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class MatchLoans {
+public class MatchLoans implements Serializable {
     private Client client;
     private LoanTerms loanTerms;
     private Map<String, Loan> matchingLoans;

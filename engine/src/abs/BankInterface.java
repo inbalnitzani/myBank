@@ -6,6 +6,7 @@ import abs.exception.*;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 public interface BankInterface {
@@ -25,6 +26,8 @@ public interface BankInterface {
      List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 
      int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
+
+     void saveStateToFile(String fileName) throws IOException;
 
      boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException;
      void payBack();
