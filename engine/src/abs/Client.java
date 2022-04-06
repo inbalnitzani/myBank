@@ -76,7 +76,7 @@ public class Client {
         asGiver.add(loan);
     }
 
-    public void subtractCurrBalance(int amountToDeducted) {
+    public void subtractCurrBalance(double amountToDeducted) {
         currBalance -= amountToDeducted;
     }
     public void addToCurrBalance(double amountToAdd) {
