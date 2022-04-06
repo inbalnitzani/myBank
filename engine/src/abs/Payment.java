@@ -10,7 +10,6 @@ public class Payment {
         this.percentage = percentage;
         this.amount = (1+percentage)*fund;
     }
-
     public double getAmount(){
         return amount;
     }
@@ -24,12 +23,9 @@ public class Payment {
     public double getFund() {
         return fund;
     }
-
     public double getPercentage() {
         return percentage;
     }
-
-
     public int getPayingActualTime() {
         return payingActualTime;
     }

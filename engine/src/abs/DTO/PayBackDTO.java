@@ -12,14 +12,6 @@ public class PayBackDTO {
         giversName = payBack.getClientDTOGivers();
     }
 
-    public void setGiversName(ClientDTO client) {
-        giversName = client.getFullName();
-    }
-
-    public void setOriginalAmount(int amount) {
-        originalAmount = amount;
-    }
-
     public String getGiversName() {
         return giversName;
     }

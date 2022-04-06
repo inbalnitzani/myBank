@@ -1,11 +1,9 @@
 package abs.DTO;
 
 import abs.*;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LoanDTO {
     //DATA MEMBERS
@@ -31,26 +29,27 @@ public class LoanDTO {
         this.totalYazTime = loan.getTotalYazTime();
         this.activeTime = loan.getActiveTime();
         setPayBacks(loan.getPayBacks());
-        setPayments(loan.getPayments());
+        setPayments(loan.getPayments(),loan.getFirstPaymentTime(),loan.getLastPaymentTime());
     }
 
+    // PRIVATE SETTERS
     private void setPayBacks(List<PayBack> payBack){
-        List <PayBackDTO> payBackDTOS=new ArrayList<>();
+        payBacks=new ArrayList<>();
         for (PayBack pay:payBack){
-            payBackDTOS.add(new PayBackDTO(pay));
+            payBacks.add(new PayBackDTO(pay));
         }
     }
 
-    private void setPayments(Map<Integer,Payment> payments) {
-        if (payments != null) {
-            Map<Integer, PaymentDTO> paymentDTOMap = new HashMap<>();
-            int firstPay = getFirstPaymentTime(), lastPayment = getLastPaymentTime();
-            for (int i = firstPay; i < lastPayment; i += pace) {
-                paymentDTOMap.put(i, new PaymentDTO(payments.get(i)));
+    private void setPayments(Map<Integer,Payment> payments, int firstPayTime, int lastPayTime) {
+       this.payments=new HashMap<>();
+        if (payments.size() != 0) {
+            for (int i = firstPayTime; i < lastPayTime; i += pace) {
+                this.payments.put(i, new PaymentDTO(payments.get(i)));
             }
         }
     }
 
+    //GETTERS
     public Map<Integer, PaymentDTO> getPayments() {
         return payments;
     }
