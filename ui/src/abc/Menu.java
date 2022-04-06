@@ -193,7 +193,6 @@ public class Menu {
                 System.out.println("There is no more money to invest in loans that fit your requirements");
             }
         }
-        scanner.next();
     }
 
     public Set<Integer> scanLoansFromUser(int maxLoans) {
