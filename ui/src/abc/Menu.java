@@ -445,8 +445,8 @@ public class Menu {
                 System.out.println("Original amount: " + loanDTO.getOriginalAmount());
                 System.out.println("Rate of payments: one payment every " + loanDTO.getPace() + " time unit");
                 System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
-                double interestPrecentage = loanDTO.getInterestRate() / 100;
-                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * interestPrecentage);
+                double interestPrecentage = (double)loanDTO.getInterestRate() / 100.0;
+                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * (1+interestPrecentage));
                 System.out.println("Loan status:" + loanDTO.getStatus());
                 printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
             }

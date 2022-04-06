@@ -61,7 +61,13 @@ public class TaskManager {
                 if (!menu.verifyExit())
                     currentAction = 0;
                 break;
+            case 9:
+                saveStateToFile();
+                break;
         }
+    }
+    public void saveStateToFile(){
+
     }
 
     public void promoteTimeline(){
