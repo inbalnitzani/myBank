@@ -63,10 +63,9 @@ public class LoanDTO {
     }
 
     public double getTotalAmountPerPayment() {
-        int fundPer1Payment = capital / pace;
-        double precentage = interestRate / 100;
-
-        return fundPer1Payment * interestRate;
+        double fundPer1Payment = capital / pace;
+        double percentage = ((double) interestRate / 100.0)+1;
+        return fundPer1Payment * percentage;
     }
 
     public int getNextPaymentTime() {

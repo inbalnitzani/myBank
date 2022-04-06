@@ -100,9 +100,8 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
-        Status loanStatus = loan.addNewInvestor(client, amountToInvestPerLoan);
-        client.setAsGiver(loan);
-        client.subtractCurrBalance(amountToInvestPerLoan);
+        Status loanStatus = loan.addNewInvestorToLoan(client, amountToInvestPerLoan);
+        client.addLoanToInvestor(loan,amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
         }
@@ -191,15 +190,6 @@ public class Bank implements Serializable, BankInterface {
             loans.put(loan.getLoansID(), loan);
 
         return createListLoanDto(loans.values());
-    }
-
-    public List<String> createCategoryListFromLoanTermsDto(LoanTerms loanTermsDTO) {
-
-        List<String> categories = new ArrayList<String>();
-        for (String string : loanTermsDTO.categories) {
-            //categories.add(this.categories.get(categoryDTO.getCategoryName()));
-        }
-        return categories;
     }
 
     public void convertToBank(AbsDescriptor info) {

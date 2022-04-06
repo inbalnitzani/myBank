@@ -33,6 +33,12 @@ public class Client implements Serializable {
         }
     }
 
+    public void addLoanToInvestor(Loan loan, int amountInvested){
+        asGiver.add(loan);
+        Movement movement=new Movement(currBalance,-amountInvested,Globals.worldTime);
+        addMovement(movement);
+        currBalance=currBalance-amountInvested;
+    }
     public String getFullName() {
         return fullName;
     }

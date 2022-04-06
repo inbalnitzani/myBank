@@ -380,24 +380,43 @@ public class Menu {
         System.out.println("First payment: " + loan.getFirstPaymentTime() + ", Last pament: " + loan.getLastPaymentTime() + ".");
     }
 
+    public List<PaymentDTO> getPaymentPaid(Map<Integer,PaymentDTO> allPayment, int pace, int firstPayment) {
+        List<PaymentDTO> paidPayment = new ArrayList<>();
+        boolean paid = true;
+        int currPayTime = firstPayment;
+        while (paid) {
+            PaymentDTO currPayment = allPayment.get(firstPayment);
+            if (currPayment.isPaid()) {
+                paidPayment.add(currPayment);
+                currPayTime += pace;
+            } else {
+                paid = false;
+            }
+        }return paidPayment;
+    }
     public void printPaymentPaid(LoanDTO loan) {
-        System.out.println("Payments made so far:");
-        int fundPayBack = 0;
-        double interestPayBack = 0;
-        for (PaymentDTO payment : loan.getPayments().values()) {
-            double fund = payment.getFund();
-            double interest = payment.getPercentage();
-            System.out.println("Payment time: " + payment.getActualPaymentTime() +
-                    ", fund part: " + fund + ", interest part: " + interest);
-            fundPayBack += fund;
-            interestPayBack += interest;
+        List<PaymentDTO> paid=getPaymentPaid(loan.getPayments(),loan.getPace(),loan.getFirstPaymentTime());
+        if (paid.isEmpty()){
+            System.out.println("Payments have not yet been refunded");
         }
-        double loanPrecentage = loan.getInterestRate() / 100;
-        int originalAmount = loan.getOriginalAmount(), fundLeft = originalAmount - fundPayBack;
-        double interesetLeft = fundLeft * loanPrecentage;
-        System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
-        System.out.println("Fund amount left to pay: " + fundLeft + " Interest amount left to pay: " + interesetLeft + " .");
-
+        else {
+            System.out.println("Payments made so far:");
+            int fundPayBack = 0;
+            double interestPayBack = 0;
+            for (PaymentDTO payment : loan.getPayments().values()) {
+                double fund = payment.getFund();
+                double interest = payment.getPercentage();
+                System.out.println("Payment time: " + payment.getActualPaymentTime() +
+                        ", fund part: " + fund + ", interest part: " + interest);
+                fundPayBack += fund;
+                interestPayBack += interest;
+            }
+            double loanPrecentage = loan.getInterestRate() / 100;
+            int originalAmount = loan.getOriginalAmount(), fundLeft = originalAmount - fundPayBack;
+            double interesetLeft = fundLeft * loanPrecentage;
+            System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
+            System.out.println("Fund amount left to pay: " + fundLeft + " Interest amount left to pay: " + interesetLeft + " .");
+        }
     }
 
     public void printActiveLoanDetails(LoanDTO loan) {
@@ -409,14 +428,15 @@ public class Menu {
 
     public void printMoneyPayed(LoanDTO loan) {
         System.out.println("Total amount invested :" + loan.getAmountCollected());
-        System.out.println("Total amount to invest in order to become active" + (loan.getOriginalAmount() - loan.getAmountCollected()));
+        int amountLeft= loan.getOriginalAmount()-loan.getAmountCollected();
+        System.out.println("Total amount to invest in order to become active " + amountLeft);
     }
 
     public void printLenderDetail(LoanDTO loan) {
         System.out.println("List of lenders on this loan:");
         List<PayBackDTO> payBackDTO = loan.getPayBacks();
         for (PayBackDTO payBack : payBackDTO) {
-            System.out.println(payBack.getGiversName() + " - " + payBack.getOriginalAmount() + " NIS");
+            System.out.println(payBack.getGiversName() + "- " + payBack.getOriginalAmount() + " NIS");
         }
     }
 
@@ -468,7 +488,7 @@ public class Menu {
                 System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
                 double interestPrecentage = (double)loanDTO.getInterestRate() / 100.0;
                 System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * (1+interestPrecentage));
-                System.out.println("Loan status:" + loanDTO.getStatus());
+                System.out.println("Loan status: " + loanDTO.getStatus());
                 printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
             }
         }
@@ -477,7 +497,7 @@ public class Menu {
     public void printLittleInfoByStatus(LoanDTO loanDTO, Status status) {
         switch (status) {
             case ACTIVE:
-                System.out.println("Next payment at " + loanDTO.getNextPaymentTime() + " time in amount " + loanDTO.getTotalAmountPerPayment());
+                System.out.println("Next payment at time: " + loanDTO.getNextPaymentTime() + ", in amount:" + loanDTO.getTotalAmountPerPayment());
                 break;
             case PENDING:
                 System.out.println("Missing amount to make this loan active: " + (loanDTO.getOriginalAmount() - loanDTO.getAmountCollected()));
