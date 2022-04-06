@@ -76,6 +76,27 @@ public class Menu {
         return loansToInvest;
     }
 
+    public int chooseWayToGetDataInfo(){
+        System.out.println("Choose one of the next source options to load information:");
+        System.out.println("1. XML file");
+        System.out.println("2. Saved file with old state");
+        int userChoice=0;
+        boolean invalidInput=false;
+        while (!invalidInput) {
+            try {
+                userChoice = scanner.nextInt();
+                if (userChoice == 1 || userChoice == 2) {
+                    invalidInput = true;
+                }
+            } catch (Exception e) {
+                scanner.nextLine();
+            } finally {
+                if (!invalidInput)
+                    System.out.println("Invalid input.Please choose 1 or 2.");
+            }
+        }
+        return userChoice;
+    }
     public void printMenu() {
         System.out.println("choose a number");
         System.out.println("1. read a file");
@@ -84,8 +105,9 @@ public class Menu {
         System.out.println("4. load money to account");
         System.out.println("5. Withdraw money to account");
         System.out.println("6. Activate inlay");
-        System.out.println("7. promote timeline and make payments");
-        System.out.println("8. Exit");
+        System.out.println("7. Promote timeline and make payments");
+        System.out.println("8. Save system state to a file");
+        System.out.println("9. Exit");
     }
 
     public boolean verifyExit() {
@@ -137,10 +159,9 @@ public class Menu {
         return tryAgain;
     }
 
-    public String getFileFullNamePath() {
+    public String getFileNameFromUser() {
         String filePath = null;
         boolean validInput = false;
-        System.out.println("Please insert a full path name of your XML");
         filePath = scanner.nextLine();
         while (!validInput) {
             try {
@@ -405,15 +426,15 @@ public class Menu {
         while (!validInput) {
             try {
                 usersChoice = scanner.nextInt();
-                if (usersChoice < 1 || usersChoice > 8) {
-                    System.out.println("Invalid input, Please enter an integer between 1 - 8.");
+                if (usersChoice < 1 || usersChoice > 9) {
+                    System.out.println("Invalid input, Please enter an integer between 1 - 9.");
                 } else if (usersChoice != 1 && usersChoice != 8 && !fileInSystem) {
                     System.out.println("Invalid input, There is no file scanned. Please choose again.");
                 } else {
                     validInput = true;
                 }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input, Please enter an integer between 1 - 8.");
+                System.out.println("Invalid input, Please enter an integer between 1 - 9.");
                 scanner.nextLine();
             }
         }

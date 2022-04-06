@@ -1,6 +1,8 @@
 package abs;
 
-public class PayBack {
+import java.io.Serializable;
+
+public class PayBack implements Serializable {
 
     private String givesALoan;
     private double percentage;

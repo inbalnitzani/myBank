@@ -7,12 +7,15 @@ import abs.LoanTerms;
 import abs.exception.*;
 
 import javax.xml.bind.JAXBException;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.List;
 
 
 public class TaskManager {
-    private final BankInterface bank = new Bank();
+    private BankInterface bank = new Bank();
     private final Menu menu = new Menu();
     private boolean fileInSystem = false;
     private int currentAction;
@@ -20,8 +23,9 @@ public class TaskManager {
     public TaskManager() {
     }
 
-    public void manageSystem() {
-        final int EXIT_SYSTEM = 8;
+
+    public void manageSystem() throws IOException, ClassNotFoundException {
+        final int EXIT_SYSTEM = 9;
         boolean stillInSystem = true;
         while (stillInSystem) {
             while (currentAction != EXIT_SYSTEM) {
@@ -34,10 +38,10 @@ public class TaskManager {
         }
     }
 
-    public void actToUserChoice() {
+    public void actToUserChoice() throws IOException, ClassNotFoundException {
         switch (currentAction) {
             case 1:
-                getXMLFile();
+                getBankData();
                 break;
             case 2:
                 menu.printLoansInfo(bank.getAllLoans());
@@ -58,18 +62,24 @@ public class TaskManager {
                 promoteTimeline();
                 break;
             case 8:
+                saveStateToFile();
+                break;
+            case 9:
                 if (!menu.verifyExit())
                     currentAction = 0;
                 break;
-            case 9:
-                saveStateToFile();
-                break;
         }
     }
+
     public void saveStateToFile(){
-
+        try {
+            System.out.println("Please insert a name for the file:");
+            bank.saveStateToFile(menu.getFileNameFromUser());
+            System.out.println("File created successfully.");
+        }catch (Exception e){
+            System.out.println("An unknown problem occurred. The system state is not saved to the file. Please try again");
+        }
     }
-
     public void promoteTimeline(){
         System.out.println("Yaz time was changed from: " + Globals.worldTime);
         Globals.changeWorldTimeByOne();
@@ -77,11 +87,22 @@ public class TaskManager {
         bank.payBack();
     }
 
+    public void getBankData() throws IOException, ClassNotFoundException {
+        int way = menu.chooseWayToGetDataInfo();
+        if (way == 1) {
+            getXMLFile();
+        } else {
+            System.out.println("Please insert the file name,which the data is saved in:");
+            readBankDataFromFile(menu.getFileNameFromUser());
+            System.out.println("File read successfully");
+        }
+    }
     public void getXMLFile() {
         String fileName = null;
         boolean tryLoadFile = true, succeed = false;
         while (tryLoadFile) {
-            fileName = menu.getFileFullNamePath();
+            System.out.println("Please insert a full path name of your XML");
+            fileName = menu.getFileNameFromUser();
             try {
                 succeed = bank.getXMLFile(fileName);
             } catch (FileException e) {
@@ -112,7 +133,13 @@ public class TaskManager {
             menu.updateUserInvest(currentLoanTerms.getMaxAmount(), amountLeft);
         }
     }
-
+    public void readBankDataFromFile(String fileName)  {
+        try (ObjectInputStream in=new ObjectInputStream(new FileInputStream(fileName))){
+            bank=(Bank) in.readObject();
+        } catch (IOException |ClassNotFoundException e) {
+            System.out.println(fileName+" is not exist. Operation failed.");
+        }
+    }
     public void getLoanProperties(LoanTerms loanTerms,int clientBalance) {
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
