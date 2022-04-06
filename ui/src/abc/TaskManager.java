@@ -124,8 +124,8 @@ public class TaskManager {
 
     public void startOfInlay() {
         String clientName = getClientNameForAction();
-        LoanTerms currentLoanTerms=new LoanTerms();
-        getLoanProperties(currentLoanTerms,bank.getCurrBalance(clientName));
+        LoanTerms currentLoanTerms = new LoanTerms();
+        getLoanProperties(currentLoanTerms, bank.getCurrBalance(clientName));
         List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoanTerms);
         loans = menu.chooseLoansToInvest(loans);
         if (!loans.isEmpty()) {
