@@ -5,6 +5,12 @@ public class Payment {
     private int payingActualTime;
     private String loanID;
 
+    public Payment(double fund, double percentage) {
+        this.fund = fund;
+        this.percentage = percentage;
+        this.amount = (1+percentage)*fund;
+    }
+
     public double getAmount(){
         return amount;
     }
@@ -23,11 +29,6 @@ public class Payment {
         return percentage;
     }
 
-    public Payment(double fund, double percentage) {
-        this.fund = fund;
-        this.percentage = percentage;
-        this.amount = (1+percentage)*fund;
-    }
 
     public int getPayingActualTime() {
         return payingActualTime;
