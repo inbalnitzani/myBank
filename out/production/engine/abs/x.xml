@@ -34,7 +34,7 @@
 	</abs-loans>
 	<abs-customers>
 		<abs-customer name="Menash">
-			<abs-balance>210</abs-balance>
+			<abs-balance>5000</abs-balance>
 		</abs-customer>
 		<abs-customer name="Avrum">
 			<abs-balance>1000</abs-balance>
