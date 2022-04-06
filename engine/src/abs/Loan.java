@@ -27,6 +27,7 @@ public class Loan {
         this.totalYazTime = totalYazTime;
         this.pace = pace;
         payBacks = new ArrayList<PayBack>();
+        payments=new HashMap<>();
     }
 
     public int getActiveTime() {
@@ -41,6 +42,22 @@ public class Loan {
         return payments;
     }
 
+    public int getFirstPaymentTime() {
+        int optionalTime = activeTime + 1;
+        if (payments.size() == 0) {
+            optionalTime = 0;
+        } else {
+            boolean timeFound = false;
+            while (!timeFound) {
+                if (payments.containsKey(optionalTime))
+                    timeFound = true;
+            }
+        }
+        return optionalTime;
+    }
+    public int getLastPaymentTime(){
+        return activeTime+totalYazTime;
+    }
     public String getLoansID() {
         return this.id;
     }
