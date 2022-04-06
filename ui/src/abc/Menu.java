@@ -395,7 +395,7 @@ public class Menu {
         System.out.println("List of lenders on this loan:");
         List<PayBackDTO> payBackDTO = loan.getPayBacks();
         for (PayBackDTO payBack : payBackDTO) {
-            System.out.println(payBack.getGivesALoan().getFullName() + " - " + payBack.getOriginalAmount() + " NIS");
+            System.out.println(payBack.getGiversName() + " - " + payBack.getOriginalAmount() + " NIS");
         }
     }
 
