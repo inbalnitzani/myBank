@@ -8,12 +8,18 @@ public class PaymentDTO {
     private double percentage;
     private double totalAmount;
     private int actualPaymentTime;
+    private boolean paid=false;
 
     public PaymentDTO(Payment payment) {
         fund = payment.getFund();
         percentage = payment.getPercentage();
         actualPaymentTime = payment.getPayingActualTime();
     }
+
+    public boolean isPaid() {
+        return paid;
+    }
+
     public double getFund() {
         return fund;
     }

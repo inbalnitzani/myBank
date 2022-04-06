@@ -11,7 +11,7 @@ public class Loan implements Serializable {
     private String id;
     private String owner;
     private String category;
-    private int capital, amountPaidBack = 0, amountCollectedPending;
+    private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate, pace;
     private Status status = Status.NEW;
     private int totalYazTime, activeTime;
@@ -28,6 +28,7 @@ public class Loan implements Serializable {
         this.category = categoryName;
         this.totalYazTime = totalYazTime;
         this.pace = pace;
+        this.amountPaidBack=0;
         payBacks = new ArrayList<PayBack>();
         payments=new HashMap<>();
     }
@@ -53,6 +54,9 @@ public class Loan implements Serializable {
             while (!timeFound) {
                 if (payments.containsKey(optionalTime))
                     timeFound = true;
+                else {
+                    optionalTime++;
+                }
             }
         }
         return optionalTime;
@@ -111,29 +115,22 @@ public class Loan implements Serializable {
         activeTime=Globals.worldTime;
     }
 
-    public int getNextTimePayment() {
-        return 0;
-    }
-
-    public String getOwner() {
+      public String getOwner() {
         return owner;
     }
 
-    public void setNextPayment() {
-        //if(status.equals(abs.e_status.ACTIVE))
-    }
-
-    public int getLeftAmountToInvest() {
+     public int getLeftAmountToInvest() {
         return capital - amountCollectedPending;
     }
 
-    public Status addNewInvestor(Client client, int newAmountForLoan) {
+    public Status addNewInvestorToLoan(Client client, int newAmountForLoan) {
         createNewGiver(client, newAmountForLoan);
-        amountCollectedPending += newAmountForLoan;
+        this.amountCollectedPending = amountCollectedPending+newAmountForLoan;
         if (amountCollectedPending == capital) {
             status = Status.ACTIVE;
             changeToActive();
         }
+        else status= Status.PENDING;
         return status;
     }
 
