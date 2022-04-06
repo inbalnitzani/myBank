@@ -1,6 +1,8 @@
 package abs;
 
-public class Movement {
+import java.io.Serializable;
+
+public class Movement implements Serializable {
     public enum kindOfMovement {INSERT_MONEY, WITHDRAW};
     public static final int INSERT_MONEY = 1;
     public static final int PAY_MONEY = -1;

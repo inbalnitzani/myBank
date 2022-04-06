@@ -7,12 +7,10 @@ import abs.schemaClasses.*;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.*;
 
-public class Bank implements BankInterface {
+public class Bank implements Serializable, BankInterface {
 
     private Set<String> categories;//
     private Map<String, Loan> activeLoans;
@@ -108,6 +106,14 @@ public class Bank implements BankInterface {
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
         }
+    }
+
+    public void saveStateToFile(String fileName) throws IOException {
+        try (
+            ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))){
+                out.writeObject(this);
+                out.flush();
+            }
     }
 
     public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest) {

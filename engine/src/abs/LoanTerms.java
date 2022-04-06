@@ -1,8 +1,9 @@
 package abs;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public class LoanTerms {
+public class LoanTerms implements Serializable {
 
     public int maxAmount;
     public Set<String> categories;

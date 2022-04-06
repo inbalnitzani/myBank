@@ -1,8 +1,9 @@
 package abs;
 
+import java.io.Serializable;
 import java.util.*;
 
-public class Client {
+public class Client implements Serializable {
     private String fullName;
     private int currBalance;
     private List<Loan> asGiver;
