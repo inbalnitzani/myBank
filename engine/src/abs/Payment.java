@@ -7,20 +7,16 @@ public class Payment implements Serializable {
     private int payingActualTime;
     private String loanID;
 
-    public Payment(double fund, double percentage) {
-        this.fund = fund;
-        this.percentage = percentage;
-        this.amount = (1+percentage)*fund;
-    }
     public double getAmount(){
         return amount;
     }
     public void addToAmount(double amount){
         this.amount+=amount;
     }
-    public Payment(int expectedTime,String loanID) {
+    public Payment(int expectedTime,String loanID,double amount) {
         payingActualTime =expectedTime;
         this.loanID = loanID;
+        this.amount = amount;
     }
     public double getFund() {
         return fund;

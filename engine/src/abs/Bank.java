@@ -247,9 +247,11 @@ public class Bank implements Serializable, BankInterface {
                     for (PayBack investor:loan.getPayBacks()) {
                         double amount = investor.getPercentage()*payment.getAmount();
                         Client client = clients.get(investor.getClientDTOGivers());
+                        clients.get(loan.getOwner()).subtractCurrBalance(amount);
                         loan.setAmountPaidBack(amount);
                         client.addMovement(new Movement(client.getCurrBalance(),amount,Globals.worldTime));
                         client.addToCurrBalance(amount);
+
                     }
                     if (loan.getAmountPaidBack()==loan.getCapital()*((loan.getInterestRate()/100)+1)){
                         loan.setStatus(Status.FINISHED);
