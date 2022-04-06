@@ -22,6 +22,7 @@ public class LoanDTO {
         this.owner = loan.getOwner();
         this.category = loan.getCategory();
         this.capital = loan.getCapital();
+        this.amountCollectedPending=loan.getAmountCollectedPending();
         this.interestRate = loan.getInterestRate();
         this.pace = loan.getPace();
         this.status = loan.getStatus();
