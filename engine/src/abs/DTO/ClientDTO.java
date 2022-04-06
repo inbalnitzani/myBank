@@ -22,7 +22,6 @@ public class ClientDTO {
         setMovements(client.getMovements());
     }
 
-
     private void setMovements(Map<Integer,Set<Movement>>movements) {
         if (movements != null) {
             this.movements = new HashMap<>();
@@ -50,26 +49,21 @@ public class ClientDTO {
     public String getFullName() {
         return fullName;
     }
-
     public Set<MovementDTO> getMovementsByTime(int executeTime) {
         if (movements.containsKey(executeTime))
             return movements.get(executeTime);
         else
             return null;
     }
-
     public Map<Integer, Set<MovementDTO>> getMovements() {
         return movements;
     }
-
     public int getCurrBalance() {
         return currBalance;
     }
-
     public List<LoanDTO> getLoansAsGiver() {
         return asGiver;
     }
-
     public List<LoanDTO> getLoansAsBorrower() {
         return asBorrower;
     }

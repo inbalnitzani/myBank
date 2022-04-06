@@ -240,7 +240,7 @@ public class Bank implements BankInterface {
                     setBackToActive(loan);
                     for (PayBack investor:loan.getPayBacks()) {
                         double amount = investor.getPercentage()*payment.getAmount();
-                        Client client = investor.getClientDTOGivers();
+                        Client client = clients.get(investor.getClientDTOGivers());
                         loan.setAmountPaidBack(amount);
                         client.addMovement(new Movement(client.getCurrBalance(),amount,Globals.worldTime));
                         client.addToCurrBalance(amount);
