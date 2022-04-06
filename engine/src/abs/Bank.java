@@ -100,7 +100,7 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
-        Status loanStatus = loan.addNewInvestorToLoan(client, amountToInvestPerLoan);
+        Status loanStatus =waitingLoans.get(loan.getLoansID()).addNewInvestorToLoan(client, amountToInvestPerLoan);
         client.addLoanToInvestor(loan,amountToInvestPerLoan);
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
