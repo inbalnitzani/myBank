@@ -2,6 +2,7 @@ package ui;
 import dto.*;
 import loan.Status;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Menu {
 
@@ -75,12 +76,12 @@ public class Menu {
         return loansToInvest;
     }
 
-    public int chooseWayToGetDataInfo(){
+    public int chooseWayToGetDataInfo() {
         System.out.println("Choose one of the next source options to load information:");
         System.out.println("1. XML file");
         System.out.println("2. Saved file with old state");
-        int userChoice=0;
-        boolean invalidInput=false;
+        int userChoice = 0;
+        boolean invalidInput = false;
         while (!invalidInput) {
             try {
                 userChoice = scanner.nextInt();
@@ -96,6 +97,7 @@ public class Menu {
         }
         return userChoice;
     }
+
     public void printMenu() {
         System.out.println("\nchoose a number");
         System.out.println("1. read a file");
@@ -379,42 +381,27 @@ public class Menu {
         System.out.println("First payment: " + loan.getFirstPaymentTime() + ", Last pament: " + loan.getLastPaymentTime() + ".");
     }
 
-    public List<PaymentDTO> getPaymentPaid(Map<Integer,PaymentDTO> allPayment, int pace, int firstPayment) {
-        List<PaymentDTO> paidPayment = new ArrayList<>();
-        boolean paid = true;
-        int currPayTime = firstPayment;
-        while (paid) {
-            PaymentDTO currPayment = allPayment.get(firstPayment);
-            if (currPayment.isPaid()) {
-                paidPayment.add(currPayment);
-                currPayTime += pace;
-            } else {
-                paid = false;
-            }
-        }return paidPayment;
-    }
     public void printPaymentPaid(LoanDTO loan) {
-        List<PaymentDTO> paid=getPaymentPaid(loan.getPayments(),loan.getPace(),loan.getFirstPaymentTime());
-        if (paid.isEmpty()){
+        List<PaymentDTO> paid = loan.getPayments().values().stream().filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
+        if (paid.isEmpty()) {
             System.out.println("Payments have not yet been refunded");
-        }
-        else {
+        } else {
             System.out.println("Payments made so far:");
             int fundPayBack = 0;
             double interestPayBack = 0;
-            for (PaymentDTO payment : loan.getPayments().values()) {
+            for (PaymentDTO payment : paid) {
                 double fund = payment.getFund();
-                double interest = payment.getPercentage();
-             //   System.out.println("Payment time: " + payment.getActualPaymentTime() +
-                      //  ", fund part: " + fund + ", interest part: " + interest);
+                double interest = payment.getInterestPart();
+                System.out.println("Payment time: " + payment.getActualPaidTime() + ", fund: " + fund + ", interest: " + interest + ".");
+                System.out.println("Total amount paid: " + payment.getAmount());
                 fundPayBack += fund;
                 interestPayBack += interest;
             }
-            double loanPrecentage = loan.getInterestRate() / 100;
-            int originalAmount = loan.getOriginalAmount(), fundLeft = originalAmount - fundPayBack;
-            double interesetLeft = fundLeft * loanPrecentage;
+            double originalFundAmount = loan.getOriginalAmount();
+            double interestLeftToPay = loan.getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
+            double fundLeftToPay = originalFundAmount - fundPayBack;
             System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
-            System.out.println("Fund amount left to pay: " + fundLeft + " Interest amount left to pay: " + interesetLeft + " .");
+            System.out.println("Fund amount left to pay: " + fundLeftToPay + ", Interest amount left to pay: " + interestLeftToPay + " .");
         }
     }
 
@@ -427,7 +414,7 @@ public class Menu {
 
     public void printMoneyPayed(LoanDTO loan) {
         System.out.println("Total amount invested :" + loan.getAmountCollected());
-        int amountLeft= loan.getOriginalAmount()-loan.getAmountCollected();
+        int amountLeft = loan.getOriginalAmount() - loan.getAmountCollected();
         System.out.println("Total amount to invest in order to become active: " + amountLeft);
     }
 
@@ -462,7 +449,7 @@ public class Menu {
 
     public void printClientInfo(List<ClientDTO> clientDTOS) {
         for (ClientDTO clientDTO : clientDTOS) {
-            System.out.println("\n"+clientDTO.getFullName() + ":");
+            System.out.println("\n" + clientDTO.getFullName() + ":");
             printClientDetails(clientDTO);
         }
     }
@@ -485,8 +472,8 @@ public class Menu {
                 System.out.println("Original amount: " + loanDTO.getOriginalAmount());
                 System.out.println("Rate of payments: one payment every " + loanDTO.getPace() + " time unit");
                 System.out.println("Intereset for any payment: " + loanDTO.getInterestRate());
-                double interestPrecentage = (double)loanDTO.getInterestRate() / 100.0;
-                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * (1+interestPrecentage));
+                double interestPrecentage = (double) loanDTO.getInterestRate() / 100.0;
+                System.out.println("Final amount paying back: " + loanDTO.getOriginalAmount() * (1 + interestPrecentage));
                 System.out.println("Loan status: " + loanDTO.getStatus());
                 printLittleInfoByStatus(loanDTO, loanDTO.getStatus());
             }
@@ -532,8 +519,8 @@ public class Menu {
     public void printOneMovementInfo(MovementDTO movement) {
         System.out.println("Movement time: " + movement.getExecuteTime());
         System.out.println("Account balance before movement: " + movement.getAmountBeforeMovement());
-        System.out.println(movement.getKindOfExecute() + movement.getAmount()+" NIS");
-        System.out.println("Account balance after movement: " + movement.getAmountAfterMovement()+"\n");
+        System.out.println(movement.getKindOfExecute() + movement.getAmount() + " NIS");
+        System.out.println("Account balance after movement: " + movement.getAmountAfterMovement() + "\n");
     }
 
     public boolean FileNotExist() {

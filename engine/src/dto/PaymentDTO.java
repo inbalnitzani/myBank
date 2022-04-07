@@ -5,31 +5,32 @@ import loan.Payment;
 public class PaymentDTO {
 
     private double fund;
-    private double percentage;
+    private double interestPart;
     private double amount;
     private String id;
-    private boolean paid=false;
+    private int actualPaidTime;
 
     public PaymentDTO(Payment payment) {
         amount = payment.getAmount();
-        percentage = payment.getPercentage();
-        fund = payment.getFund();
+        interestPart=amount-fund;
+        fund = amount/(1+payment.getPercentage());
         id = payment.getLoanID();
+        actualPaidTime=payment.getActualPaidTime();
     }
 
-    public boolean isPaid() {
-        return paid;
+    public int getActualPaidTime() {
+        return actualPaidTime;
     }
 
     public double getFund() {
         return fund;
     }
 
-    public double getPercentage() {
-        return percentage;
-    }
-
     public double getAmount() {
         return amount;
+    }
+
+    public double getInterestPart() {
+        return interestPart;
     }
 }
