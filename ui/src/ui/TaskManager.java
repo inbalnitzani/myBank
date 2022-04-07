@@ -4,7 +4,7 @@ import dto.ClientDTO;
 import dto.LoanDTO;
 import bank.Bank;
 import bank.BankInterface;
-import bank.Globals;
+import bank.Global;
 import exception.FileException;
 import loan.LoanTerms;
 
@@ -82,9 +82,9 @@ public class TaskManager {
     }
 
     public void promoteTimeline() {
-        System.out.println("Yaz time was changed from: " + Globals.worldTime);
-        Globals.changeWorldTimeByOne();
-        System.out.println("To: " + Globals.worldTime);
+        System.out.println("Yaz time was changed from: " + Global.worldTime);
+        Global.changeWorldTimeByOne();
+        System.out.println("To: " + Global.worldTime);
         bank.startMoneyTransfers();
     }
 
@@ -115,7 +115,7 @@ public class TaskManager {
                 System.out.println("File read successfully");
                 tryLoadFile = false;
                 fileInSystem = true;
-                Globals.setWorldTime(1);
+                Global.setWorldTime(1);
             } else {
                 if (!menu.checkTryAgain(fileName))
                     tryLoadFile = false;

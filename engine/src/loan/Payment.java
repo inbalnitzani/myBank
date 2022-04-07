@@ -4,32 +4,25 @@ import java.io.Serializable;
 
 public class Payment implements Serializable {
     private double amount;
-    private double fund;
-    private double percentage;
-    private boolean paid=false;
+    private double interesetByPercentage;
     private String loanID;
+    private int actualPaidTime=0;
 
+    public int getActualPaidTime() {
+        return actualPaidTime;
+    }
     public void addToAmount(double amount) {
         this.amount += amount;
-    }
 
+    }
     public Payment(String loanID, double fund, double percentage) {
         this.loanID = loanID;
-        this.fund = fund;
-        this.percentage = percentage;
+        this.interesetByPercentage = percentage;
         this.amount = fund * (percentage + 1);
     }
 
-    public void setPaid(boolean paid) {
-        this.paid = paid;
-    }
-
-    public double getFund() {
-        return fund;
-    }
-
     public double getPercentage() {
-        return percentage;
+        return interesetByPercentage;
     }
 
     public String getLoanID() {
@@ -38,5 +31,9 @@ public class Payment implements Serializable {
 
     public double getAmount() {
         return amount;
+    }
+
+    public void setActualPaidTime(int actualPaidTime) {
+        this.actualPaidTime = actualPaidTime;
     }
 }

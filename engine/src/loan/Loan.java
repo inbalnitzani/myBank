@@ -1,8 +1,7 @@
 package loan;
 
-import dto.LoanDTO;
 import client.Client;
-import bank.Globals;
+import bank.Global;
 
 import java.io.Serializable;
 import java.util.*;
@@ -105,13 +104,13 @@ public class Loan implements Serializable {
 
     public void changeToActive() {
         payments = new HashMap<>();
-        int lastPayment = Globals.worldTime + totalYazTime;
+        int lastPayment = Global.worldTime + totalYazTime;
         double fund = capital/(totalYazTime/pace);
         double percentage=(double)interestRate/100.0;
-        for (int i = Globals.worldTime+pace; i <= lastPayment; i += pace) {
+        for (int i = Global.worldTime+pace; i <= lastPayment; i += pace) {
             payments.put(i,new Payment(id,fund,percentage));
         }
-        activeTime=Globals.worldTime;
+        activeTime= Global.worldTime;
     }
 
       public String getOwner() {

@@ -1,6 +1,6 @@
 package client;
 
-import bank.Globals;
+import bank.Global;
 import loan.Loan;
 
 import java.io.Serializable;
@@ -36,7 +36,7 @@ public class Client implements Serializable {
         if (!isAlreadyInvolve) {
             asGiver.add(loan);
         }
-        addMovement(new Movement(currBalance, -amountInvested, Globals.worldTime));
+        addMovement(new Movement(currBalance, -amountInvested, Global.worldTime));
         currBalance = currBalance - amountInvested;
     }
     public String getFullName() {
@@ -63,13 +63,13 @@ public class Client implements Serializable {
     }
 
     public void addMoneyToAccount(double moneyToAdd) {
-        Movement movement = new Movement(currBalance, moneyToAdd, Globals.worldTime);
+        Movement movement = new Movement(currBalance, moneyToAdd, Global.worldTime);
         addMovement(movement);
         currBalance += moneyToAdd;
     }
 
     public void withdrawingMoney(double sumToPull) {
-        addMovement(new Movement(currBalance, -sumToPull, Globals.worldTime));
+        addMovement(new Movement(currBalance, -sumToPull, Global.worldTime));
         currBalance -= sumToPull;
     }
 

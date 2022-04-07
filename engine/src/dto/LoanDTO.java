@@ -4,7 +4,7 @@ import loan.Loan;
 import loan.PayBack;
 import loan.Payment;
 import loan.Status;
-import bank.Globals;
+import bank.Global;
 
 import java.util.*;
 
@@ -63,7 +63,7 @@ public class LoanDTO {
     }
 
     public double getTotalMoneyForPayingBack() {
-        double precentage = interestRate / 100;
+        double precentage = interestRate / 100.0;
         return (precentage + 1) * capital;
     }
 
@@ -75,7 +75,7 @@ public class LoanDTO {
 
     public int getNextPaymentTime() {
         boolean findNextPayment = false;
-        int nextPayment = Globals.worldTime + 1;
+        int nextPayment = Global.worldTime + 1;
         while (!findNextPayment) {
             if (payments.containsKey(nextPayment)) {
                 findNextPayment = true;
@@ -101,7 +101,7 @@ public class LoanDTO {
     }
 
     public int getFirstPaymentTime() {
-        int firstPayment = activeTime;
+        int firstPayment = activeTime+1;
         boolean findFirstPayment = false;
         while (!findFirstPayment) {
             if (payments.containsKey(firstPayment))

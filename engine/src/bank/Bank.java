@@ -188,7 +188,6 @@ public class Bank implements Serializable, BankInterface {
             Loan loan = activeLoans.get(payment.getLoanID());
             double totalAmount = payment.getAmount();
             Client owner = clients.get(loan.getOwner());
-
             if (owner.getCurrBalance() < totalAmount) {
                 setInRisk(loan, totalAmount);
             } else {
@@ -206,7 +205,8 @@ public class Bank implements Serializable, BankInterface {
     public void payBack(Loan loan, double totalAmount, Payment payment) {
         clients.get(loan.getOwner()).withdrawingMoney(totalAmount);
         loan.setAmountPaidBack(totalAmount);
-        payment.setPaid(true);
+        payment.setActualPaidTime(Global.worldTime);
+        //payment.setPaid(true);
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, totalAmount);
         }
@@ -231,12 +231,12 @@ public class Bank implements Serializable, BankInterface {
 
         for (Loan loan : activeLoans.values()) {
             Map<Integer, Payment> paymentMap = loan.getPayments();
-            if (paymentMap.containsKey(Globals.worldTime)) {
+            if (paymentMap.containsKey(Global.worldTime)) {
                 int activeTime = loan.getActiveTime();
                 if (!paymentsByYaz.containsKey(activeTime)) {
                     paymentsByYaz.put(activeTime, new ArrayList<>());
                 }
-                paymentsByYaz.get(activeTime).add(paymentMap.get(Globals.worldTime));
+                paymentsByYaz.get(activeTime).add(paymentMap.get(Global.worldTime));
             }
         }
         for (List<Payment> payments : paymentsByYaz.values()) {
@@ -247,7 +247,13 @@ public class Bank implements Serializable, BankInterface {
 
     public void setInRisk(Loan loan, double totalAmount) {
         loan.setStatus(Status.RISK);
-        loan.getPayments().get(loan.getPace() + Globals.worldTime).addToAmount(totalAmount);
+        int nextTimePay=loan.getPace() + Global.worldTime;
+        Map<Integer,Payment> paymentList=loan.getPayments();
+        if (paymentList.containsKey(nextTimePay))
+            paymentList.get(nextTimePay).addToAmount(totalAmount);
+        else {
+            paymentList.put(nextTimePay,new Payment(loan.getLoansID(),(totalAmount/(1+(loan.getInterestRate())/100.0)),loan.getInterestRate()/100.0));
+        }
     }
 
 
