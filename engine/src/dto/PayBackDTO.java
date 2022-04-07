@@ -6,11 +6,12 @@ public class PayBackDTO {
 
     private String giversName;
     private double percentage;
-private double amountInvested;
+    private double amountInvested;
+
     public PayBackDTO(PayBack payBack) {
-        percentage=payBack.getPercentage();
+        percentage = payBack.getPercentage();
         giversName = payBack.getClientDTOGivers();
-        amountInvested=payBack.getAmountInvested();
+        amountInvested = payBack.getAmountInvested();
     }
 
     public String getGiversName() {
@@ -21,7 +22,4 @@ private double amountInvested;
         return amountInvested;
     }
 
-    public double getPercentage() {
-        return percentage;
-    }
 }

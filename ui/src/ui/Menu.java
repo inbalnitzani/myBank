@@ -528,30 +528,4 @@ public class Menu {
         System.out.println("Account balance after movement: " + movement.getAmountAfterMovement() + "\n");
     }
 
-    public boolean FileNotExist() {
-        System.out.println("Error! File does not exist.");
-        System.out.println("If you want to go back to menu - press 1");
-        System.out.println("If you want to try load file again - press 2");
-        boolean validInput = false, loadAgain = false;
-        int userChoice = 0;
-        while (!validInput) {
-            try {
-                userChoice = scanner.nextInt();
-                if (userChoice == 1) {
-                    loadAgain = false;
-                    validInput = true;
-                } else if (userChoice == 2) {
-                    loadAgain = true;
-                    validInput = true;
-                }
-            } catch (Exception e) {
-                scanner.nextLine();
-            } finally {
-                if (!validInput) {
-                    System.out.println("Invalid input. Please try again.");
-                }
-            }
-        }
-        return loadAgain;
-    }
 }

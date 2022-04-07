@@ -20,14 +20,6 @@ public class PayBack implements Serializable {
         return anountInvested;
     }
 
-    //    public PayBack(Client client, int originalAmount) {
-//        this.givesALoan = client.getFullName();
-//        this.originalAmount = originalAmount;
-//    }
-//    public double getOriginalAmount() {
-//        return originalAmount;
-//    }
-
     public String getClientDTOGivers() {
         return givesALoan;
     }

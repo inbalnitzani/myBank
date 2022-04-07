@@ -26,32 +26,33 @@ public class LoanDTO {
         this.owner = loan.getOwner();
         this.category = loan.getCategory();
         this.capital = loan.getCapital();
-        this.amountCollectedPending=loan.getAmountCollectedPending();
+        this.amountCollectedPending = loan.getAmountCollectedPending();
         this.interestRate = loan.getInterestRate();
         this.pace = loan.getPace();
         this.status = loan.getStatus();
         this.totalYazTime = loan.getTotalYazTime();
         this.activeTime = loan.getActiveTime();
-        this.amountPaidBack=loan.getAmountPaidBack();
+        this.amountPaidBack = loan.getAmountPaidBack();
         setPayBacks(loan.getPayBacks());
-        setPayments(loan.getPayments(),loan.getFirstPaymentTime(),loan.getLastPaymentTime());
+        setPayments(loan.getPayments(), loan.getFirstPaymentTime(), loan.getLastPaymentTime());
     }
 
 
     // PRIVATE SETTERS
-    private void setPayBacks(List<PayBack> payBack){
-        payBacks=new ArrayList<>();
-        for (PayBack pay:payBack){
+    private void setPayBacks(List<PayBack> payBack) {
+        payBacks = new ArrayList<>();
+        for (PayBack pay : payBack) {
             payBacks.add(new PayBackDTO(pay));
         }
     }
 
-    public double sumMissingPayments(){
-        double amountNextPayment= payments.get(getNextPaymentTime()).getAmount();
-        return (amountNextPayment-getTotalAmountPerPayment())/getTotalAmountPerPayment();
+    public double sumMissingPayments() {
+        double amountNextPayment = payments.get(getNextPaymentTime()).getAmount();
+        return (amountNextPayment - getTotalAmountPerPayment()) / getTotalAmountPerPayment();
     }
+
     private void setPayments(Map<Integer, Payment> payments, int firstPayTime, int lastPayTime) {
-       this.payments=new HashMap<>();
+        this.payments = new HashMap<>();
         if (payments.size() != 0) {
             for (int i = firstPayTime; i <= lastPayTime; i += pace) {
                 this.payments.put(i, new PaymentDTO(payments.get(i)));
@@ -74,7 +75,7 @@ public class LoanDTO {
     }
 
     public double getTotalAmountPerPayment() {
-       return getTotalMoneyForPayingBack()/(totalYazTime/pace);
+        return getTotalMoneyForPayingBack() / (totalYazTime / pace);
     }
 
     public int getNextPaymentTime() {
@@ -105,7 +106,7 @@ public class LoanDTO {
     }
 
     public int getFirstPaymentTime() {
-        int firstPayment = activeTime+1;
+        int firstPayment = activeTime + 1;
         boolean findFirstPayment = false;
         while (!findFirstPayment) {
             if (payments.containsKey(firstPayment))
@@ -146,6 +147,5 @@ public class LoanDTO {
     public String getOwner() {
         return owner;
     }
-
- }
+}
 
