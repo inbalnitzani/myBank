@@ -105,10 +105,10 @@ public class Loan implements Serializable {
     public void changeToActive() {
         payments = new HashMap<>();
         int lastPayment = Global.worldTime + totalYazTime;
-        double fund = capital/(totalYazTime/pace);
+        double fundPerPayment = (double) capital/((double) totalYazTime/(double) pace);
         double percentage=(double)interestRate/100.0;
         for (int i = Global.worldTime+pace; i <= lastPayment; i += pace) {
-            payments.put(i,new Payment(id,fund,percentage));
+            payments.put(i,new Payment(id,fundPerPayment,percentage));
         }
         activeTime= Global.worldTime;
     }

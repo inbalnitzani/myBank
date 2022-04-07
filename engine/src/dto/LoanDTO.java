@@ -32,9 +32,11 @@ public class LoanDTO {
         this.status = loan.getStatus();
         this.totalYazTime = loan.getTotalYazTime();
         this.activeTime = loan.getActiveTime();
+        this.amountPaidBack=loan.getAmountPaidBack();
         setPayBacks(loan.getPayBacks());
         setPayments(loan.getPayments(),loan.getFirstPaymentTime(),loan.getLastPaymentTime());
     }
+
 
     // PRIVATE SETTERS
     private void setPayBacks(List<PayBack> payBack){
@@ -44,6 +46,10 @@ public class LoanDTO {
         }
     }
 
+    public double sumMissingPayments(){
+        double amountNextPayment= payments.get(getNextPaymentTime()).getAmount();
+        return (amountNextPayment-getTotalAmountPerPayment())/getTotalAmountPerPayment();
+    }
     private void setPayments(Map<Integer, Payment> payments, int firstPayTime, int lastPayTime) {
        this.payments=new HashMap<>();
         if (payments.size() != 0) {
@@ -68,9 +74,7 @@ public class LoanDTO {
     }
 
     public double getTotalAmountPerPayment() {
-        double fundPer1Payment = capital / pace;
-        double percentage = ((double) interestRate / 100.0)+1;
-        return fundPer1Payment * percentage;
+       return getTotalMoneyForPayingBack()/(totalYazTime/pace);
     }
 
     public int getNextPaymentTime() {

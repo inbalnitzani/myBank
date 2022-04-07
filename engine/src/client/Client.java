@@ -9,18 +9,21 @@ import java.util.*;
 public class Client implements Serializable {
     private String fullName;
     private int currBalance;
-    private List<Loan> asGiver;
+    private List<Loan> asLender;
     private List<Loan> asBorrower;
     private Map<Integer, List<Movement>> movements;
 
     public Client(String name, int accountBalance) {
         fullName = name;
         currBalance = accountBalance;
-        asGiver = new ArrayList<>();
+        asLender = new ArrayList<>();
         asBorrower = new ArrayList<>();
         movements=new HashMap<>();
     }
 
+    public void addLoanToBorrowerList(Loan loan) {
+        asBorrower.add(loan);
+    }
     public void addMovement(Movement oneMove) {
         int time = oneMove.getExecuteTime();
         if (movements.containsKey(time)) {
@@ -34,7 +37,7 @@ public class Client implements Serializable {
 
     public void addLoanToInvestor(Loan loan, int amountInvested,boolean isAlreadyInvolve) {
         if (!isAlreadyInvolve) {
-            asGiver.add(loan);
+            asLender.add(loan);
         }
         addMovement(new Movement(currBalance, -amountInvested, Global.worldTime));
         currBalance = currBalance - amountInvested;
@@ -55,7 +58,7 @@ public class Client implements Serializable {
     }
 
     public List<Loan> getLoanListAsGiver() {
-        return asGiver;
+        return asLender;
     }
 
     public List<Loan> getLoanListAsBorrower() {
@@ -77,8 +80,8 @@ public class Client implements Serializable {
         return movements;
     }
 
-    public void setAsGiver(Loan loan) {
-        asGiver.add(loan);
+    public void setAsLender(Loan loan) {
+        asLender.add(loan);
     }
 
     public void subtractCurrBalance(double amountToDeducted) {

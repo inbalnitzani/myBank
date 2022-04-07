@@ -360,11 +360,13 @@ public class Menu {
         System.out.println("Status: " + status);
 
         switch (status) {
+            case RISK:
+                printLenderDetail(loan);
+                printActiveLoanDetails(loan);
+
+                break;
             case ACTIVE:
                 printLenderDetail(loan);
-                //printActiveLoanDetails(loan);
-                //break;
-            case RISK:
                 printActiveLoanDetails(loan);
                 break;
             case FINISHED:
@@ -384,15 +386,13 @@ public class Menu {
     }
 
     public void printPaymentPaid(LoanDTO loan) {
-        List<PaymentDTO> paid = loan.getPayments().values().stream().filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
-        if (paid.isEmpty()) {
-            System.out.println("Payments have not yet been refunded");
-        } else {
-            DecimalFormat df = new DecimalFormat();
-            df.setMaximumFractionDigits(3);
+        List<PaymentDTO> paid = loan.getPayments().values().stream()
+                .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(3);
+        double fundPayBack = 0, interestPayBack = 0;
+        if (!paid.isEmpty()) {
             System.out.println("Payments made so far:");
-            int fundPayBack = 0;
-            double interestPayBack = 0;
             for (PaymentDTO payment : paid) {
                 double fund = payment.getFund();
                 double interest = payment.getInterestPart();
@@ -401,12 +401,14 @@ public class Menu {
                 fundPayBack += fund;
                 interestPayBack += interest;
             }
-            double originalFundAmount = loan.getOriginalAmount();
-            double interestLeftToPay = loan.getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
-            double fundLeftToPay = originalFundAmount - fundPayBack;
-            System.out.println("Total fund paid back: " + df.format(fundPayBack) + ", Total interest paid back: " + df.format(interestPayBack) + ".");
-            System.out.println("Fund amount left to pay: " + df.format(fundLeftToPay) + ", Interest amount left to pay: " + df.format(interestLeftToPay) + " .");
+        } else {
+            System.out.println("Payments have not yet been refunded");
         }
+        double originalFundAmount = loan.getOriginalAmount();
+        double interestLeftToPay = loan.getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
+        double fundLeftToPay = originalFundAmount - fundPayBack;
+        System.out.println("Total fund paid back: " + df.format(fundPayBack) + ", Total interest paid back: " + df.format(interestPayBack) + ".");
+        System.out.println("Fund amount left to pay: " + df.format(fundLeftToPay) + ", Interest amount left to pay: " + df.format(interestLeftToPay) + " .");
     }
 
     public void printActiveLoanDetails(LoanDTO loan) {
@@ -493,13 +495,12 @@ public class Menu {
                 System.out.println("Missing amount to make this loan active: " + (loanDTO.getOriginalAmount() - loanDTO.getAmountCollected()));
                 break;
             case FINISHED:
-                System.out.println("First payment at " + loanDTO.getFirstPaymentTime() + " time, last payment time at: " + loanDTO.getLastPaymentTime() + ".");
+                System.out.println("First payment time: " + loanDTO.getFirstPaymentTime() + ", last payment time: " + loanDTO.getLastPaymentTime() + ".");
                 break;
             case RISK:
-                double missingMoney = loanDTO.getTotalMoneyForPayingBack() - loanDTO.getAmountPaidBack();
-                int amountOfPayment = (int) missingMoney / loanDTO.getPace();
-                System.out.println("So far" + loanDTO.getAmountPaidBack() + " NIS have been paid and "
-                        + missingMoney + " are missing, in " + amountOfPayment + " payments");
+            int sumMissingPayments=(int)loanDTO.sumMissingPayments();
+                System.out.println("So far " + loanDTO.getAmountPaidBack() + " NIS have been paid and "
+                        + sumMissingPayments*loanDTO.getTotalAmountPerPayment() + " are missing, in " + sumMissingPayments + " payments");
                 break;
         }
         System.out.println("");

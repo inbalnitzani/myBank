@@ -12,7 +12,7 @@ public class PaymentDTO {
 
     public PaymentDTO(Payment payment) {
         amount = payment.getAmount();
-        fund = amount/(1+payment.getPercentage());
+        fund = amount/(1.0+payment.getPercentage());
         interestPart=amount-fund;
         id = payment.getLoanID();
         actualPaidTime=payment.getActualPaidTime();
