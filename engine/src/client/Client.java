@@ -18,12 +18,13 @@ public class Client implements Serializable {
         currBalance = accountBalance;
         asLender = new ArrayList<>();
         asBorrower = new ArrayList<>();
-        movements=new HashMap<>();
+        movements = new HashMap<>();
     }
 
     public void addLoanToBorrowerList(Loan loan) {
         asBorrower.add(loan);
     }
+
     public void addMovement(Movement oneMove) {
         int time = oneMove.getExecuteTime();
         if (movements.containsKey(time)) {
@@ -35,22 +36,16 @@ public class Client implements Serializable {
         }
     }
 
-    public void addLoanToInvestor(Loan loan, int amountInvested,boolean isAlreadyInvolve) {
+    public void addLoanToInvestor(Loan loan, int amountInvested, boolean isAlreadyInvolve) {
         if (!isAlreadyInvolve) {
             asLender.add(loan);
         }
         addMovement(new Movement(currBalance, -amountInvested, Global.worldTime));
         currBalance = currBalance - amountInvested;
     }
+
     public String getFullName() {
         return fullName;
-    }
-
-    public List<Movement> getMovementsByTime(int executeTime) {
-        if (movements.containsKey(executeTime))
-            return movements.get(executeTime);
-        else
-            return null;
     }
 
     public int getCurrBalance() {
@@ -79,16 +74,5 @@ public class Client implements Serializable {
     public Map<Integer, List<Movement>> getMovements() {
         return movements;
     }
-
-    public void setAsLender(Loan loan) {
-        asLender.add(loan);
-    }
-
-    public void subtractCurrBalance(double amountToDeducted) {
-        currBalance -= amountToDeducted;
-    }
-//   // public void addToCurrBalance(double amountToAdd) {
-//        currBalance += amountToAdd;
-//    }
 
 }

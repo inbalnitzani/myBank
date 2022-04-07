@@ -1,7 +1,5 @@
 package dto;
 
-import client.Movement;
-
 public class MovementDTO {
     public static final int INSERT_MONEY = 1;
     public static final int WITHDRAW = -1;

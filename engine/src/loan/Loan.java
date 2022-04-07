@@ -29,9 +29,9 @@ public class Loan implements Serializable {
         this.category = categoryName;
         this.totalYazTime = totalYazTime;
         this.pace = pace;
-        this.amountPaidBack=0;
+        this.amountPaidBack = 0;
         payBacks = new ArrayList<PayBack>();
-        payments=new HashMap<>();
+        payments = new HashMap<>();
     }
 
     public int getActiveTime() {
@@ -58,9 +58,11 @@ public class Loan implements Serializable {
         }
         return optionalTime;
     }
-    public int getLastPaymentTime(){
-        return activeTime+totalYazTime;
+
+    public int getLastPaymentTime() {
+        return activeTime + totalYazTime;
     }
+
     public String getLoansID() {
         return this.id;
     }
@@ -80,7 +82,10 @@ public class Loan implements Serializable {
     public int getAmountPaidBack() {
         return this.amountPaidBack;
     }
-    public void setAmountPaidBack(double amountToAdd){amountPaidBack += amountToAdd;}
+
+    public void setAmountPaidBack(double amountToAdd) {
+        amountPaidBack += amountToAdd;
+    }
 
     public int getAmountCollectedPending() {
         return this.amountCollectedPending;
@@ -105,19 +110,19 @@ public class Loan implements Serializable {
     public void changeToActive() {
         payments = new HashMap<>();
         int lastPayment = Global.worldTime + totalYazTime;
-        double fundPerPayment = (double) capital/((double) totalYazTime/(double) pace);
-        double percentage=(double)interestRate/100.0;
-        for (int i = Global.worldTime+pace; i <= lastPayment; i += pace) {
-            payments.put(i,new Payment(id,fundPerPayment,percentage));
+        double fundPerPayment = (double) capital / ((double) totalYazTime / (double) pace);
+        double percentage = (double) interestRate / 100.0;
+        for (int i = Global.worldTime + pace; i <= lastPayment; i += pace) {
+            payments.put(i, new Payment(id, fundPerPayment, percentage));
         }
-        activeTime= Global.worldTime;
+        activeTime = Global.worldTime;
     }
 
-      public String getOwner() {
+    public String getOwner() {
         return owner;
     }
 
-     public int getLeftAmountToInvest() {
+    public int getLeftAmountToInvest() {
         return capital - amountCollectedPending;
     }
 
@@ -126,10 +131,11 @@ public class Loan implements Serializable {
             if (payBack.getClientDTOGivers().equals(client.getFullName())) {
                 return payBack;
             }
-        }  return null;
+        }
+        return null;
     }
 
-    public void updatePayBacks(Client client, int newAmountForLoan,PayBack payBack){
+    public void updatePayBacks(Client client, int newAmountForLoan, PayBack payBack) {
         if (payBack != null) {
             payBack.setAmounts(newAmountForLoan, capital);
         } else {
@@ -137,23 +143,27 @@ public class Loan implements Serializable {
         }
     }
 
-    public double totalAmountToPayBack(){
-        return capital*((interestRate/100.0)+1);
+    public double totalAmountToPayBack() {
+        return capital * ((interestRate / 100.0) + 1);
     }
-    public Status addNewInvestorToLoan(Client client, int newAmountForLoan,PayBack payBack) {
-        updatePayBacks(client, newAmountForLoan,payBack);
+
+    public Status addNewInvestorToLoan(Client client, int newAmountForLoan, PayBack payBack) {
+        updatePayBacks(client, newAmountForLoan, payBack);
         this.amountCollectedPending += newAmountForLoan;
         if (amountCollectedPending == capital) {
             status = Status.ACTIVE;
             changeToActive();
         } else {
             status = Status.PENDING;
-        } return status;
+        }
+        return status;
     }
 
     public void createNewGiver(Client client, int investorAmount) {
-        payBacks.add(new PayBack(client,this.capital,investorAmount));
+        payBacks.add(new PayBack(client, this.capital, investorAmount));
     }
 
-    public void setStatus(Status status){this.status = status;}
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }
