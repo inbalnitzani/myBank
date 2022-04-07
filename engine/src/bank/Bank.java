@@ -22,6 +22,7 @@ public class Bank implements Serializable, BankInterface {
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
+    private int time;
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -81,9 +82,13 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
+    public int getWorldTime() {
+        return time;
+    }
+
     public void saveStateToFile(String fileName) throws IOException {
-        try (
-                ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
+        time = Global.worldTime;
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(this);
             out.flush();
         }
@@ -177,9 +182,11 @@ public class Bank implements Serializable, BankInterface {
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         for (AbsLoan loan : loanList) {
+            String owner=loan.getAbsOwner();
             String id = loan.getId();
-            Loan newLoan = new Loan(id, loan.getAbsOwner(), loan.getAbsCapital(), loan.getAbsIntristPerPayment(), loan.getAbsCategory(), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
+            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), loan.getAbsCategory(), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
+            clients.get(owner).addLoanToBorrowerList(newLoan);
         }
     }
 
@@ -206,7 +213,6 @@ public class Bank implements Serializable, BankInterface {
         clients.get(loan.getOwner()).withdrawingMoney(totalAmount);
         loan.setAmountPaidBack(totalAmount);
         payment.setActualPaidTime(Global.worldTime);
-        //payment.setPaid(true);
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, totalAmount);
         }

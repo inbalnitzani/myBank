@@ -9,7 +9,7 @@ import java.util.*;
 public class ClientDTO {
     private String fullName;
     private int currBalance;
-    private List<LoanDTO> asGiver;
+    private List<LoanDTO> asLender;
     private List<LoanDTO> asBorrower;
     private Map<Integer, List<MovementDTO>> movements;
 
@@ -17,7 +17,7 @@ public class ClientDTO {
         this.fullName = client.getFullName();
         this.currBalance = client.getCurrBalance();
         this.asBorrower=createLoanDTOList(client.getLoanListAsBorrower());
-        this.asGiver=createLoanDTOList(client.getLoanListAsGiver());
+        this.asLender =createLoanDTOList(client.getLoanListAsGiver());
         setMovements(client.getMovements());
     }
 
@@ -61,7 +61,7 @@ public class ClientDTO {
         return currBalance;
     }
     public List<LoanDTO> getLoansAsGiver() {
-        return asGiver;
+        return asLender;
     }
     public List<LoanDTO> getLoansAsBorrower() {
         return asBorrower;

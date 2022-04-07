@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface BankInterface {
 
+     int getWorldTime();
      List<ClientDTO> getClients() ;
 
      List<String> getCategories();

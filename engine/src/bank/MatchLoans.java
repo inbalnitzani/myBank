@@ -5,7 +5,9 @@ import loan.Loan;
 import loan.LoanTerms;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MatchLoans implements Serializable {
     private Client client;
@@ -19,6 +21,7 @@ public class MatchLoans implements Serializable {
 
     public void checkRelevantLoans(Map<String, Loan> matchLoans, Map<String, Loan> loansToCheck) {
         if (loansToCheck != null) {
+
             for (Loan loan : loansToCheck.values()) {
                 if (loan.getOwner().equals(client.getFullName())) {
                     continue;
@@ -34,6 +37,13 @@ public class MatchLoans implements Serializable {
             }
         }
         this.matchingLoans = matchLoans;
+
+//        List<Loan>loans=loansToCheck.values().stream()
+//                .filter(loan-> !(loan.getOwner().equals(client.getFullName())))
+////                           .filter(loan -> loanTerms.getCategories().contains(loan.getCategory()))
+//                .filter(loan -> loan.getInterestRate() >= loanTerms.getMinInterestForTimeUnit())
+//                .filter(loan->loan.getTotalYazTime() >=loanTerms.getMinTotalYaz() && loanTerms.getMinTotalYaz()!=0)
+//                .collect(Collectors.toList());
     }
 
     public int getAmountToInvest() {

@@ -138,6 +138,7 @@ public class TaskManager {
     public void readBankDataFromFile(String fileName) {
         try (ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName))) {
             bank = (Bank) in.readObject();
+            Global.setWorldTime(bank.getWorldTime());
             System.out.println("File read successfully\n");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println(fileName + " does not exist. Operation failed.\n");
