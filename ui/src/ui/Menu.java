@@ -1,6 +1,8 @@
 package ui;
 import dto.*;
 import loan.Status;
+
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -386,22 +388,24 @@ public class Menu {
         if (paid.isEmpty()) {
             System.out.println("Payments have not yet been refunded");
         } else {
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(3);
             System.out.println("Payments made so far:");
             int fundPayBack = 0;
             double interestPayBack = 0;
             for (PaymentDTO payment : paid) {
                 double fund = payment.getFund();
                 double interest = payment.getInterestPart();
-                System.out.println("Payment time: " + payment.getActualPaidTime() + ", fund: " + fund + ", interest: " + interest + ".");
-                System.out.println("Total amount paid: " + payment.getAmount());
+                System.out.println("Payment time: " + payment.getActualPaidTime() + ", fund: " + df.format(fund) + ", interest: " + df.format(interest) + " .");
+                System.out.println("Total amount paid: " + df.format(payment.getAmount()));
                 fundPayBack += fund;
                 interestPayBack += interest;
             }
             double originalFundAmount = loan.getOriginalAmount();
             double interestLeftToPay = loan.getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
             double fundLeftToPay = originalFundAmount - fundPayBack;
-            System.out.println("Total fund paid back: " + fundPayBack + ", Total interest paid back: " + interestPayBack + ".");
-            System.out.println("Fund amount left to pay: " + fundLeftToPay + ", Interest amount left to pay: " + interestLeftToPay + " .");
+            System.out.println("Total fund paid back: " + df.format(fundPayBack) + ", Total interest paid back: " + df.format(interestPayBack) + ".");
+            System.out.println("Fund amount left to pay: " + df.format(fundLeftToPay) + ", Interest amount left to pay: " + df.format(interestLeftToPay) + " .");
         }
     }
 
