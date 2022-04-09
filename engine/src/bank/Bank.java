@@ -43,7 +43,7 @@ public class Bank implements Serializable, BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
-    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException {
+    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, IdException {
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
@@ -148,6 +148,9 @@ public class Bank implements Serializable, BankInterface {
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
+    public String stringConvertor(String str){
+        return str.trim().toLowerCase();
+    }
 
     public List<LoanDTO> getAllLoans() {
         Map<String, Loan> loans = new HashMap<>();
@@ -167,24 +170,24 @@ public class Bank implements Serializable, BankInterface {
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
         for (String category : categories) {
-            this.categories.add(category);
+            this.categories.add(stringConvertor(category));
         }
     }
 
     public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
         for (AbsCustomer customer : customerList) {
-            Client newClient = new Client(customer.getName(), customer.getAbsBalance());
-            this.clients.put(customer.getName(), newClient);
+            Client newClient = new Client(stringConvertor(customer.getName()), customer.getAbsBalance());
+            this.clients.put(stringConvertor(customer.getName()), newClient);
         }
     }
 
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         for (AbsLoan loan : loanList) {
-            String owner=loan.getAbsOwner();
-            String id = loan.getId();
-            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), loan.getAbsCategory(), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
+            String owner=stringConvertor(loan.getAbsOwner());
+            String id = stringConvertor(loan.getId());
+            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
             clients.get(owner).addLoanToBorrowerList(newLoan);
         }

@@ -1,7 +1,7 @@
 <abs-descriptor xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ABS-V1.xsd">
 	<abs-categories>
 		<abs-category>Setup a business</abs-category>
-		<abs-category>Overdraft cover</abs-category>
+		<abs-category>Overdraft coveR</abs-category>
 		<abs-category>Investment</abs-category>
 		<abs-category>Happy Event</abs-category>
 		<abs-category>Renovate</abs-category>
@@ -9,7 +9,7 @@
 	<abs-loans>
 		<abs-loan id="stock market introduction">
 			<abs-owner>Menash</abs-owner>
-			<abs-category>Investment</abs-category>
+			<abs-category>InVestment</abs-category>
 			<abs-capital>2400</abs-capital>
 			<abs-total-yaz-time>12</abs-total-yaz-time>
 			<abs-pays-every-yaz>1</abs-pays-every-yaz>
@@ -25,7 +25,7 @@
 		</abs-loan>
 		<abs-loan id="Bar Mitzva !">
 			<abs-owner>Mosh</abs-owner>
-			<abs-category>Happy Event</abs-category>
+			<abs-category>Happy EvEnt</abs-category>
 			<abs-capital>2500</abs-capital>
 			<abs-total-yaz-time>25</abs-total-yaz-time>
 			<abs-pays-every-yaz>5</abs-pays-every-yaz>
@@ -39,7 +39,7 @@
 			<abs-pays-every-yaz>2</abs-pays-every-yaz>
 			<abs-intrist-per-payment>5</abs-intrist-per-payment>
 		</abs-loan>
-		<abs-loan id="I don't have money">
+		<abs-loan id="HELLO">
 			<abs-owner>Menash</abs-owner>
 			<abs-category>OVErdraft cover</abs-category>
 			<abs-capital>1000</abs-capital>
@@ -60,7 +60,7 @@
 		<abs-customer name="Menash">
 			<abs-balance>0</abs-balance>
 		</abs-customer>
-		<abs-customer name="Avrum">
+		<abs-customer name="AvrUm">
 			<abs-balance>1000</abs-balance>
 		</abs-customer>
 		<abs-customer name="Tikva">
@@ -69,7 +69,7 @@
 		<abs-customer name="Shosh">
 			<abs-balance>20000</abs-balance>
 		</abs-customer>
-		<abs-customer name="Mosh">
+		<abs-customer name="MoSh">
 			<abs-balance>15000</abs-balance>
 		</abs-customer>
 		<abs-customer name="Bina">
