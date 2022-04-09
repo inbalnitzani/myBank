@@ -25,7 +25,7 @@ public class TaskManager {
     public TaskManager() {
     }
 
-    public void manageSystem() throws IOException, ClassNotFoundException {
+    public void manageSystem() {
         boolean stillInSystem = true;
         while (stillInSystem) {
             while (currentAction != EXIT_SYSTEM) {
@@ -38,7 +38,7 @@ public class TaskManager {
         }
     }
 
-    public void actToUserChoice() throws IOException, ClassNotFoundException {
+    public void actToUserChoice()  {
         switch (currentAction) {
             case 1:
                 getBankData();
