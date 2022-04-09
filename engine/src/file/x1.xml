@@ -41,7 +41,7 @@
 		</abs-loan>
 		<abs-loan id="I don't have money">
 			<abs-owner>Menash</abs-owner>
-			<abs-category>Overdraft cover</abs-category>
+			<abs-category>OVErdraft cover</abs-category>
 			<abs-capital>1000</abs-capital>
 			<abs-total-yaz-time>10</abs-total-yaz-time>
 			<abs-pays-every-yaz>1</abs-pays-every-yaz>

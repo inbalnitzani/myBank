@@ -23,7 +23,7 @@ public class File {
             valid = false;
             String curCategory = loan.getAbsCategory();
             for (String category:categories) {
-                if (category.equals(curCategory))
+                if (category.equalsIgnoreCase(curCategory))
                     valid = true;
             }
             if (valid == false) {
