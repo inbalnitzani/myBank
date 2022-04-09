@@ -1,4 +1,4 @@
 Manifest-Version: 1.0
 Main-Class: ui.Main
-Class-Path: lib/engine.jar
+Class-Path: engine_jar
 

@@ -1,10 +1,11 @@
 <component name="ArtifactManager">
-  <artifact name="engine:jar">
+  <artifact name="engine_jar">
     <output-path>$PROJECT_DIR$/out/artifacts/engine_jar</output-path>
     <root id="root">
       <element id="archive" name="engine.jar">
         <element id="module-output" name="engine" />
       </element>
+      <element id="file-copy" path="$MAVEN_REPOSITORY$/org/jetbrains/annotations/20.1.0/annotations-20.1.0.jar" />
     </root>
   </artifact>
 </component>
