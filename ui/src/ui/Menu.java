@@ -371,8 +371,6 @@ public class Menu {
                 printActiveLoanDetails(loan);
                 break;
             case FINISHED:
-                //printLenderDetail(loan);
-                //printMoneyPayed(loan);
                 printPayingTime(loan);
                 //break;
             case PENDING:
@@ -387,16 +385,18 @@ public class Menu {
     }
 
     public void printPaymentUnpaid(LoanDTO loan) {
-        List<PaymentDTO> unPaid = loan.getPayments().values().stream()
-                .filter(payment -> payment.getActualPaidTime() == 0).collect(Collectors.toList());
         Map<Integer, PaymentDTO> paymentDTOMap = loan.getPayments();
-        System.out.println("There are " + unPaid.size() + " unpaid payments. The unpaid payment times are: ");
-        for (int i = loan.getFirstPaymentTime(); i <= Global.worldTime; i += loan.getPace()) {
+        List<Integer> unPaidTimes=new ArrayList<>();
+        int firstTime=loan.getFirstPaymentTime(), pace=loan.getPace();
+        System.out.println("There are "+unPaidTimes.size()+" unpaid payments in times: ");
+        for (int i =firstTime ; i <= Global.worldTime; i += pace) {
             if (paymentDTOMap.get(i).getActualPaidTime() == 0)
-                System.out.print(i + ", ");
+                unPaidTimes.add(i);
         }
+        System.out.println(unPaidTimes);
         System.out.println("Total amount missing: "+(loan.getTotalMoneyForPayingBack()-loan.getAmountPaidBack()));
     }
+
     public void printPaymentPaid(LoanDTO loan) {
         List<PaymentDTO> paid = loan.getPayments().values().stream()
                 .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
