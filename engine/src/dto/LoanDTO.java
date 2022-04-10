@@ -16,7 +16,7 @@ public class LoanDTO {
     private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate, pace;
     private Status status;
-    private int totalYazTime, activeTime;
+    private int totalYazTime, activeTime, lastRiskTime;
     private List<PayBackDTO> payBacks;
     private Map<Integer, PaymentDTO> payments;
 
@@ -33,6 +33,7 @@ public class LoanDTO {
         this.totalYazTime = loan.getTotalYazTime();
         this.activeTime = loan.getActiveTime();
         this.amountPaidBack = loan.getAmountPaidBack();
+        this.lastRiskTime =loan.getLastRiskTime();
         setPayBacks(loan.getPayBacks());
         setPayments(loan.getPayments(), loan.getFirstPaymentTime(), loan.getLastPaymentTime());
     }
@@ -67,6 +68,10 @@ public class LoanDTO {
 
     public int getActiveTime() {
         return activeTime;
+    }
+
+    public int getLastRiskTime() {
+        return lastRiskTime;
     }
 
     public double getTotalMoneyForPayingBack() {

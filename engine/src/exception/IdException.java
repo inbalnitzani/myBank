@@ -11,4 +11,8 @@ public class IdException extends FileException{
         return "The loan's ID: " + ID +" appears more than once in the loans list";
     }
 
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> main

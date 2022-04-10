@@ -5,11 +5,9 @@ import loan.PayBack;
 public class PayBackDTO {
 
     private String giversName;
-    private double percentage;
     private double amountInvested;
 
     public PayBackDTO(PayBack payBack) {
-        percentage = payBack.getPercentage();
         giversName = payBack.getClientDTOGivers();
         amountInvested = payBack.getAmountInvested();
     }

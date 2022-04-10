@@ -3,11 +3,8 @@ package bank;
 import client.Client;
 import loan.Loan;
 import loan.LoanTerms;
-
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class MatchLoans implements Serializable {
     private Client client;
@@ -39,7 +36,8 @@ public class MatchLoans implements Serializable {
         this.matchingLoans = matchLoans;
 
     }
-        public int getAmountToInvest () {
-            return loanTerms.maxAmount;
-        }
+
+    public int getAmountToInvest() {
+        return loanTerms.maxAmount;
     }
+}

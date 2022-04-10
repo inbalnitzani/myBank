@@ -103,10 +103,10 @@ public class Menu {
 
     public void printMenu() {
         System.out.println("\nchoose a number");
-        System.out.println("1. read a file");
-        System.out.println("2. get loans information");
-        System.out.println("3. get clients information");
-        System.out.println("4. load money to account");
+        System.out.println("1. Read a file");
+        System.out.println("2. Get loans information");
+        System.out.println("3. Get clients information");
+        System.out.println("4. Load money to account");
         System.out.println("5. Withdraw money to account");
         System.out.println("6. Activate inlay");
         System.out.println("7. Promote timeline and make payments");
@@ -297,7 +297,7 @@ public class Menu {
         }
     }
 
-    public int chooseAmountByBalance(int currBalance) {
+    public int chooseAmountByBalance(double currBalance) {
         boolean validInput = false;
         int amount = 0;
         while (!validInput) {
@@ -386,13 +386,15 @@ public class Menu {
 
     public void printPaymentUnpaid(LoanDTO loan) {
         Map<Integer, PaymentDTO> paymentDTOMap = loan.getPayments();
+
         List<Integer> unPaidTimes=new ArrayList<>();
-        int firstTime=loan.getFirstPaymentTime(), pace=loan.getPace();
-        System.out.println("There are "+unPaidTimes.size()+" unpaid payments in times: ");
-        for (int i =firstTime ; i <= Global.worldTime; i += pace) {
-            if (paymentDTOMap.get(i).getActualPaidTime() == 0)
+        int lastRiskTime=loan.getLastRiskTime(), pace=loan.getPace();
+        for (int i =lastRiskTime ; i <= Global.worldTime; i += pace) {
+            if (paymentDTOMap.get(i).getActualPaidTime() == 0) {
                 unPaidTimes.add(i);
+            }
         }
+        System.out.println("There are "+unPaidTimes.size()+" unpaid payments in times: ");
         System.out.println(unPaidTimes);
         System.out.println("Total amount missing: "+(loan.getTotalMoneyForPayingBack()-loan.getAmountPaidBack()));
     }

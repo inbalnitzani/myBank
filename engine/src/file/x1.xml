@@ -7,9 +7,15 @@
 		<abs-category>Renovate</abs-category>
 	</abs-categories>
 	<abs-loans>
+<<<<<<< HEAD
+		<abs-loan id="build a R0oom">
+			<abs-owner>MEnash</abs-owner>
+			<abs-category>InvestmenT</abs-category>
+=======
 		<abs-loan id="stock market introduction">
 			<abs-owner>Menash</abs-owner>
 			<abs-category>InVestment</abs-category>
+>>>>>>> main
 			<abs-capital>2400</abs-capital>
 			<abs-total-yaz-time>12</abs-total-yaz-time>
 			<abs-pays-every-yaz>1</abs-pays-every-yaz>
@@ -25,7 +31,11 @@
 		</abs-loan>
 		<abs-loan id="Bar Mitzva !">
 			<abs-owner>Mosh</abs-owner>
+<<<<<<< HEAD
+			<abs-category>Happy Event                   </abs-category>
+=======
 			<abs-category>Happy EvEnt</abs-category>
+>>>>>>> main
 			<abs-capital>2500</abs-capital>
 			<abs-total-yaz-time>25</abs-total-yaz-time>
 			<abs-pays-every-yaz>5</abs-pays-every-yaz>

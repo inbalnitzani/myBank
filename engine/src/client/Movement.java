@@ -1,7 +1,4 @@
 package client;
-
-import dto.MovementDTO;
-
 import java.io.Serializable;
 
 public class Movement implements Serializable {

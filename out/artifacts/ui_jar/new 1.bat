@@ -1,1 +1,0 @@
-java -jar ui_jar.jar

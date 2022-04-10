@@ -15,7 +15,7 @@ public class Loan implements Serializable {
     private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate, pace;
     private Status status = Status.NEW;
-    private int totalYazTime, activeTime;
+    private int totalYazTime, activeTime, lastRiskTime;
     private List<PayBack> payBacks;
     private Map<Integer, Payment> payments;
 
@@ -30,14 +30,25 @@ public class Loan implements Serializable {
         this.totalYazTime = totalYazTime;
         this.pace = pace;
         this.amountPaidBack = 0;
+        this.lastRiskTime =0;
         payBacks = new ArrayList<PayBack>();
         payments = new HashMap<>();
+    }
+
+    public int getLastRiskTime() {
+        return lastRiskTime;
     }
 
     public int getActiveTime() {
         return activeTime;
     }
 
+    public void setRiskTime(){
+        if (status!=Status.RISK) {
+            lastRiskTime = Global.worldTime;
+            setStatus(Status.RISK);
+        }
+    }
     public Map<Integer, Payment> getPayments() {
         return payments;
     }

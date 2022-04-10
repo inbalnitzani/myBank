@@ -29,8 +29,8 @@ public class CustomerException extends FileException{
     @Override
     public String toString(){
         return "The loan " +'"'+ loan.getId()+'"' + " contains an owner that is not included in the list of customers:" + '\n' +
-        "The owner is" + loan.getAbsOwner() + '\n' +
-        "These are the names in our system:" + names;
+        "The owner is " + loan.getAbsOwner() + '\n' +
+        "These are the names in our system: " + names;
     }
 
 }

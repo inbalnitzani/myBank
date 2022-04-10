@@ -43,7 +43,11 @@ public class Bank implements Serializable, BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
+<<<<<<< HEAD
+    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+=======
     public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, IdException {
+>>>>>>> main
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
@@ -182,6 +186,9 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
+    public String stringConvertor(String str){
+        return str.trim().toLowerCase();
+    }
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         for (AbsLoan loan : loanList) {
@@ -255,13 +262,13 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void setInRisk(Loan loan, double totalAmount) {
-        loan.setStatus(Status.RISK);
-        int nextTimePay=loan.getPace() + Global.worldTime;
-        Map<Integer,Payment> paymentList=loan.getPayments();
+        loan.setRiskTime();
+        int nextTimePay = loan.getPace() + Global.worldTime;
+        Map<Integer, Payment> paymentList = loan.getPayments();
         if (paymentList.containsKey(nextTimePay))
             paymentList.get(nextTimePay).addToAmount(totalAmount);
         else {
-            paymentList.put(nextTimePay,new Payment(loan.getLoansID(),(totalAmount/(1+(loan.getInterestRate())/100.0)),loan.getInterestRate()/100.0));
+            paymentList.put(nextTimePay, new Payment(loan.getLoansID(), (totalAmount / (1 + (loan.getInterestRate()) / 100.0)), loan.getInterestRate() / 100.0));
         }
     }
 

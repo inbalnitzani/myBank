@@ -2,7 +2,6 @@ package dto;
 
 import client.Client;
 import loan.Loan;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
