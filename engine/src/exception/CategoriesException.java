@@ -15,17 +15,7 @@ public class CategoriesException extends FileException{
             }
             this.loan = loan;
         }
-        /*
-        public String getLoansID(){
-            return loan.getLoansID();
-        }
-        public String getLoansCategory(){
-            return loan.getCategory();
-        }
-        public List<String> getCategories(){
-            return categories;
-        }
-         */
+
         @Override
         public String toString() {
 

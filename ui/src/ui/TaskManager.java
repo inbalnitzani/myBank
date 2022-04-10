@@ -105,7 +105,7 @@ public class TaskManager {
             System.out.println("Please insert a full path name of your XML");
             fileName = menu.getFileNameFromUser();
             try {
-                succeed = bank.getXMLFile(fileName);
+                succeed = bank.getXMLFile(fileName.trim());
             } catch (FileException e) {
                 System.out.println(e);
             } catch (JAXBException | FileNotFoundException e) {
@@ -125,13 +125,18 @@ public class TaskManager {
 
     public void startOfInlay() {
         String clientName = getClientNameForAction();
-        LoanTerms currentLoanTerms = new LoanTerms();
-        getLoanProperties(currentLoanTerms, bank.getCurrBalance(clientName));
-        List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoanTerms);
-        loans = menu.chooseLoansToInvest(loans);
-        if (!loans.isEmpty()) {
-            int amountLeft = bank.startInlayProcess(loans, clientName);
-            menu.updateUserInvest(currentLoanTerms.getMaxAmount(), amountLeft);
+        double balance = bank.getCurrBalance(clientName);
+        if (balance == 0)
+            System.out.println(clientName + " has no money! can't invest..");
+        else {
+            LoanTerms currentLoanTerms = new LoanTerms();
+            getLoanProperties(currentLoanTerms, balance);
+            List<LoanDTO> loans = bank.findMatchLoans(clientName, currentLoanTerms);
+            loans = menu.chooseLoansToInvest(loans);
+            if (loans!=null) {
+                int amountLeft = bank.startInlayProcess(loans, clientName);
+                menu.updateUserInvest(currentLoanTerms.getMaxAmount(), amountLeft);
+            }
         }
     }
 
@@ -145,7 +150,7 @@ public class TaskManager {
         }
     }
 
-    public void getLoanProperties(LoanTerms loanTerms, int clientBalance) {
+    public void getLoanProperties(LoanTerms loanTerms, double clientBalance) {
         System.out.println("Please enter the amount you want to invest.");
         System.out.println("Pay attention - you can't invest more than " + clientBalance + ".");
         loanTerms.setMaxAmount(menu.chooseAmountByBalance(clientBalance));
@@ -159,15 +164,22 @@ public class TaskManager {
         System.out.println("Enter the amount you want to charge your account");
         int amountToCharge = menu.scanAmountFromUser();
         bank.loadMoney(clientName, amountToCharge);
+        System.out.println(amountToCharge+" NIS were added to "+clientName+"'s account successfully");
     }
 
     public void withdrawMoney() {
         String clientName = getClientNameForAction();
         int maxAmountToWithdraw = bank.getCurrBalance(clientName);
-        System.out.println("Enter the amount you want to withdraw from your account.");
-        System.out.println("Pay attention - can't withdraw more than " + maxAmountToWithdraw+".");
-        int amountToWithdraw = menu.chooseAmountByBalance(maxAmountToWithdraw);
-        bank.withdrawMoneyFromAccount(clientName, amountToWithdraw);
+        if(maxAmountToWithdraw==0)
+            System.out.println(clientName+" has no money! Can't withdraw!");
+        else {
+            System.out.println("Enter the amount you want to withdraw from your account.");
+            System.out.println("Pay attention - can't withdraw more than " + maxAmountToWithdraw + ".");
+            int amountToWithdraw = menu.chooseAmountByBalance(maxAmountToWithdraw);
+            bank.withdrawMoneyFromAccount(clientName, amountToWithdraw);
+            System.out.println(amountToWithdraw + " NIS were withdraw from " + clientName + "'s account successfully");
+        }
+
     }
 
     public String getClientNameForAction() {

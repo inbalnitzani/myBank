@@ -13,24 +13,26 @@ import java.util.List;
 public interface BankInterface {
 
      int getWorldTime();
-     List<ClientDTO> getClients() ;
+
+     List<ClientDTO> getClients();
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) ;
+     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw);
 
      List<LoanDTO> getAllLoans();
 
-     void loadMoney(String clientName, int amountToLoad) ;
+     void loadMoney(String clientName, int amountToLoad);
 
      int getCurrBalance(String clientName);
 
      List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 
-     int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) ;
+     int startInlayProcess(List<LoanDTO> loansToInvest, String clientName);
 
      void saveStateToFile(String fileName) throws IOException;
 
-     boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException;
+     boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException;
+
      void startMoneyTransfers();
 }

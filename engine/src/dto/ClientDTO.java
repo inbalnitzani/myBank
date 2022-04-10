@@ -1,7 +1,5 @@
 package dto;
-
 import client.Client;
-import loan.Loan;
 import client.Movement;
 
 import java.util.*;
@@ -16,8 +14,8 @@ public class ClientDTO {
     public ClientDTO(Client client) {
         this.fullName = client.getFullName();
         this.currBalance = client.getCurrBalance();
-        this.asBorrower = createLoanDTOList(client.getLoanListAsBorrower());
-        this.asLender = createLoanDTOList(client.getLoanListAsGiver());
+        this.asBorrower = new ConvertDTO().createListLoanDto(client.getLoanListAsBorrower());
+        this.asLender = new ConvertDTO().createListLoanDto(client.getLoanListAsGiver());
         setMovements(client.getMovements());
     }
 
@@ -38,14 +36,6 @@ public class ClientDTO {
             time = movement.getExecuteTime();
         }
         this.movements.put(time, movementDTOS);
-    }
-
-    private List<LoanDTO> createLoanDTOList(List<Loan> loans) {
-        List<LoanDTO> loanDTOS = new ArrayList<LoanDTO>();
-        for (Loan loan : loans) {
-            loanDTOS.add(new LoanDTO(loan));
-        }
-        return loanDTOS;
     }
 
     public String getFullName() {

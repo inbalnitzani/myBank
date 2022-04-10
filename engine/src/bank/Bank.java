@@ -43,7 +43,7 @@ public class Bank implements Serializable, BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
-    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException {
+    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
@@ -167,24 +167,27 @@ public class Bank implements Serializable, BankInterface {
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
         for (String category : categories) {
-            this.categories.add(category);
+            this.categories.add(stringConvertor(category));
         }
     }
 
     public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
         for (AbsCustomer customer : customerList) {
-            Client newClient = new Client(customer.getName(), customer.getAbsBalance());
-            this.clients.put(customer.getName(), newClient);
+            Client newClient = new Client(stringConvertor(customer.getName()), customer.getAbsBalance());
+            this.clients.put(stringConvertor(customer.getName()), newClient);
         }
     }
 
+    public String stringConvertor(String str){
+        return str.trim().toLowerCase();
+    }
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         for (AbsLoan loan : loanList) {
-            String owner=loan.getAbsOwner();
-            String id = loan.getId();
-            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), loan.getAbsCategory(), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
+            String owner=stringConvertor(loan.getAbsOwner());
+            String id = stringConvertor(loan.getId());
+            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
             clients.get(owner).addLoanToBorrowerList(newLoan);
         }
@@ -252,13 +255,13 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void setInRisk(Loan loan, double totalAmount) {
-        loan.setStatus(Status.RISK);
-        int nextTimePay=loan.getPace() + Global.worldTime;
-        Map<Integer,Payment> paymentList=loan.getPayments();
+        loan.setRiskTime();
+        int nextTimePay = loan.getPace() + Global.worldTime;
+        Map<Integer, Payment> paymentList = loan.getPayments();
         if (paymentList.containsKey(nextTimePay))
             paymentList.get(nextTimePay).addToAmount(totalAmount);
         else {
-            paymentList.put(nextTimePay,new Payment(loan.getLoansID(),(totalAmount/(1+(loan.getInterestRate())/100.0)),loan.getInterestRate()/100.0));
+            paymentList.put(nextTimePay, new Payment(loan.getLoansID(), (totalAmount / (1 + (loan.getInterestRate()) / 100.0)), loan.getInterestRate() / 100.0));
         }
     }
 

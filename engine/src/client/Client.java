@@ -2,7 +2,6 @@ package client;
 
 import bank.Global;
 import loan.Loan;
-
 import java.io.Serializable;
 import java.util.*;
 
