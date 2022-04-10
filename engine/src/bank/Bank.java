@@ -43,7 +43,11 @@ public class Bank implements Serializable, BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
+<<<<<<< HEAD
     public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+=======
+    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, IdException {
+>>>>>>> main
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
@@ -147,6 +151,9 @@ public class Bank implements Serializable, BankInterface {
         JAXBContext jc = JAXBContext.newInstance("schema");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
+    }
+    public String stringConvertor(String str){
+        return str.trim().toLowerCase();
     }
 
     public List<LoanDTO> getAllLoans() {

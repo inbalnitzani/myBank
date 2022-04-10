@@ -1,5 +1,6 @@
 package file;
 import exception.*;
+import loan.Loan;
 import schema.AbsCustomer;
 import schema.AbsLoan;
 
@@ -7,11 +8,16 @@ import java.util.*;
 
 public class File {
 
+<<<<<<< HEAD
     public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+=======
+    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, IdException {
+>>>>>>> main
         isXmlFile(fileName);
         checkCategories(categories,loans);
         checkCustomer(clients,loans);
         checkNames(clients);
+<<<<<<< HEAD
         checkTime(loans);
         checkNumbers(loans,clients);
         checkInterest(loans);
@@ -35,7 +41,30 @@ public class File {
                 throw new NegativeLoanCapitalException(loan.getId(), loan.getAbsCapital());
             }
         }
+=======
+        checkPace(loans);
+        checkID(loans);
+
+>>>>>>> main
     }
+    public void checkID(Collection<AbsLoan> loans) throws IdException {
+        List<String> IDs = new ArrayList<>();
+        for (AbsLoan loan : loans) {
+            IDs.add(loan.getId().trim());
+        }
+        for (AbsLoan loan:loans) {
+            int counter = 0;
+            String curID = loan.getId();
+            for (String id:IDs) {
+                if (id.equalsIgnoreCase(curID.trim()))
+                    counter++;
+            }
+            if (counter >1)
+                throw new IdException(curID);
+        }
+    }
+
+
     public void checkCategories(Collection<String> categories,Collection<AbsLoan> loans) throws CategoriesException {
        boolean valid;
         for (AbsLoan loan:loans) {
@@ -64,6 +93,7 @@ public class File {
             }
             if (counter >1)
                 throw new NamesException(curName);
+<<<<<<< HEAD
         }
     }
     public void checkID(Collection<AbsLoan> loans) throws IdException {
@@ -80,6 +110,8 @@ public class File {
             }
             if (counter >1)
                 throw new IdException(curID);
+=======
+>>>>>>> main
         }
     }
     public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
