@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Bank.iml" filepath="$PROJECT_DIR$/Bank.iml" />
       <module fileurl="file://$PROJECT_DIR$/engine/engine.iml" filepath="$PROJECT_DIR$/engine/engine.iml" />
+      <module fileurl="file://$PROJECT_DIR$/javafx/javafx.iml" filepath="$PROJECT_DIR$/javafx/javafx.iml" />
       <module fileurl="file://$PROJECT_DIR$/ui/ui.iml" filepath="$PROJECT_DIR$/ui/ui.iml" />
     </modules>
   </component>
