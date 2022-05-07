@@ -32,11 +32,7 @@ public interface BankInterface {
 
      void saveStateToFile(String fileName) throws IOException;
 
-<<<<<<< HEAD
      boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException;
 
-=======
-     boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, IdException;
->>>>>>> main
      void startMoneyTransfers();
 }
