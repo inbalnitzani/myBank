@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+
+
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ComboBox fx:id="user" prefWidth="150.0" promptText="Choose User" />
+      <Label fx:id="file" prefHeight="17.0" prefWidth="251.0" text="File included" />
+      <TextField fx:id="yaz" prefHeight="25.0" prefWidth="201.0" promptText="yaz" />
+   </children>
+</HBox>
