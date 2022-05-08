@@ -18,6 +18,7 @@ import javax.xml.bind.Binder;
 import javax.xml.bind.JAXBException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 
 public class headerController {
 
@@ -30,11 +31,14 @@ public class headerController {
     private SimpleIntegerProperty currYaz;
     private AppController mainController;
 
-    @FXML void chooseUserAction(ActionEvent event) {    }
-
     public headerController() {
         fileInSystem = new SimpleBooleanProperty(false);
         currYaz = new SimpleIntegerProperty();
+    }
+
+    @FXML
+    void chooseUser(ActionEvent event) throws IOException {
+        mainController.checkBodyToShow(userOptions.getValue());
     }
 
     public void setMainController(AppController mainController) {
