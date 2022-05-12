@@ -96,7 +96,7 @@ public class bodyAdmin {
         layout.setContent(data);
         Scene scene = new Scene(data,500,100);
         popUpWindow.setScene(scene);
-        popUpWindow.show();
+        popUpWindow.show();//
     }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         for (int i = 0; i > loanDTO.getPayBacks().size(); i++) {
