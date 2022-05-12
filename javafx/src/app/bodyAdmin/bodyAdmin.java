@@ -96,7 +96,7 @@ public class bodyAdmin {
         layout.setContent(data);
         Scene scene = new Scene(data,500,100);
         popUpWindow.setScene(scene);
-        popUpWindow.show();//
+        popUpWindow.show();
     }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         for (int i = 0; i > loanDTO.getPayBacks().size(); i++) {
@@ -104,10 +104,6 @@ public class bodyAdmin {
             Label label = new Label(payBackDTO.getGiversName() + payBackDTO.getAmountInvested());
             data.getChildren().add(label);
         }
-<<<<<<< HEAD
-        Label label=new Label("Total amount collected: "+loanDTO.getAmountCollected());
-        Label label1=new Label("Total left to become ACTIVE: "+(loanDTO.getCapital()-loanDTO.getAmountCollected()));
-=======
         return data;
     }
     public VBox addActiveData(VBox data,LoanDTO loan) {
@@ -139,7 +135,6 @@ public class bodyAdmin {
         loan.calculateInfo();
         Label label=new Label("Total fund paid:"+loan.getFundPaid()+" -- Total interest paid:"+loan.getInterestPaid());
         Label label1=new Label("Total fund left to pay:"+loan.getFundLeftToPay()+" -- Total interest left to pay:"+loan.getInterestLeftToPay());
->>>>>>> 69926b1b3655a88fa00ce0725f30e82ad029a196
         data.getChildren().addAll(label,label1);
         return data;
     }
