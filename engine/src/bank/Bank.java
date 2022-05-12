@@ -187,6 +187,7 @@ public class Bank implements Serializable, BankInterface {
     public String stringConvertor(String str){
         return str.trim().toLowerCase();
     }
+
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         if (!this.waitingLoans.isEmpty()){
