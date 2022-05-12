@@ -2,8 +2,8 @@
 
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="mainComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.main.AppController">
+<BorderPane fx:id="mainComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.main.AppController">
    <top>
-      <fx:include fx:id="headerComponent" source="../header/header.fxml" />
+      <fx:include fx:id="headerComponent" maxHeight="20.0" source="../header/header.fxml" />
    </top>
 </BorderPane>
