@@ -3,6 +3,7 @@ package app.bodyAdmin;
 import app.main.AppController;
 import dto.LoanDTO;
 import dto.PayBackDTO;
+import dto.PaymentDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,9 @@ import javafx.stage.Stage;
 import loan.PayBack;
 
 import java.io.File;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class bodyAdmin {
 
@@ -67,19 +71,23 @@ public class bodyAdmin {
         loans.setItems(loansData);
     }
 
-    public void popup(LoanDTO loanDTO){
+    public void popup(LoanDTO loan){
         Stage popUpWindow = new Stage();
-        popUpWindow.setTitle(loanDTO.getLoansID());
+        popUpWindow.setTitle(loan.getLoansID());
         Button button = new Button("Close");
         button.setOnAction(error -> popUpWindow.close());
 
         VBox data=new VBox(5);
 
-        switch (loanDTO.getStatus()) {
+        switch (loan.getStatus()) {
             case PENDING:
-                data=addPendingData(data,loanDTO);
+                data=addPendingData(data,loan);
                 break;
             case ACTIVE:
+                data=addPayBacksData(data,loan);
+                data=addActiveData(data,loan);
+                data=addPaymentData(data,loan);
+                break;
         }
 
         data.setAlignment(Pos.CENTER_LEFT);
@@ -90,16 +98,43 @@ public class bodyAdmin {
         popUpWindow.setScene(scene);
         popUpWindow.show();
     }
-
-    public VBox addPendingData(VBox data,LoanDTO loanDTO){
-
+    public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         for (int i = 0; i > loanDTO.getPayBacks().size(); i++) {
             PayBackDTO payBackDTO = loanDTO.getPayBacks().get(i);
             Label label = new Label(payBackDTO.getGiversName() + payBackDTO.getAmountInvested());
             data.getChildren().add(label);
         }
-        Label label=new Label("Total amount collected: "+loanDTO.getAmountCollected());
-        Label label1=new Label("Total left to become ACTIVE: "+(loanDTO.getCapital()-loanDTO.getAmountCollected());
+        return data;
+    }
+    public VBox addActiveData(VBox data,LoanDTO loan) {
+        addPayBacksData(data, loan);
+        data = addActiveTimeData(data, loan);
+        return data;
+    }
+    public VBox addActiveTimeData(VBox data,LoanDTO loan){
+        Label label=new Label("Active time is: "+loan.getActiveTime());
+        Label label1=new Label("Next payment time: "+loan.getNextPaymentTime());
+        return data;
+    }
+    public VBox addPendingData(VBox data,LoanDTO loan){
+        data=addPayBacksData(data,loan);
+        Label label=new Label("Total amount collected: "+loan.getAmountCollected());
+        Label label1=new Label("Total left to become ACTIVE: "+(loan.getCapital()-loan.getAmountCollected()));
+        data.getChildren().addAll(label,label1);
+        return data;
+    }
+    public VBox addPaymentData(VBox data,LoanDTO loan){
+        int index=1;
+        for (PaymentDTO paymentDTO:loan.getPayments().values()){
+            Label label=new Label("Payment "+index+" -- Paying time:"+paymentDTO.getActualPaidTime()+
+                    " -- Fund:"+paymentDTO.getAmount()+" -- Interest:"+paymentDTO.getInterestPart()+
+                    " -- Total:"+(paymentDTO.getInterestPart()+paymentDTO.getAmount()));
+            data.getChildren().add(label);
+        }
+
+        loan.calculateInfo();
+        Label label=new Label("Total fund paid:"+loan.getFundPaid()+" -- Total interest paid:"+loan.getInterestPaid());
+        Label label1=new Label("Total fund left to pay:"+loan.getFundLeftToPay()+" -- Total interest left to pay:"+loan.getInterestLeftToPay());
         data.getChildren().addAll(label,label1);
         return data;
     }
