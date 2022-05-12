@@ -1,11 +1,10 @@
 package app.bodyUser;
 
-import app.bodyInterface;
 import app.main.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class bodyUser implements bodyInterface {
+public class bodyUser {
 
     @FXML private Label body;
     private AppController mainController;

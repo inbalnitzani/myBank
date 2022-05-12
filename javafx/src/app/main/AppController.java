@@ -1,6 +1,5 @@
 package app.main;
 import app.bodyAdmin.bodyAdmin;
-import app.bodyInterface;
 import app.bodyUser.bodyUser;
 import app.header.headerController;
 import bank.Bank;
@@ -25,12 +24,11 @@ public class AppController {
     private static final String BODY_ADMIN_PATH="../bodyAdmin/bodyAdmin.fxml";
     @FXML private headerController headerComponentController;
     @FXML private Parent headerComponent;
-
-    private bodyInterface bodyComponentController;
-    private Parent bodyComponent;
-
     @FXML private BorderPane mainComponent;
-
+    private bodyAdmin bodyAdminController;
+    private bodyUser bodyUserController;
+    private Parent adminComponentRoot;
+    private Parent userComponentRoot;
     private BankInterface myBank;
     private SimpleBooleanProperty fileInSystem;
 
@@ -39,37 +37,41 @@ public class AppController {
         fileInSystem = new SimpleBooleanProperty(false);
     }
 
-    @FXML
-    public void initialize() {
+    @FXML public void initialize() throws IOException {
         if (headerComponentController != null) {
             headerComponentController.setMainController(this);
         }
+        loadAdmin();
+        loadUser();
     }
-
+    public void loadAdmin() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource(BODY_ADMIN_PATH);
+        fxmlLoader.setLocation(url);
+        adminComponentRoot = fxmlLoader.load(url.openStream());
+        bodyAdminController=fxmlLoader.getController();
+    }
+    public void loadUser() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource(BODY_USER_PATH);
+        fxmlLoader.setLocation(url);
+        userComponentRoot = fxmlLoader.load(url.openStream());
+        bodyUserController=fxmlLoader.getController();
+    }
     public void checkBodyToShow(String user) throws IOException {
         if (user.equals("No clients in system - no file.")) {
             mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
         } else {
-            URL url;
             if (user.equals("Admin")) {
-                bodyComponentController = new bodyAdmin();
-                url = getClass().getResource(BODY_ADMIN_PATH);
+                mainComponent.setCenter(adminComponentRoot);
             } else {
-                bodyComponentController = new bodyUser();
-                url = getClass().getResource(BODY_USER_PATH);
+                mainComponent.setCenter(userComponentRoot);
             }
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            //  mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
-            fxmlLoader.setLocation(url);
-            Parent root = fxmlLoader.load(url.openStream());
-            mainComponent.setCenter(root);
         }
     }
-
     public Collection<ClientDTO> getClients() {
         return myBank.getClients();
     }
-
     public void getFile(String path) throws CustomerException, NegativeTimeException, JAXBException, FileNotFoundException, NamesException, NegativeLoanCapitalException, PaceException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
         if (!myBank.getXMLFile(path)) {
             //add exception !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

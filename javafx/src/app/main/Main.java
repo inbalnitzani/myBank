@@ -14,8 +14,7 @@ public class Main extends Application {
         launch(args);
     }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
+    @Override public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Bank");
         FXMLLoader fxmlLoader=new FXMLLoader();
         URL url=getClass().getResource("mainController.fxml");
