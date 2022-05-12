@@ -15,7 +15,7 @@
                   <Font size="16.0" />
                </font>
             </Button>
-            <Button fx:id="increaseYaz" mnemonicParsing="false" prefHeight="37.0" prefWidth="234.0" text="Increase Yaz">
+            <Button fx:id="increaseYaz" mnemonicParsing="false" onAction="#increaseYaz" prefHeight="37.0" prefWidth="234.0" text="Increase Yaz">
                <font>
                   <Font size="16.0" />
                </font>

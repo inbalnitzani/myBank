@@ -22,7 +22,7 @@ public class Bank implements Serializable, BankInterface {
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
-    private int time;
+    private int time=1;
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -235,7 +235,9 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
-    public void startMoneyTransfers() {
+    public void promoteTime() {
+        Global.changeWorldTimeByOne();
+        time++;
         TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
         while (!payments.isEmpty()) {
             int currKey = payments.firstKey();

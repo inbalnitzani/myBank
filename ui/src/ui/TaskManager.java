@@ -83,9 +83,8 @@ public class TaskManager {
 
     public void promoteTimeline() {
         System.out.println("Yaz time was changed from: " + Global.worldTime);
-        Global.changeWorldTimeByOne();
+        bank.promoteTime();
         System.out.println("To: " + Global.worldTime);
-        bank.startMoneyTransfers();
     }
 
     public void getBankData() {
