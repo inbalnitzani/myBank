@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="mainComponent" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="-Infinity" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.main.AppController">
-   <top>
-      <fx:include fx:id="headerComponent" maxHeight="20.0" source="../header/header.fxml" />
-   </top>
-</BorderPane>
+
+<ScrollPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.main.AppController">
+   <content>
+      <BorderPane fx:id="mainComponent" minHeight="-Infinity">
+         <top>
+            <fx:include fx:id="headerComponent" source="../header/header.fxml" />
+         </top>
+      </BorderPane>
+   </content>
+</ScrollPane>
+

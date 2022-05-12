@@ -5,12 +5,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<<<<<<< HEAD
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="70.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.header.headerController">
+=======
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.header.headerController">
+>>>>>>> aaee7f6cf3db300a4ce3e753e77d6128789f5a14
    <children>
       <VBox prefHeight="400.0" prefWidth="71.0">
          <children>
             <Label text="View By" textFill="#ab2525" />
+<<<<<<< HEAD
             <ComboBox fx:id="userOptions" minWidth="120.0" onAction="#chooseUser" prefWidth="150.0" promptText="Choose User" />
+=======
+            <ComboBox fx:id="userOptions" onAction="#chooseUser" prefHeight="27.0" prefWidth="102.0" promptText="Choose User" />
+>>>>>>> aaee7f6cf3db300a4ce3e753e77d6128789f5a14
          </children>
       </VBox>
       <Label fx:id="file" prefHeight="17.0" prefWidth="358.0" text="File included" />
