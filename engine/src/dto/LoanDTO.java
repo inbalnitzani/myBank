@@ -19,7 +19,7 @@ public class LoanDTO {
     private int totalYazTime, activeTime, lastRiskTime;
     private List<PayBackDTO> payBacks;
     private Map<Integer, PaymentDTO> payments;
-
+private String MoreInfo="hi";
     //CTOR
     public LoanDTO(Loan loan) {
         this.id = loan.getLoansID();
@@ -64,6 +64,14 @@ public class LoanDTO {
     //GETTERS
     public Map<Integer, PaymentDTO> getPayments() {
         return payments;
+    }
+
+    public int getCapital() {
+        return capital;
+    }
+
+    public String getId() {
+        return id;
     }
 
     public int getActiveTime() {
@@ -151,6 +159,10 @@ public class LoanDTO {
 
     public String getOwner() {
         return owner;
+    }
+
+    public String getInfo() {
+        return "More Info";
     }
 }
 

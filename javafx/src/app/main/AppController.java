@@ -5,6 +5,7 @@ import app.header.headerController;
 import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
+import dto.LoanDTO;
 import exception.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -26,18 +27,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.List;
 
 import static app.constParameters.BODY_ADMIN_PATH;
 import static app.constParameters.BODY_USER_PATH;
 
 public class AppController {
 
-    @FXML
-    private headerController headerComponentController;
-    @FXML
-    private Parent headerComponent;
-    @FXML
-    private BorderPane mainComponent;
+    @FXML private headerController headerComponentController;
+    @FXML private Parent headerComponent;
+    @FXML private BorderPane mainComponent;
     private bodyAdmin bodyAdminController;
     private bodyUser bodyUserController;
     private Parent adminComponentRoot;
@@ -46,12 +45,6 @@ public class AppController {
     private SimpleBooleanProperty fileInSystem;
     private SimpleIntegerProperty time;
 
-    public AppController() {
-        myBank = new Bank();
-        fileInSystem = new SimpleBooleanProperty(false);
-        time = new SimpleIntegerProperty();
-    }
-
     @FXML
     public void initialize() throws IOException {
         if (headerComponentController != null) {
@@ -59,6 +52,12 @@ public class AppController {
         }
         loadAdmin();
         loadUser();
+    }
+
+    public AppController() {
+        myBank = new Bank();
+        fileInSystem = new SimpleBooleanProperty(false);
+        time = new SimpleIntegerProperty();
     }
 
     public void loadAdmin() throws IOException {
@@ -86,12 +85,14 @@ public class AppController {
             } else {
                 if (user.equals("Admin")) {
                     mainComponent.setCenter(adminComponentRoot);
+                    bodyAdminController.showData();
                 } else {
                     mainComponent.setCenter(userComponentRoot);
                 }
             }
         }
     }
+
     public Collection<ClientDTO> getClients() {
         return myBank.getClients();
     }
@@ -111,25 +112,21 @@ public class AppController {
 
     public void showError(Exception e){
         Stage popUpWindow = new Stage();
-     //   popUpWindow.initModality(Modality.APPLICATION_MODAL);
-        Button button1 = new Button("Close");
+        Button button = new Button("Close");
         popUpWindow.setTitle("Error - opening file");
-        button1.setOnAction(error -> popUpWindow.close());
+        button.setOnAction(error -> popUpWindow.close());
         Label label = new Label();
-        label.setText(e.getMessage());
-        VBox vbox = new VBox(20);
+        label.setText(e.toString());
+        VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(label, button1);
-
-        //ScrollPane layout = new ScrollPane();
-        Scene scene = new Scene(vbox,500,500);
+        vbox.getChildren().addAll(label, button);
+        ScrollPane layout = new ScrollPane();
+        layout.setContent(vbox);
+        Scene scene = new Scene(vbox,500,100);
         popUpWindow.setScene(scene);
         popUpWindow.show();
-
-
-//        layout.setContent(vbox);
-
     }
+
     public void getFile(String path) {
         try {
             myBank.getXMLFile(path);
@@ -142,5 +139,7 @@ public class AppController {
             showError(err);
         }
     }
+
+    public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
 
 }
