@@ -5,7 +5,7 @@ import app.main.AppController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class bodyController implements bodyInterface {
+public class bodyUser implements bodyInterface {
 
     @FXML private Label body;
     private AppController mainController;
