@@ -99,7 +99,7 @@ public class bodyAdmin {
             data.getChildren().add(label);
         }
         Label label=new Label("Total amount collected: "+loanDTO.getAmountCollected());
-        Label label1=new Label("Total left to become ACTIVE: "+(loanDTO.getCapital()-loanDTO.getAmountCollected());
+        Label label1=new Label("Total left to become ACTIVE: "+(loanDTO.getCapital()-loanDTO.getAmountCollected()));
         data.getChildren().addAll(label,label1);
         return data;
     }
