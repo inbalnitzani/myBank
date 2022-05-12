@@ -22,6 +22,7 @@ import java.io.IOException;
 
 public class headerController {
 
+    private static final String ADMIN  = "Admin";
     @FXML private ComboBox<String> userOptions;
     @FXML private Label file;
     @FXML private Button button;
@@ -31,27 +32,16 @@ public class headerController {
     private SimpleIntegerProperty currYaz;
     private AppController mainController;
 
-    public headerController() {
-        fileInSystem = new SimpleBooleanProperty(false);
-        currYaz = new SimpleIntegerProperty();
+    @FXML public void initialize() {
+        yaz.textProperty().bind(currYaz.asString());
+        initUserOptions();
     }
 
-    @FXML
-    void chooseUser(ActionEvent event) throws IOException {
+    @FXML void chooseUser(ActionEvent event) throws IOException {
         mainController.checkBodyToShow(userOptions.getValue());
     }
 
-    public void setMainController(AppController mainController) {
-        this.mainController = mainController;
-    }
-
-    @FXML public void initialize() {
-        yaz.textProperty().bind(currYaz.asString());
-        userOptions.getItems().add("Admin");
-        userOptions.getItems().add("No clients in system - no file.");
-    }
-
-    @FXML void onActionButton(ActionEvent event) throws CustomerException, NegativeTimeException, JAXBException, FileNotFoundException, NamesException, NegativeLoanCapitalException, PaceException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
+    @FXML void uploadFile(ActionEvent event) throws CustomerException, NegativeTimeException, JAXBException, FileNotFoundException, NamesException, NegativeLoanCapitalException, PaceException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
         File selectedFile = fileChooser.showOpenDialog(null);
@@ -63,14 +53,28 @@ public class headerController {
         mainController.getFile(path);
         fileInSystem.setValue(true);
         setUsers();
-        button.setText(userOptions.getValue());
+    }
+
+    public void initUserOptions(){
+        userOptions.getItems().add("Admin");
+        userOptions.getItems().add("No clients in system - no file.");
+    }
+
+    public headerController() {
+        fileInSystem = new SimpleBooleanProperty(false);
+        currYaz = new SimpleIntegerProperty();
+    }
+
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
     }
 
     public void setUsers() {
         if (fileInSystem.getValue()) {
+            userOptions.getItems().clear();
+            userOptions.getItems().add(ADMIN);
             for (ClientDTO clientDTO : mainController.getClients())
                 userOptions.getItems().add(clientDTO.getFullName());
-            userOptions.getItems().remove("No clients in system - no file.");
         }
     }
 }

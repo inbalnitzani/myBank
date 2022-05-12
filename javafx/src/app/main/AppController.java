@@ -1,19 +1,17 @@
 package app.main;
 import app.bodyAdmin.bodyAdmin;
 import app.bodyInterface;
-import app.bodyUser.bodyController;
+import app.bodyUser.bodyUser;
 import app.header.headerController;
 import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import exception.*;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
@@ -23,6 +21,8 @@ import java.util.Collection;
 
 public class AppController {
 
+    private static final String BODY_USER_PATH="../bodyUser/bodyUser.fxml";
+    private static final String BODY_ADMIN_PATH="../bodyAdmin/bodyAdmin.fxml";
     @FXML private headerController headerComponentController;
     @FXML private Parent headerComponent;
 
@@ -47,20 +47,22 @@ public class AppController {
     }
 
     public void checkBodyToShow(String user) throws IOException {
-        if(user.equals("Admin")) {
-            bodyComponentController = new bodyAdmin();
-
+        if (user.equals("No clients in system - no file.")) {
+            mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
+        } else {
+            URL url;
+            if (user.equals("Admin")) {
+                bodyComponentController = new bodyAdmin();
+                url = getClass().getResource(BODY_ADMIN_PATH);
+            } else {
+                bodyComponentController = new bodyUser();
+                url = getClass().getResource(BODY_USER_PATH);
+            }
             FXMLLoader fxmlLoader = new FXMLLoader();
-            mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
-
-            URL url=getClass().getResource("../bodyAdmin/bodyAdmin.fxml");
+            //  mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
             fxmlLoader.setLocation(url);
-            Parent root=fxmlLoader.load(url.openStream());
+            Parent root = fxmlLoader.load(url.openStream());
             mainComponent.setCenter(root);
-
-        } else{
-            mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
-
         }
     }
 

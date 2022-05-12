@@ -166,6 +166,8 @@ public class Bank implements Serializable, BankInterface {
 
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
+        if(!this.categories.isEmpty())
+            this.categories.clear();
         for (String category : categories) {
             this.categories.add(stringConvertor(category));
         }
@@ -173,6 +175,9 @@ public class Bank implements Serializable, BankInterface {
 
     public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
+        if(!this.clients.isEmpty()){
+            this.clients.clear();
+        }
         for (AbsCustomer customer : customerList) {
             Client newClient = new Client(stringConvertor(customer.getName()), customer.getAbsBalance());
             this.clients.put(stringConvertor(customer.getName()), newClient);
@@ -184,6 +189,10 @@ public class Bank implements Serializable, BankInterface {
     }
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
+        if (!this.waitingLoans.isEmpty()){
+            this.waitingLoans.clear();
+            this.activeLoans.clear();
+        }
         for (AbsLoan loan : loanList) {
             String owner=stringConvertor(loan.getAbsOwner());
             String id = stringConvertor(loan.getId());
