@@ -6,7 +6,9 @@ import loan.Payment;
 import loan.Status;
 import bank.Global;
 
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class LoanDTO {
     //DATA MEMBERS
@@ -19,7 +21,10 @@ public class LoanDTO {
     private int totalYazTime, activeTime, lastRiskTime;
     private List<PayBackDTO> payBacks;
     private Map<Integer, PaymentDTO> payments;
-private String MoreInfo="hi";
+private double interestLeftToPay;
+private double fundLeftToPay;
+private double fundPaid;
+private double interestPaid;
     //CTOR
     public LoanDTO(Loan loan) {
         this.id = loan.getLoansID();
@@ -135,6 +140,44 @@ private String MoreInfo="hi";
 
     public int getAmountPaidBack() {
         return this.amountPaidBack;
+    }
+
+    public int getAmountCollectedPending() {
+        return amountCollectedPending;
+    }
+
+    public double getFundLeftToPay() {
+        return fundLeftToPay;
+    }
+
+    public double getFundPaid() {
+        return fundPaid;
+    }
+
+    public double getInterestLeftToPay() {
+        return interestLeftToPay;
+    }
+
+    public double getInterestPaid() {
+        return interestPaid;
+    }
+
+    public void calculateInfo(){
+        List<PaymentDTO> paid = this.payments.values().stream()
+                .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
+
+        this.fundPaid=0;
+        this.interestPaid=0;
+        if (!paid.isEmpty()) {
+            for (PaymentDTO payment : paid) {
+                double fund = payment.getFund();
+                double interest = payment.getInterestPart();
+                fundPaid += fund;
+                interestPaid += interest;
+            }
+        }
+        this.interestLeftToPay = getTotalMoneyForPayingBack() - capital - interestPaid;
+        this.fundLeftToPay = capital - fundPaid;
     }
 
     public int getAmountCollected() {
