@@ -19,14 +19,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import javax.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 
 import static app.constParameters.BODY_ADMIN_PATH;
@@ -80,21 +75,12 @@ public class AppController {
 
     public void checkBodyToShow(String user) {
         if (user != null) {
-            if (user.equals("No clients in system - no file.")) {
-                mainComponent.getChildren().remove(mainComponent.getCenter()); //remove existing fxml from center.
+            if (user.equals("Admin")) {
+                mainComponent.setCenter(adminComponentRoot);
             } else {
-                if (user.equals("Admin")) {
-                    mainComponent.setCenter(adminComponentRoot);
-                    bodyAdminController.showData();
-                } else {
-                    mainComponent.setCenter(userComponentRoot);
-                }
+                mainComponent.setCenter(userComponentRoot);
             }
         }
-    }
-
-    public Collection<ClientDTO> getClients() {
-        return myBank.getClients();
     }
 
     public void setUserOptions() {
@@ -142,4 +128,7 @@ public class AppController {
 
     public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
 
+    public List<ClientDTO> getClients(){
+        return myBank.getClients();
+    }
 }

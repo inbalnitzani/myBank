@@ -34,7 +34,6 @@ public class headerController {
 
     public void initUserOptions() {
         userOptions.getItems().add("Admin");
-        userOptions.getItems().add("No clients in system - no file.");
     }
 
     public headerController() {
