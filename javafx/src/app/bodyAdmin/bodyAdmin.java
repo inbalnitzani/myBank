@@ -34,10 +34,21 @@ public class bodyAdmin {
     @FXML private TableView<LoanDTO> loans;
     private AppController mainController;
 
+    @FXML void increaseYaz(ActionEvent event) {mainController.increaseYaz();}
+    @FXML void loadNewFile(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile == null) {
+            return;
+        }
+        String path = selectedFile.getAbsolutePath();
+        mainController.getFile(path);
+        showLoanData();
+    }
     public void showData() {
         showLoanData();
     }
-
     public void showLoanData() {
         loans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
@@ -70,7 +81,6 @@ public class bodyAdmin {
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loans.setItems(loansData);
     }
-
     public void popup(LoanDTO loan){
         Stage popUpWindow = new Stage();
         popUpWindow.setTitle(loan.getLoansID());
@@ -141,22 +151,6 @@ public class bodyAdmin {
 
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
-    }
-
-    @FXML void increaseYaz(ActionEvent event) {
-        mainController.increaseYaz();
-    }
-
-    @FXML void loadNewFile(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile == null) {
-            return;
-        }
-        String path = selectedFile.getAbsolutePath();
-        mainController.getFile(path);
-        showLoanData();
     }
 
 }
