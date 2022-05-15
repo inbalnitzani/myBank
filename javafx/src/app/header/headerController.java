@@ -25,7 +25,7 @@ public class headerController {
     }
 
     @FXML void chooseUser(ActionEvent event) {
-        mainController.checkBodyToShow(userOptions.getValue());
+        mainController.updateDataByViewer(userOptions.getValue());
     }
 
     public Label getYaz() {

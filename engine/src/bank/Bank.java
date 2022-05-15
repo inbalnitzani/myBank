@@ -277,4 +277,8 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
+    public ClientDTO getClientByName(String name){
+        return new ClientDTO(clients.get(name));
+    }
+
 }

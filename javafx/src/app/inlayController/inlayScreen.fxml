@@ -18,14 +18,14 @@
       </Label>
       <HBox prefHeight="64.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="amountToInvest" prefHeight="25.0" prefWidth="206.0" promptText="Choose an amount to invest" />
+            <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="206.0" promptText="Choose an amount to invest" />
             <ComboBox fx:id="categoryToInvest" onAction="#chooseCategory" prefHeight="25.0" prefWidth="211.0" promptText="Choose Category" />
          </children>
       </HBox>
       <HBox prefHeight="54.0" prefWidth="600.0">
          <children>
             <TextField fx:id="chooseMinTime" promptText="Choose Min Time To Refund" />
-            <ComboBox fx:id="ChooseMinInterest" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
+            <ComboBox fx:id="chooseMinInterest" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
          </children>
       </HBox>
       <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="472.0" text="Start Inlay" />
