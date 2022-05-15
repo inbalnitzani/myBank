@@ -22,6 +22,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 import static app.constParameters.BODY_ADMIN_PATH;
@@ -55,6 +56,9 @@ public class AppController {
         time = new SimpleIntegerProperty();
     }
 
+    public void setDataUser(){
+        bodyUserController.setData();
+    }
     public void loadAdmin() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource(BODY_ADMIN_PATH);
@@ -131,4 +135,6 @@ public class AppController {
     public List<ClientDTO> getClients(){
         return myBank.getClients();
     }
+
+    public List<String> getCategories(){return myBank.getCategories();}
 }

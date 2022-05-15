@@ -13,7 +13,7 @@
                <children>
                   <ScrollPane layoutX="1.0" layoutY="1.0" prefHeight="369.0" prefWidth="600.0">
                      <content>
-                        <fx:include source="information.fxml" />
+                        <fx:include fx:id="informationComponent" source="../information/information.fxml" />
                      </content>
                   </ScrollPane>
                </children></AnchorPane>
@@ -21,7 +21,11 @@
     </Tab>
     <Tab id="scramble" text="Scramble">
       <content>
-        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+               <children>
+                  <ScrollPane prefHeight="375.0" prefWidth="600.0" />
+                  <fx:include fx:id="scrambleComponent" source="../inlayController/inlayScreen.fxml" />
+               </children></AnchorPane>
       </content>
     </Tab>
       <Tab id="payment" text="Payment">

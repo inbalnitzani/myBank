@@ -1,5 +1,4 @@
 package app.bodyAdmin;
-
 import app.main.AppController;
 import dto.ClientDTO;
 import dto.LoanDTO;
@@ -10,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -18,12 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import loan.PayBack;
-
 import java.io.File;
-import java.text.DecimalFormat;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class bodyAdmin {
 
@@ -46,6 +39,7 @@ public class bodyAdmin {
         }
         String path = selectedFile.getAbsolutePath();
         mainController.getFile(path);
+        mainController.setDataUser();
         showData();
     }
     public void showData() {
