@@ -6,7 +6,6 @@ import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import dto.LoanDTO;
-import exception.*;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -59,6 +58,7 @@ public class AppController {
     public void setDataUser(){
         bodyUserController.setData();
     }
+
     public void loadAdmin() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource(BODY_ADMIN_PATH);
@@ -77,12 +77,13 @@ public class AppController {
         bodyUserController.setMainController(this);
     }
 
-    public void checkBodyToShow(String user) {
+    public void updateDataByViewer(String user) {
         if (user != null) {
             if (user.equals("Admin")) {
                 mainComponent.setCenter(adminComponentRoot);
             } else {
                 mainComponent.setCenter(userComponentRoot);
+                bodyUserController.updateUserViewer(user);
             }
         }
     }
@@ -100,13 +101,13 @@ public class AppController {
         time.setValue(myBank.getWorldTime());
     }
 
-    public void showError(Exception e){
+    public void showError(Exception err){
         Stage popUpWindow = new Stage();
         Button button = new Button("Close");
         popUpWindow.setTitle("Error - opening file");
         button.setOnAction(error -> popUpWindow.close());
         Label label = new Label();
-        label.setText(e.toString());
+        label.setText(err.toString());
         VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(label, button);
@@ -132,8 +133,12 @@ public class AppController {
 
     public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
 
-    public List<ClientDTO> getClients(){
+    public Collection<ClientDTO> getClients(){
         return myBank.getClients();
+    }
+
+    public ClientDTO getClientByName(String name){
+        return myBank.getClientByName(name);
     }
 
     public List<String> getCategories(){return myBank.getCategories();}

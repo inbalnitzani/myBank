@@ -2,6 +2,7 @@ package app.bodyUser;
 import app.information.informationController;
 import app.inlayController.inlayController;
 import app.main.AppController;
+import dto.ClientDTO;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 
@@ -13,6 +14,7 @@ public class bodyUser {
     @FXML private Parent scrambleComponent;
     @FXML private informationController informationComponentController;
     @FXML private Parent informationComponent;
+    private ClientDTO clientDTO;
     public AppController mainController;
 
     @FXML public void initialize(){
@@ -21,11 +23,19 @@ public class bodyUser {
             this.informationComponentController.setBodyUser(this);
         }
     }
+    public void updateUserViewer(String client) {
+        clientDTO = mainController.getClientByName(client);
+    }
 
+    public void showErrorPopUp(Exception err){
+        mainController.showError(err);
+    }
     public bodyUser(){}
     public void setData(){
         scrambleComponentController.setCategories();
+        scrambleComponentController.setChooseMinInterest();
     }
+    public double getClientBalance(){return clientDTO.getCurrBalance();}
     public List<String> getCategories(){return mainController.getCategories();}
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
