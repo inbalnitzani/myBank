@@ -9,13 +9,16 @@ public class ClientDTO {
     private int currBalance;
     private List<LoanDTO> asLender;
     private List<LoanDTO> asBorrower;
+    private int sumAsLender, sumAsBorrower ;
     private Map<Integer, List<MovementDTO>> movements;
 
     public ClientDTO(Client client) {
         this.fullName = client.getFullName();
         this.currBalance = client.getCurrBalance();
         this.asBorrower = new ConvertDTO().createListLoanDto(client.getLoanListAsBorrower());
+        this.sumAsBorrower=asBorrower.size();
         this.asLender = new ConvertDTO().createListLoanDto(client.getLoanListAsGiver());
+        this.sumAsLender=asLender.size();
         setMovements(client.getMovements());
     }
 
@@ -36,6 +39,14 @@ public class ClientDTO {
             time = movement.getExecuteTime();
         }
         this.movements.put(time, movementDTOS);
+    }
+
+    public int getSumAsBorrower() {
+        return sumAsBorrower;
+    }
+
+    public int getSumAsLender() {
+        return sumAsLender;
     }
 
     public String getFullName() {
