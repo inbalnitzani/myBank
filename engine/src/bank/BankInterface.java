@@ -35,4 +35,6 @@ public interface BankInterface {
      boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException;
 
      void promoteTime();
+
+     ClientDTO getClientByName(String name);
 }

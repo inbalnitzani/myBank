@@ -15,11 +15,14 @@ import java.util.Collection;
 
 public class information {
 
-    @FXML
-    private TableView<LoanDTO> loansAsLoner;
-    @FXML
-    private TableView<LoanDTO> loansAsLender;
+    @FXML    private TableView<LoanDTO> loansAsLoner;
+    @FXML    private TableView<LoanDTO> loansAsLender;
+    private bodyUser bodyUser;
     private ClientDTO user;
+
+    public void setBodyUser(bodyUser bodyUser) {
+        this.bodyUser = bodyUser;
+    }
 
     public void setUser(ClientDTO user) {
         this.user = user;

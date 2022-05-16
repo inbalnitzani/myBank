@@ -25,7 +25,7 @@ public class headerController {
     }
 
     @FXML void chooseUser(ActionEvent event) {
-        mainController.checkBodyToShow(userOptions.getValue());
+        mainController.updateDataByViewer(userOptions.getValue());
     }
 
     public Label getYaz() {
@@ -34,7 +34,6 @@ public class headerController {
 
     public void initUserOptions() {
         userOptions.getItems().add("Admin");
-        userOptions.getItems().add("No clients in system - no file.");
     }
 
     public headerController() {

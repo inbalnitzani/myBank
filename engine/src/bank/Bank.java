@@ -22,7 +22,7 @@ public class Bank implements Serializable, BankInterface {
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
     private MatchLoans matchLoans;
-    private int time=1;
+    private int time = 1;
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -166,7 +166,7 @@ public class Bank implements Serializable, BankInterface {
 
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
-        if(!this.categories.isEmpty())
+        if (!this.categories.isEmpty())
             this.categories.clear();
         for (String category : categories) {
             this.categories.add(stringConvertor(category));
@@ -175,7 +175,7 @@ public class Bank implements Serializable, BankInterface {
 
     public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
-        if(!this.clients.isEmpty()){
+        if (!this.clients.isEmpty()) {
             this.clients.clear();
         }
         for (AbsCustomer customer : customerList) {
@@ -184,18 +184,18 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
-    public String stringConvertor(String str){
+    public String stringConvertor(String str) {
         return str.trim().toLowerCase();
     }
 
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
-        if (!this.waitingLoans.isEmpty()){
+        if (!this.waitingLoans.isEmpty()) {
             this.waitingLoans.clear();
             this.activeLoans.clear();
         }
         for (AbsLoan loan : loanList) {
-            String owner=stringConvertor(loan.getAbsOwner());
+            String owner = stringConvertor(loan.getAbsOwner());
             String id = stringConvertor(loan.getId());
             Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
@@ -277,5 +277,8 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
+    public ClientDTO getClientByName(String name){
+        return new ClientDTO(clients.get(name));
+    }
 
 }
