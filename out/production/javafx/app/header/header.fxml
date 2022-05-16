@@ -7,14 +7,14 @@
 
 <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="62.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.header.headerController">
    <children>
-      <VBox fillWidth="false" minHeight="10.0" prefHeight="100.0" prefWidth="187.0" HBox.hgrow="ALWAYS">
+      <VBox fillWidth="false" minHeight="10.0" prefHeight="100.0" prefWidth="187.0">
          <children>
             <Label text="View By" textFill="#ab2525" />
             <ComboBox fx:id="userOptions" onAction="#chooseUser" prefHeight="27.0" prefWidth="102.0" promptText="Choose User" />
          </children>
       </VBox>
-      <Label fx:id="file" prefHeight="17.0" prefWidth="250.0" text="File included" HBox.hgrow="ALWAYS" />
-      <Label prefHeight="17.0" prefWidth="79.0" text="Current Yaz : " HBox.hgrow="NEVER" />
-      <Label fx:id="yaz" prefHeight="17.0" prefWidth="61.0" text="NO FILE" HBox.hgrow="NEVER" />
+      <Label fx:id="file" prefHeight="17.0" prefWidth="250.0" text="File included" />
+      <Label prefHeight="17.0" prefWidth="79.0" text="Current Yaz : " />
+      <Label fx:id="yaz" prefHeight="17.0" prefWidth="61.0" text="NO FILE" />
    </children>
 </HBox>

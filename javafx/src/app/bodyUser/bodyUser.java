@@ -3,36 +3,19 @@ import app.information.informationController;
 import app.inlayController.inlayController;
 import app.main.AppController;
 import dto.ClientDTO;
-
-import dto.LoanDTO;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class bodyUser {
 
-    @FXML private Label body;
-    @FXML private Tab information,scramble,payment;
-    @FXML private information informationComponentController;
-    @FXML private Parent informationComponent;
     @FXML private inlayController scrambleComponentController;
     @FXML private Parent scrambleComponent;
+    @FXML private informationController informationComponentController;
+    @FXML private Parent informationComponent;
     private ClientDTO clientDTO;
-    private AppController mainController;
-    private ClientDTO user;
-
-    public void setUser(ClientDTO user) {
-        this.user = user;
-        informationComponentController.setUser(user);
-    }
+    public AppController mainController;
 
     @FXML public void initialize(){
         if (scrambleComponentController!=null && informationComponentController!=null) {
@@ -42,6 +25,7 @@ public class bodyUser {
     }
     public void updateUserViewer(String client) {
         clientDTO = mainController.getClientByName(client);
+        informationComponentController.setUser(clientDTO);
     }
 
     public void showErrorPopUp(Exception err){
@@ -57,11 +41,5 @@ public class bodyUser {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-    public void showData(ClientDTO clientDTO) {
-    informationComponentController.showData(clientDTO);
-    }
-
+    public void showData(){informationComponentController.showData();}
 }
-
-
-

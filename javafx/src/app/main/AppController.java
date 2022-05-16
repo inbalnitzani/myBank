@@ -82,22 +82,9 @@ public class AppController {
             if (user.equals("Admin")) {
                 mainComponent.setCenter(adminComponentRoot);
             } else {
-                if (user.equals("Admin")) {
-                    mainComponent.setCenter(adminComponentRoot);
-                    bodyAdminController.showData();
-                } else {
-                    mainComponent.setCenter(userComponentRoot);
-                    List<ClientDTO> clientDTOList = myBank.getClients();
-                    ClientDTO client = null;
-                    for (ClientDTO currClient:clientDTOList) {
-                       if (currClient.getFullName() == user)
-                           client = currClient;
-                    }
-                    bodyUserController.setUser(client);
-                    bodyUserController.showData(client);
-                }
                 mainComponent.setCenter(userComponentRoot);
                 bodyUserController.updateUserViewer(user);
+                bodyUserController.showData();
             }
         }
     }
