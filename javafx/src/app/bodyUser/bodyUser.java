@@ -25,6 +25,7 @@ public class bodyUser {
     }
     public void updateUserViewer(String client) {
         clientDTO = mainController.getClientByName(client);
+        informationComponentController.setUser(clientDTO);
     }
 
     public void showErrorPopUp(Exception err){
@@ -40,5 +41,5 @@ public class bodyUser {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-
+    public void showData(){informationComponentController.showData();}
 }

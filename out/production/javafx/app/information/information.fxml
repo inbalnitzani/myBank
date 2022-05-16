@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -28,28 +27,8 @@
                 <RowConstraints maxHeight="223.0" minHeight="10.0" prefHeight="129.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView prefHeight="128.0" prefWidth="436.0" GridPane.rowIndex="2">
-                    <columns>
-                      <TableColumn prefWidth="60.0" text="ID" />
-                      <TableColumn prefWidth="60.0" text="Category" />
-                        <TableColumn minWidth="71.0" prefWidth="60.0" text="Amount" />
-                        <TableColumn prefWidth="60.0" text="Rate" />
-                        <TableColumn prefWidth="60.0" text="Interest" />
-                        <TableColumn prefWidth="60.0" text="Final" />
-                        <TableColumn prefWidth="60.0" text="Status" />
-                    </columns>
-                  </TableView>
-                  <TableView prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5">
-                    <columns>
-                      <TableColumn prefWidth="60.0" text="ID" />
-                      <TableColumn prefWidth="60.0" text="Category" />
-                        <TableColumn prefWidth="60.0" text="Amount" />
-                        <TableColumn prefWidth="60.0" text="Rate" />
-                        <TableColumn prefWidth="60.0" text="Interest" />
-                        <TableColumn prefWidth="60.0" text="Final" />
-                        <TableColumn prefWidth="75.0" text="Status" />
-                    </columns>
-                  </TableView>
+                  <TableView fx:id="loansAsLoner" prefHeight="128.0" prefWidth="436.0" GridPane.rowIndex="2" />
+                  <TableView fx:id="loansAsLender" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="5" />
                   <TextArea prefHeight="200.0" prefWidth="200.0" text="lender loans:" GridPane.rowIndex="4" />
                   <TextArea prefHeight="200.0" prefWidth="200.0" text="loner loans:" GridPane.rowIndex="1" />
                </children>

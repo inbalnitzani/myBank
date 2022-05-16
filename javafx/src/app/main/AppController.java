@@ -84,6 +84,7 @@ public class AppController {
             } else {
                 mainComponent.setCenter(userComponentRoot);
                 bodyUserController.updateUserViewer(user);
+                bodyUserController.showData();
             }
         }
     }
