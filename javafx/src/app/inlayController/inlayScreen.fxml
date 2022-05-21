@@ -3,41 +3,63 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
+<VBox prefHeight="459.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
    <children>
-      <Label alignment="CENTER" prefHeight="68.0" prefWidth="600.0" text="Create new Inlay" textAlignment="CENTER" textFill="#3921cf">
+      <Label alignment="CENTER" prefHeight="35.0" prefWidth="600.0" text="Create new Inlay" textAlignment="CENTER" textFill="#3921cf">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
       <HBox prefHeight="64.0" prefWidth="600.0">
          <children>
-            <VBox prefHeight="34.0" prefWidth="273.0">
+            <VBox prefHeight="64.0" prefWidth="277.0">
                <children>
-                  <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="230.0" promptText="Choose an amount to invest" />
-                  <Label fx:id="errorAmount" textFill="#eb0909" />
+                  <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="161.0" promptText="Choose an amount to invest" />
+                  <Label fx:id="errorAmount" prefHeight="17.0" prefWidth="282.0" />
                </children>
             </VBox>
-            <CheckComboBox fx:id="chooserCategory" />
+            <CheckComboBox fx:id="CheckComboBox" prefHeight="25.0" prefWidth="242.0" />
          </children>
       </HBox>
       <HBox prefHeight="54.0" prefWidth="600.0">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0">
+            <VBox prefHeight="54.0" prefWidth="278.0">
                <children>
-                  <TextField fx:id="minTimeForReturn" onAction="#checkMinTime" promptText="Choose Min Time To Refund" />
-                  <Label fx:id="errorMinTime" textFill="#f50606" />
+                  <ComboBox fx:id="chooseMinInterest" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
+                  <Label fx:id="errorMinTime" prefHeight="17.0" prefWidth="130.0" />
                </children>
             </VBox>
-            <ComboBox fx:id="chooseMinInterest" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
+            <TextField fx:id="chooseMinTime" prefHeight="25.0" prefWidth="244.0" promptText="Choose Min Time To Refund" />
          </children>
       </HBox>
-      <Button fx:id="startInlay" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="472.0" text="Start Inlay" />
+      <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="472.0" text="Start Inlay" />
+      <GridPane prefHeight="225.0" prefWidth="600.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints maxHeight="108.0" minHeight="0.0" prefHeight="34.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="225.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="225.0" minHeight="10.0" prefHeight="194.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="600.0" text="Optional Loans" textAlignment="CENTER">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <TableView fx:id="optionalLoans" prefHeight="118.0" prefWidth="600.0" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
    </children>
 </VBox>

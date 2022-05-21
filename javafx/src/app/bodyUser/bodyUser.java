@@ -5,6 +5,7 @@ import app.main.AppController;
 import app.payment.paymentController;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import loan.LoanTerms;
@@ -60,5 +61,6 @@ public class bodyUser {
         return mainController.findMatchLoans(clientName,terms);
     }
     public ClientDTO getClientDTO(){return clientDTO;}
+    public ObservableList<LoanDTO> getLoans(){return (ObservableList<LoanDTO>) mainController.getLoans();}
 
 }
