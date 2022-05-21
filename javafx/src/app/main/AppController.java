@@ -19,6 +19,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import loan.LoanTerms;
+
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -143,6 +145,10 @@ public class AppController {
     }
 
     public List<String> getCategories(){return myBank.getCategories();}
+
+    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
+        return myBank.findMatchLoans(clientName,terms);
+    }
     public void chargeAcount(String clientName,double amount) {
         myBank.loadMoney(clientName,(int)amount);
     }

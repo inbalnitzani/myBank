@@ -1,6 +1,8 @@
 package loan;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class LoanTerms implements Serializable {
@@ -11,7 +13,7 @@ public class LoanTerms implements Serializable {
     public int minTimeForLoan;
 
     public LoanTerms() {
-
+        categories=new HashSet<>();
     }
 
     public void setMaxAmount(int amount) {

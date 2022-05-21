@@ -4,8 +4,10 @@ import app.inlayController.inlayController;
 import app.main.AppController;
 import app.payment.paymentController;
 import dto.ClientDTO;
+import dto.LoanDTO;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import loan.LoanTerms;
 
 import java.util.List;
 
@@ -40,8 +42,8 @@ public class bodyUser {
     }
     public bodyUser(){}
     public void setData(){
-        scrambleComponentController.setCategories();
         scrambleComponentController.setChooseMinInterest();
+        scrambleComponentController.setCategoriesChooser();
     }
     public double getClientBalance(){return clientDTO.getCurrBalance();}
     public List<String> getCategories(){return mainController.getCategories();}
@@ -54,4 +56,9 @@ public class bodyUser {
     public void chargeAcount(String clientName,double amount){
         mainController.chargeAcount(clientName,amount);
     }
+    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
+        return mainController.findMatchLoans(clientName,terms);
+    }
+    public ClientDTO getClientDTO(){return clientDTO;}
+
 }

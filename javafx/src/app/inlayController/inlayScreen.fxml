@@ -7,9 +7,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
 
-
-<VBox xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0" prefWidth="320.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
    <children>
       <Label alignment="CENTER" prefHeight="68.0" prefWidth="600.0" text="Create new Inlay" textAlignment="CENTER" textFill="#3921cf">
          <font>
@@ -18,16 +18,26 @@
       </Label>
       <HBox prefHeight="64.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="206.0" promptText="Choose an amount to invest" />
-            <ComboBox fx:id="categoryToInvest" onAction="#chooseCategory" prefHeight="25.0" prefWidth="211.0" promptText="Choose Category" />
+            <VBox prefHeight="34.0" prefWidth="273.0">
+               <children>
+                  <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="230.0" promptText="Choose an amount to invest" />
+                  <Label fx:id="errorAmount" textFill="#eb0909" />
+               </children>
+            </VBox>
+            <CheckComboBox fx:id="chooserCategory" />
          </children>
       </HBox>
       <HBox prefHeight="54.0" prefWidth="600.0">
          <children>
-            <TextField fx:id="chooseMinTime" promptText="Choose Min Time To Refund" />
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <TextField fx:id="minTimeForReturn" onAction="#checkMinTime" promptText="Choose Min Time To Refund" />
+                  <Label fx:id="errorMinTime" textFill="#f50606" />
+               </children>
+            </VBox>
             <ComboBox fx:id="chooseMinInterest" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
          </children>
       </HBox>
-      <Button contentDisplay="CENTER" mnemonicParsing="false" prefHeight="25.0" prefWidth="472.0" text="Start Inlay" />
+      <Button fx:id="startInlay" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="472.0" text="Start Inlay" />
    </children>
 </VBox>
