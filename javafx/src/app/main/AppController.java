@@ -143,4 +143,7 @@ public class AppController {
     }
 
     public List<String> getCategories(){return myBank.getCategories();}
+    public void chargeAcount(String clientName,double amount) {
+        myBank.loadMoney(clientName,(int)amount);
+    }
 }
