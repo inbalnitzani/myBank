@@ -1,6 +1,5 @@
 package app.inlayController;
 
-import app.bodyUser.bodyUser;
 import dto.LoanDTO;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
