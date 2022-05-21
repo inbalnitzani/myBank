@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+
+<SplitPane dividerPositions="0.5" prefHeight="407.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.payment.paymentController">
+   <items>
+      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+         <children>
+            <Label text="Loaner loans" />
+            <TableView fx:id="loanerLoans" prefHeight="200.0" prefWidth="200.0" />
+            <Label text="Payment controls" />
+            <ChoiceBox fx:id="choosePayment" prefWidth="150.0" />
+         </children>
+      </VBox>
+      <ListView fx:id="notificationList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+   </items>
+</SplitPane>
