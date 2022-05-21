@@ -31,77 +31,12 @@ public class inlayController {
     @FXML private Label errorMinTime;
     @FXML private TableView<LoanDTO> optionalLoans;
 
-    private LoanTerms setInterestTerm(LoanTerms terms) {
-        String minInterestString = chooseMinInterest.getValue();
-        if (minInterestString != null)
-            terms.setMinInterestForTimeUnit(Integer.parseInt(minInterestString));
-        return terms;
-    }
-
-    private LoanTerms setTimeTerm(LoanTerms terms){
-        String minTimeString = chooseMinTime.getCharacters().toString();
-        if (!minTimeString.equals("")) {
-            terms.setMinTimeForLoan(Integer.parseInt(minTimeString));
-        }
-        return terms;
-    }
-
-    private LoanTerms setCategoriesTerm(LoanTerms terms) {
-        Set<String> chosenCategory = new HashSet<>();
-        ObservableList<String> userChoose = CheckComboBox.getCheckModel().getCheckedItems();
-        if (userChoose.size() == 0) {
-            chosenCategory.addAll(bodyUser.getCategories());
-        } else {
-            for (String category : userChoose)
-                chosenCategory.add(category);
-        }
-        terms.setCategories(chosenCategory);
-        return terms;
-    }
-
-    private LoanTerms updateTerms() {
-        LoanTerms terms = new LoanTerms();
-        terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
-        terms= setTimeTerm(terms);
-        terms=setCategoriesTerm(terms);
-        terms=setInterestTerm(terms);
-        return terms;
-    }
-
     @FXML void startInlay(ActionEvent event) {
-        if (checkMandatoryCategories())
-        {
-            LoanTerms terms=updateTerms();
-            List<LoanDTO> matchLoans= bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(),terms);
-
-            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
-
-            TableColumn<LoanDTO,String> idCol= new TableColumn<>("id");
-            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-
-            TableColumn<LoanDTO,String> ownerCol= new TableColumn<>("owner");
-            ownerCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
-
-            optionalLoans.getColumns().addAll(expander,idCol,ownerCol);
-            optionalLoans.setItems(FXCollections.observableArrayList(matchLoans));
+        if (checkMandatoryCategories()) {
+            LoanTerms terms = updateTerms();
+            List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
+            showRelevantLoans(matchLoans);
         }
-    }
-
-    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<LoanDTO> arg) {
-        Pane pane;
-        try {
-            pane = FXMLLoader.load(getClass().getResource("src/app/bodyAdmin/bodyAdmin.fxml"));
-        } catch (Exception err) {
-            pane = new Pane();
-        }
-        return pane;
-    }
-    public boolean checkMandatoryCategories() {
-        if (amountToInvest.getCharacters().toString().equals("")) {
-            errorAmount.setText("Please choose amount!");
-            return false;
-        }
-        return true;
     }
 
     @FXML public void initialize() {
@@ -161,6 +96,75 @@ public class inlayController {
             if (!validInput)
                 amountToInvest.setText("");
         }
+    }
+
+    private LoanTerms setInterestTerm(LoanTerms terms) {
+        String minInterestString = chooseMinInterest.getValue();
+        if (minInterestString != null)
+            terms.setMinInterestForTimeUnit(Integer.parseInt(minInterestString));
+        return terms;
+    }
+
+    private LoanTerms setTimeTerm(LoanTerms terms){
+        String minTimeString = chooseMinTime.getCharacters().toString();
+        if (!minTimeString.equals("")) {
+            terms.setMinTimeForLoan(Integer.parseInt(minTimeString));
+        }
+        return terms;
+    }
+
+    private LoanTerms setCategoriesTerm(LoanTerms terms) {
+        Set<String> chosenCategory = new HashSet<>();
+        ObservableList<String> userChoose = CheckComboBox.getCheckModel().getCheckedItems();
+        if (userChoose.size() == 0) {
+            chosenCategory.addAll(bodyUser.getCategories());
+        } else {
+            for (String category : userChoose)
+                chosenCategory.add(category);
+        }
+        terms.setCategories(chosenCategory);
+        return terms;
+    }
+
+    private LoanTerms updateTerms() {
+        LoanTerms terms = new LoanTerms();
+        terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
+        terms= setTimeTerm(terms);
+        terms=setCategoriesTerm(terms);
+        terms=setInterestTerm(terms);
+        return terms;
+    }
+
+    private void showRelevantLoans(List<LoanDTO> loans){
+        TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
+
+        TableColumn<LoanDTO,String> idCol= new TableColumn<>("id");
+        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+        TableColumn<LoanDTO,String> ownerCol= new TableColumn<>("owner");
+        ownerCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
+
+        optionalLoans.getColumns().addAll(expander,idCol,ownerCol);
+        optionalLoans.setItems(FXCollections.observableArrayList(loans));
+
+    }
+
+    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<LoanDTO> arg) {
+        Pane pane;
+        try {
+            pane = FXMLLoader.load(getClass().getResource("src/app/inlayController/loanInfo.fxml"));
+        } catch (Exception err) {
+            pane = new Pane();
+        }
+        return pane;
+    }
+
+    public boolean checkMandatoryCategories() {
+        if (amountToInvest.getCharacters().toString().equals("")) {
+            errorAmount.setText("Please choose amount!");
+            return false;
+        }
+        return true;
     }
 
     public void setBodyUser(bodyUser bodyUser) {
