@@ -36,6 +36,7 @@ public class bodyUser {
         clientDTO = mainController.getClientByName(client);
         informationComponentController.setUser(clientDTO);
         paymentComponentController.setClient(clientDTO);
+        scrambleComponentController.setDataAccordingToClient();
     }
 
     public void showErrorPopUp(Exception err){

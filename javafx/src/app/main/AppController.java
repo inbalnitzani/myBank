@@ -149,6 +149,7 @@ public class AppController {
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return myBank.findMatchLoans(clientName,terms);
     }
+
     public void chargeAcount(String clientName,double amount) {
         myBank.loadMoney(clientName,(int)amount);
     }
