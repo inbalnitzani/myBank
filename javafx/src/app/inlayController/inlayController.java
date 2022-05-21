@@ -2,28 +2,34 @@ package app.inlayController;
 
 import app.bodyUser.bodyUser;
 import dto.LoanDTO;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.Pane;
 import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.table.TableRowExpanderColumn;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 
 public class inlayController {
 
     private bodyUser bodyUser;
     @FXML private TextField amountToInvest;
-    @FXML private TextField minTimeForReturn;
+    @FXML private TextField chooseMinTime;
     @FXML private ComboBox<String> chooseMinInterest;
+    @FXML private CheckComboBox<String> CheckComboBox;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
-    @FXML private CheckComboBox<String> chooserCategory;
-    @FXML private Button startInlay;
+    @FXML private TableView<LoanDTO> optionalLoans;
 
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = chooseMinInterest.getValue();
@@ -33,7 +39,7 @@ public class inlayController {
     }
 
     private LoanTerms setTimeTerm(LoanTerms terms){
-        String minTimeString = minTimeForReturn.getCharacters().toString();
+        String minTimeString = chooseMinTime.getCharacters().toString();
         if (!minTimeString.equals("")) {
             terms.setMinTimeForLoan(Integer.parseInt(minTimeString));
         }
@@ -42,7 +48,7 @@ public class inlayController {
 
     private LoanTerms setCategoriesTerm(LoanTerms terms) {
         Set<String> chosenCategory = new HashSet<>();
-        ObservableList<String> userChoose = chooserCategory.getCheckModel().getCheckedItems();
+        ObservableList<String> userChoose = CheckComboBox.getCheckModel().getCheckedItems();
         if (userChoose.size() == 0) {
             chosenCategory.addAll(bodyUser.getCategories());
         } else {
@@ -66,13 +72,30 @@ public class inlayController {
         if (checkMandatoryCategories())
         {
             LoanTerms terms=updateTerms();
-            List<LoanDTO> optionalLoans=bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(),terms);
-            //wait for user to choose
-            //start inlay process
-            //continue
+            List<LoanDTO> matchLoans= bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(),terms);
+
+            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
+
+            TableColumn<LoanDTO,String> idCol= new TableColumn<>("id");
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+
+            TableColumn<LoanDTO,String> ownerCol= new TableColumn<>("owner");
+            ownerCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
+
+            optionalLoans.getColumns().addAll(expander,idCol,ownerCol);
+            optionalLoans.setItems(FXCollections.observableArrayList(matchLoans));
         }
     }
 
+    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<LoanDTO> arg) {
+        Pane pane;
+        try {
+            pane = FXMLLoader.load(getClass().getResource("src/app/bodyAdmin/bodyAdmin.fxml"));
+        } catch (Exception err) {
+            pane = new Pane();
+        }
+        return pane;
+    }
     public boolean checkMandatoryCategories() {
         if (amountToInvest.getCharacters().toString().equals("")) {
             errorAmount.setText("Please choose amount!");
@@ -86,7 +109,7 @@ public class inlayController {
     }
 
     @FXML void checkMinTime(ActionEvent event) {
-        String input = minTimeForReturn.getCharacters().toString().trim();
+        String input = chooseMinTime.getCharacters().toString().trim();
         boolean validInput=false;
         int number;
         try {
@@ -100,13 +123,13 @@ public class inlayController {
         } catch (Exception err) {
             if (input.equals("")) {
                 errorMinTime.setText("");
-                minTimeForReturn.clear();
+                chooseMinTime.clear();
             } else {
                 errorMinTime.setText(input + " is not a number.\nPlease enter a number");
             }
         } finally {
             if (!validInput)
-                minTimeForReturn.setText("");
+                chooseMinTime.setText("");
         }
     }
 
@@ -145,15 +168,14 @@ public class inlayController {
     }
 
     public void setChooseMinInterest() {
-        chooseMinInterest.getItems().add("Don't Care");
-        for (int i = 1; i < 100; i++) {
+        for (int i = 1; i <= 100; i++) {
             chooseMinInterest.getItems().add(Integer.toString(i));
         }
     }
 
     public void setCategoriesChooser(){
-        chooserCategory.getItems().add("Don't Care");
-        chooserCategory.getItems().addAll(bodyUser.getCategories());
+        CheckComboBox.getItems().addAll(bodyUser.getCategories());
     }
+
 
 }
