@@ -83,7 +83,8 @@ public class AppController {
         if (user != null) {
             if (user.equals("Admin")) {
                 mainComponent.setCenter(adminComponentRoot);
-                bodyAdminController.showData();
+                if (fileInSystem.getValue())
+                    bodyAdminController.updateData();
             } else {
                 mainComponent.setCenter(userComponentRoot);
                 bodyUserController.updateUserViewer(user);
@@ -129,7 +130,7 @@ public class AppController {
     public void getFile(String path) {
         try {
             myBank.getXMLFile(path);
-            fileInSystem.setValue(true);
+            fileInSystem.set(true);
             time.setValue(myBank.getWorldTime());
             headerComponentController.getYaz().textProperty().bind(time.asString());
             headerComponentController.updateFileName(path);
