@@ -8,15 +8,23 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+import loan.Status;
+import org.controlsfx.control.table.TableRowExpanderColumn;
+
 import java.io.File;
+import java.util.List;
 
 public class bodyAdmin {
     @FXML private VBox bodyAdmin;
@@ -38,14 +46,22 @@ public class bodyAdmin {
         }
         String path = selectedFile.getAbsolutePath();
         mainController.getFile(path);
-        mainController.setDataUser();
         showData();
+        mainController.setDataUser();
+
     }
-    public void showData() {
+    public void updateLoansData() {
+        loans.setItems(FXCollections.observableArrayList(mainController.getLoans()));
+    }
+    public void updateData() {
+        updateLoansData();
+        showClients();
+    }
+    public void showData( ) {
         showLoanData();
-        showClientData();
+        showClients();
     }
-    public void showLoanData() { loans.getColumns().clear();
+    public void showLoanData( ) {
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
         loansData.addAll(mainController.getLoans());
 
@@ -75,12 +91,50 @@ public class bodyAdmin {
         });
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loans.setItems(loansData);
-    }
-    public void showClientData() {
-        clients.getColumns().clear();
-        ObservableList<ClientDTO> clientData = FXCollections.observableArrayList();
-        clientData.addAll(mainController.getClients());
 
+    }
+    public VBox createLoanData(List<LoanDTO> loans) {
+        VBox data=new VBox();
+        Label label = new Label("Total NEW loans: ");
+        Label label1 = new Label("Total PENDING loans: ");
+        Label label2 = new Label("Total ACTIVE loans: ");
+        Label label3 = new Label("Total RISK loans: ");
+        int newLoan = 0, pendingLoan = 0, activeLoan = 0, riskLoan = 0;
+        for (LoanDTO loanDTO : loans) {
+            switch (loanDTO.getStatus()) {
+                case RISK:
+                    riskLoan++;
+                    break;
+                case ACTIVE:
+                    activeLoan++;
+                    break;
+                case PENDING:
+                    pendingLoan++;
+                    break;
+                case NEW:
+                    newLoan++;
+                    break;
+            }
+        }
+        if (newLoan != 0)
+            data.getChildren().add(new HBox(label, new Label(String.valueOf(newLoan))));
+        if (pendingLoan != 0)
+            data.getChildren().add(new HBox(label1, new Label(String.valueOf(pendingLoan))));
+        if (activeLoan != 0)
+            data.getChildren().add(new HBox(label2, new Label(String.valueOf(activeLoan))));
+        if (riskLoan != 0)
+            data.getChildren().add(new HBox(label3, new Label(String.valueOf(riskLoan))));
+        return data;
+    }
+    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<ClientDTO> param) {
+        VBox data = new VBox();
+        data.getChildren().add(new Label("Loans as Giver:"));
+        data = createLoanData(param.getValue().getLoansAsGiver());
+        data.getChildren().add(new Label("Loans as Borrower:"));
+        data = createLoanData(param.getValue().getLoansAsBorrower());
+        return data;
+    }
+    private void showClients() {
         TableColumn<ClientDTO, String> idNameCol = new TableColumn<>("Client name");
         TableColumn<ClientDTO, Integer> currBalanceCol = new TableColumn<>("Balance");
         TableColumn<ClientDTO, Integer> asGiverCol = new TableColumn<>("Total loans as giver");
@@ -90,10 +144,11 @@ public class bodyAdmin {
         currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
         asGiverCol.setCellValueFactory(new PropertyValueFactory<>("sumAsLender"));
         asTakenCol.setCellValueFactory(new PropertyValueFactory<>("sumAsBorrower"));
+        TableRowExpanderColumn<ClientDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
-        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol);
-        clients.setItems(clientData );
-   }
+        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol,expander);
+        clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
+    }
 
     public void popup(LoanDTO loan){
         Stage popUpWindow = new Stage();
