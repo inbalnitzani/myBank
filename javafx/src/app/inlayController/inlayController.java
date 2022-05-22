@@ -6,23 +6,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 import loan.LoanTerms;
-import loan.Status;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static loan.Status.PENDING;
 
 public class inlayController {
 
@@ -190,12 +185,47 @@ public class inlayController {
         TableColumn<LoanDTO,String> finalAmountCol= new TableColumn<>("Final Amount");
         finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
 
-        optionalLoans.getColumns().addAll(expander,idCol,categoryCol,capitalCol,paceCol,interestCol,statusCol);
+        TableColumn actionCol = new TableColumn("Investment");
+
+        Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
+            new Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>>() {
+                public TableCell call(final TableColumn<LoanDTO, String> param) {
+                    final TableCell<LoanDTO, String> cell = new TableCell<LoanDTO, String>() {
+                        final Button btn = new Button("Invest this loan");
+                        public void updateItem(String item, boolean empty) {
+                            super.updateItem(item, empty);
+                            if (empty) {
+                                setGraphic(null);
+                                setText(null);
+                            } else {
+                                btn.setOnAction(event -> {
+                                    String id = getTableView().getItems().get(getIndex()).getLoansID();
+                                    if (loansToInvest.contains(id)) {
+                                        loansToInvest.remove(id);
+                                        btn.setText("Invest this loan");
+                                    } else if (!loansToInvest.contains(id)) {
+                                        btn.setText("invested!");
+                                        loansToInvest.add(id);
+                                    }});
+                                setGraphic(btn);
+                                setText(null);
+                            }}};
+                    return cell;
+        }};
+        actionCol.setCellFactory(cellFactory);
+        optionalLoans.getColumns().addAll(expander,idCol,categoryCol,capitalCol,paceCol,interestCol,statusCol,actionCol);
         optionalLoans.setItems(FXCollections.observableArrayList(loans));
 
-        root.getChildren().add(optionalLoans);
+        Button inlay = new Button("Aprrove Inlay");
+        inlay.setOnAction(e->{
+            startInlayProcess();
+        });
+
+        root.getChildren().addAll(optionalLoans,inlay);
         vbox.getChildren().add(root);
     }
+
+    private void startInlayProcess(){}
 
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label1=new Label();
@@ -228,17 +258,6 @@ public class inlayController {
                 data = showDataAccordingLoanStatus(data, "Last Payment Time: ", String.valueOf(loan.getLastPaymentTime()));
                 break;
         }
-        Button investmentButton = new Button("Click to invest");
-        investmentButton.setOnAction(e -> {
-            if (loansToInvest.contains(loan.getLoansID())) {
-                loansToInvest.remove(loan.getLoansID());
-                investmentButton.setText("Not invested");
-            } else if (!loansToInvest.contains(loan.getLoansID())) {
-                investmentButton.setText("invested!");
-                loansToInvest.add(loan.getLoansID());
-            }
-        });
-        data.getChildren().add(investmentButton);
         return data;
     }
 

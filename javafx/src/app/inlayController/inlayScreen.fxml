@@ -11,42 +11,45 @@
 
 <VBox fx:id="vbox" prefHeight="459.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
    <children>
-      <Label alignment="CENTER" prefHeight="22.0" prefWidth="600.0" text="Create new Inlay" textAlignment="CENTER" textFill="#3921cf">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
       <HBox prefHeight="27.0" prefWidth="600.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="88.0" text="Client Name: " />
-            <Label fx:id="clientName" prefHeight="17.0" prefWidth="94.0" />
-            <Label prefHeight="17.0" prefWidth="119.0" text="Account Balance: " />
-            <Label fx:id="accountBalance" />
+            <Label alignment="CENTER" prefHeight="30.0" prefWidth="175.0" text="Create new Inlay -" textAlignment="CENTER" textFill="#3921cf">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label prefHeight="31.0" prefWidth="88.0" text="Client Name: " />
+            <Label fx:id="clientName" prefHeight="35.0" prefWidth="94.0" />
+            <Label prefHeight="34.0" prefWidth="119.0" text="Account Balance: " />
+            <Label fx:id="accountBalance" prefHeight="33.0" prefWidth="135.0" />
          </children>
       </HBox>
       <HBox prefHeight="58.0" prefWidth="600.0">
          <children>
-            <VBox prefHeight="64.0" prefWidth="277.0">
+            <VBox prefHeight="58.0" prefWidth="901.0">
                <children>
-                  <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="161.0" promptText="Choose an amount to invest" />
-                  <Label fx:id="errorAmount" alignment="CENTER" prefHeight="61.0" prefWidth="277.0" textFill="#e10c0c" />
+                  <HBox prefHeight="63.0" prefWidth="600.0">
+                     <children>
+                        <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="238.0" promptText="Choose an amount to invest" />
+                        <Label fx:id="errorAmount" alignment="CENTER" prefHeight="25.0" prefWidth="364.0" textFill="#e10c0c" />
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <TextField fx:id="minTimeToReturn" onAction="#checkMinTime" prefHeight="25.0" prefWidth="237.0" promptText="Choose Min Time To Refund" />
+                        <Label fx:id="errorMinTime" prefHeight="25.0" prefWidth="364.0" />
+                     </children>
+                  </HBox>
+                  <CheckComboBox fx:id="categoriesForLoan" prefHeight="25.0" prefWidth="242.0" />
+                  <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="242.0" promptText="Choose Min Interest" />
                </children>
             </VBox>
-            <CheckComboBox fx:id="categoriesForLoan" prefHeight="25.0" prefWidth="242.0" />
          </children>
       </HBox>
-      <HBox prefHeight="63.0" prefWidth="600.0">
-         <children>
-            <VBox prefHeight="54.0" prefWidth="278.0">
-               <children>
-                  <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="215.0" promptText="Choose Min Interest" />
-                  <Label fx:id="errorMinTime" prefHeight="17.0" prefWidth="130.0" />
-               </children>
-            </VBox>
-            <TextField fx:id="minTimeToReturn" onAction="#checkMinTime" prefHeight="25.0" prefWidth="244.0" promptText="Choose Min Time To Refund" />
-         </children>
-      </HBox>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="322.0" text="Start Inlay" />
+      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="243.0" text="Start Inlay" textFill="#e40101">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="600.0" text="Optional Loans" textAlignment="CENTER">
          <font>
             <Font size="20.0" />
