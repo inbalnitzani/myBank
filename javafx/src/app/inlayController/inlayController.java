@@ -15,6 +15,7 @@ import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -31,10 +32,10 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
-    private Set<String> loansToInvest;
+         private List<LoanDTO> loansToInvest;
 
     public inlayController(){
-        loansToInvest=new HashSet<>();
+        loansToInvest=new ArrayList<>();
     }
 
     @FXML void startInlay(ActionEvent event) {
@@ -199,13 +200,13 @@ public class inlayController {
                                 setText(null);
                             } else {
                                 btn.setOnAction(event -> {
-                                    String id = getTableView().getItems().get(getIndex()).getLoansID();
-                                    if (loansToInvest.contains(id)) {
-                                        loansToInvest.remove(id);
+                                    LoanDTO loan = getTableView().getItems().get(getIndex());
+                                    if (loansToInvest.contains(loan)) {
+                                        loansToInvest.remove(loan);
                                         btn.setText("Invest this loan");
-                                    } else if (!loansToInvest.contains(id)) {
+                                    } else if (!loansToInvest.contains(loan)) {
                                         btn.setText("invested!");
-                                        loansToInvest.add(id);
+                                        loansToInvest.add(loan);
                                     }});
                                 setGraphic(btn);
                                 setText(null);
@@ -225,7 +226,18 @@ public class inlayController {
         vbox.getChildren().add(root);
     }
 
-    private void startInlayProcess(){}
+    private void startInlayProcess() {
+        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
+        Label investmentStatus = new Label();
+        if (amountLeft == 0) {
+            investmentStatus.setText("Investment successfully completed!");
+        } else if (Integer.parseInt(amountToInvest.getCharacters().toString()) == amountLeft) {
+            investmentStatus.setText("Sorry, an unknown error has occurred, please try again.");
+        } else {
+            investmentStatus.setText("Invested " + (Integer.parseInt(amountToInvest.getCharacters().toString()) - amountLeft) + " out of " + Integer.parseInt(amountToInvest.getCharacters().toString()) + " successfully");
+        }
+        vbox.getChildren().add(investmentStatus);
+    }
 
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label1=new Label();
