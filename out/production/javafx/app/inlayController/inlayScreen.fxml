@@ -1,59 +1,103 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.CheckComboBox?>
 
-<VBox fx:id="vbox" prefHeight="459.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
+<VBox prefHeight="459.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
    <children>
       <HBox prefHeight="27.0" prefWidth="600.0">
          <children>
-            <Label alignment="CENTER" prefHeight="30.0" prefWidth="175.0" text="Create new Inlay -" textAlignment="CENTER" textFill="#3921cf">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
-            <Label prefHeight="31.0" prefWidth="88.0" text="Client Name: " />
-            <Label fx:id="clientName" prefHeight="35.0" prefWidth="94.0" />
-            <Label prefHeight="34.0" prefWidth="119.0" text="Account Balance: " />
-            <Label fx:id="accountBalance" prefHeight="33.0" prefWidth="135.0" />
+            <Label prefHeight="27.0" prefWidth="204.0" text="Client Name: " />
+            <Label fx:id="clientName" prefHeight="27.0" prefWidth="302.0" />
+            <Label prefHeight="27.0" prefWidth="222.0" text="Account Balance: " />
+            <Label fx:id="accountBalance" prefHeight="27.0" prefWidth="299.0" />
          </children>
       </HBox>
       <HBox prefHeight="58.0" prefWidth="600.0">
          <children>
-            <VBox prefHeight="58.0" prefWidth="901.0">
+            <VBox prefHeight="100.0" prefWidth="597.0">
                <children>
                   <HBox prefHeight="63.0" prefWidth="600.0">
                      <children>
-                        <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="238.0" promptText="Choose an amount to invest" />
-                        <Label fx:id="errorAmount" alignment="CENTER" prefHeight="25.0" prefWidth="364.0" textFill="#e10c0c" />
+                        <Label prefHeight="25.0" prefWidth="229.0" text="Enter amount:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="62.0" />
+                        <Label fx:id="errorAmount" prefHeight="25.0" prefWidth="364.0" textFill="#e10c0c" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
-                        <TextField fx:id="minTimeToReturn" onAction="#checkMinTime" prefHeight="25.0" prefWidth="237.0" promptText="Choose Min Time To Refund" />
+                        <Label prefHeight="25.0" prefWidth="232.0" text="Enter minimum time to refund:">
+                           <font>
+                              <Font name="System Bold" size="14.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="minTimeToReturn" onAction="#checkMinTime" prefHeight="25.0" prefWidth="69.0" />
                         <Label fx:id="errorMinTime" prefHeight="25.0" prefWidth="364.0" />
                      </children>
                   </HBox>
-                  <CheckComboBox fx:id="categoriesForLoan" prefHeight="25.0" prefWidth="242.0" />
-                  <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="242.0" promptText="Choose Min Interest" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <VBox prefHeight="50.0" prefWidth="502.0">
+                           <children>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefHeight="26.0" prefWidth="212.0" text="Choose categories for loan:">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <CheckComboBox fx:id="categoriesForLoan" prefHeight="25.0" prefWidth="132.0" />
+                                 </children>
+                              </HBox>
+                              <HBox prefHeight="100.0" prefWidth="200.0">
+                                 <children>
+                                    <Label prefHeight="25.0" prefWidth="211.0" text="Choose minimum interest:">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="133.0" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="50.0" prefWidth="102.0" text="Find loans!" textFill="#e40101" textOverrun="CENTER_ELLIPSIS" HBox.hgrow="ALWAYS">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
+               <HBox.margin>
+                  <Insets left="2.0" />
+               </HBox.margin>
+               <padding>
+                  <Insets left="2.0" right="2.0" />
+               </padding>
             </VBox>
          </children>
       </HBox>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="243.0" text="Start Inlay" textFill="#e40101">
-         <font>
-            <Font name="System Bold" size="12.0" />
-         </font></Button>
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="600.0" text="Optional Loans" textAlignment="CENTER">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
+      <BorderPane fx:id="borderPane" prefHeight="297.0" prefWidth="600.0">
+         <top>
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="35.0" prefWidth="600.0" text="Optional Loans" textAlignment="CENTER" BorderPane.alignment="CENTER">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+         </top>
+      </BorderPane>
    </children>
 </VBox>

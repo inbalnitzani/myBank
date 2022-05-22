@@ -38,7 +38,9 @@ public class bodyUser {
         paymentComponentController.setClient(clientDTO);
         scrambleComponentController.setDataAccordingToClient();
     }
-
+    public void updateClientInfo(){
+        clientDTO=mainController.getClientByName(clientDTO.getFullName());
+    }
     public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
          return mainController.startInlayProcess(loansToInvest,clientName);
     }
