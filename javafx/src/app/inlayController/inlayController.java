@@ -11,10 +11,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Callback;
 import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
@@ -29,7 +26,6 @@ import java.util.Set;
 public class inlayController {
 
     private bodyUser bodyUser;
-    @FXML private BorderPane borderPane;
     @FXML private Label clientName;
     @FXML private Label accountBalance;
     @FXML private TextField amountToInvest;
@@ -38,6 +34,8 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
+    @FXML private AnchorPane canter;
+    @FXML private AnchorPane button;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
     private Button approveButton;
@@ -168,12 +166,12 @@ public class inlayController {
             errorAmount.setText("");
             errorMinTime.setText("");
             minInterestForLoan.setValue("");
-        } borderPane.setCenter(null);
+        } canter.getChildren().clear();
+        //borderPane.setCenter(null);
     }
 
     private void showRelevantLoans(List<LoanDTO> loans){
         checkIfLoansExist(false);
-        Pane root =new Pane();
         TableView<LoanDTO> optionalLoans=new TableView<>();
         TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
@@ -234,10 +232,10 @@ public class inlayController {
         }};
         actionCol.setCellFactory(cellFactory);
         optionalLoans.getColumns().addAll(expander,idCol,categoryCol,capitalCol,paceCol,interestCol,statusCol,actionCol);
+
         optionalLoans.setItems(FXCollections.observableArrayList(loans));
-        root.getChildren().add(optionalLoans);
-        borderPane.setCenter(root);
-        borderPane.setBottom(new HBox(approveButton));
+        canter.getChildren().add(optionalLoans);
+        button.getChildren().add(approveButton);
     }
 
     private void setDisableApproveButton() {
@@ -266,10 +264,14 @@ public class inlayController {
             }
         }
         amountToInvest.setText("");
-        investmentStatus.getChildren().clear();
+        errorAmount.setText("");
+        errorMinTime.setText("");
+   //     minInterestForLoan.setValue("");
+    //    investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
-        borderPane.setCenter(investmentStatus);
-        borderPane.setBottom(null);
+        canter.getChildren().clear();
+        canter.getChildren().add(investmentStatus);
+        button.getChildren().clear();
         approveButton.setDisable(true);
     }
 
