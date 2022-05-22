@@ -83,6 +83,7 @@ public class AppController {
         if (user != null) {
             if (user.equals("Admin")) {
                 mainComponent.setCenter(adminComponentRoot);
+                bodyAdminController.showData();
             } else {
                 mainComponent.setCenter(userComponentRoot);
                 bodyUserController.updateUserViewer(user);

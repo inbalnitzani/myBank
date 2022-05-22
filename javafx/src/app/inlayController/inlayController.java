@@ -8,6 +8,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.util.Callback;
@@ -15,6 +18,7 @@ import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -178,7 +182,6 @@ public class inlayController {
         } else {
             checkIfLoansExist(false);
             TableView<LoanDTO> optionalLoans = new TableView<>();
-            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
             TableColumn<LoanDTO, String> idCol = new TableColumn<>("Id");
             idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -200,6 +203,8 @@ public class inlayController {
 
             TableColumn<LoanDTO, String> finalAmountCol = new TableColumn<>("Final Amount");
             finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
+
+            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
             approveButton.setDisable(true);
             approveButton.setOnAction(e -> {
