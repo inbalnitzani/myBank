@@ -2,12 +2,17 @@ package app.inlayController;
 
 import app.bodyUser.bodyUser;
 import dto.LoanDTO;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
@@ -15,6 +20,7 @@ import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
+import javax.script.Bindings;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +29,7 @@ import java.util.Set;
 public class inlayController {
 
     private bodyUser bodyUser;
-    @FXML private VBox vbox;
+    @FXML private BorderPane borderPane;
     @FXML private Label clientName;
     @FXML private Label accountBalance;
     @FXML private TextField amountToInvest;
@@ -32,10 +38,15 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
-         private List<LoanDTO> loansToInvest;
+    private List<LoanDTO> loansToInvest;
+    private Pane investmentStatus;
+    private Button approveButton;
+    private SimpleDoubleProperty accountBalanceProp;
 
     public inlayController(){
         loansToInvest=new ArrayList<>();
+        investmentStatus=new Pane();
+        accountBalanceProp=new SimpleDoubleProperty();
     }
 
     @FXML void startInlay(ActionEvent event) {
@@ -47,7 +58,7 @@ public class inlayController {
     }
 
     @FXML public void initialize() {
-
+        accountBalance.textProperty().bind(accountBalanceProp.asString());
     }
 
     @FXML void checkMinTime(ActionEvent event) {
@@ -57,7 +68,7 @@ public class inlayController {
         try {
             number = Integer.parseInt(input);
             if (number < 0) {
-                errorMinTime.setText(number + " is a negative number!\nPlease enter a positive number");
+                errorMinTime.setText(number + " is a negative number! Please enter a positive number");
             } else {
                 validInput=true;
                 errorMinTime.setText("");
@@ -67,7 +78,7 @@ public class inlayController {
                 errorMinTime.setText("");
                 minTimeToReturn.clear();
             } else {
-                errorMinTime.setText(input + " is not a number.\nPlease enter a number");
+                errorMinTime.setText(input + " is not a number. Please enter a number");
             }
         } finally {
             if (!validInput)
@@ -78,26 +89,27 @@ public class inlayController {
     @FXML void checkAmountToInvest(ActionEvent event) {
         String input = amountToInvest.getCharacters().toString().trim();
         boolean validInput = false;
-        int number;
+        int number=Integer.parseInt(input);
+        double currBalance = bodyUser.getClientBalance();
         try {
-            number = Integer.parseInt(input);
-            if (number < 0) {
-                errorAmount.setText(number + " is a negative number!\nPlease enter a positive amount.");
+            if(currBalance==0){
+                errorAmount.setText("Current balance is 0. CAN'T INVEST! ");
+            } else if (number < 0) {
+                errorAmount.setText(number + " is a negative number! Please enter a positive amount.");
+            } else if(number==0) {
+                errorAmount.setText("Please enter a positive amount.");
+            } else if (number > currBalance) {
+                errorAmount.setText("Current balance is: " + currBalance + ". Please enter amount lower than " + currBalance);
             } else {
-                double currBalance = bodyUser.getClientBalance();
-                if (number > currBalance) {
-                    errorAmount.setText("Current balance is: " + currBalance + ".\nPlease enter amount lower than " + currBalance);
-                } else {
-                    validInput = true;
-                    errorAmount.setText("");
-                }
+                validInput = true;
+                errorAmount.setText("");
             }
         } catch (Exception err) {
             if (input.equals("")) {
                 errorAmount.setText("");
                 amountToInvest.clear();
             } else {
-                errorAmount.setText(input + " is not a number.\nPlease enter a number");
+                errorAmount.setText(input + " is not a number. Please enter a number");
             }
         } finally {
             if (!validInput)
@@ -107,13 +119,14 @@ public class inlayController {
 
     public void setDataAccordingToClient(){
         clientName.setText(bodyUser.getClientDTO().getFullName());
-        accountBalance.setText(String.valueOf(bodyUser.getClientDTO().getCurrBalance()));
+        accountBalanceProp.set(bodyUser.getClientBalance());
+        accountBalance.textProperty().bind(accountBalanceProp.asString());
         checkIfLoansExist(true);
     }
 
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = minInterestForLoan.getValue();
-        if (minInterestString != null)
+        if (minInterestString != null&& minInterestString!="")
             terms.setMinInterestForTimeUnit(Integer.parseInt(minInterestString));
         return terms;
     }
@@ -148,15 +161,14 @@ public class inlayController {
         return terms;
     }
 
-    private void checkIfLoansExist(boolean changeUser){
-        int indexLast=vbox.getChildren().size()-1;
-        if (vbox.getChildren().get(indexLast).getClass().getSimpleName().equals("Pane")){
-            if (changeUser){
-                amountToInvest.setText("");
-                minTimeToReturn.setText("");
-            }
-            vbox.getChildren().remove(indexLast);
-        }
+    private void checkIfLoansExist(boolean changeUser) {
+        if (changeUser) {
+            amountToInvest.setText("");
+            minTimeToReturn.setText("");
+            errorAmount.setText("");
+            errorMinTime.setText("");
+            minInterestForLoan.setValue("");
+        } borderPane.setCenter(null);
     }
 
     private void showRelevantLoans(List<LoanDTO> loans){
@@ -186,6 +198,12 @@ public class inlayController {
         TableColumn<LoanDTO,String> finalAmountCol= new TableColumn<>("Final Amount");
         finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
 
+        approveButton = new Button("Approve Inlay");
+        approveButton.setDisable(true);
+        approveButton.setOnAction(e->{
+            startInlayProcess();
+        });
+
         TableColumn actionCol = new TableColumn("Investment");
 
         Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
@@ -207,7 +225,8 @@ public class inlayController {
                                     } else if (!loansToInvest.contains(loan)) {
                                         btn.setText("invested!");
                                         loansToInvest.add(loan);
-                                    }});
+                                    } setDisableApproveButton();
+                                });
                                 setGraphic(btn);
                                 setText(null);
                             }}};
@@ -216,27 +235,41 @@ public class inlayController {
         actionCol.setCellFactory(cellFactory);
         optionalLoans.getColumns().addAll(expander,idCol,categoryCol,capitalCol,paceCol,interestCol,statusCol,actionCol);
         optionalLoans.setItems(FXCollections.observableArrayList(loans));
-
-        Button inlay = new Button("Aprrove Inlay");
-        inlay.setOnAction(e->{
-            startInlayProcess();
-        });
-
-        root.getChildren().addAll(optionalLoans,inlay);
-        vbox.getChildren().add(root);
+        root.getChildren().add(optionalLoans);
+        borderPane.setCenter(root);
+        borderPane.setBottom(new HBox(approveButton));
     }
 
+    private void setDisableApproveButton() {
+        boolean disableButton = false;
+        if (loansToInvest.isEmpty()) {
+            disableButton = true;
+        }
+        approveButton.setDisable(disableButton);
+    }
     private void startInlayProcess() {
         int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
-        Label investmentStatus = new Label();
+        loansToInvest.clear();
+        bodyUser.updateClientInfo();
+        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
+
+        Label label = new Label();
         if (amountLeft == 0) {
-            investmentStatus.setText("Investment successfully completed!");
-        } else if (Integer.parseInt(amountToInvest.getCharacters().toString()) == amountLeft) {
-            investmentStatus.setText("Sorry, an unknown error has occurred, please try again.");
+            label.setText("Investment successfully completed!");
         } else {
-            investmentStatus.setText("Invested " + (Integer.parseInt(amountToInvest.getCharacters().toString()) - amountLeft) + " out of " + Integer.parseInt(amountToInvest.getCharacters().toString()) + " successfully");
+            int originalAmountToInvest = Integer.parseInt(amountToInvest.getCharacters().toString());
+            if (originalAmountToInvest == amountLeft) {
+                label.setText("Sorry, an unknown error has occurred, please try again.");
+            } else {
+                label.setText("Invested " + (originalAmountToInvest - amountLeft) + " out of " + originalAmountToInvest + " successfully");
+            }
         }
-        vbox.getChildren().add(investmentStatus);
+        amountToInvest.setText("");
+        investmentStatus.getChildren().clear();
+        investmentStatus.getChildren().add(label);
+        borderPane.setCenter(investmentStatus);
+        borderPane.setBottom(null);
+        approveButton.setDisable(true);
     }
 
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
@@ -274,7 +307,10 @@ public class inlayController {
     }
 
     public boolean checkMandatoryCategories() {
-        if (amountToInvest.getCharacters().toString().equals("")) {
+        if(bodyUser.getClientBalance()==0){
+            errorAmount.setText("Current balance is 0. CAN'T INVEST.");
+            return false;
+        } else if (amountToInvest.getCharacters().toString().equals("")) {
             errorAmount.setText("Please choose amount!");
             return false;
         }
