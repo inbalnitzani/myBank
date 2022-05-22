@@ -43,12 +43,6 @@ public class inlayController {
     private Button approveButton;
     private SimpleDoubleProperty accountBalanceProp;
 
-    public inlayController(){
-        loansToInvest=new ArrayList<>();
-        investmentStatus=new Pane();
-        accountBalanceProp=new SimpleDoubleProperty();
-    }
-
     @FXML void startInlay(ActionEvent event) {
         if (checkMandatoryCategories()) {
             LoanTerms terms = updateTerms();
@@ -115,6 +109,12 @@ public class inlayController {
             if (!validInput)
                 amountToInvest.setText("");
         }
+    }
+
+    public inlayController(){
+        loansToInvest=new ArrayList<>();
+        investmentStatus=new Pane();
+        accountBalanceProp=new SimpleDoubleProperty();
     }
 
     public void setDataAccordingToClient(){
@@ -247,6 +247,7 @@ public class inlayController {
         }
         approveButton.setDisable(disableButton);
     }
+
     private void startInlayProcess() {
         int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
         loansToInvest.clear();
@@ -273,12 +274,9 @@ public class inlayController {
     }
 
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
-        Label label1=new Label();
-        TextField a=new TextField();
-        a.setText(value);
-        label1.setText(str);
-        VBox vBox=new VBox(label1,a);
-        data.getChildren().add(vBox);
+        Label label2=new Label(value);
+        Label label1=new Label(str);
+        data.getChildren().add(new HBox(label1,label2));
         return data;
     }
 
