@@ -17,6 +17,7 @@ import loan.Status;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,6 +36,11 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
+    private Set<String> loansToInvest;
+
+    public inlayController(){
+        loansToInvest=new HashSet<>();
+    }
 
     @FXML void startInlay(ActionEvent event) {
         if (checkMandatoryCategories()) {
@@ -191,46 +197,49 @@ public class inlayController {
         vbox.getChildren().add(root);
     }
 
-    private GridPane showDataAccordingLoanStatus(GridPane pane,String str, String value){
+    private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label1=new Label();
         TextField a=new TextField();
         a.setText(value);
         label1.setText(str);
-        pane.addRow(0,label1,a);
-        return pane;
+        VBox vBox=new VBox(label1,a);
+        data.getChildren().add(vBox);
+        return data;
     }
+
     private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<LoanDTO> param) {
-        GridPane pane=new GridPane();
-        pane.setPadding(new Insets(10));
-        pane.setHgap(10);
-        pane.setVgap(5);
+        VBox data = new VBox();
         LoanDTO loan = param.getValue();
-        switch (loan.getStatus()){
+        switch (loan.getStatus()) {
             case PENDING:
-                pane=showDataAccordingLoanStatus(pane,
-                        "Amount left for being Active: ",
-                        String.valueOf(loan.getCapital()-loan.getAmountCollectedPending()));
+                data = showDataAccordingLoanStatus(data, "Amount left for being Active: ",
+                        String.valueOf(loan.getCapital() - loan.getAmountCollectedPending()));
                 break;
             case ACTIVE:
-                pane=showDataAccordingLoanStatus(pane,
-                        "Next Payment Time: ",String.valueOf(loan.getNextPaymentTime()));
-                pane=showDataAccordingLoanStatus(pane,
-                            "Next Payment Amount: ",String.valueOf(loan.getNextPaymentAmount()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Time: ", String.valueOf(loan.getNextPaymentTime()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
                 break;
             case RISK:
-                pane=showDataAccordingLoanStatus(pane,
-                        "Sum missing payments: ",String.valueOf(loan.getMissingMoneyPaymentTimes()));
-                pane=showDataAccordingLoanStatus(pane,
-                "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
+                data = showDataAccordingLoanStatus(data, "Sum missing payments: ", String.valueOf(loan.getMissingMoneyPaymentTimes()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
                 break;
             case FINISHED:
-                pane=showDataAccordingLoanStatus(pane,
-                        "Starting Time: ",String.valueOf(loan.getActiveTime()));
-                pane=showDataAccordingLoanStatus(pane,
-                "Last Payment Time: ", String.valueOf(loan.getLastPaymentTime()));
+                data = showDataAccordingLoanStatus(data, "Starting Time: ", String.valueOf(loan.getActiveTime()));
+                data = showDataAccordingLoanStatus(data, "Last Payment Time: ", String.valueOf(loan.getLastPaymentTime()));
                 break;
         }
-        return pane;
+        Button investmentButton = new Button("Click to invest");
+        investmentButton.setOnAction(e -> {
+            if (loansToInvest.contains(loan.getLoansID())) {
+                loansToInvest.remove(loan.getLoansID());
+                investmentButton.setText("Not invested");
+            } else if (!loansToInvest.contains(loan.getLoansID())) {
+                investmentButton.setText("invested!");
+                loansToInvest.add(loan.getLoansID());
+            }
+        });
+        data.getChildren().add(investmentButton);
+        return data;
     }
 
     public boolean checkMandatoryCategories() {
