@@ -18,10 +18,10 @@
    <children>
       <BorderPane prefHeight="657.0" prefWidth="747.0">
          <center>
-            <AnchorPane fx:id="canter" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+            <AnchorPane fx:id="center" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
          </center>
          <bottom>
-            <AnchorPane fx:id="button" prefHeight="26.0" prefWidth="747.0" BorderPane.alignment="CENTER" />
+            <AnchorPane fx:id="buttom" prefHeight="26.0" prefWidth="747.0" BorderPane.alignment="CENTER" />
          </bottom>
          <top>
             <GridPane prefHeight="129.0" prefWidth="747.0" BorderPane.alignment="CENTER">
@@ -47,13 +47,13 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="amountToInvest" onAction="#checkAmountToInvest" prefHeight="25.0" prefWidth="62.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField fx:id="amountToInvest" prefHeight="25.0" prefWidth="62.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <Label prefHeight="25.0" prefWidth="232.0" text="Enter minimum time to refund:" GridPane.rowIndex="2">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="minTimeToReturn" onAction="#checkMinTime" prefHeight="25.0" prefWidth="69.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="minTimeToReturn" prefHeight="25.0" prefWidth="69.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Label prefHeight="26.0" prefWidth="212.0" text="Choose categories for loan:" GridPane.rowIndex="3">
                      <font>
                         <Font name="System Bold" size="14.0" />

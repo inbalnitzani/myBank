@@ -3,12 +3,10 @@ package app.inlayController;
 import app.bodyUser.bodyUser;
 import dto.LoanDTO;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
@@ -17,7 +15,6 @@ import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
-import javax.script.Bindings;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -34,56 +31,60 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
-    @FXML private AnchorPane canter;
-    @FXML private AnchorPane button;
+    @FXML private AnchorPane center;
+    @FXML private AnchorPane buttom;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
     private Button approveButton;
     private SimpleDoubleProperty accountBalanceProp;
 
     @FXML void startInlay(ActionEvent event) {
-        if (checkMandatoryCategories()) {
-            LoanTerms terms = updateTerms();
-            List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
-            showRelevantLoans(matchLoans);
+        boolean validAmount = checkAmountToInvest();
+        boolean validTime = checkMinTime();
+        if (validAmount && validTime) {
+            if (checkMandatoryCategories()) {
+                LoanTerms terms = updateTerms();
+                List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
+                showRelevantLoans(matchLoans);
+            }
         }
     }
 
     @FXML public void initialize() {
         accountBalance.textProperty().bind(accountBalanceProp.asString());
+        approveButton = new Button("Approve Inlay");
     }
 
-    @FXML void checkMinTime(ActionEvent event) {
+     public boolean checkMinTime() {
         String input = minTimeToReturn.getCharacters().toString().trim();
         boolean validInput=false;
-        int number;
-        try {
-            number = Integer.parseInt(input);
-            if (number < 0) {
+        if(input.equals("")){
+            validInput=true;
+        } else {
+            try {
+                int number = Integer.parseInt(input);
+                if (number < 0) {
                 errorMinTime.setText(number + " is a negative number! Please enter a positive number");
-            } else {
-                validInput=true;
-                errorMinTime.setText("");
-            }
-        } catch (Exception err) {
-            if (input.equals("")) {
-                errorMinTime.setText("");
-                minTimeToReturn.clear();
-            } else {
+                } else {
+                    validInput=true;
+                    errorMinTime.setText("");
+                }
+            } catch (Exception err) {
                 errorMinTime.setText(input + " is not a number. Please enter a number");
-            }
-        } finally {
+            } finally {
             if (!validInput)
                 minTimeToReturn.setText("");
+            }
         }
+        return validInput;
     }
 
-    @FXML void checkAmountToInvest(ActionEvent event) {
+    public boolean checkAmountToInvest() {
         String input = amountToInvest.getCharacters().toString().trim();
         boolean validInput = false;
-        int number=Integer.parseInt(input);
         double currBalance = bodyUser.getClientBalance();
         try {
+            int number=Integer.parseInt(input);
             if(currBalance==0){
                 errorAmount.setText("Current balance is 0. CAN'T INVEST! ");
             } else if (number < 0) {
@@ -98,15 +99,16 @@ public class inlayController {
             }
         } catch (Exception err) {
             if (input.equals("")) {
-                errorAmount.setText("");
+                errorAmount.setText("Amount is a mandatory field!");
                 amountToInvest.clear();
             } else {
-                errorAmount.setText(input + " is not a number. Please enter a number");
+                errorAmount.setText("Please enter an Integer!");
             }
         } finally {
             if (!validInput)
                 amountToInvest.setText("");
         }
+    return validInput;
     }
 
     public inlayController(){
@@ -166,76 +168,86 @@ public class inlayController {
             errorAmount.setText("");
             errorMinTime.setText("");
             minInterestForLoan.setValue("");
-        } canter.getChildren().clear();
-        //borderPane.setCenter(null);
+        } center.getChildren().clear();
     }
 
-    private void showRelevantLoans(List<LoanDTO> loans){
-        checkIfLoansExist(false);
-        TableView<LoanDTO> optionalLoans=new TableView<>();
-        TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
+    private void showRelevantLoans(List<LoanDTO> loans) {
+        if (loans.size() == 0) {
+            center.getChildren().clear();
+            center.getChildren().add(new Label("There are no loans that match your applications"));
+        } else {
+            checkIfLoansExist(false);
+            TableView<LoanDTO> optionalLoans = new TableView<>();
+            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
-        TableColumn<LoanDTO,String> idCol= new TableColumn<>("Id");
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            TableColumn<LoanDTO, String> idCol = new TableColumn<>("Id");
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
 
-        TableColumn<LoanDTO,String> categoryCol= new TableColumn<>("Category");
-        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+            TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
+            categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
 
-        TableColumn<LoanDTO,String> capitalCol= new TableColumn<>("Original Amount");
-        capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
+            TableColumn<LoanDTO, String> capitalCol = new TableColumn<>("Original Amount");
+            capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
 
-        TableColumn<LoanDTO,String> paceCol= new TableColumn<>("Pace");
-        paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
+            TableColumn<LoanDTO, String> paceCol = new TableColumn<>("Pace");
+            paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
 
-        TableColumn<LoanDTO,String> interestCol= new TableColumn<>("Interest");
-        interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
+            TableColumn<LoanDTO, String> interestCol = new TableColumn<>("Interest");
+            interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
 
-        TableColumn<LoanDTO,String> statusCol= new TableColumn<>("Status");
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+            TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
+            statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        TableColumn<LoanDTO,String> finalAmountCol= new TableColumn<>("Final Amount");
-        finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
+            TableColumn<LoanDTO, String> finalAmountCol = new TableColumn<>("Final Amount");
+            finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
 
-        approveButton = new Button("Approve Inlay");
-        approveButton.setDisable(true);
-        approveButton.setOnAction(e->{
-            startInlayProcess();
-        });
+            approveButton.setDisable(true);
+            approveButton.setOnAction(e -> {
+                startInlayProcess();
+            });
 
-        TableColumn actionCol = new TableColumn("Investment");
+            TableColumn actionCol = new TableColumn("Investment");
 
-        Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
-            new Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>>() {
-                public TableCell call(final TableColumn<LoanDTO, String> param) {
-                    final TableCell<LoanDTO, String> cell = new TableCell<LoanDTO, String>() {
-                        final Button btn = new Button("Invest this loan");
-                        public void updateItem(String item, boolean empty) {
-                            super.updateItem(item, empty);
-                            if (empty) {
-                                setGraphic(null);
-                                setText(null);
-                            } else {
-                                btn.setOnAction(event -> {
-                                    LoanDTO loan = getTableView().getItems().get(getIndex());
-                                    if (loansToInvest.contains(loan)) {
-                                        loansToInvest.remove(loan);
-                                        btn.setText("Invest this loan");
-                                    } else if (!loansToInvest.contains(loan)) {
-                                        btn.setText("invested!");
-                                        loansToInvest.add(loan);
-                                    } setDisableApproveButton();
-                                });
-                                setGraphic(btn);
-                                setText(null);
-                            }}};
-                    return cell;
-        }};
-        actionCol.setCellFactory(cellFactory);
-        optionalLoans.getColumns().addAll(expander,idCol,categoryCol,capitalCol,paceCol,interestCol,statusCol,actionCol);
+            Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
+                    new Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>>() {
+                        public TableCell call(final TableColumn<LoanDTO, String> param) {
+                            final TableCell<LoanDTO, String> cell = new TableCell<LoanDTO, String>() {
+                                final Button btn = new Button("Invest this loan");
 
-        optionalLoans.setItems(FXCollections.observableArrayList(loans));
-        canter.getChildren().add(optionalLoans);
-        button.getChildren().add(approveButton);
+                                public void updateItem(String item, boolean empty) {
+                                    super.updateItem(item, empty);
+                                    if (empty) {
+                                        setGraphic(null);
+                                        setText(null);
+                                    } else {
+                                        btn.setOnAction(event -> {
+                                            LoanDTO loan = getTableView().getItems().get(getIndex());
+                                            if (loansToInvest.contains(loan)) {
+                                                loansToInvest.remove(loan);
+                                                btn.setText("Invest this loan");
+                                            } else if (!loansToInvest.contains(loan)) {
+                                                btn.setText("invested!");
+                                                loansToInvest.add(loan);
+                                            }
+                                            setDisableApproveButton();
+                                        });
+                                        setGraphic(btn);
+                                        setText(null);
+                                    }
+                                }
+                            };
+                            return cell;
+                        }
+                    };
+            actionCol.setCellFactory(cellFactory);
+            optionalLoans.getColumns().addAll(expander, idCol, categoryCol, capitalCol, paceCol, interestCol, statusCol, actionCol);
+
+            optionalLoans.setItems(FXCollections.observableArrayList(loans));
+            center.getChildren().clear();
+            buttom.getChildren().clear();
+            center.getChildren().add(optionalLoans);
+            buttom.getChildren().add(approveButton);
+        }
     }
 
     private void setDisableApproveButton() {
@@ -266,12 +278,12 @@ public class inlayController {
         amountToInvest.setText("");
         errorAmount.setText("");
         errorMinTime.setText("");
-   //     minInterestForLoan.setValue("");
+        minInterestForLoan.setValue("");
     //    investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
-        canter.getChildren().clear();
-        canter.getChildren().add(investmentStatus);
-        button.getChildren().clear();
+        center.getChildren().clear();
+        center.getChildren().add(investmentStatus);
+        buttom.getChildren().clear();
         approveButton.setDisable(true);
     }
 
@@ -309,9 +321,6 @@ public class inlayController {
     public boolean checkMandatoryCategories() {
         if(bodyUser.getClientBalance()==0){
             errorAmount.setText("Current balance is 0. CAN'T INVEST.");
-            return false;
-        } else if (amountToInvest.getCharacters().toString().equals("")) {
-            errorAmount.setText("Please choose amount!");
             return false;
         }
         return true;
