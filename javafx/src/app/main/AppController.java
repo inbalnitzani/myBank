@@ -91,6 +91,10 @@ public class AppController {
         }
     }
 
+    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
+        return myBank.startInlayProcess(loansToInvest,clientName);
+    }
+
     public void setUserOptions() {
         headerComponentController.setUsers();
     }

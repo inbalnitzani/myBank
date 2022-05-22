@@ -39,8 +39,8 @@ public class bodyUser {
         scrambleComponentController.setDataAccordingToClient();
     }
 
-    public void showErrorPopUp(Exception err){
-        mainController.showError(err);
+    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
+         return mainController.startInlayProcess(loansToInvest,clientName);
     }
     public bodyUser(){}
     public void setData(){
