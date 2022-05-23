@@ -1,19 +1,22 @@
 package app.information;
 
 import app.bodyUser.bodyUser;
-import dto.ClientDTO;
-import dto.LoanDTO;
+import dto.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 public class informationController {
 
@@ -22,9 +25,10 @@ public class informationController {
     @FXML private TextField amount;
     @FXML private Button chargeButton;
     @FXML private Button withdrawButton;
-
-        private bodyUser bodyUser;
+    @FXML private TableView<MovementDTO> transactionTable;
+    private bodyUser bodyUser;
     private ClientDTO user;
+
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
@@ -36,9 +40,32 @@ public class informationController {
     public void showData() {
         showLonersLoans(user.getLoansAsBorrower());
         showLoansAsLender(user.getLoansAsGiver());
-
+        showTransactions();
     }
+    public void showTransactions() {
 
+        transactionTable.getColumns().clear();
+        ObservableList<MovementDTO> transactionData = FXCollections.observableArrayList();
+
+        List<List<MovementDTO>> movements = new ArrayList<>(user.getMovements().values());
+
+        for (List<MovementDTO> moveList : movements) {
+            for (MovementDTO movement : moveList) {
+                transactionData.add(movement);
+            }
+        }
+        TableColumn<MovementDTO, String> amountCol = new TableColumn<>("Amount");
+        TableColumn<MovementDTO, Integer> balanceBeforeCol = new TableColumn<>("Balance before");
+        TableColumn<MovementDTO, Integer> balanceAfterCol = new TableColumn<>("Balance after");
+        TableColumn<MovementDTO, Integer> yazCol = new TableColumn<>("Yaz");
+
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        balanceBeforeCol.setCellValueFactory(new PropertyValueFactory<>("amountBeforeMovement"));
+        balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
+        yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
+        transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
+        transactionTable.setItems(transactionData);
+    }
 
     public void showLonersLoans(Collection<LoanDTO> loans) {
 
@@ -63,22 +90,40 @@ public class informationController {
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
+        loansAsLoner.setOnMouseClicked(event -> {
+            Object choice = loansAsLoner.getSelectionModel().getSelectedItem();
+            if (choice != null) {
+                popup(bodyUser.getLoans().get(loansAsLoner.getSelectionModel().getFocusedIndex()));
+            }
+        });
 
         loansAsLoner.getColumns().addAll(idCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLoner.setItems(loansData);
 
     }
-  @FXML void chargeListener(ActionEvent event) {
-   try {
-        double toAdd = Double.parseDouble(amount.getText());
-        bodyUser.chargeAcount(user.getFullName(),toAdd);
-    }
-   catch (Exception exception)
-    {
-       System.out.println( "not good");
-   }
+    @FXML void chargeListener(ActionEvent event) {
+      try {
+          double toAdd = Double.parseDouble(amount.getText());
+          bodyUser.chargeAcount(user.getFullName(), toAdd);
+          amount.clear();
+          setUser(bodyUser.mainController.getClientByName(user.getFullName()));
+          showTransactions();
+      } catch (Exception exception) {
+          System.out.println("not good");
+      }
 
-       }
+  }
+    @FXML void withdrawListener(ActionEvent event) {
+        try {
+            double toWithdraw = Double.parseDouble(amount.getText());
+            bodyUser.withdrawFromAcount(user.getFullName(), toWithdraw);
+            amount.clear();
+            setUser(bodyUser.mainController.getClientByName(user.getFullName()));
+            showTransactions();
+        } catch (Exception exception) {
+            System.out.println("not good");
+        }
+    }
     public void showLoansAsLender(Collection<LoanDTO> loans) {
 
         loansAsLender.getColumns().clear();
@@ -86,7 +131,7 @@ public class informationController {
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
         loansData.addAll(loans);
 
-        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
+        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
         TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
         TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
@@ -104,9 +149,79 @@ public class informationController {
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-
+        loansAsLender.setOnMouseClicked(event -> {
+                    Object choice = loansAsLender.getSelectionModel().getSelectedItem();
+                    if (choice != null) {
+                        popup(bodyUser.getLoans().get(loansAsLender.getSelectionModel().getFocusedIndex()));
+                    }
+        });
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLender.setItems(loansData);
 
+    }
+    public void popup(LoanDTO loan){
+        Stage popUpWindow = new Stage();
+        popUpWindow.setTitle(loan.getLoansID());
+        Button button = new Button("Close");
+        button.setOnAction(error -> popUpWindow.close());
+        VBox data=new VBox(5);
+        switch (loan.getStatus()) {
+            case PENDING:
+                data=addPendingData(data,loan);
+                break;
+            case ACTIVE:
+                data=addPayBacksData(data,loan);
+                data=addActiveData(data,loan);
+                data=addPaymentData(data,loan);
+                break;
+        }
+
+        data.setAlignment(Pos.CENTER_LEFT);
+        data.getChildren().add(button);
+        ScrollPane layout = new ScrollPane();
+        layout.setContent(data);
+        Scene scene = new Scene(data,500,100);
+        popUpWindow.setScene(scene);
+        popUpWindow.show();
+    }
+    public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
+        for (int i = 0; i > loanDTO.getPayBacks().size(); i++) {
+            PayBackDTO payBackDTO = loanDTO.getPayBacks().get(i);
+            Label label = new Label(payBackDTO.getGiversName() + payBackDTO.getAmountInvested());
+            data.getChildren().add(label);
+        }
+        return data;
+    }
+    public VBox addActiveData(VBox data,LoanDTO loan) {
+        addPayBacksData(data, loan);
+        data = addActiveTimeData(data, loan);
+        return data;
+    }
+    public VBox addActiveTimeData(VBox data,LoanDTO loan){
+        Label label=new Label("Active time is: "+loan.getActiveTime());
+        Label label1=new Label("Next payment time: "+loan.getNextPaymentTime());
+        return data;
+    }
+    public VBox addPendingData(VBox data,LoanDTO loan){
+        data=addPayBacksData(data,loan);
+        Label label=new Label("Total amount collected: "+loan.getAmountCollected());
+        Label label1=new Label("Total left to become ACTIVE: "+(loan.getCapital()-loan.getAmountCollected()));
+        data.getChildren().addAll(label,label1);
+        return data;
+    }
+    public VBox addPaymentData(VBox data,LoanDTO loan){
+        int index=1;
+        for (PaymentDTO paymentDTO:loan.getPayments().values()){
+            Label label=new Label("Payment "+index+" -- Paying time:"+paymentDTO.getActualPaidTime()+
+                    " -- Fund:"+paymentDTO.getAmount()+" -- Interest:"+paymentDTO.getInterestPart()+
+                    " -- Total:"+(paymentDTO.getInterestPart()+paymentDTO.getAmount()));
+            data.getChildren().add(label);
+        }
+
+        loan.calculateInfo();
+        Label label=new Label("Total fund paid:"+loan.getFundPaid()+" -- Total interest paid:"+loan.getInterestPaid());
+        Label label1=new Label("Total fund left to pay:"+loan.getFundLeftToPay()+" -- Total interest left to pay:"+loan.getInterestLeftToPay());
+        data.getChildren().addAll(label,label1);
+        return data;
     }
 }

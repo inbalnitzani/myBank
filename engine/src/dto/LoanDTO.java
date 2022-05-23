@@ -6,7 +6,6 @@ import loan.Payment;
 import loan.Status;
 import bank.Global;
 
-import java.text.DecimalFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,10 +20,12 @@ public class LoanDTO {
     private int totalYazTime, activeTime, lastRiskTime;
     private List<PayBackDTO> payBacks;
     private Map<Integer, PaymentDTO> payments;
-private double interestLeftToPay;
-private double fundLeftToPay;
-private double fundPaid;
-private double interestPaid;
+    private double finalAmount;
+    private double interestLeftToPay;
+    private double fundLeftToPay;
+    private double fundPaid;
+    private double interestPaid;
+
     //CTOR
     public LoanDTO(Loan loan) {
         this.id = loan.getLoansID();
@@ -39,10 +40,10 @@ private double interestPaid;
         this.activeTime = loan.getActiveTime();
         this.amountPaidBack = loan.getAmountPaidBack();
         this.lastRiskTime =loan.getLastRiskTime();
+        this.finalAmount=capital*(interestRate/100+1);
         setPayBacks(loan.getPayBacks());
         setPayments(loan.getPayments(), loan.getFirstPaymentTime(), loan.getLastPaymentTime());
     }
-
 
     // PRIVATE SETTERS
     private void setPayBacks(List<PayBack> payBack) {
@@ -69,6 +70,21 @@ private double interestPaid;
     //GETTERS
     public Map<Integer, PaymentDTO> getPayments() {
         return payments;
+    }
+
+
+    public int getMissingMoneyPaymentTimes() {
+        int unPaidTimes = 0;
+        for (int i = lastRiskTime; i <= Global.worldTime; i += pace) {
+            if (payments.get(i).getActualPaidTime() == 0) {
+                unPaidTimes++;
+            }
+        }
+        return unPaidTimes;
+    }
+
+    public double getFinalAmount(){
+        return finalAmount;
     }
 
     public int getCapital() {
@@ -169,7 +185,8 @@ private double interestPaid;
         this.fundPaid=0;
         this.interestPaid=0;
         if (!paid.isEmpty()) {
-            for (PaymentDTO payment : paid) {
+            for (PaymentDTO payment : paid)
+            {
                 double fund = payment.getFund();
                 double interest = payment.getInterestPart();
                 fundPaid += fund;
@@ -204,8 +221,9 @@ private double interestPaid;
         return owner;
     }
 
-    public String getInfo() {
-        return "More Info";
+    public double getNextPaymentAmount(){
+        return payments.get(getNextPaymentTime()).getAmount();
     }
+
 }
 

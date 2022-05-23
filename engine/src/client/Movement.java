@@ -7,6 +7,7 @@ public class Movement implements Serializable {
     private int executeTime;
     private double amountBeforeMovement;
     private double amountAfterMovement;
+    private double amount;
     private int kindOfExecute;
 
     //ctor
@@ -14,6 +15,7 @@ public class Movement implements Serializable {
         executeTime = time;
         amountBeforeMovement = currBalance;
         amountAfterMovement = amountBeforeMovement + amountChange;
+        amount = amountAfterMovement - amountBeforeMovement;
         if (amountChange < 0)
             kindOfExecute = WITHDRAW;
         else
@@ -29,7 +31,7 @@ public class Movement implements Serializable {
     }
 
     public double getAmount() {
-        return amountAfterMovement - amountBeforeMovement;
+        return amount;
     }
-
+    public double getAmountAfterMovement(){return amountAfterMovement;}
 }

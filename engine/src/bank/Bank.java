@@ -54,11 +54,11 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
+    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
-    public void loadMoney(String clientName, int amountToLoad) {
+    public void loadMoney(String clientName, double amountToLoad) {
         clients.get(clientName).addMoneyToAccount(amountToLoad);
     }
 

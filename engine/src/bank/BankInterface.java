@@ -18,11 +18,11 @@ public interface BankInterface {
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw);
+     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw);
 
      List<LoanDTO> getAllLoans();
 
-     void loadMoney(String clientName, int amountToLoad);
+     void loadMoney(String clientName, double amountToLoad);
 
      int getCurrBalance(String clientName);
 

@@ -3,21 +3,32 @@
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
 
-<SplitPane dividerPositions="0.5" prefHeight="407.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.payment.paymentController">
-   <items>
-      <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
-         <children>
-            <Label text="Loaner loans" />
-            <TableView fx:id="loanerLoans" prefHeight="200.0" prefWidth="200.0" />
-            <Label text="Payment controls" />
-            <ChoiceBox fx:id="choosePayment" prefWidth="150.0" />
-         </children>
-      </VBox>
-      <ListView fx:id="notificationList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
-   </items>
-</SplitPane>
+<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.payment.paymentController">
+   <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="27.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="26.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+   </rowConstraints>
+   <children>
+      <TableView fx:id="loanerLoans" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+      <Label text="Payment controls" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <ChoiceBox fx:id="choosePayment" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+      <ListView fx:id="notificationList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+      <Label text="Loaner loans" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+   </children>
+</GridPane>

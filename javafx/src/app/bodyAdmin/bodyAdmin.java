@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class bodyAdmin {
-
     @FXML private VBox bodyAdmin;
     @FXML private HBox loadFileButton;
     @FXML private Button loadFile;
@@ -101,9 +100,7 @@ public class bodyAdmin {
         popUpWindow.setTitle(loan.getLoansID());
         Button button = new Button("Close");
         button.setOnAction(error -> popUpWindow.close());
-
         VBox data=new VBox(5);
-
         switch (loan.getStatus()) {
             case PENDING:
                 data=addPendingData(data,loan);

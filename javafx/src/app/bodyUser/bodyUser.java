@@ -8,6 +8,9 @@ import dto.LoanDTO;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import loan.LoanTerms;
 
 import java.util.List;
@@ -36,10 +39,13 @@ public class bodyUser {
         clientDTO = mainController.getClientByName(client);
         informationComponentController.setUser(clientDTO);
         paymentComponentController.setClient(clientDTO);
+        scrambleComponentController.setDataAccordingToClient();
     }
-
-    public void showErrorPopUp(Exception err){
-        mainController.showError(err);
+    public void updateClientInfo(){
+        clientDTO=mainController.getClientByName(clientDTO.getFullName());
+    }
+    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
+         return mainController.startInlayProcess(loansToInvest,clientName);
     }
     public bodyUser(){}
     public void setData(){
@@ -55,12 +61,13 @@ public class bodyUser {
     paymentComponentController.showData();
     }
     public void chargeAcount(String clientName,double amount){
-        mainController.chargeAcount(clientName,amount);
+        mainController.chargeAccount(clientName,amount);
     }
+    public void withdrawFromAcount(String clientName,double amount){mainController.withdrawFromAccount(clientName,amount);}
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return mainController.findMatchLoans(clientName,terms);
     }
     public ClientDTO getClientDTO(){return clientDTO;}
-    public ObservableList<LoanDTO> getLoans(){return (ObservableList<LoanDTO>) mainController.getLoans();}
+    public List<LoanDTO> getLoans(){return mainController.getLoans();}
 
 }

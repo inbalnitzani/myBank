@@ -91,6 +91,10 @@ public class AppController {
         }
     }
 
+    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
+        return myBank.startInlayProcess(loansToInvest,clientName);
+    }
+
     public void setUserOptions() {
         headerComponentController.setUsers();
     }
@@ -149,7 +153,9 @@ public class AppController {
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return myBank.findMatchLoans(clientName,terms);
     }
-    public void chargeAcount(String clientName,double amount) {
-        myBank.loadMoney(clientName,(int)amount);
+
+    public void chargeAccount(String clientName, double amount) {
+        myBank.loadMoney(clientName,amount);
     }
+public void withdrawFromAccount(String clientName, double amount){myBank.withdrawMoneyFromAccount(clientName,amount);}
 }
