@@ -25,19 +25,24 @@ public class informationController {
     @FXML private TextField amount;
     @FXML private Button chargeButton;
     @FXML private Button withdrawButton;
+    @FXML private Label balance;
     @FXML private TableView<MovementDTO> transactionTable;
     private bodyUser bodyUser;
     private ClientDTO user;
 
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
+
     }
     @FXML void amountListener(ActionEvent event) {
 
 
     }
-    public void setUser(ClientDTO user){this.user = user;}
+    public void setUser(ClientDTO user){this.user = user;
+        balance.setText("Your current balance is: "+ user.getCurrBalance());
+    }
     public void showData() {
+        balance.setText("Your current balance is: "+ user.getCurrBalance());
         showLonersLoans(user.getLoansAsBorrower());
         showLoansAsLender(user.getLoansAsGiver());
         showTransactions();
@@ -66,7 +71,6 @@ public class informationController {
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
         transactionTable.setItems(transactionData);
     }
-
     public void showLonersLoans(Collection<LoanDTO> loans) {
 
 

@@ -157,5 +157,10 @@ public class AppController {
     public void chargeAccount(String clientName, double amount) {
         myBank.loadMoney(clientName,amount);
     }
-public void withdrawFromAccount(String clientName, double amount){myBank.withdrawMoneyFromAccount(clientName,amount);}
+    public void withdrawFromAccount(String clientName, double amount){myBank.withdrawMoneyFromAccount(clientName,amount);}
+
+    public int getTime() {
+        return time.get();
+    }
 }
+

@@ -3,7 +3,9 @@ package bank;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import exception.*;
+import loan.Loan;
 import loan.LoanTerms;
+import loan.Payment;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;

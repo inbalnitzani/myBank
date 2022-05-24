@@ -23,12 +23,13 @@
          </columnConstraints>
          <rowConstraints>
             <RowConstraints maxHeight="48.0" minHeight="0.0" prefHeight="13.0" vgrow="NEVER" />
+            <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="24.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="442.0" minHeight="10.0" prefHeight="442.0" vgrow="ALWAYS" />
             <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="14.0" vgrow="ALWAYS" />
          </rowConstraints>
          <children>
-            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+            <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
               <columnConstraints>
                   <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="10.0" />
                 <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
@@ -54,7 +55,7 @@
                   <Insets />
                </opaqueInsets>
             </GridPane>
-            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS">
                <children>
                   <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="400.0" prefWidth="431.0">
                     <columnConstraints>
@@ -74,12 +75,13 @@
                   </GridPane>
                </children>
             </VBox>
-            <Label text="loner loans:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Label text="transaction:" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <Label text="loner loans:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Label text="transaction:" GridPane.columnIndex="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </Label>
+            <Label fx:id="balance" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
          </children>
       </GridPane>
    </content>
