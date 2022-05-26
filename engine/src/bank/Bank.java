@@ -59,7 +59,7 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) {
+    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
@@ -84,6 +84,7 @@ public class Bank implements Serializable, BankInterface {
         client.addLoanToInvestor(loan, amountToInvestPerLoan, isAlreadyInvolve);
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
+            clients.get(loan.getOwner()).addMoneyToAccount(loan.getCapital());
         }
     }
 

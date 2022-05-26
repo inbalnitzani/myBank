@@ -54,11 +54,13 @@ public class bodyAdmin {
             return;
         }
         String path = selectedFile.getAbsolutePath();
-        mainController.getFile(path);
-        showData();
-        mainController.setDataUser();
-
+        if (mainController.getFile(path)) {
+            showDataAdminScreen();
+            mainController.setDataUser();
+        }
     }
+
+
     public void updateLoansData() {
         loans.setItems(FXCollections.observableArrayList(mainController.getLoans()));
     }
@@ -71,17 +73,22 @@ public class bodyAdmin {
     }
     public void setClientInfo(){
         clientsDetail.setMasterNode(clients);
-        loansDetail.setDetailNode(new Pane(new Label("no info")));
         clientsDetail.setDetailSide(Side.RIGHT);
         clientsDetail.setShowDetailNode(true);
     }
+    public void updateNoFileAdminScreen(){
+        clientsDetail.setMasterNode(new Pane(new Label("No file in system!")));
+        clientsDetail.setDetailNode(new Pane(new Label("No file in system!")));
+        loansDetail.setMasterNode(new Pane(new Label("No file in system!")));
+        loansDetail.setDetailNode(new Pane(new Label("No file in system!")));
+    }
+
     public void setLoansInfo() {
         loansDetail.setMasterNode(loans);
-        loansDetail.setDetailNode(new Pane(new Label("no info")));
         loansDetail.setDetailSide(Side.RIGHT);
         loansDetail.setShowDetailNode(true);
     }
-    public void showData( ) {
+    public void showDataAdminScreen() {
         showLoanData();
         showClients();
     }
@@ -161,13 +168,8 @@ public class bodyAdmin {
         vBox.getChildren().addAll(label,label2,label3);
         return vBox;
     }
-    public VBox createLoanData(List<LoanDTO> loans) {
-        VBox data = new VBox();
+    public VBox createLoanData(List<LoanDTO> loans,VBox data) {
         if (loans.size() != 0) {
-            Label label = new Label("Total NEW loans: ");
-            Label label1 = new Label("Total PENDING loans: ");
-            Label label2 = new Label("Total ACTIVE loans: ");
-            Label label3 = new Label("Total RISK loans: ");
             int newLoan = 0, pendingLoan = 0, activeLoan = 0, riskLoan = 0;
             for (LoanDTO loanDTO : loans) {
                 switch (loanDTO.getStatus()) {
@@ -186,13 +188,16 @@ public class bodyAdmin {
                 }
             }
             if (newLoan != 0)
-                data.getChildren().add(new HBox(label, new Label(String.valueOf(newLoan))));
+                data.getChildren().add(new HBox(new Label("Total NEW loans: "), new Label(String.valueOf(newLoan))));
             if (pendingLoan != 0)
-                data.getChildren().add(new HBox(label1, new Label(String.valueOf(pendingLoan))));
+                data.getChildren().add(new HBox(new Label("Total PENDING loans: "), new Label(String.valueOf(pendingLoan))));
             if (activeLoan != 0)
-                data.getChildren().add(new HBox(label2, new Label(String.valueOf(activeLoan))));
+                data.getChildren().add(new HBox(new Label("Total ACTIVE loans: "), new Label(String.valueOf(activeLoan))));
             if (riskLoan != 0)
-                data.getChildren().add(new HBox(label3, new Label(String.valueOf(riskLoan))));
+                data.getChildren().add(new HBox(new Label("Total RISK loans: "), new Label(String.valueOf(riskLoan))));
+        }
+        else {
+            data.getChildren().add(new Label("No loans right now."));
         }
         return data;
     }
@@ -209,11 +214,13 @@ public class bodyAdmin {
 
         clients.setOnMouseClicked(event -> {
             ClientDTO client =clients.getSelectionModel().getSelectedItem();
-            if (client != null){
-                VBox vBox = new VBox();
-                vBox.getChildren().add(createLoanData(client.getLoansAsBorrower()));
-                vBox.getChildren().add(createLoanData(client.getLoansAsGiver()));
-                clientsDetail.setDetailNode(vBox);
+            if (client != null) {
+                VBox data = new VBox();
+                data.getChildren().add(new Label("Loans as borrower:"));
+                data.getChildren().add(createLoanData(client.getLoansAsBorrower(), data));
+                data.getChildren().add(new Label("Loans as Giver:"));
+                data.getChildren().add(createLoanData(client.getLoansAsGiver(), data));
+                clientsDetail.setDetailNode(data);
             }
         });
 
@@ -248,14 +255,12 @@ public class bodyAdmin {
         popUpWindow.show();
     }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
-        Label titleLenders=new Label(("Lenders: "));
-        data.getChildren().add(titleLenders);
-        int payBackSize = loanDTO.getPayBacks().size();
+        data.getChildren().add(new Label("Lenders: "));
         List<PayBackDTO> payBackList = loanDTO.getPayBacks();
+        int payBackSize = payBackList.size();
         for (int i = 0; i < payBackSize; i++) {
             PayBackDTO payBack = payBackList.get(i);
-            Label label = new Label((i+1)+". "+payBack.getGiversName() +": "+ payBack.getAmountInvested());
-            data.getChildren().add(label);
+            data.getChildren().add(new Label((i+1)+". "+payBack.getGiversName() +": "+ payBack.getAmountInvested()));
         }
         data.getChildren().add(new Label(""));
         return data;
@@ -278,7 +283,7 @@ public class bodyAdmin {
         if (paidPayments.isEmpty()){
             data.getChildren().add(new Label("No money has been returned yet"));
         } else {
-           data=createLabelsPaidPaymentData(data,paidPayments);
+            data = createLabelsPaidPaymentData(data, paidPayments);
         }
         loan.calculateInfo();
         Label label = new Label("Total fund paid:" + loan.getFundPaid() + " -- Total interest paid:" + loan.getInterestPaid());

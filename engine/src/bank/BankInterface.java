@@ -22,7 +22,7 @@ public interface BankInterface {
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw);
+     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney;
 
      List<LoanDTO> getAllLoans();
 

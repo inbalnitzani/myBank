@@ -60,9 +60,9 @@ public class paymentController {
         for (int yaz = 0; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-                if (paymentsByYaz.containsKey(yaz)&&!paymentsByYaz.get(yaz).isPaid())
+                if (paymentsByYaz.containsKey(yaz+1)&&!paymentsByYaz.get(yaz+1).isPaid())
                     notificationList.getItems().add("Yaz: "+yaz+
-                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
+                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz+1).getAmount());
             }
         }
 
@@ -142,6 +142,7 @@ public class paymentController {
              else {
             bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
+             bodyUser.updateClientInfo();
         }
         catch (NotEnoughMoney e){
             payAllLable.setText("NOTICE: you do not have enough money ");
@@ -152,5 +153,7 @@ public class paymentController {
 
     public void updateClientUser(){
       //  accountBalanceProp.set(bodyUser.getClientBalance());
+        setClient(bodyUser.getClientDTO());
+        showData();
     }
 }

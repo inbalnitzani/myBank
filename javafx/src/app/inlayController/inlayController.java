@@ -55,6 +55,10 @@ public class inlayController {
 
     @FXML public void initialize() {
         approveButton = new Button("Approve Inlay");
+        for (int i = 1; i <= 100; i++) {
+            minInterestForLoan.getItems().add(Integer.toString(i));
+        }
+        accountBalance.textProperty().bind(accountBalanceProp.asString());
     }
 
     public boolean checkMinTime() {
@@ -122,7 +126,7 @@ public class inlayController {
     public void setDataAccordingToClient(){
         clientName.setText(bodyUser.getClientDTO().getFullName());
         accountBalanceProp.set(bodyUser.getClientBalance());
-        accountBalance.textProperty().bind(accountBalanceProp.asString());
+      //  accountBalance.textProperty().bind(accountBalanceProp.asString());
         checkIfLoansExist(true);
     }
 
@@ -350,13 +354,9 @@ public class inlayController {
         this.bodyUser = bodyUser;
     }
 
-    public void setChooseMinInterest() {
-        for (int i = 1; i <= 100; i++) {
-            minInterestForLoan.getItems().add(Integer.toString(i));
-        }
-    }
-
     public void setCategoriesChooser(){
+        if(categoriesForLoan.getItems().size()>0)
+            categoriesForLoan.getItems().clear();
         categoriesForLoan.getItems().addAll(bodyUser.getCategories());
     }
 }
