@@ -114,6 +114,8 @@ public class informationController {
         setUser(bodyUser.mainController.getClientByName(user.getFullName()));
 
         showTransactions();
+        ////////
+        bodyUser.updateClientInfo();
     }
     @FXML void withdrawListener(ActionEvent event) {
         try {
@@ -225,5 +227,9 @@ public class informationController {
         Label label1=new Label("Total fund left to pay:"+loan.getFundLeftToPay()+" -- Total interest left to pay:"+loan.getInterestLeftToPay());
         data.getChildren().addAll(label,label1);
         return data;
+    }
+
+    public void updateClientUser(){
+     //   accountBalanceProp.set(bodyUser.getClientBalance());
     }
 }

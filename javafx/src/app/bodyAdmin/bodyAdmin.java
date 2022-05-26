@@ -69,7 +69,6 @@ public class bodyAdmin {
         updateLoansData();
         updateClientsData();
     }
-
     public void setClientInfo(){
         clientsDetail.setMasterNode(clients);
         loansDetail.setDetailNode(new Pane(new Label("no info")));
@@ -82,7 +81,6 @@ public class bodyAdmin {
         loansDetail.setDetailSide(Side.RIGHT);
         loansDetail.setShowDetailNode(true);
     }
-
     public void showData( ) {
         showLoanData();
         showClients();
@@ -120,34 +118,30 @@ public class bodyAdmin {
         loans.setItems(loansData);
         setLoansInfo();
     }
-
-    public VBox createDetailNodeByLoanStatus(LoanDTO loan){
-        VBox vBox=new VBox();
+    public VBox createDetailNodeByLoanStatus(LoanDTO loan) {
+        VBox vBox = new VBox();
         switch (loan.getStatus()) {
+            case FINISHED:
+                vBox = addFinishedData(vBox, loan);
+                vBox = addPaymentData(vBox, loan);
             case PENDING:
                 vBox = addPendingData(vBox, loan);
                 break;
             case ACTIVE:
                 vBox = addPayBacksData(vBox, loan);
-                vBox = addActiveTimeData(vBox, loan);
                 vBox = addPaymentData(vBox, loan);
+                vBox = addActiveTimeData(vBox, loan);
+                break;
+            case RISK:
+                vBox = addActiveTimeData(vBox, loan);
+                vBox = addRiskData(vBox, loan);
                 break;
             case NEW:
                 vBox.getChildren().add(new Label("no data"));
                 break;
-            case RISK:
-                vBox = addActiveTimeData(vBox, loan);
-                vBox=addRiskData(vBox,loan);
-                break;
-            case FINISHED:
-                vBox = addPendingData(vBox, loan);
-                vBox = addFinishedData(vBox, loan);
-                vBox = addPaymentData(vBox, loan);
-                break;
         }
         return vBox;
     }
-
     public VBox addFinishedData(VBox vBox,LoanDTO loan) {
         Label firstPayment = new Label("First payment time: " + loan.getFirstPaymentTime());
         Label lastPayment = new Label("Last payment time: " + loan.getLastPaymentTime());
@@ -233,7 +227,8 @@ public class bodyAdmin {
         Button button = new Button("Close");
         button.setOnAction(error -> popUpWindow.close());
         VBox data=new VBox(5);
-        switch (loan.getStatus()) {
+        switch (loan.getStatus())
+        {
             case PENDING:
                 data=addPendingData(data,loan);
                 break;
@@ -281,32 +276,34 @@ public class bodyAdmin {
     public VBox addPaymentData(VBox data,LoanDTO loan) {
         List<PaymentDTO> paidPayments = loan.getPaidPayment();
         if (paidPayments.isEmpty()){
-            Label label = new Label("No money has been returned yet");
-            data.getChildren().add(label);
+            data.getChildren().add(new Label("No money has been returned yet"));
         } else {
-            int size=paidPayments.size();
-            for (int i = 0; i < size; i++) {
-                Label label = new Label("Payment " + (i + 1) + ":");
-                Label label1 = new Label("Paying time: " + paidPayments.get(i).getActualPaidTime());
-                Label label2 = new Label("Fund: " + paidPayments.get(i).getAmount());
-                Label label3 = new Label("Interest: " + paidPayments.get(i).getInterestPart());
-                Label label4 = new Label("Total: " + (paidPayments.get(i).getInterestPart() + paidPayments.get(i).getAmount()));
-                data.getChildren().addAll(label, label1, label2, label3, label4);
-            }
+           data=createLabelsPaidPaymentData(data,paidPayments);
         }
-
         loan.calculateInfo();
         Label label = new Label("Total fund paid:" + loan.getFundPaid() + " -- Total interest paid:" + loan.getInterestPaid());
         Label label1 = new Label("Total fund left to pay:" + loan.getFundLeftToPay() + " -- Total interest left to pay:" + loan.getInterestLeftToPay());
         data.getChildren().addAll(label, label1);
         return data;
     }
-
-
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
 
+    public VBox createLabelsPaidPaymentData(VBox data,List<PaymentDTO> paidPayments){
+        int size=paidPayments.size();
+        for (int i = 0; i < size; i++) {
+            Label label = new Label("Payment " + (i + 1) + ":");
+            Label label1 = new Label("Paying time: " + paidPayments.get(i).getActualPaidTime());
+            Label label2 = new Label("Fund: " + paidPayments.get(i).getAmount());
+            Label label3 = new Label("Interest: " + paidPayments.get(i).getInterestPart());
+            Label label4 = new Label("Total: " + (paidPayments.get(i).getInterestPart() + paidPayments.get(i).getAmount()));
+            data.getChildren().addAll(label, label1, label2, label3, label4);
+        }
+        return data;
+    }
 }
+
+
 
 

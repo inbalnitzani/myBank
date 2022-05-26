@@ -41,6 +41,11 @@ public class bodyUser {
     }
     public void updateClientInfo(){
         clientDTO=mainController.getClientByName(clientDTO.getFullName());
+
+        scrambleComponentController.updateClientUser();
+        informationComponentController.updateClientUser();
+        paymentComponentController.updateClientUser();
+
     }
     public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
          return mainController.startInlayProcess(loansToInvest,clientName);
@@ -69,4 +74,5 @@ public class bodyUser {
     public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
         mainController.withdrawFromAccount(clientName,amount);
     }
+
 }

@@ -6,7 +6,6 @@ import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import dto.LoanDTO;
-import dto.PaymentDTO;
 import exception.NotEnoughMoney;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -21,7 +20,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import loan.Loan;
 import loan.LoanTerms;
 
 import java.io.IOException;
@@ -52,6 +50,8 @@ public class AppController {
         }
         loadAdmin();
         loadUser();
+        headerComponentController.getYaz().textProperty().bind(time.asString());
+
     }
 
     public AppController() {
@@ -101,7 +101,7 @@ public class AppController {
     }
 
     public void setUserOptions() {
-        headerComponentController.setUsers();
+        headerComponentController.setUsersComboBox();
     }
 
     public boolean isFileInSystem() {
@@ -115,11 +115,10 @@ public class AppController {
 
     public void showError(Exception err){
         Stage popUpWindow = new Stage();
-        Button button = new Button("Close");
         popUpWindow.setTitle("Error - opening file");
+        Button button = new Button("Close");
         button.setOnAction(error -> popUpWindow.close());
-        Label label = new Label();
-        label.setText(err.toString());
+        Label label = new Label(err.toString());
         VBox vbox = new VBox(5);
         vbox.setAlignment(Pos.CENTER);
         vbox.getChildren().addAll(label, button);
@@ -133,11 +132,9 @@ public class AppController {
     public void getFile(String path) {
         try {
             myBank.getXMLFile(path);
+            headerComponentController.updateComponentForNewFile(path);
             fileInSystem.set(true);
             time.setValue(myBank.getWorldTime());
-            headerComponentController.getYaz().textProperty().bind(time.asString());
-            headerComponentController.updateFileName(path);
-            setUserOptions();
         } catch (Exception err) {
             showError(err);
         }

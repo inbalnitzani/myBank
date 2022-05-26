@@ -148,4 +148,7 @@ public class paymentController {
 
     }
 
+    public void updateClientUser(){
+      //  accountBalanceProp.set(bodyUser.getClientBalance());
+    }
 }

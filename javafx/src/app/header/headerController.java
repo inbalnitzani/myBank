@@ -41,15 +41,19 @@ public class headerController {
         this.mainController = mainController;
     }
 
-    public void setUsers() {
+    public void setUsersComboBox() {
         if (mainController.isFileInSystem()) {
             userOptions.getItems().clear();
             userOptions.getItems().add(constParameters.ADMIN);
-            for (ClientDTO clientDTO : mainController.getClients())
-                userOptions.getItems().add(clientDTO.getFullName());
         }
+        for (ClientDTO clientDTO : mainController.getClients())
+            userOptions.getItems().add(clientDTO.getFullName());
     }
 
+    public void updateComponentForNewFile(String path){
+        setUsersComboBox();
+        updateFileName(path);
+    }
     public void updateFileName(String fileName) {
         file.setText(fileName);
     }
