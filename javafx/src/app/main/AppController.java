@@ -6,6 +6,7 @@ import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import dto.PaymentDTO;
 import exception.NotEnoughMoney;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -20,6 +21,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import loan.Loan;
 import loan.LoanTerms;
 
 import java.io.IOException;
@@ -168,6 +170,7 @@ public class AppController {
     public void payAllBack(String loanID) throws NotEnoughMoney {
         myBank.payAllBack(loanID);
     }
+    public void payBackNextPayment(String loanID, double totalAmount,int yaz){myBank.payBackNextPayment(loanID,totalAmount,yaz);}
     public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
         myBank.withdrawMoneyFromAccount(clientName, amount);
     }
