@@ -2,13 +2,17 @@ package bank;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
+import dto.PaymentDTO;
 import exception.*;
+import loan.Loan;
 import loan.LoanTerms;
+import loan.Payment;
 
 import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface BankInterface {
 
@@ -39,4 +43,7 @@ public interface BankInterface {
      ClientDTO getClientByName(String name);
 
      void payAllBack(String loanID) throws NotEnoughMoney;
-}
+     void payBack(Loan loan, double totalAmount, Payment payment);
+     void payBackNextPayment(String loanID, double totalAmount, int yaz);
+
+     }

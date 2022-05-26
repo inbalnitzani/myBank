@@ -58,8 +58,8 @@ public class bodyUser {
     public void showData(){informationComponentController.showData();
     paymentComponentController.showData();
     }
-    public void chargeAcount(String clientName,double amount){
-        mainController.chargeAcount(clientName,amount);
+    public void chargeAcount(double amount){
+        mainController.chargeAcount(clientDTO.getFullName(),amount);
     }
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return mainController.findMatchLoans(clientName,terms);

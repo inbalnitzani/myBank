@@ -26,7 +26,8 @@ import java.util.stream.Collectors;
 public class paymentController {
     private bodyUser bodyUser;
     private ClientDTO client;
-    private List<LoanDTO> loans;
+    private Map<String,LoanDTO> loans;
+    private List<LoanDTO> loansList;
     @FXML private TableView<LoanDTO> loanerLoans;
     @FXML private ComboBox<String> choosePayment;
     @FXML private CheckBox payAllCheckBox;
@@ -43,7 +44,11 @@ public class paymentController {
         this.client = client;
     }
     public void showData(){
-        loans = client.getLoansAsBorrower();
+        loans = new HashMap<>();
+       loansList= client.getLoansAsBorrower();
+        for (LoanDTO loan:loansList) {
+            loans.put(loan.getId(),loan);
+        }
         showLonersLoans();
         showNotifications();
         showPaymentsControl();
@@ -53,7 +58,7 @@ public class paymentController {
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
         for (int yaz = 0; yaz<= time; yaz++) {
-            for (LoanDTO loan:loans) {
+            for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
                 if (paymentsByYaz.containsKey(yaz))
                     notificationList.getItems().add("Yaz: "+yaz+
@@ -65,9 +70,9 @@ public class paymentController {
 
     public void showPaymentsControl(){
         choosePayment.getItems().clear();
-        List<LoanDTO> active =loans.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
+        List<LoanDTO> active =loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
                 .collect(Collectors.toList());
-        List<LoanDTO> inRisk = loans.stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)
+        List<LoanDTO> inRisk = loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)
                 .collect(Collectors.toList());
         if(active.isEmpty()&&inRisk.isEmpty()){
             payAllCheckBox.setDisable(true);
@@ -89,7 +94,7 @@ public class paymentController {
 
         loanerLoans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
-        loansData.addAll(loans);
+        loansData.addAll(loansList);
 
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
         TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
@@ -115,27 +120,29 @@ public class paymentController {
 
     @FXML
     void clientChosePayment(ActionEvent event) {
-        totalAmount.setText("next payment is a total of: " );
-        payAllLable.setText("the amount left to pay all back at once is:");
+        LoanDTO loan = loans.get(choosePayment.getValue());
+        double total = loan.getTotalMoneyForPayingBack()-loan.getAmountPaidBack();
+        totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
+        payAllLable.setText("the amount left to pay all back at once is:" + total );
         payAllCheckBox.setDisable(false);
         acceptButton.setDisable(false);
     }
 
     @FXML
     void acceptButtonListener(ActionEvent event) {
+        LoanDTO loan = loans.get(choosePayment.getValue());
+
         try {
 
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
             }
-            // else {
-            //bodyUser.mainController.payBack(choosePayment.getValue(),);
-            //   }
-            //pay back next payment
-            //}
+             else {
+            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
+            }
         }
         catch (NotEnoughMoney e){
-            payAllLable.setText("Your current balance is:________________________________ ");
+            payAllLable.setText("you do not have enough money to pay all back ");
         }
 
 
