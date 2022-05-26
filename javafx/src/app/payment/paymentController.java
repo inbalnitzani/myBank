@@ -130,16 +130,16 @@ public class paymentController {
 
     @FXML
     void acceptButtonListener(ActionEvent event) {
+        LoanDTO loan = loans.get(choosePayment.getValue());
+
         try {
 
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
             }
              else {
-            bodyUser.mainController.;
-            //   }
-            //pay back next payment
-            //}
+            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
+            }
         }
         catch (NotEnoughMoney e){
             payAllLable.setText("you do not have enough money to pay all back ");

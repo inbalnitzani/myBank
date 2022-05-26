@@ -3,6 +3,7 @@ import dto.ClientDTO;
 import dto.ConvertDTO;
 import dto.LoanDTO;
 import client.Client;
+import dto.PaymentDTO;
 import exception.*;
 import loan.*;
 import schema.AbsDescriptor;
@@ -30,6 +31,8 @@ public class Bank implements Serializable, BankInterface {
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
     }
+
+
 
     public List<ClientDTO> getClients() {
         return new ConvertDTO().createListClientDTO(clients.values());
@@ -221,6 +224,11 @@ public class Bank implements Serializable, BankInterface {
         Client borrower = clients.get(investor.getClientDTOGivers());
         borrower.addMoneyToAccount(amount);
     }
+    public void payBackNextPayment(String loanID, double totalAmount, int yaz){
+       Loan loan = activeLoans.get(loanID);
+       Payment payment = loan.getPayments().get(yaz);
+        payBack(loan,totalAmount,payment);
+    }
 
     public void payBack(Loan loan, double totalAmount, Payment payment) {
         clients.get(loan.getOwner()).withdrawingMoney(totalAmount);
@@ -242,7 +250,7 @@ public class Bank implements Serializable, BankInterface {
         TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
         while (!payments.isEmpty()) {
             int currKey = payments.firstKey();
-            paymentProcess(payments.get(currKey));
+            //paymentProcess(payments.get(currKey));
             payments.remove(currKey);
         }
     }
