@@ -43,7 +43,7 @@ public interface BankInterface {
      ClientDTO getClientByName(String name);
 
      void payAllBack(String loanID) throws NotEnoughMoney;
-     void payBack(Loan loan, double totalAmount, Payment payment);
-     void payBackNextPayment(String loanID, double totalAmount, int yaz);
+     void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney;
+     void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney;
 
      }

@@ -16,6 +16,10 @@ public class Payment implements Serializable {
         this.amount += amount;
 
     }
+    public boolean isPaid(){
+        if(actualPaidTime!= 0) return true;
+         else return false;
+    }
 
     public Payment(String loanID, double fund, double percentage) {
         this.loanID = loanID;

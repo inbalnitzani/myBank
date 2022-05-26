@@ -60,7 +60,7 @@ public class paymentController {
         for (int yaz = 0; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-                if (paymentsByYaz.containsKey(yaz))
+                if (paymentsByYaz.containsKey(yaz)&&!paymentsByYaz.get(yaz).isPaid())
                     notificationList.getItems().add("Yaz: "+yaz+
                             "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
             }
@@ -120,12 +120,14 @@ public class paymentController {
 
     @FXML
     void clientChosePayment(ActionEvent event) {
-        LoanDTO loan = loans.get(choosePayment.getValue());
-        double total = loan.getTotalMoneyForPayingBack()-loan.getAmountPaidBack();
-        totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
-        payAllLable.setText("the amount left to pay all back at once is:" + total );
-        payAllCheckBox.setDisable(false);
-        acceptButton.setDisable(false);
+        if(choosePayment.getValue()!= null) {
+            LoanDTO loan = loans.get(choosePayment.getValue());
+            double total = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
+            totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
+            payAllLable.setText("the amount left to pay all back at once is:" + total);
+            payAllCheckBox.setDisable(false);
+            acceptButton.setDisable(false);
+        }
     }
 
     @FXML
@@ -142,7 +144,7 @@ public class paymentController {
             }
         }
         catch (NotEnoughMoney e){
-            payAllLable.setText("you do not have enough money to pay all back ");
+            payAllLable.setText("NOTICE: you do not have enough money ");
         }
 
 
