@@ -61,6 +61,7 @@ public class paymentController {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
                 if (paymentsByYaz.containsKey(yaz+1)&&!paymentsByYaz.get(yaz+1).isPaid())
+                if (paymentsByYaz.containsKey(yaz)&&!paymentsByYaz.get(yaz).isPaid())
                     notificationList.getItems().add("Yaz: "+yaz+
                             "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz+1).getAmount());
             }
