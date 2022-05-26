@@ -234,5 +234,7 @@ public class informationController {
     public void updateClientUser(){
      //   accountBalanceProp.set(bodyUser.getClientBalance());
         setUser(bodyUser.getClientDTO());
+        showData();
+
     }
 }

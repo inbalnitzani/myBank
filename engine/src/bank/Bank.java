@@ -59,7 +59,7 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) {
+    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 

@@ -38,6 +38,7 @@ public class bodyUser {
         informationComponentController.setUser(clientDTO);
         paymentComponentController.setClient(clientDTO);
         scrambleComponentController.setDataAccordingToClient();
+
     }
     public void updateClientInfo(){
         clientDTO=mainController.getClientByName(clientDTO.getFullName());
