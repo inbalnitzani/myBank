@@ -72,7 +72,6 @@ public class LoanDTO {
         return payments;
     }
 
-
     public int getMissingMoneyPaymentTimes() {
         int unPaidTimes = 0;
         for (int i = lastRiskTime; i <= Global.worldTime; i += pace) {
@@ -223,6 +222,27 @@ public class LoanDTO {
 
     public double getNextPaymentAmount(){
         return payments.get(getNextPaymentTime()).getAmount();
+    }
+
+    public List<PaymentDTO> getPaidPayment(){
+        int size = payments.size();
+        List<PaymentDTO> paidPayments=new ArrayList<>();
+        for (int i = getFirstPaymentTime() ; i < size ; i+=pace) {
+            PaymentDTO payment=payments.get(i);
+            if(payment.getActualPaidTime()!=0)
+                paidPayments.add(payment);
+        }
+        return paidPayments;
+    }
+
+    public List<Integer> getUnPaidPayment(){
+        List<Integer> unPaidTimes=new ArrayList<>();
+        for (int i =lastRiskTime ; i <= Global.worldTime; i += pace) {
+            if (payments.get(i).getActualPaidTime() == 0) {
+                unPaidTimes.add(i);
+            }
+        }
+        return unPaidTimes;
     }
 
 }

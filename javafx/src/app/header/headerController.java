@@ -3,13 +3,11 @@ package app.header;
 import app.constParameters;
 import app.main.AppController;
 import dto.ClientDTO;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import java.io.IOException;
 
 public class headerController {
     @FXML private ComboBox<String> userOptions;
@@ -25,7 +23,7 @@ public class headerController {
     }
 
     @FXML void chooseUser(ActionEvent event) {
-        mainController.updateDataByViewer(userOptions.getValue());
+        mainController.changeUser(userOptions.getValue());
     }
 
     public Label getYaz() {

@@ -54,7 +54,6 @@ public class inlayController {
     }
 
     @FXML public void initialize() {
-        accountBalance.textProperty().bind(accountBalanceProp.asString());
         approveButton = new Button("Approve Inlay");
     }
 
@@ -354,6 +353,4 @@ public class inlayController {
     public void setCategoriesChooser(){
         categoriesForLoan.getItems().addAll(bodyUser.getCategories());
     }
-
-
 }
