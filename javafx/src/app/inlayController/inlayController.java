@@ -57,7 +57,7 @@ public class inlayController {
         approveButton = new Button("Approve Inlay");
     }
 
-     public boolean checkMinTime() {
+    public boolean checkMinTime() {
         String input = minTimeToReturn.getCharacters().toString().trim();
         boolean validInput=false;
         if(input.equals("")){
@@ -295,11 +295,17 @@ public class inlayController {
         approveButton.setDisable(disableButton);
     }
 
+    public void updateClientUser(){
+        accountBalanceProp.set(bodyUser.getClientBalance());
+    }
+
     private void startInlayProcess() {
         int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
+
         loansToInvest.clear();
         bodyUser.updateClientInfo();
         accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
+        bodyUser.updateClientInfo();
 
         Label label = new Label();
         if (amountLeft == 0) {

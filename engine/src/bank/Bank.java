@@ -53,6 +53,8 @@ public class Bank implements Serializable, BankInterface {
         File file = new File();
         file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
         convertToBank(info);
+        time=1;
+        Global.setWorldTime(1);
         readFile = true;
         return readFile;
     }
