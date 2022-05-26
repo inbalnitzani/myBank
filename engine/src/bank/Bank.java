@@ -54,7 +54,7 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) {
+    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
@@ -210,9 +210,10 @@ public class Bank implements Serializable, BankInterface {
             Client owner = clients.get(loan.getOwner());
             if (owner.getCurrBalance() < totalAmount) {
                 setInRisk(loan, totalAmount);
-            } else {
-                payBack(loan, totalAmount, payment);
             }
+            //else {
+               // payBack(loan.getLoansID(), totalAmount, payment);
+            //}
         }
     }
 
@@ -222,29 +223,57 @@ public class Bank implements Serializable, BankInterface {
         borrower.addMoneyToAccount(amount);
     }
 
-    public void payBack(Loan loan, double totalAmount, Payment payment) {
-        clients.get(loan.getOwner()).withdrawingMoney(totalAmount);
-        loan.setAmountPaidBack(totalAmount);
-        payment.setActualPaidTime(Global.worldTime);
-        for (PayBack investor : loan.getPayBacks()) {
-            payBackToInvestor(investor, totalAmount);
+    public void payBack(String loanID, double totalAmount) throws NotEnoughMoney {
+        Loan loan = activeLoans.get(loanID);
+        Client client = clients.get(loan.getOwner());
+        if(client.getCurrBalance() >= totalAmount) {
+            client.withdrawingMoney(totalAmount);
+            loan.setAmountPaidBack(totalAmount);
+            // payment.setActualPaidTime(Global.worldTime);
+            for (PayBack investor : loan.getPayBacks()) {
+                payBackToInvestor(investor, totalAmount);
+            }
+            if (loan.getAmountPaidBack() == loan.totalAmountToPayBack()) {
+                loan.setStatus(Status.FINISHED);
+            } else {
+                loan.setStatus(Status.ACTIVE);
+            }
         }
-        if (loan.getAmountPaidBack() == loan.totalAmountToPayBack()) {
+        else throw new NotEnoughMoney(totalAmount);
+    }
+    public void payAllBack(String loanID) throws NotEnoughMoney {
+        Loan loan = activeLoans.get(loanID);
+        double totalAmount = loan.totalAmountToPayBack();
+        Client client = clients.get(loan.getOwner());
+        if(client.getCurrBalance()>= totalAmount)
+        {
+            client.withdrawingMoney(totalAmount);
+            loan.setAmountPaidBack(totalAmount);
+            //payment.setActualPaidTime(Global.worldTime);
+
+
+            for (PayBack investor : loan.getPayBacks()) {
+                payBackToInvestor(investor, totalAmount);
+            }
             loan.setStatus(Status.FINISHED);
-        } else {
-            loan.setStatus(Status.ACTIVE);
         }
+        else throw new NotEnoughMoney(totalAmount);
+
+
     }
 
     public void promoteTime() {
         Global.changeWorldTimeByOne();
         time++;
-        TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
+         /* TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
+
         while (!payments.isEmpty()) {
             int currKey = payments.firstKey();
             paymentProcess(payments.get(currKey));
             payments.remove(currKey);
-        }
+
+
+        }*/
     }
 
     public TreeMap<Integer, List<Payment>> makePaymentsLists() {

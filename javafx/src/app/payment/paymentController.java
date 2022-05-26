@@ -6,12 +6,14 @@ import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
 import dto.PaymentDTO;
+import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import loan.Loan;
 import loan.Payment;
 import loan.Status;
 
@@ -24,11 +26,15 @@ import java.util.stream.Collectors;
 public class paymentController {
 private bodyUser bodyUser;
 private ClientDTO client;
+private List<LoanDTO> loans;
 @FXML private TableView<LoanDTO> loanerLoans;
 @FXML private ComboBox<String> choosePayment;
 @FXML private CheckBox payAllCheckBox;
 @FXML private Button acceptButton;
+@FXML private Label payAllLable;
 @FXML private ListView<String> notificationList;
+@FXML private Label totalAmount;
+
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
@@ -37,28 +43,27 @@ private ClientDTO client;
         this.client = client;
     }
     public void showData(){
-        List<LoanDTO> loans = client.getLoansAsBorrower();
-        showLonersLoans(loans);
-        showNotifications(loans);
-        showPaymentsControl(loans);
+        loans = client.getLoansAsBorrower();
+        showLonersLoans();
+        showNotifications();
+        showPaymentsControl();
 
     }
-    public void showNotifications(Collection<LoanDTO> loans){
-
+    public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
         for (int yaz = 0; yaz<= time; yaz++) {
             for (LoanDTO loan:loans) {
-                Map<Integer,PaymentDTO> payments = loan.getPayments();
-                if (payments.containsKey(yaz))
+                Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
+                if (paymentsByYaz.containsKey(yaz))
                     notificationList.getItems().add("Yaz: "+yaz+
-                        "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+payments.get(yaz).getAmount());
+                        "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
             }
         }
 
     }
 
-    public void showPaymentsControl(Collection<LoanDTO> loans){
+    public void showPaymentsControl(){
         choosePayment.getItems().clear();
         List<LoanDTO> active =loans.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
                 .collect(Collectors.toList());
@@ -80,7 +85,7 @@ private ClientDTO client;
         }
     }
 
-    public void showLonersLoans(Collection<LoanDTO> loans) {
+    public void showLonersLoans() {
 
         loanerLoans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
@@ -110,11 +115,30 @@ private ClientDTO client;
 
     @FXML
     void clientChosePayment(ActionEvent event) {
+        totalAmount.setText("next payment is a total of: " );
+        payAllLable.setText("the amount left to pay all back at once is:");
         payAllCheckBox.setDisable(false);
         acceptButton.setDisable(false);
-       //if (payAllCheckBox.isSelected())
-            //else
-        //pay back next payment
+    }
+
+    @FXML
+    void acceptButtonListener(ActionEvent event) {
+    try {
+
+    if (payAllCheckBox.isSelected()) {
+        bodyUser.mainController.payAllBack(choosePayment.getValue());
+    }
+    // else {
+    //bodyUser.mainController.payBack(choosePayment.getValue(),);
+    //   }
+    //pay back next payment
+    //}
+    }
+    catch (NotEnoughMoney e){
+        payAllLable.setText("Your current balance is: "+e.getAmount());
+    }
+
+
     }
 
 }

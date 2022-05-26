@@ -1,6 +1,7 @@
 package client;
 
 import bank.Global;
+import exception.NotEnoughMoney;
 import loan.Loan;
 import java.io.Serializable;
 import java.util.*;
@@ -65,9 +66,11 @@ public class Client implements Serializable {
         currBalance += moneyToAdd;
     }
 
-    public void withdrawingMoney(double sumToPull) {
+    public void withdrawingMoney(double sumToPull) throws NotEnoughMoney {
+        if (currBalance >= sumToPull){
         addMovement(new Movement(currBalance, -sumToPull, Global.worldTime));
-        currBalance -= sumToPull;
+        currBalance -= sumToPull;}
+        else throw new NotEnoughMoney(sumToPull);
     }
 
     public Map<Integer, List<Movement>> getMovements() {

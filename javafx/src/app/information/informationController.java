@@ -2,6 +2,7 @@ package app.information;
 
 import app.bodyUser.bodyUser;
 import dto.*;
+import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -26,6 +27,7 @@ public class informationController {
     @FXML private Button chargeButton;
     @FXML private Button withdrawButton;
     @FXML private Label balance;
+    @FXML private Label notEnoughtMoney;
     @FXML private TableView<MovementDTO> transactionTable;
     private bodyUser bodyUser;
     private ClientDTO user;
@@ -106,16 +108,11 @@ public class informationController {
 
     }
     @FXML void chargeListener(ActionEvent event) {
-      try {
           double toAdd = Double.parseDouble(amount.getText());
           bodyUser.chargeAcount(user.getFullName(), toAdd);
           amount.clear();
           setUser(bodyUser.mainController.getClientByName(user.getFullName()));
           showTransactions();
-      } catch (Exception exception) {
-          System.out.println("not good");
-      }
-
   }
     @FXML void withdrawListener(ActionEvent event) {
         try {
@@ -124,8 +121,8 @@ public class informationController {
             amount.clear();
             setUser(bodyUser.mainController.getClientByName(user.getFullName()));
             showTransactions();
-        } catch (Exception exception) {
-            System.out.println("not good");
+        } catch (NotEnoughMoney exception) {
+            notEnoughtMoney.setText("NOTICE: you do not have enough money in your account");
         }
     }
     public void showLoansAsLender(Collection<LoanDTO> loans) {

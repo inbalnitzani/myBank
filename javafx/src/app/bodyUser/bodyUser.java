@@ -5,6 +5,7 @@ import app.main.AppController;
 import app.payment.paymentController;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import exception.NotEnoughMoney;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -63,7 +64,9 @@ public class bodyUser {
     public void chargeAcount(String clientName,double amount){
         mainController.chargeAccount(clientName,amount);
     }
-    public void withdrawFromAcount(String clientName,double amount){mainController.withdrawFromAccount(clientName,amount);}
+    public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
+            mainController.withdrawFromAccount(clientName,amount);
+    }
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return mainController.findMatchLoans(clientName,terms);
     }

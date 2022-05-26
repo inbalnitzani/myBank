@@ -6,6 +6,7 @@ import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import exception.NotEnoughMoney;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -19,7 +20,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import loan.Loan;
 import loan.LoanTerms;
+import loan.Payment;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,9 +34,12 @@ import static app.constParameters.BODY_USER_PATH;
 
 public class AppController {
 
-    @FXML private headerController headerComponentController;
-    @FXML private Parent headerComponent;
-    @FXML private BorderPane mainComponent;
+    @FXML
+    private headerController headerComponentController;
+    @FXML
+    private Parent headerComponent;
+    @FXML
+    private BorderPane mainComponent;
     private bodyAdmin bodyAdminController;
     private bodyUser bodyUserController;
     private Parent adminComponentRoot;
@@ -57,7 +63,7 @@ public class AppController {
         time = new SimpleIntegerProperty();
     }
 
-    public void setDataUser(){
+    public void setDataUser() {
         bodyUserController.setData();
     }
 
@@ -91,8 +97,8 @@ public class AppController {
         }
     }
 
-    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
-        return myBank.startInlayProcess(loansToInvest,clientName);
+    public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName) {
+        return myBank.startInlayProcess(loansToInvest, clientName);
     }
 
     public void setUserOptions() {
@@ -108,7 +114,7 @@ public class AppController {
         time.setValue(myBank.getWorldTime());
     }
 
-    public void showError(Exception err){
+    public void showError(Exception err) {
         Stage popUpWindow = new Stage();
         Button button = new Button("Close");
         popUpWindow.setTitle("Error - opening file");
@@ -120,7 +126,7 @@ public class AppController {
         vbox.getChildren().addAll(label, button);
         ScrollPane layout = new ScrollPane();
         layout.setContent(vbox);
-        Scene scene = new Scene(vbox,500,100);
+        Scene scene = new Scene(vbox, 500, 100);
         popUpWindow.setScene(scene);
         popUpWindow.show();
     }
@@ -138,29 +144,43 @@ public class AppController {
         }
     }
 
-    public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
+    public List<LoanDTO> getLoans() {
+        return myBank.getAllLoans();
+    }
 
-    public Collection<ClientDTO> getClients(){
+    public Collection<ClientDTO> getClients() {
         return myBank.getClients();
     }
 
-    public ClientDTO getClientByName(String name){
+    public ClientDTO getClientByName(String name) {
         return myBank.getClientByName(name);
     }
 
-    public List<String> getCategories(){return myBank.getCategories();}
+    public List<String> getCategories() {
+        return myBank.getCategories();
+    }
 
-    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
-        return myBank.findMatchLoans(clientName,terms);
+    public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
+        return myBank.findMatchLoans(clientName, terms);
     }
 
     public void chargeAccount(String clientName, double amount) {
-        myBank.loadMoney(clientName,amount);
+        myBank.loadMoney(clientName, amount);
     }
-    public void withdrawFromAccount(String clientName, double amount){myBank.withdrawMoneyFromAccount(clientName,amount);}
+
+    public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
+        myBank.withdrawMoneyFromAccount(clientName, amount);
+    }
 
     public int getTime() {
         return time.get();
     }
+
+    public void payBack(String loanID, double totalAmount) throws NotEnoughMoney {
+        myBank.payBack(loanID, totalAmount);
+    }
+   public void payAllBack(String loanID) throws NotEnoughMoney {
+       myBank.payAllBack(loanID);
+   }
 }
 

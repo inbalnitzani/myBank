@@ -7,7 +7,11 @@ public class NotEnoughMoney extends Exception {
         this.amount = _amount;
     }
 
-@Override
+    public double getAmount() {
+        return amount;
+    }
+
+    @Override
     public String toString(){
         return "Current balance is: "+amount+".\nPlease enter amount lower than +"+amount;
     }

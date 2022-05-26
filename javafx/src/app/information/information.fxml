@@ -40,6 +40,7 @@
                 <RowConstraints maxHeight="337.0" minHeight="10.0" prefHeight="312.0" vgrow="ALWAYS" />
                 <RowConstraints maxHeight="1.7976931348623157E308" minHeight="36.0" prefHeight="53.0" />
                 <RowConstraints fillHeight="false" />
+                  <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" />
               </rowConstraints>
                <children>
                   <Button fx:id="chargeButton" mnemonicParsing="false" onAction="#chargeListener" text="Charge" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
@@ -50,6 +51,7 @@
                   <Button fx:id="withdrawButton" mnemonicParsing="false" onAction="#withdrawListener" text="Withdraw" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                   <TextField fx:id="amount" onAction="#amountListener" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
                   <TableView fx:id="transactionTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
+                  <Label fx:id="notEnoughtMoney" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
                </children>
                <opaqueInsets>
                   <Insets />
