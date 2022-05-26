@@ -127,6 +127,7 @@ public class bodyAdmin {
                 vBox.getChildren().add(new Label("no data"));
                 break;
         }
+        return vBox;
     }
 
     public VBox createLoanData(List<LoanDTO> loans) {

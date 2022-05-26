@@ -1,25 +1,40 @@
 package app.payment;
 
 import app.bodyUser.bodyUser;
+import client.Movement;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import dto.MovementDTO;
+import dto.PaymentDTO;
+import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import loan.Loan;
+import loan.Payment;
 import loan.Status;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class paymentController {
-private bodyUser bodyUser;
-private ClientDTO client;
-@FXML private TableView<LoanDTO> loanerLoans;
-@FXML private ChoiceBox<String> choosePayment;
+    private bodyUser bodyUser;
+    private ClientDTO client;
+    private List<LoanDTO> loans;
+    @FXML private TableView<LoanDTO> loanerLoans;
+    @FXML private ComboBox<String> choosePayment;
+    @FXML private CheckBox payAllCheckBox;
+    @FXML private Button acceptButton;
+    @FXML private Label payAllLable;
+    @FXML private ListView<String> notificationList;
+    @FXML private Label totalAmount;
 
-@FXML private ListView<String> notificationList;
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
@@ -28,21 +43,49 @@ private ClientDTO client;
         this.client = client;
     }
     public void showData(){
-        List<LoanDTO> loans = client.getLoansAsBorrower();
-        showLonersLoans(loans);
+        loans = client.getLoansAsBorrower();
+        showLonersLoans();
         showNotifications();
-        showPaymentsControl(loans);
+        showPaymentsControl();
+
     }
     public void showNotifications(){
-        notificationList.getItems().add("hiiii");
-    }
-    public void showPaymentsControl(Collection<LoanDTO> loans){
-        for (LoanDTO loan:loans)
-            if(loan.getStatus().equals(Status.ACTIVE))
-              choosePayment.getItems().add(loan.getLoansID());
+        notificationList.getItems().clear();
+        int time = bodyUser.mainController.getTime();
+        for (int yaz = 0; yaz<= time; yaz++) {
+            for (LoanDTO loan:loans) {
+                Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
+                if (paymentsByYaz.containsKey(yaz))
+                    notificationList.getItems().add("Yaz: "+yaz+
+                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
+            }
+        }
+
     }
 
-    public void showLonersLoans(Collection<LoanDTO> loans) {
+    public void showPaymentsControl(){
+        choosePayment.getItems().clear();
+        List<LoanDTO> active =loans.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
+                .collect(Collectors.toList());
+        List<LoanDTO> inRisk = loans.stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)
+                .collect(Collectors.toList());
+        if(active.isEmpty()&&inRisk.isEmpty()){
+            payAllCheckBox.setDisable(true);
+            acceptButton.setDisable(true);
+            choosePayment.setDisable(true);}
+        else {
+            choosePayment.setDisable(false);
+
+            for (LoanDTO loan:active)
+                if(loan.getStatus().equals(Status.ACTIVE))
+                    choosePayment.getItems().add(loan.getLoansID());
+            for (LoanDTO loan:inRisk) {
+                choosePayment.getItems().add(loan.getLoansID());
+            }
+        }
+    }
+
+    public void showLonersLoans() {
 
         loanerLoans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
@@ -69,4 +112,33 @@ private ClientDTO client;
         loanerLoans.setItems(loansData);
 
     }
+
+    @FXML
+    void clientChosePayment(ActionEvent event) {
+        totalAmount.setText("next payment is a total of: " );
+        payAllLable.setText("the amount left to pay all back at once is:");
+        payAllCheckBox.setDisable(false);
+        acceptButton.setDisable(false);
+    }
+
+    @FXML
+    void acceptButtonListener(ActionEvent event) {
+        try {
+
+            if (payAllCheckBox.isSelected()) {
+                bodyUser.mainController.payAllBack(choosePayment.getValue());
+            }
+            // else {
+            //bodyUser.mainController.payBack(choosePayment.getValue(),);
+            //   }
+            //pay back next payment
+            //}
+        }
+        catch (NotEnoughMoney e){
+            payAllLable.setText("Your current balance is:________________________________ ");
+        }
+
+
+    }
+
 }
