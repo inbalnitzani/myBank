@@ -31,4 +31,8 @@ public class PaymentDTO {
     public double getInterestPart() {
         return interestPart;
     }
+    public boolean isPaid(){
+        if(actualPaidTime!= 0) return true;
+         else return false;
+    }
 }

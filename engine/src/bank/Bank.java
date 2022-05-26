@@ -209,7 +209,7 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
-    public void paymentProcess(List<Payment> paymentList) {
+    public void paymentProcess(List<Payment> paymentList) throws NotEnoughMoney {
         for (Payment payment : paymentList) {
             Loan loan = activeLoans.get(payment.getLoanID());
             double totalAmount = payment.getAmount();
@@ -221,30 +221,40 @@ public class Bank implements Serializable, BankInterface {
             }
         }
     }
+    public void setLoansInRiSK(Collection<Payment> paymentList){
+        for (Payment payment : paymentList) {
+            if(!payment.isPaid())
+                setInRisk(activeLoans.get(payment.getLoanID()),payment.getAmount());
+        }
 
+    }
     public void payBackToInvestor(PayBack investor, double totalAmount) {
         double amount = investor.getPercentage() * totalAmount;
         Client borrower = clients.get(investor.getClientDTOGivers());
         borrower.addMoneyToAccount(amount);
     }
-    public void payBackNextPayment(String loanID, double totalAmount, int yaz){
+    public void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney {
        Loan loan = activeLoans.get(loanID);
        Payment payment = loan.getPayments().get(yaz);
         payBack(loan,totalAmount,payment);
     }
 
-    public void payBack(Loan loan, double totalAmount, Payment payment) {
-        clients.get(loan.getOwner()).withdrawingMoney(totalAmount);
-        loan.setAmountPaidBack(totalAmount);
-        payment.setActualPaidTime(Global.worldTime);
-        for (PayBack investor : loan.getPayBacks()) {
-            payBackToInvestor(investor, totalAmount);
+    public void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney {
+        Client client = clients.get(loan.getOwner());
+        if(client.getCurrBalance() >= totalAmount) {
+            client.withdrawingMoney(totalAmount);
+            loan.setAmountPaidBack(totalAmount);
+            payment.setActualPaidTime(Global.worldTime);
+            for (PayBack investor : loan.getPayBacks()) {
+                payBackToInvestor(investor, totalAmount);
+            }
+            if (loan.getAmountPaidBack() == loan.totalAmountToPayBack()) {
+                loan.setStatus(Status.FINISHED);
+            } else {
+                loan.setStatus(Status.ACTIVE);
+            }
         }
-        if (loan.getAmountPaidBack() == loan.totalAmountToPayBack()) {
-            loan.setStatus(Status.FINISHED);
-        } else {
-            loan.setStatus(Status.ACTIVE);
-        }
+        else throw new NotEnoughMoney(totalAmount);
     }
 
     public void promoteTime() {
@@ -253,7 +263,8 @@ public class Bank implements Serializable, BankInterface {
         TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
         while (!payments.isEmpty()) {
             int currKey = payments.firstKey();
-            //paymentProcess(payments.get(currKey));
+          //  paymentProcess(payments.get(currKey));}
+            setLoansInRiSK(payments.get(currKey));
             payments.remove(currKey);
         }
     }
@@ -263,7 +274,7 @@ public class Bank implements Serializable, BankInterface {
 
         for (Loan loan : activeLoans.values()) {
             Map<Integer, Payment> paymentMap = loan.getPayments();
-            if (paymentMap.containsKey(Global.worldTime)) {
+            if (paymentMap.containsKey(Global.worldTime)&&(!paymentMap.get(Global.worldTime).isPaid())) {
                 int activeTime = loan.getActiveTime();
                 if (!paymentsByYaz.containsKey(activeTime)) {
                     paymentsByYaz.put(activeTime, new ArrayList<>());

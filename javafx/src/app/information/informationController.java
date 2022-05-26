@@ -100,7 +100,7 @@ public class informationController {
         loansAsLoner.setOnMouseClicked(event -> {
             Object choice = loansAsLoner.getSelectionModel().getSelectedItem();
             if (choice != null) {
-                popup(bodyUser.getLoans().get(loansAsLoner.getSelectionModel().getFocusedIndex()));
+               // popup(bodyUser.getLoans().get(loansAsLoner.getSelectionModel().getFocusedIndex()));
             }
         });
 
@@ -125,6 +125,7 @@ public class informationController {
             amount.clear();
             setUser(bodyUser.mainController.getClientByName(user.getFullName()));
             showTransactions();
+            bodyUser.updateClientInfo();
         } catch (NotEnoughMoney exception) {
             notEnoughtMoney.setText("NOTICE: you do not have enough money in your account");
         }
@@ -232,5 +233,6 @@ public class informationController {
 
     public void updateClientUser(){
      //   accountBalanceProp.set(bodyUser.getClientBalance());
+        setUser(bodyUser.getClientDTO());
     }
 }

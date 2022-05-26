@@ -173,7 +173,7 @@ public class AppController {
     public void payAllBack(String loanID) throws NotEnoughMoney {
         myBank.payAllBack(loanID);
     }
-    public void payBackNextPayment(String loanID, double totalAmount,int yaz){myBank.payBackNextPayment(loanID,totalAmount,yaz);}
+    public void payBackNextPayment(String loanID, double totalAmount,int yaz) throws NotEnoughMoney {myBank.payBackNextPayment(loanID,totalAmount,yaz);}
     public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
         myBank.withdrawMoneyFromAccount(clientName, amount);
     }
