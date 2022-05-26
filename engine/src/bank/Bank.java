@@ -84,6 +84,7 @@ public class Bank implements Serializable, BankInterface {
         client.addLoanToInvestor(loan, amountToInvestPerLoan, isAlreadyInvolve);
         if (loanStatus == Status.ACTIVE) {
             activeLoans.put(loan.getLoansID(), waitingLoans.remove(loan.getLoansID()));
+            clients.get(loan.getOwner()).addMoneyToAccount(loan.getCapital());
         }
     }
 

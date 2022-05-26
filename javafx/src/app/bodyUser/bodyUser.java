@@ -51,8 +51,7 @@ public class bodyUser {
          return mainController.startInlayProcess(loansToInvest,clientName);
     }
     public bodyUser(){}
-    public void setData(){
-        scrambleComponentController.setChooseMinInterest();
+    public void setDataForNewFile(){
         scrambleComponentController.setCategoriesChooser();
     }
     public double getClientBalance(){return clientDTO.getCurrBalance();}
@@ -60,7 +59,8 @@ public class bodyUser {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-    public void showData(){informationComponentController.showData();
+    public void showData(){
+        informationComponentController.showData();
     paymentComponentController.showData();
     }
     public void chargeAcount(double amount){

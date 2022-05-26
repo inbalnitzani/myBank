@@ -40,7 +40,8 @@ public class informationController {
 
 
     }
-    public void setUser(ClientDTO user){this.user = user;
+    public void setUser(ClientDTO user){
+        this.user = user;
         balance.setText("Your current balance is: "+ user.getCurrBalance());
     }
     public void showData() {
