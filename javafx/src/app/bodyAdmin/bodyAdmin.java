@@ -8,18 +8,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Side;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.controlsfx.control.table.TableRowExpanderColumn;
+import org.controlsfx.control.MasterDetailPane;
 
 import java.io.File;
 import java.util.List;
@@ -30,10 +28,16 @@ public class bodyAdmin {
     @FXML private Button loadFile;
     @FXML private Button increaseYaz;
     @FXML private Label clientInfo;
-    @FXML private TableView<LoanDTO> loans;
-    @FXML private TableView<ClientDTO> clients;
+    private TableView<LoanDTO> loans;
+    private TableView<ClientDTO> clients;
+    @FXML private MasterDetailPane loansDetail;
+    @FXML private MasterDetailPane clientsDetail;
     private AppController mainController;
 
+    public bodyAdmin(){
+        loans=new TableView<>();
+        clients=new TableView<>();
+    }
     @FXML void increaseYaz(ActionEvent event) {mainController.increaseYaz();}
     @FXML void loadNewFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -55,6 +59,20 @@ public class bodyAdmin {
         updateLoansData();
         showClients();
     }
+
+    public void setClientInfo(){
+        clientsDetail.setMasterNode(clients);
+        clientsDetail.setDetailNode(new Label("hi"));
+        clientsDetail.setDetailSide(Side.RIGHT);
+        clientsDetail.setShowDetailNode(true);
+    }
+    public void setLoansInfo() {
+        loansDetail.setMasterNode(loans);
+        loansDetail.setDetailNode(new Label("hi"));
+        loansDetail.setDetailSide(Side.RIGHT);
+        loansDetail.setShowDetailNode(true);
+    }
+
     public void showData( ) {
         showLoanData();
         showClients();
@@ -89,7 +107,7 @@ public class bodyAdmin {
         });
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loans.setItems(loansData);
-
+        setLoansInfo();
     }
     public VBox createLoanData(List<LoanDTO> loans) {
         VBox data=new VBox();
@@ -124,14 +142,6 @@ public class bodyAdmin {
             data.getChildren().add(new HBox(label3, new Label(String.valueOf(riskLoan))));
         return data;
     }
-    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<ClientDTO> param) {
-        VBox data = new VBox();
-        data.getChildren().add(new Label("Loans as Giver:"));
-        data = createLoanData(param.getValue().getLoansAsGiver());
-        data.getChildren().add(new Label("Loans as Borrower:"));
-        data = createLoanData(param.getValue().getLoansAsBorrower());
-        return data;
-    }
     private void showClients() {
         TableColumn<ClientDTO, String> idNameCol = new TableColumn<>("Client name");
         TableColumn<ClientDTO, Integer> currBalanceCol = new TableColumn<>("Balance");
@@ -142,10 +152,10 @@ public class bodyAdmin {
         currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
         asGiverCol.setCellValueFactory(new PropertyValueFactory<>("sumAsLender"));
         asTakenCol.setCellValueFactory(new PropertyValueFactory<>("sumAsBorrower"));
-        TableRowExpanderColumn<ClientDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
 
-        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol,expander);
+        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol);
         clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
+        setClientInfo();
     }
     public void popup(LoanDTO loan){
         Stage popUpWindow = new Stage();
