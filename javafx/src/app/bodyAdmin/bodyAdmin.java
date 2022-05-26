@@ -14,6 +14,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -68,7 +69,7 @@ public class bodyAdmin {
     }
     public void setLoansInfo() {
         loansDetail.setMasterNode(loans);
-        loansDetail.setDetailNode(new Label("hi"));
+        loansDetail.setDetailNode(new Pane(new Label("no info")));
         loansDetail.setDetailSide(Side.RIGHT);
         loansDetail.setShowDetailNode(true);
     }
@@ -100,15 +101,34 @@ public class bodyAdmin {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         loans.setOnMouseClicked(event -> {
-            Object choice =loans.getSelectionModel().getSelectedItem();
-            if (choice != null){
-                popup(mainController.getLoans().get(loans.getSelectionModel().getFocusedIndex()));
+            LoanDTO loan =loans.getSelectionModel().getSelectedItem();
+            if (loan != null){
+                VBox vBox= createDetailNodeByLoanStatus(loan);
+                loansDetail.setDetailNode(vBox);
             }
         });
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loans.setItems(loansData);
         setLoansInfo();
     }
+
+    public VBox createDetailNodeByLoanStatus(LoanDTO loan){
+        VBox vBox=new VBox();
+        switch (loan.getStatus()) {
+            case PENDING:
+                vBox = addPendingData(vBox,loan);
+                break;
+            case ACTIVE:
+                vBox=addPayBacksData(vBox,loan);
+                vBox=addActiveData(vBox,loan);
+                vBox=addPaymentData(vBox,loan);
+                break;
+            case NEW:
+                vBox.getChildren().add(new Label("no data"));
+                break;
+        }
+    }
+
     public VBox createLoanData(List<LoanDTO> loans) {
         VBox data=new VBox();
         Label label = new Label("Total NEW loans: ");
