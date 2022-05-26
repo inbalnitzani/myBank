@@ -19,8 +19,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import loan.Status;
 import org.controlsfx.control.table.TableRowExpanderColumn;
 
 import java.io.File;
@@ -149,7 +147,6 @@ public class bodyAdmin {
         clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol,expander);
         clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
     }
-
     public void popup(LoanDTO loan){
         Stage popUpWindow = new Stage();
         popUpWindow.setTitle(loan.getLoansID());

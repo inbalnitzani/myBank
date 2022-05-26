@@ -16,9 +16,6 @@ import javafx.scene.layout.*;
 import javafx.util.Callback;
 import loan.LoanTerms;
 import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.table.TableRowExpanderColumn;
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,6 +34,8 @@ public class inlayController {
     @FXML private Label errorMinTime;
     @FXML private AnchorPane center;
     @FXML private AnchorPane buttom;
+    @FXML private Label currentLoanId;
+    @FXML private AnchorPane rightErea;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
     private Button approveButton;
@@ -204,14 +203,12 @@ public class inlayController {
             TableColumn<LoanDTO, String> finalAmountCol = new TableColumn<>("Final Amount");
             finalAmountCol.setCellValueFactory(new PropertyValueFactory<>("interest"));
 
-            TableRowExpanderColumn<LoanDTO> expander = new TableRowExpanderColumn<>(this::createEditor);
-
             approveButton.setDisable(true);
             approveButton.setOnAction(e -> {
                 startInlayProcess();
             });
 
-            TableColumn actionCol = new TableColumn("Investment");
+            TableColumn investLoanActionCol = new TableColumn("Investment");
 
             Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
                     new Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>>() {
@@ -244,15 +241,51 @@ public class inlayController {
                             return cell;
                         }
                     };
-            actionCol.setCellFactory(cellFactory);
-            optionalLoans.getColumns().addAll(expander, idCol, categoryCol, capitalCol, paceCol, interestCol, statusCol, actionCol);
+            investLoanActionCol.setCellFactory(cellFactory);
+            optionalLoans.getColumns().addAll(idCol, categoryCol, capitalCol, paceCol, interestCol, statusCol, investLoanActionCol);
 
             optionalLoans.setItems(FXCollections.observableArrayList(loans));
             center.getChildren().clear();
             buttom.getChildren().clear();
+            optionalLoans.setOnMouseClicked(event -> {
+                LoanDTO choice =optionalLoans.getSelectionModel().getSelectedItem();
+                if (choice != null){
+                    addMoreInfo(choice);
+                }
+            });
+
             center.getChildren().add(optionalLoans);
             buttom.getChildren().add(approveButton);
         }
+    }
+
+    public void addMoreInfo(LoanDTO loan){
+        VBox data = new VBox();
+        currentLoanId.setText(loan.getId());
+        switch (loan.getStatus()) {
+            case NEW:
+                data.getChildren().clear();
+                data.getChildren().add(new Label("No more Info"));
+                break;
+            case PENDING:
+                data = showDataAccordingLoanStatus(data, "Amount left for being Active: ",
+                        String.valueOf(loan.getCapital() - loan.getAmountCollectedPending()));
+                break;
+            case ACTIVE:
+                data = showDataAccordingLoanStatus(data, "Next Payment Time: ", String.valueOf(loan.getNextPaymentTime()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
+                break;
+            case RISK:
+                data = showDataAccordingLoanStatus(data, "Sum missing payments: ", String.valueOf(loan.getMissingMoneyPaymentTimes()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
+                break;
+            case FINISHED:
+                data = showDataAccordingLoanStatus(data, "Starting Time: ", String.valueOf(loan.getActiveTime()));
+                data = showDataAccordingLoanStatus(data, "Last Payment Time: ", String.valueOf(loan.getLastPaymentTime()));
+                break;
+        }
+        rightErea.getChildren().clear();
+        rightErea.getChildren().add(data);
     }
 
     private void setDisableApproveButton() {
@@ -290,36 +323,13 @@ public class inlayController {
         center.getChildren().add(investmentStatus);
         buttom.getChildren().clear();
         approveButton.setDisable(true);
+        rightErea.getChildren().clear();
     }
 
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label2=new Label(value);
         Label label1=new Label(str);
         data.getChildren().add(new HBox(label1,label2));
-        return data;
-    }
-
-    private Pane createEditor(TableRowExpanderColumn.TableRowDataFeatures<LoanDTO> param) {
-        VBox data = new VBox();
-        LoanDTO loan = param.getValue();
-        switch (loan.getStatus()) {
-            case PENDING:
-                data = showDataAccordingLoanStatus(data, "Amount left for being Active: ",
-                        String.valueOf(loan.getCapital() - loan.getAmountCollectedPending()));
-                break;
-            case ACTIVE:
-                data = showDataAccordingLoanStatus(data, "Next Payment Time: ", String.valueOf(loan.getNextPaymentTime()));
-                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
-                break;
-            case RISK:
-                data = showDataAccordingLoanStatus(data, "Sum missing payments: ", String.valueOf(loan.getMissingMoneyPaymentTimes()));
-                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
-                break;
-            case FINISHED:
-                data = showDataAccordingLoanStatus(data, "Starting Time: ", String.valueOf(loan.getActiveTime()));
-                data = showDataAccordingLoanStatus(data, "Last Payment Time: ", String.valueOf(loan.getLastPaymentTime()));
-                break;
-        }
         return data;
     }
 
