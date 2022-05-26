@@ -109,9 +109,10 @@ public class informationController {
     }
     @FXML void chargeListener(ActionEvent event) {
         double toAdd = Double.parseDouble(amount.getText());
-        bodyUser.chargeAcount(user.getFullName(), toAdd);
+        bodyUser.chargeAcount(toAdd);
         amount.clear();
         setUser(bodyUser.mainController.getClientByName(user.getFullName()));
+
         showTransactions();
     }
     @FXML void withdrawListener(ActionEvent event) {
