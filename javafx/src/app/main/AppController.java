@@ -6,6 +6,7 @@ import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
 import dto.LoanDTO;
+import exception.NotEnoughMoney;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.fxml.FXML;
@@ -158,5 +159,16 @@ public class AppController {
 
     public void chargeAcount(String clientName,double amount) {
         myBank.loadMoney(clientName,(int)amount);
+    }
+
+    public int getTime() {
+        return time.get();
+    }
+
+    public void payAllBack(String loanID) throws NotEnoughMoney {
+        myBank.payAllBack(loanID);
+    }
+    public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
+        myBank.withdrawMoneyFromAccount(clientName, amount);
     }
 }

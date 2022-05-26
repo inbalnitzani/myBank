@@ -54,7 +54,7 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) {
+    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
@@ -279,6 +279,27 @@ public class Bank implements Serializable, BankInterface {
 
     public ClientDTO getClientByName(String name){
         return new ClientDTO(clients.get(name));
+    }
+
+    public void payAllBack(String loanID) throws NotEnoughMoney {
+        Loan loan = activeLoans.get(loanID);
+        double totalAmount = loan.totalAmountToPayBack();
+        Client client = clients.get(loan.getOwner());
+        if(client.getCurrBalance()>= totalAmount)
+        {
+            client.withdrawingMoney(totalAmount);
+            loan.setAmountPaidBack(totalAmount);
+            //payment.setActualPaidTime(Global.worldTime);
+
+
+            for (PayBack investor : loan.getPayBacks()) {
+                payBackToInvestor(investor, totalAmount);
+            }
+            loan.setStatus(Status.FINISHED);
+        }
+        else throw new NotEnoughMoney(totalAmount);
+
+
     }
 
 }

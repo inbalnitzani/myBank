@@ -18,7 +18,7 @@ public interface BankInterface {
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw);
+     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw);
 
      List<LoanDTO> getAllLoans();
 
@@ -37,4 +37,6 @@ public interface BankInterface {
      void promoteTime();
 
      ClientDTO getClientByName(String name);
+
+     void payAllBack(String loanID) throws NotEnoughMoney;
 }
