@@ -61,7 +61,7 @@ public class AppController {
     }
 
     public void setDataUser(){
-        bodyUserController.setData();
+        bodyUserController.setDataForNewFile();
     }
 
     public void loadAdmin() throws IOException {
@@ -86,8 +86,11 @@ public class AppController {
         if (user != null) {
             if (user.equals("Admin")) {
                 mainComponent.setCenter(adminComponentRoot);
-                if (fileInSystem.getValue())
+                if (fileInSystem.getValue()) {
                     bodyAdminController.updateData();
+                } else {
+                    bodyAdminController.updateNoFileAdminScreen();
+                }
             } else {
                 mainComponent.setCenter(userComponentRoot);
                 bodyUserController.updateUserViewer(user);
@@ -129,16 +132,19 @@ public class AppController {
         popUpWindow.show();
     }
 
-    public void getFile(String path) {
+    public boolean getFile(String path) {
+        boolean validFile=false;
         try {
             myBank.getXMLFile(path);
             headerComponentController.updateComponentForNewFile(path);
             fileInSystem.set(true);
             time.setValue(myBank.getWorldTime());
+            validFile=true;
         } catch (Exception err) {
             showError(err);
-        }
+        }return validFile;
     }
+
 
     public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
 
