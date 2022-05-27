@@ -11,7 +11,7 @@
       <content>
         <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="1.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="407.0" prefWidth="600.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" layoutX="1.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                      <content>
                         <fx:include fx:id="informationComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="../information/information.fxml" />
                      </content>
@@ -31,14 +31,14 @@
     </Tab>
       <Tab id="payment" text="Payment">
         <content>
-          <AnchorPane maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
+          <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0">
                <children>
-                  <ScrollPane fitToHeight="true" fitToWidth="true" maxWidth="1.7976931348623157E308" prefHeight="367.0" prefWidth="600.0">
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0" />
+                      <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="0.0" minWidth="0.0" prefWidth="4890.0" />
                     </content>
                   </ScrollPane>
-                  <fx:include fx:id="paymentComponent" source="../payment/payment.fxml" />
+                  <fx:include fx:id="paymentComponent" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" source="../payment/payment.fxml" />
                </children>
             </AnchorPane>
         </content>
