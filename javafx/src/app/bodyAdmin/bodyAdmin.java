@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -59,8 +60,6 @@ public class bodyAdmin {
             mainController.setDataUser();
         }
     }
-
-
     public void updateLoansData() {
         loans.setItems(FXCollections.observableArrayList(mainController.getLoans()));
     }
@@ -74,6 +73,7 @@ public class bodyAdmin {
     public void setClientInfo(){
         clientsDetail.setMasterNode(clients);
         clientsDetail.setDetailSide(Side.RIGHT);
+        clientsDetail.setDetailNode(new Label("To see more information\nclick on the client."));
         clientsDetail.setShowDetailNode(true);
     }
     public void updateNoFileAdminScreen(){
@@ -82,10 +82,10 @@ public class bodyAdmin {
         loansDetail.setMasterNode(new Pane(new Label("No file in system!")));
         loansDetail.setDetailNode(new Pane(new Label("No file in system!")));
     }
-
     public void setLoansInfo() {
         loansDetail.setMasterNode(loans);
         loansDetail.setDetailSide(Side.RIGHT);
+        loansDetail.setDetailNode(new Label("To see more information\nclick on the loan."));
         loansDetail.setShowDetailNode(true);
     }
     public void showDataAdminScreen() {
@@ -217,9 +217,9 @@ public class bodyAdmin {
             if (client != null) {
                 VBox data = new VBox();
                 data.getChildren().add(new Label("Loans as borrower:"));
-                data.getChildren().add(createLoanData(client.getLoansAsBorrower(), data));
+                createLoanData(client.getLoansAsBorrower(), data);
                 data.getChildren().add(new Label("Loans as Giver:"));
-                data.getChildren().add(createLoanData(client.getLoansAsGiver(), data));
+                createLoanData(client.getLoansAsGiver(), data);
                 clientsDetail.setDetailNode(data);
             }
         });
@@ -227,32 +227,6 @@ public class bodyAdmin {
         clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol);
         clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
         setClientInfo();
-    }
-    public void popup(LoanDTO loan){
-        Stage popUpWindow = new Stage();
-        popUpWindow.setTitle(loan.getLoansID());
-        Button button = new Button("Close");
-        button.setOnAction(error -> popUpWindow.close());
-        VBox data=new VBox(5);
-        switch (loan.getStatus())
-        {
-            case PENDING:
-                data=addPendingData(data,loan);
-                break;
-            case ACTIVE:
-                data=addPayBacksData(data,loan);
-                data= addActiveTimeData(data,loan);
-                data=addPaymentData(data,loan);
-                break;
-        }
-
-        data.setAlignment(Pos.CENTER_LEFT);
-        data.getChildren().add(button);
-        ScrollPane layout = new ScrollPane();
-        layout.setContent(data);
-        Scene scene = new Scene(data,500,100);
-        popUpWindow.setScene(scene);
-        popUpWindow.show();
     }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         data.getChildren().add(new Label("Lenders: "));
@@ -294,7 +268,6 @@ public class bodyAdmin {
     public void setMainController(AppController mainController) {
         this.mainController = mainController;
     }
-
     public VBox createLabelsPaidPaymentData(VBox data,List<PaymentDTO> paidPayments){
         int size=paidPayments.size();
         for (int i = 0; i < size; i++) {
