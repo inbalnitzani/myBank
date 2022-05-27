@@ -6,6 +6,7 @@ import bank.Bank;
 import bank.BankInterface;
 import bank.Global;
 import exception.FileException;
+import exception.NotEnoughMoney;
 import loan.LoanTerms;
 
 import javax.xml.bind.JAXBException;
@@ -166,9 +167,9 @@ public class TaskManager {
         System.out.println(amountToCharge+" NIS were added to "+clientName+"'s account successfully");
     }
 
-    public void withdrawMoney() {
+    public void withdrawMoney()  {
         String clientName = getClientNameForAction();
-        int maxAmountToWithdraw = bank.getCurrBalance(clientName);
+        double maxAmountToWithdraw = bank.getCurrBalance(clientName);
         if(maxAmountToWithdraw==0)
             System.out.println(clientName+" has no money! Can't withdraw!");
         else {

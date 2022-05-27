@@ -72,7 +72,7 @@ public class bodyUser {
     }
     public ClientDTO getClientDTO(){return clientDTO;}
     public ObservableList<LoanDTO> getLoans(){return (ObservableList<LoanDTO>) mainController.getLoans();}
-    public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
+    public void withdrawFromAcount(String clientName,int amount) throws NotEnoughMoney {
         mainController.withdrawFromAccount(clientName,amount);
     }
 

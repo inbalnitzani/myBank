@@ -14,6 +14,7 @@ public class MatchLoans implements Serializable {
     private LoanTerms loanTerms;
     private Map<String, Loan> matchingLoans;
 
+    public int getMaxOwnershipPrecent(){return loanTerms.getMaxOwnershipPrecent();}
     public MatchLoans(Client client, LoanTerms loanTerms) {
         this.client = client;
         this.loanTerms = loanTerms;

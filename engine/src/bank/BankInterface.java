@@ -22,13 +22,13 @@ public interface BankInterface {
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney;
+     void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) throws NotEnoughMoney;
 
      List<LoanDTO> getAllLoans();
 
      void loadMoney(String clientName, int amountToLoad);
 
-     int getCurrBalance(String clientName);
+     double getCurrBalance(String clientName);
 
      List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms);
 

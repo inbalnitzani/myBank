@@ -120,7 +120,7 @@ public class informationController {
     }
     @FXML void withdrawListener(ActionEvent event) {
         try {
-            double toWithdraw = Double.parseDouble(amount.getText());
+            int toWithdraw = Integer.parseInt(amount.getText());
             bodyUser.withdrawFromAcount(user.getFullName(), toWithdraw);
             amount.clear();
             setUser(bodyUser.mainController.getClientByName(user.getFullName()));
@@ -230,7 +230,6 @@ public class informationController {
         data.getChildren().addAll(label,label1);
         return data;
     }
-
     public void updateClientUser(){
      //   accountBalanceProp.set(bodyUser.getClientBalance());
         setUser(bodyUser.getClientDTO());
