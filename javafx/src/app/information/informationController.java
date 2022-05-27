@@ -115,7 +115,7 @@ public class informationController {
     }
     @FXML void withdrawListener(ActionEvent event) {
         try {
-            double toWithdraw = Double.parseDouble(amount.getText());
+            int toWithdraw = Integer.parseInt(amount.getText());
             bodyUser.withdrawFromAcount(user.getFullName(), toWithdraw);
             amount.clear();
             setUser(bodyUser.mainController.getClientByName(user.getFullName()));
@@ -164,6 +164,40 @@ public class informationController {
         }
         return data;
     }
+
+    public VBox addActiveData(VBox data,LoanDTO loan) {
+        addPayBacksData(data, loan);
+        data = addActiveTimeData(data, loan);
+        return data;
+    }
+    public VBox addActiveTimeData(VBox data,LoanDTO loan){
+        Label label=new Label("Active time is: "+loan.getActiveTime());
+        Label label1=new Label("Next payment time: "+loan.getNextPaymentTime());
+        return data;
+    }
+    public VBox addPendingData(VBox data,LoanDTO loan){
+        data=addPayBacksData(data,loan);
+        Label label=new Label("Total amount collected: "+loan.getAmountCollected());
+        Label label1=new Label("Total left to become ACTIVE: "+(loan.getCapital()-loan.getAmountCollected()));
+        data.getChildren().addAll(label,label1);
+        return data;
+    }
+    public VBox addPaymentData(VBox data,LoanDTO loan){
+        int index=1;
+        for (PaymentDTO paymentDTO:loan.getPayments().values()){
+            Label label=new Label("Payment "+index+" -- Paying time:"+paymentDTO.getActualPaidTime()+
+                    " -- Fund:"+paymentDTO.getAmount()+" -- Interest:"+paymentDTO.getInterestPart()+
+                    " -- Total:"+(paymentDTO.getInterestPart()+paymentDTO.getAmount()));
+            data.getChildren().add(label);
+        }
+
+        loan.calculateInfo();
+        Label label=new Label("Total fund paid:"+loan.getFundPaid()+" -- Total interest paid:"+loan.getInterestPaid());
+        Label label1=new Label("Total fund left to pay:"+loan.getFundLeftToPay()+" -- Total interest left to pay:"+loan.getInterestLeftToPay());
+        data.getChildren().addAll(label,label1);
+        return data;
+    }
+
     public void updateClientUser(){
      //   accountBalanceProp.set(bodyUser.getClientBalance());
         setUser(bodyUser.getClientDTO());

@@ -32,8 +32,6 @@ public class Bank implements Serializable, BankInterface {
         categories = new HashSet<String>();
     }
 
-
-
     public List<ClientDTO> getClients() {
         return new ConvertDTO().createListClientDTO(clients.values());
     }
@@ -42,7 +40,7 @@ public class Bank implements Serializable, BankInterface {
         return new ConvertDTO().createListCategories(categories);
     }
 
-    public int getCurrBalance(String clientName) {
+    public double getCurrBalance(String clientName) {
         return clients.get(clientName).getCurrBalance();
     }
 
@@ -59,7 +57,7 @@ public class Bank implements Serializable, BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
+    public void withdrawMoneyFromAccount(String clientName, int amountToWithdraw) throws NotEnoughMoney {
         clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
@@ -100,32 +98,27 @@ public class Bank implements Serializable, BankInterface {
         }
     }
 
-    public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest) {
-        int sumLoans = loans.size(), amountPerLoan = amountToInvest / sumLoans;
-        int firstPayment = amountPerLoan + amountToInvest % sumLoans;
+    public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest, int ownershipAttention) {
+        int sumLoans = loans.size(), firstPayment = (amountToInvest / sumLoans) + (amountToInvest % sumLoans);
         while (sumLoans > 0) {
             Loan currLoan = loans.get(0);
             int amountLeftCurrLoan = currLoan.getLeftAmountToInvest();
-            if (amountLeftCurrLoan >= firstPayment) {
-                if (firstPayment != amountPerLoan) {
-                    addInvestorToLoan(currLoan, client, firstPayment);
-                    loans.remove(0);
+            if (amountLeftCurrLoan < firstPayment) {
+                firstPayment = amountLeftCurrLoan;
+            }
+            if (ownershipAttention > 0) {
+                double maxPartOfLoanDouble = (ownershipAttention / 100.0) * (currLoan.getCapital());
+                int maxPartOfLoan = ((int) maxPartOfLoanDouble);
+                if (maxPartOfLoan < firstPayment) {
+                    firstPayment = maxPartOfLoan;
                 }
-                for (Loan loan : loans) {
-                    addInvestorToLoan(loan, client, amountPerLoan);
-                }
-                loans.clear();
-                sumLoans = 0;
-                amountToInvest = 0;
-            } else {
-                addInvestorToLoan(currLoan, client, amountLeftCurrLoan);
-                loans.remove(0);
-                amountToInvest = amountToInvest - amountLeftCurrLoan;
-                sumLoans--;
-                if (sumLoans != 0) {
-                    amountPerLoan = amountToInvest / sumLoans;
-                    firstPayment = amountPerLoan + amountToInvest % sumLoans;
-                }
+            }
+            addInvestorToLoan(currLoan, client, firstPayment);
+            loans.remove(0);
+            amountToInvest = amountToInvest - firstPayment;
+            sumLoans--;
+            if (sumLoans != 0) {
+                firstPayment = (amountToInvest / sumLoans) + amountToInvest % sumLoans;
             }
         }
         return amountToInvest;
@@ -145,8 +138,8 @@ public class Bank implements Serializable, BankInterface {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = new ConvertDTO().createListLoan(loansDTOToInvest, waitingLoans);
         sortListByLeftAmount(loansToInvest);
-        int amountLeft = addInvestorToLoans(loansToInvest, client, matchLoans.getAmountToInvest());
-        return amountLeft;
+        int maxOwnershipAttention=matchLoans.getMaxOwnershipPrecent();
+        return addInvestorToLoans(loansToInvest, client, matchLoans.getAmountToInvest(), maxOwnershipAttention);
     }
 
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {

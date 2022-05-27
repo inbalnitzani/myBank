@@ -12,8 +12,15 @@ public class LoanTerms implements Serializable {
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
     public int maxLoansForOwner;
-  //  public int minTimeForLoan;
+    public int maxOwnershipPrecent;
 
+    public int getMaxOwnershipPrecent() {
+        return maxOwnershipPrecent;
+    }
+
+    public void setMaxOwnershipPrecent(int maxOwnershipPrecent) {
+        this.maxOwnershipPrecent = maxOwnershipPrecent;
+    }
 
     public void setMaxLoansForOwner(int maxLoansForOwner) {
         this.maxLoansForOwner = maxLoansForOwner;

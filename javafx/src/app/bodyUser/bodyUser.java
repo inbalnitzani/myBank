@@ -71,9 +71,11 @@ public class bodyUser {
         return mainController.findMatchLoans(clientName,terms);
     }
     public ClientDTO getClientDTO(){return clientDTO;}
+
 //    public List<LoanDTO> getLoans(){return  mainController.getLoans();
   //  }
     public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
+
         mainController.withdrawFromAccount(clientName,amount);
     }
 

@@ -6,6 +6,7 @@ import bank.Bank;
 import bank.BankInterface;
 import bank.Global;
 import exception.FileException;
+import exception.NotEnoughMoney;
 import loan.LoanTerms;
 
 import javax.xml.bind.JAXBException;
@@ -53,7 +54,11 @@ public class TaskManager {
                 loadMoneyToAccount();
                 break;
             case 5:
-                withdrawMoney();
+                try {
+                    withdrawMoney();
+                } catch (Exception e){
+
+                }
                 break;
             case 6:
                 startOfInlay();
@@ -168,7 +173,7 @@ public class TaskManager {
 
     public void withdrawMoney() {
         String clientName = getClientNameForAction();
-        int maxAmountToWithdraw = bank.getCurrBalance(clientName);
+        double maxAmountToWithdraw = bank.getCurrBalance(clientName);
         if(maxAmountToWithdraw==0)
             System.out.println(clientName+" has no money! Can't withdraw!");
         else {
