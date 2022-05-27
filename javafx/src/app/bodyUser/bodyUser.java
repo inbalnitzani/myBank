@@ -53,7 +53,7 @@ public class bodyUser {
     }
     public bodyUser(){}
     public void setDataForNewFile(){
-        scrambleComponentController.setCategoriesChooser();
+        scrambleComponentController.setInlayDataForNewFile();
     }
     public double getClientBalance(){return clientDTO.getCurrBalance();}
     public List<String> getCategories(){return mainController.getCategories();}
