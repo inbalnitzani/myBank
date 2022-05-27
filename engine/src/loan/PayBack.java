@@ -10,7 +10,7 @@ public class PayBack implements Serializable {
     private double percentage;
     private double anountInvested;
 
-    public PayBack(Client client, double originalAmount, int investorAmount) {
+    public PayBack(Client client, double originalAmount, double investorAmount) {
         this.givesALoan = client.getFullName();
         this.percentage = investorAmount / originalAmount;
         this.anountInvested = investorAmount;
@@ -28,7 +28,7 @@ public class PayBack implements Serializable {
         return percentage;
     }
 
-    public void setAmounts(int amountToAdd, int originalLoanAmount) {
+    public void setAmounts(double amountToAdd, int originalLoanAmount) {
         anountInvested += amountToAdd;
         percentage = anountInvested / originalLoanAmount;
     }

@@ -146,7 +146,7 @@ public class Loan implements Serializable {
         return null;
     }
 
-    public void updatePayBacks(Client client, int newAmountForLoan, PayBack payBack) {
+    public void updatePayBacks(Client client, double newAmountForLoan, PayBack payBack) {
         if (payBack != null) {
             payBack.setAmounts(newAmountForLoan, capital);
         } else {
@@ -158,7 +158,7 @@ public class Loan implements Serializable {
         return capital * ((interestRate / 100.0) + 1);
     }
 
-    public Status addNewInvestorToLoan(Client client, int newAmountForLoan, PayBack payBack) {
+    public Status addNewInvestorToLoan(Client client, double newAmountForLoan, PayBack payBack) {
         updatePayBacks(client, newAmountForLoan, payBack);
         this.amountCollectedPending += newAmountForLoan;
         if (amountCollectedPending == capital) {
@@ -170,7 +170,7 @@ public class Loan implements Serializable {
         return status;
     }
 
-    public void createNewGiver(Client client, int investorAmount) {
+    public void createNewGiver(Client client, double investorAmount) {
         payBacks.add(new PayBack(client, this.capital, investorAmount));
     }
 

@@ -204,6 +204,13 @@ public class inlayController {
         terms= setTimeTerm(terms);
         terms=setCategoriesTerm(terms);
         terms=setInterestTerm(terms);
+        terms=setMaxOwnership(terms);
+        return terms;
+    }
+
+    private LoanTerms setMaxOwnership(LoanTerms terms){
+        if(maxOwnership.getValue()!=null)
+            terms.setMaxOwnershipPrecent(maxOwnership.getValue());
         return terms;
     }
 
@@ -214,6 +221,9 @@ public class inlayController {
             minTimeToReturn.setText("");
             errorMinTime.setText("");
             minInterestForLoan.setValue("");
+            maxLoansExist.setText("");
+            //
+            //
         }
         center.getChildren().clear();
     }
