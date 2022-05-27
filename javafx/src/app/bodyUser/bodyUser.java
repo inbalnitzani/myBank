@@ -6,7 +6,6 @@ import app.payment.paymentController;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import exception.NotEnoughMoney;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import loan.LoanTerms;
@@ -24,8 +23,6 @@ public class bodyUser {
     private ClientDTO clientDTO;
     public AppController mainController;
 
-
-
     @FXML public void initialize(){
         if (scrambleComponentController!=null && informationComponentController!=null) {
             this.scrambleComponentController.setBodyUser(this);
@@ -35,7 +32,7 @@ public class bodyUser {
     }
     public void updateUserViewer(String client) {
         clientDTO = mainController.getClientByName(client);
-        informationComponentController.setUser(clientDTO);
+        informationComponentController.updateUserViewer(clientDTO);
         paymentComponentController.setClient(clientDTO);
         scrambleComponentController.setDataAccordingToClient();
 
@@ -48,12 +45,18 @@ public class bodyUser {
         paymentComponentController.updateClientUser();
 
     }
+
+    public void increaseYaz(){
+      //  paymentComponentController.showNotifications();
+    }
     public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
          return mainController.startInlayProcess(loansToInvest,clientName);
     }
     public bodyUser(){}
     public void setDataForNewFile(){
         scrambleComponentController.setInlayDataForNewFile();
+        informationComponentController.setInformationDataForNewFile();
+        paymentComponentController.setPaymentsDataForNewFile();
     }
     public double getClientBalance(){return clientDTO.getCurrBalance();}
     public List<String> getCategories(){return mainController.getCategories();}
@@ -62,19 +65,16 @@ public class bodyUser {
     }
     public void showData(){
         informationComponentController.showData();
-    paymentComponentController.showData();
+         paymentComponentController.showData();
     }
-    public void chargeAcount(double amount){
-        mainController.chargeAcount(clientDTO.getFullName(),amount);
+    public void chargeAccount(double amount){
+        mainController.chargeAccount(clientDTO.getFullName(),amount);
     }
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms){
         return mainController.findMatchLoans(clientName,terms);
     }
     public ClientDTO getClientDTO(){return clientDTO;}
-
-//    public List<LoanDTO> getLoans(){return  mainController.getLoans();
-  //  }
-    public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
+    public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
 
         mainController.withdrawFromAccount(clientName,amount);
     }

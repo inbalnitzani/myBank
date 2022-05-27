@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.text.Font?>
 
 <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.information.informationController">
     <content>
@@ -24,8 +24,8 @@
             <rowConstraints>
                 <RowConstraints maxHeight="48.0" minHeight="0.0" prefHeight="13.0" vgrow="NEVER" />
                 <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="24.0" vgrow="ALWAYS" />
-                <RowConstraints maxHeight="442.0" minHeight="10.0" prefHeight="442.0" vgrow="ALWAYS" />
+                <RowConstraints maxHeight="60.0" minHeight="10.0" prefHeight="31.0" vgrow="ALWAYS" />
+                <RowConstraints maxHeight="442.0" minHeight="10.0" prefHeight="423.0" vgrow="ALWAYS" />
                 <RowConstraints maxHeight="26.0" minHeight="10.0" prefHeight="14.0" vgrow="ALWAYS" />
             </rowConstraints>
             <children>
@@ -38,20 +38,37 @@
                     </columnConstraints>
                     <rowConstraints>
                         <RowConstraints maxHeight="337.0" minHeight="10.0" prefHeight="312.0" vgrow="ALWAYS" />
-                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="36.0" prefHeight="53.0" />
-                        <RowConstraints fillHeight="false" />
-                        <RowConstraints fillHeight="false" minHeight="10.0" prefHeight="30.0" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" minHeight="36.0" prefHeight="54.0" />
+                        <RowConstraints maxHeight="1.7976931348623157E308" minHeight="13.0" prefHeight="15.0" />
+                        <RowConstraints fillHeight="false" maxHeight="56.0" minHeight="25.0" prefHeight="25.0" />
+                        <RowConstraints fillHeight="false" maxHeight="40.0" minHeight="10.0" prefHeight="40.0" />
                     </rowConstraints>
                     <children>
-                        <Button fx:id="chargeButton" mnemonicParsing="false" onAction="#chargeListener" text="Charge" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                        <Button fx:id="chargeButton" mnemonicParsing="false" onAction="#chargeListener" prefHeight="25.0" prefWidth="129.0" text="Charge" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
                             <GridPane.margin>
-                                <Insets />
+                                <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                             </GridPane.margin>
+                     <padding>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
                         </Button>
-                        <Button fx:id="withdrawButton" mnemonicParsing="false" onAction="#withdrawListener" text="Withdraw" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
-                        <TextField fx:id="amount" onAction="#amountListener" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
+                        <Button fx:id="withdrawButton" mnemonicParsing="false" onAction="#withdrawListener" prefHeight="25.0" prefWidth="93.0" text="Withdraw" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                     <GridPane.margin>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </GridPane.margin>
+                     <padding>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font></Button>
+                        <TextField fx:id="amount" onAction="#amountListener" prefHeight="25.0" prefWidth="88.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
                         <TableView fx:id="transactionTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.vgrow="ALWAYS" />
-                        <Label fx:id="notEnoughtMoney" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3" />
+                        <Label maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4" />
+                  <Label fx:id="amountErrorLabel" prefHeight="26.0" prefWidth="167.0" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2" />
                     </children>
                     <opaqueInsets>
                         <Insets />
@@ -72,16 +89,25 @@
                             <children>
                                 <TableView fx:id="loansAsLoner" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.rowIndex="1" />
                                 <TableView fx:id="loansAsLender" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="152.0" prefWidth="431.0" GridPane.hgrow="ALWAYS" GridPane.rowIndex="3" GridPane.vgrow="ALWAYS" />
-                                <Label text="lender loans:" GridPane.rowIndex="2" />
+                                <Label alignment="CENTER" prefHeight="19.0" prefWidth="644.0" text="Lender Loans" GridPane.rowIndex="2">
+                           <font>
+                              <Font name="System Bold" size="21.0" />
+                           </font></Label>
                             </children>
                         </GridPane>
                     </children>
                 </VBox>
-                <Label text="loner loans:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label text="transaction:" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="544.0" text="Loner Loans" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font></Label>
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="559.0" text="Transaction" GridPane.columnIndex="2" GridPane.rowIndex="2">
                     <GridPane.margin>
                         <Insets left="10.0" />
                     </GridPane.margin>
+               <font>
+                  <Font name="System Bold" size="21.0" />
+               </font>
                 </Label>
                 <Label fx:id="balance" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS" />
             </children>

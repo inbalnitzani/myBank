@@ -21,6 +21,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import loan.LoanTerms;
+import loan.Payment;
 
 import java.io.IOException;
 import java.net.URL;
@@ -112,8 +113,11 @@ public class AppController {
     }
 
     public void increaseYaz() {
-        myBank.promoteTime();
-        time.setValue(myBank.getWorldTime());
+        if(isFileInSystem()){
+            myBank.promoteTime();
+            time.setValue(myBank.getWorldTime());
+            bodyUserController.increaseYaz();
+        }
     }
 
     public void showError(Exception err){
@@ -162,7 +166,7 @@ public class AppController {
         return myBank.findMatchLoans(clientName,terms);
     }
 
-    public void chargeAcount(String clientName,double amount) {
+    public void chargeAccount(String clientName, double amount) {
         myBank.loadMoney(clientName,(int)amount);
     }
 
@@ -174,7 +178,7 @@ public class AppController {
         myBank.payAllBack(loanID);
     }
     public void payBackNextPayment(String loanID, double totalAmount,int yaz) throws NotEnoughMoney {myBank.payBackNextPayment(loanID,totalAmount,yaz);}
-    public void withdrawFromAccount(String clientName, int amount) throws NotEnoughMoney {
+    public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
         myBank.withdrawMoneyFromAccount(clientName, amount);
     }
 }

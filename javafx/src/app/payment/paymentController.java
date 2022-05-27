@@ -36,24 +36,66 @@ public class paymentController {
     @FXML private ListView<String> notificationList;
     @FXML private Label totalAmount;
 
+    @FXML void acceptButtonListener(ActionEvent event) {
+        LoanDTO loan = loans.get(choosePayment.getValue());
+        try {
+            if (payAllCheckBox.isSelected()) {
+                bodyUser.mainController.payAllBack(choosePayment.getValue());
+            } else {
+                bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
+            }
+            bodyUser.updateClientInfo();
+        }
+        catch (NotEnoughMoney e){
+            payAllLable.setText("NOTICE: you do not have enough money ");
+        }
+    }
+    @FXML void clientChosePayment(ActionEvent event) {
+        if(choosePayment.getValue()!= null) {
+            LoanDTO loan = loans.get(choosePayment.getValue());
+            double total = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
+            totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
+            payAllLable.setText("the amount left to pay all back at once is:" + total);
+            payAllCheckBox.setDisable(false);
+            acceptButton.setDisable(false);
+        }
+    }
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
-
     public void setClient(ClientDTO client) {
         this.client = client;
     }
     public void showData(){
         loans = new HashMap<>();
-       loansList= client.getLoansAsBorrower();
+        loansList= client.getLoansAsBorrower();
         for (LoanDTO loan:loansList) {
             loans.put(loan.getId(),loan);
         }
         showLonersLoans();
-        showNotifications();
+       showNotifications();
         showPaymentsControl();
 
     }
+    public void showNtifications(){
+        List<String> notifications = bodyUser.getClientDTO().getNotifications();
+
+        int yaz = bodyUser.mainController.getTime();
+        for (LoanDTO loan:loansList) {
+            Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
+            PaymentDTO payment= paymentsByYaz.get(yaz);
+            if (payment!=null){
+                if(!payment.isPaid())
+                    notifications.add("Yaz: "+yaz+
+                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
+
+            }
+        }
+        bodyUser.getClientDTO().setNotifications(notifications);
+        notificationList.getItems().clear();
+        notificationList.getItems().addAll(notifications);
+    }
+
     public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
@@ -67,7 +109,6 @@ public class paymentController {
         }
 
     }
-
     public void showPaymentsControl(){
         choosePayment.getItems().clear();
         List<LoanDTO> active =loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
@@ -89,13 +130,11 @@ public class paymentController {
             }
         }
     }
-
-    public void showLonersLoans() {
-
+    public void setPaymentsDataForNewFile(){
+        setLoanerLoans();
+    }
+    public void setLoanerLoans(){
         loanerLoans.getColumns().clear();
-        ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
-        loansData.addAll(loansList);
-
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
         TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
         TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
@@ -111,49 +150,16 @@ public class paymentController {
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
         statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-
         loanerLoans.getColumns().addAll(idCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        loanerLoans.setItems(loansData);
 
     }
-
-    @FXML
-    void clientChosePayment(ActionEvent event) {
-        if(choosePayment.getValue()!= null) {
-            LoanDTO loan = loans.get(choosePayment.getValue());
-            double total = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
-            totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
-            payAllLable.setText("the amount left to pay all back at once is:" + total);
-            payAllCheckBox.setDisable(false);
-            acceptButton.setDisable(false);
-        }
+    public void showLonersLoans() {
+        loanerLoans.setItems(FXCollections.observableArrayList(loansList));
     }
-
-    @FXML
-    void acceptButtonListener(ActionEvent event) {
-        LoanDTO loan = loans.get(choosePayment.getValue());
-
-        try {
-
-            if (payAllCheckBox.isSelected()) {
-                bodyUser.mainController.payAllBack(choosePayment.getValue());
-            }
-             else {
-                bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
-            }
-             bodyUser.updateClientInfo();
-        }
-        catch (NotEnoughMoney e){
-            payAllLable.setText("NOTICE: you do not have enough money ");
-        }
-
-
-    }
-
     public void updateClientUser(){
       //  accountBalanceProp.set(bodyUser.getClientBalance());
         setClient(bodyUser.getClientDTO());
+        loansList=client.getLoansAsBorrower();
         showData();
     }
 }

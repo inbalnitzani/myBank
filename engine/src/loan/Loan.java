@@ -15,10 +15,18 @@ public class Loan implements Serializable {
     private int capital, amountPaidBack, amountCollectedPending;
     private int interestRate, pace;
     private Status status = Status.NEW;
-    private int totalYazTime, activeTime, lastRiskTime;
+    private int totalYazTime, activeTime, lastRiskTime, actualLastPaymentTime=0;
     private List<PayBack> payBacks;
     private Map<Integer, Payment> payments;
 
+
+    public void setActualLastPaymentTime(int actualLastPaymentTime) {
+        this.actualLastPaymentTime = actualLastPaymentTime;
+    }
+
+    public int getActualLastPaymentTime() {
+        return actualLastPaymentTime;
+    }
 
     //CTOR
     public Loan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace) {
@@ -52,6 +60,7 @@ public class Loan implements Serializable {
     public Map<Integer, Payment> getPayments() {
         return payments;
     }
+
 
     public int getFirstPaymentTime() {
         int optionalTime = activeTime + 1;
@@ -177,4 +186,27 @@ public class Loan implements Serializable {
     public void setStatus(Status status) {
         this.status = status;
     }
+
+    public Payment getNextPayment() {
+        boolean findNextPayment = false;
+        int nextPayment = Global.worldTime + 1;
+        while (!findNextPayment) {
+            if (payments.containsKey(nextPayment)) {
+                findNextPayment = true;
+            } else nextPayment++;
+        }
+        return payments.get(nextPayment);
+    }
+    public int getNextPaymentTime() {
+        boolean findNextPayment = false;
+        int nextPayment = Global.worldTime + 1;
+        while (!findNextPayment) {
+            if (payments.containsKey(nextPayment)) {
+                findNextPayment = true;
+            } else nextPayment++;
+        }
+        return nextPayment;
+    }
+
+
 }

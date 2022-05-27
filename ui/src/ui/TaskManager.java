@@ -56,9 +56,7 @@ public class TaskManager {
             case 5:
                 try {
                     withdrawMoney();
-                } catch (Exception e){
-
-                }
+                } catch (Exception e){}
                 break;
             case 6:
                 startOfInlay();
@@ -171,7 +169,7 @@ public class TaskManager {
         System.out.println(amountToCharge+" NIS were added to "+clientName+"'s account successfully");
     }
 
-    public void withdrawMoney() {
+    public void withdrawMoney() throws NotEnoughMoney {
         String clientName = getClientNameForAction();
         double maxAmountToWithdraw = bank.getCurrBalance(clientName);
         if(maxAmountToWithdraw==0)
@@ -183,7 +181,6 @@ public class TaskManager {
             bank.withdrawMoneyFromAccount(clientName, amountToWithdraw);
             System.out.println(amountToWithdraw + " NIS were withdraw from " + clientName + "'s account successfully");
         }
-
     }
 
     public String getClientNameForAction() {

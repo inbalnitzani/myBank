@@ -42,7 +42,10 @@ public class LoanDTO {
         this.lastRiskTime =loan.getLastRiskTime();
         this.finalAmount=capital*(interestRate/100+1);
         setPayBacks(loan.getPayBacks());
-        setPayments(loan.getPayments(), loan.getFirstPaymentTime(), loan.getLastPaymentTime());
+        int lastPay= loan.getActualLastPaymentTime();
+        if(lastPay==0) {
+            lastPay= loan.getLastPaymentTime();}
+        setPayments(loan.getPayments(), loan.getFirstPaymentTime(), lastPay);
     }
 
     // PRIVATE SETTERS
@@ -113,11 +116,18 @@ public class LoanDTO {
 
     public int getNextPaymentTime() {
         boolean findNextPayment = false;
-        int nextPayment = Global.worldTime + 1;
+        int nextPayment = Global.worldTime;
         while (!findNextPayment) {
-            if (payments.containsKey(nextPayment)) {
-                findNextPayment = true;
-            } else nextPayment++;
+            PaymentDTO paymentDTO = payments.get(nextPayment);
+            if (paymentDTO != null) {
+                if (!paymentDTO.isPaid()) {
+                    findNextPayment = true;
+                } else {
+                    nextPayment++;
+                }
+            } else {
+                nextPayment++;
+            }
         }
         return nextPayment;
     }
@@ -138,18 +148,7 @@ public class LoanDTO {
         return this.capital;
     }
 
-    public int getFirstPaymentTime() {
-        int firstPayment = activeTime + 1;
-        boolean findFirstPayment = false;
-        while (!findFirstPayment) {
-            if (payments.containsKey(firstPayment))
-                findFirstPayment = true;
-            else firstPayment++;
-        }
-        return firstPayment;
-    }
-
-    public int getLastPaymentTime() {
+      public int getLastPaymentTime() {
         return activeTime + totalYazTime;
     }
 
@@ -229,16 +228,30 @@ public class LoanDTO {
         List<PaymentDTO> paidPayments=new ArrayList<>();
         for (int i = getFirstPaymentTime() ; i < size ; i+=pace) {
             PaymentDTO payment=payments.get(i);
-            if(payment.getActualPaidTime()!=0)
+            if(payment.isPaid())
                 paidPayments.add(payment);
         }
         return paidPayments;
     }
 
+    public int getFirstPaymentTime() {
+        int firstPayment = activeTime + 1;
+        boolean findFirstPayment = false;
+        while (!findFirstPayment) {
+            PaymentDTO payment = payments.get(firstPayment);
+            if (payment != null)
+                if (payment.isPaid()) {
+                    firstPayment = payment.getActualPaidTime();
+                    findFirstPayment = true;
+                } else firstPayment++;
+        }
+        return firstPayment;
+    }
+
     public List<Integer> getUnPaidPayment(){
         List<Integer> unPaidTimes=new ArrayList<>();
         for (int i =lastRiskTime ; i <= Global.worldTime; i += pace) {
-            if (payments.get(i).getActualPaidTime() == 0) {
+            if (!payments.get(i).isPaid()) {
                 unPaidTimes.add(i);
             }
         }
@@ -256,7 +269,7 @@ public class LoanDTO {
         else if (Status.RISK.equals(status))
             return "Risk: " + getUnPaidPayment().size() +
                     " Payments have not been paid" +
-                    "\n for a total of: " + (getNextPaymentAmount() - getTotalAmountPerPayment());
+                    "\n for a total of: " + (getNextPaymentAmount());
         else if (Status.FINISHED.equals(status))
             return "Finished: Time activated: " + getActiveTime() +
                     "Time finished: " + getLastPaymentTime();
