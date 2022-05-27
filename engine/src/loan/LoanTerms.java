@@ -11,6 +11,17 @@ public class LoanTerms implements Serializable {
     public Set<String> categories;
     public int minInterestForTimeUnit;
     public int minTimeForLoan;
+    public int maxLoansForOwner;
+  //  public int minTimeForLoan;
+
+
+    public void setMaxLoansForOwner(int maxLoansForOwner) {
+        this.maxLoansForOwner = maxLoansForOwner;
+    }
+
+    public int getMaxLoansForOwner() {
+        return maxLoansForOwner;
+    }
 
     public LoanTerms() {
         categories=new HashSet<>();

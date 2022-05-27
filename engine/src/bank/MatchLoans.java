@@ -4,6 +4,9 @@ import client.Client;
 import loan.Loan;
 import loan.LoanTerms;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MatchLoans implements Serializable {
@@ -16,9 +19,8 @@ public class MatchLoans implements Serializable {
         this.loanTerms = loanTerms;
     }
 
-    public void checkRelevantLoans(Map<String, Loan> matchLoans, Map<String, Loan> loansToCheck) {
+    public void checkRelevantLoans(Map<String, Loan> matchLoans, Map<String, Loan> loansToCheck, Map<String,Client> clientList) {
         if (loansToCheck != null) {
-
             for (Loan loan : loansToCheck.values()) {
                 if (loan.getOwner().equals(client.getFullName())) {
                     continue;
@@ -33,8 +35,24 @@ public class MatchLoans implements Serializable {
                 }
             }
         }
-        this.matchingLoans = matchLoans;
 
+        if (loanTerms.getMaxLoansForOwner()!=0) {
+            filterLoansByMaxLoansForOwner(matchLoans,clientList);
+        }
+        this.matchingLoans = matchLoans;
+    }
+
+    public void filterLoansByMaxLoansForOwner(Map<String,Loan> matchLoans, Map<String,Client>clientList) {
+        List<String> loansToRemove = new ArrayList<>();
+        for (Loan loan : matchLoans.values()) {
+            Client owner = clientList.get(loan.getOwner());
+            if (owner.getLoanListAsBorrower().size() > loanTerms.getMaxLoansForOwner()) {
+                loansToRemove.add(loan.getLoansID());
+            }
+        }
+        for (String loanId : loansToRemove) {
+            matchLoans.remove(loanId);
+        }
     }
 
     public int getAmountToInvest() {

@@ -70,7 +70,7 @@ public class Bank implements Serializable, BankInterface {
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
         matchLoans = new MatchLoans(clients.get(clientName), terms);
         Map<String, Loan> loans = new HashMap<>();
-        matchLoans.checkRelevantLoans(loans, waitingLoans);
+        matchLoans.checkRelevantLoans(loans, waitingLoans,clients);
         List<LoanDTO> loanDTOS = new ConvertDTO().createListLoanDto(loans.values());
         return loanDTOS;
     }
