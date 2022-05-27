@@ -45,6 +45,24 @@ public class inlayController {
     private SimpleDoubleProperty accountBalanceProp;
     private TableView<LoanDTO> optionalLoans;
 
+    @FXML public void initialize() {
+        approveButton = new Button("Approve Inlay");
+        for (int i = 1; i <= 100; i++) {
+            minInterestForLoan.getItems().add(Integer.toString(i));
+            maxOwnership.getItems().add(i);
+        }
+        accountBalance.textProperty().bind(accountBalanceProp.asString());
+    }
+    @FXML void startInlay(ActionEvent event) {
+        boolean amountToInvest =checkAmountToInvest();
+        boolean minTimeForLoan = checkMinTime();
+        boolean maxLoansExist = checkMaxLoansExist();
+        if (amountToInvest && minTimeForLoan && maxLoansExist) {
+            LoanTerms terms = updateTerms();
+            List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
+            showRelevantLoans(matchLoans);
+        }
+    }
     public boolean checkMaxLoansExist() {
         String input = maxLoansExist.getCharacters().toString().trim();
         boolean validInput = false;
@@ -68,34 +86,12 @@ public class inlayController {
         }
         return validInput;
     }
-
     public inlayController(){
         loansToInvest=new ArrayList<>();
         investmentStatus=new Pane();
         accountBalanceProp=new SimpleDoubleProperty();
         optionalLoans = new TableView<>();
     }
-
-    @FXML public void initialize() {
-        approveButton = new Button("Approve Inlay");
-        for (int i = 1; i <= 100; i++) {
-            minInterestForLoan.getItems().add(Integer.toString(i));
-            maxOwnership.getItems().add(i);
-        }
-        accountBalance.textProperty().bind(accountBalanceProp.asString());
-    }
-
-    @FXML void startInlay(ActionEvent event) {
-        boolean amountToInvest =checkAmountToInvest();
-        boolean minTimeForLoan = checkMinTime();
-        boolean maxLoansExist = checkMaxLoansExist();
-        if (amountToInvest && minTimeForLoan && maxLoansExist) {
-            LoanTerms terms = updateTerms();
-            List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
-            showRelevantLoans(matchLoans);
-        }
-    }
-
     public boolean checkMinTime() {
         String input = minTimeToReturn.getCharacters().toString().trim();
         boolean validInput=false;
@@ -119,7 +115,6 @@ public class inlayController {
         }
         return validInput;
     }
-
     public boolean checkAmountToInvest() {
         String input = amountToInvest.getCharacters().toString().trim();
         boolean validInput = false;
@@ -151,21 +146,17 @@ public class inlayController {
         }
     return validInput;
     }
-
     public void setDataAccordingToClient(){
         clientName.setText(bodyUser.getClientDTO().getFullName());
         accountBalanceProp.set(bodyUser.getClientBalance());
-      //  accountBalance.textProperty().bind(accountBalanceProp.asString());
         checkIfLoansExist(true);
     }
-
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = minInterestForLoan.getValue();
         if (minInterestString != null&& minInterestString!="")
             terms.setMinInterestForTimeUnit(Integer.parseInt(minInterestString));
         return terms;
     }
-
     private LoanTerms setTimeTerm(LoanTerms terms){
         String minTimeString = minTimeToReturn.getCharacters().toString();
         if (!minTimeString.equals("")) {
@@ -173,7 +164,6 @@ public class inlayController {
         }
         return terms;
     }
-
     private LoanTerms setCategoriesTerm(LoanTerms terms) {
         Set<String> chosenCategory = new HashSet<>();
         ObservableList<String> userChoose = categoriesForLoan.getCheckModel().getCheckedItems();
@@ -186,7 +176,6 @@ public class inlayController {
         terms.setCategories(chosenCategory);
         return terms;
     }
-
     private LoanTerms setMaxLoansForOwner(LoanTerms terms){
         String maxLoans =maxLoansExist.getCharacters().toString().trim();
         if(maxLoans.equals(""))
@@ -196,7 +185,6 @@ public class inlayController {
         }
         return terms;
     }
-
     private LoanTerms updateTerms() {
         LoanTerms terms = new LoanTerms();
         terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
@@ -207,13 +195,11 @@ public class inlayController {
         terms=setMaxOwnership(terms);
         return terms;
     }
-
     private LoanTerms setMaxOwnership(LoanTerms terms){
         if(maxOwnership.getValue()!=null)
             terms.setMaxOwnershipPrecent(maxOwnership.getValue());
         return terms;
     }
-
     private void checkIfLoansExist(boolean changeUser) {
         if (changeUser) {
             amountToInvest.setText("");
@@ -227,13 +213,11 @@ public class inlayController {
         }
         center.getChildren().clear();
     }
-
     private void showRelevantLoans(List<LoanDTO> loans) {
         if (loans.size() == 0) {
             center.getChildren().clear();
             center.getChildren().add(new Label("There are no loans that match your applications"));
         } else {
-//            checkIfLoansExist(false);
             Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>> cellFactory =
                     new Callback<TableColumn<LoanDTO, String>, TableCell<LoanDTO, String>>() {
                         public TableCell call(final TableColumn<LoanDTO, String> param) {
@@ -275,7 +259,6 @@ public class inlayController {
             buttom.getChildren().add(approveButton);
         }
     }
-
     public void addMoreInfo(LoanDTO loan){
         VBox data = new VBox();
         currentLoanId.setText(loan.getId());
@@ -304,7 +287,6 @@ public class inlayController {
         rightErea.getChildren().clear();
         rightErea.getChildren().add(data);
     }
-
     private void setDisableApproveButton() {
         boolean disableButton = false;
         if (loansToInvest.isEmpty()) {
@@ -312,11 +294,9 @@ public class inlayController {
         }
         approveButton.setDisable(disableButton);
     }
-
     public void updateClientUser(){
         accountBalanceProp.set(bodyUser.getClientBalance());
     }
-
     private void startInlayProcess() {
         int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
 
@@ -348,19 +328,18 @@ public class inlayController {
         approveButton.setDisable(true);
         rightErea.getChildren().clear();
     }
-
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label2=new Label(value);
         Label label1=new Label(str);
         data.getChildren().add(new HBox(label1,label2));
         return data;
     }
-
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
-
     public void setOptionalLoans(){
+
+        optionalLoans.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("Id");
         TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
         TableColumn<LoanDTO, String> paceCol = new TableColumn<>("Pace");

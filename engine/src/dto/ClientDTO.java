@@ -11,6 +11,7 @@ public class ClientDTO {
     private List<LoanDTO> asBorrower;
     private int sumAsLender, sumAsBorrower ;
     private Map<Integer, List<MovementDTO>> movements;
+    private List<String> notifications;
 
     public ClientDTO(Client client) {
         this.fullName = client.getFullName();
@@ -20,6 +21,15 @@ public class ClientDTO {
         this.asLender = new ConvertDTO().createListLoanDto(client.getLoanListAsGiver());
         this.sumAsLender=asLender.size();
         setMovements(client.getMovements());
+        notifications=new ArrayList<>();
+    }
+
+    public void setNotifications(List<String> notifications) {
+        this.notifications = notifications;
+    }
+
+    public List<String> getNotifications() {
+        return notifications;
     }
 
     private void setMovements(Map<Integer, List<Movement>> movements) {

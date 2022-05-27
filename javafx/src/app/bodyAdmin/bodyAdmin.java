@@ -46,7 +46,8 @@ public class bodyAdmin {
         loans=new TableView<>();
         clients=new TableView<>();
     }
-    @FXML void increaseYaz(ActionEvent event) {mainController.increaseYaz();}
+    @FXML void increaseYaz(ActionEvent event) {
+        mainController.increaseYaz();}
     @FXML void loadNewFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
@@ -218,7 +219,7 @@ public class bodyAdmin {
                 VBox data = new VBox();
                 data.getChildren().add(new Label("Loans as borrower:"));
                 createLoanData(client.getLoansAsBorrower(), data);
-                data.getChildren().add(new Label("Loans as Giver:"));
+                data.getChildren().add(new Label("Loans as Lender:"));
                 createLoanData(client.getLoansAsGiver(), data);
                 clientsDetail.setDetailNode(data);
             }

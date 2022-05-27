@@ -100,18 +100,17 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="97.0" />
               </columnConstraints>
               <rowConstraints>
-                <RowConstraints maxHeight="130.0" minHeight="0.0" prefHeight="24.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="330.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="366.0" minHeight="10.0" prefHeight="255.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="130.0" minHeight="0.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="330.0" minHeight="0.0" prefHeight="17.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="366.0" minHeight="10.0" prefHeight="230.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label prefHeight="23.0" prefWidth="170.0" text="More information">
+                  <Label prefHeight="20.0" prefWidth="113.0" text="More information">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <Label text="Loan id:" GridPane.rowIndex="1" />
-                  <Label fx:id="currentLoanId" prefHeight="69.0" prefWidth="97.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <Label fx:id="currentLoanId" prefHeight="69.0" prefWidth="97.0" GridPane.rowIndex="1" />
                   <AnchorPane fx:id="rightErea" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
                </children>
             </GridPane>
