@@ -32,15 +32,42 @@ public class inlayController {
     @FXML private CheckComboBox<String> categoriesForLoan;
     @FXML private Label errorAmount;
     @FXML private Label errorMinTime;
+    @FXML private Label errorMaxLoans;
     @FXML private AnchorPane center;
     @FXML private AnchorPane buttom;
     @FXML private Label currentLoanId;
     @FXML private AnchorPane rightErea;
+    @FXML private TextField maxLoansExist;
+    @FXML private ComboBox<Integer> maxOwnership;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
     private Button approveButton;
     private SimpleDoubleProperty accountBalanceProp;
     private TableView<LoanDTO> optionalLoans;
+
+    public boolean checkMaxLoansExist() {
+        String input = maxLoansExist.getCharacters().toString().trim();
+        boolean validInput = false;
+        if (input.equals("")) {
+            validInput = true;
+        } else {
+            try {
+                int number = Integer.parseInt(input);
+                if (number < 0) {
+                    errorMaxLoans.setText("'" + number + "' is a negative number! Please enter a positive number.");
+                } else {
+                    validInput = true;
+                    errorMinTime.setText("");
+                }
+            } catch (Exception err) {
+                errorMaxLoans.setText("'" + input + "' is not a number. Please enter a number.");
+            } finally {
+                if (validInput)
+                    errorMaxLoans.setText("");
+            }
+        }
+        return validInput;
+    }
 
     public inlayController(){
         loansToInvest=new ArrayList<>();
@@ -53,14 +80,16 @@ public class inlayController {
         approveButton = new Button("Approve Inlay");
         for (int i = 1; i <= 100; i++) {
             minInterestForLoan.getItems().add(Integer.toString(i));
+            maxOwnership.getItems().add(i);
         }
         accountBalance.textProperty().bind(accountBalanceProp.asString());
     }
 
     @FXML void startInlay(ActionEvent event) {
-        boolean validAmount = checkAmountToInvest();
-        boolean validTime = checkMinTime();
-        if (validAmount && validTime) {
+        boolean amountToInvest =checkAmountToInvest();
+        boolean minTimeForLoan = checkMinTime();
+        boolean maxLoansExist = checkMaxLoansExist();
+        if (amountToInvest && minTimeForLoan && maxLoansExist) {
             LoanTerms terms = updateTerms();
             List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
             showRelevantLoans(matchLoans);
@@ -123,7 +152,6 @@ public class inlayController {
     return validInput;
     }
 
-
     public void setDataAccordingToClient(){
         clientName.setText(bodyUser.getClientDTO().getFullName());
         accountBalanceProp.set(bodyUser.getClientBalance());
@@ -159,9 +187,20 @@ public class inlayController {
         return terms;
     }
 
+    private LoanTerms setMaxLoansForOwner(LoanTerms terms){
+        String maxLoans =maxLoansExist.getCharacters().toString().trim();
+        if(maxLoans.equals(""))
+            terms.setMaxLoansForOwner(0);
+        else {
+            terms.setMaxLoansForOwner(Integer.parseInt(maxLoans));
+        }
+        return terms;
+    }
+
     private LoanTerms updateTerms() {
         LoanTerms terms = new LoanTerms();
         terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
+        terms=setMaxLoansForOwner(terms);
         terms= setTimeTerm(terms);
         terms=setCategoriesTerm(terms);
         terms=setInterestTerm(terms);
