@@ -1,6 +1,7 @@
 package app.information;
 
 import app.bodyUser.bodyUser;
+import bank.Global;
 import dto.*;
 import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import loan.Status;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -95,14 +97,7 @@ public class informationController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        loansAsLoner.setOnMouseClicked(event -> {
-            Object choice = loansAsLoner.getSelectionModel().getSelectedItem();
-            if (choice != null) {
-               // popup(bodyUser.getLoans().get(loansAsLoner.getSelectionModel().getFocusedIndex()));
-            }
-        });
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
 
         loansAsLoner.getColumns().addAll(idCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLoner.setItems(loansData);
@@ -153,43 +148,14 @@ public class informationController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
 
-        loansAsLender.setOnMouseClicked(event -> {
-            Object choice = loansAsLender.getSelectionModel().getSelectedItem();
-            if (choice != null) {
-                popup(bodyUser.getLoans().get(loansAsLender.getSelectionModel().getFocusedIndex()));
-            }
-        });
+
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLender.setItems(loansData);
 
     }
-    public void popup(LoanDTO loan){
-        Stage popUpWindow = new Stage();
-        popUpWindow.setTitle(loan.getLoansID());
-        Button button = new Button("Close");
-        button.setOnAction(error -> popUpWindow.close());
-        VBox data=new VBox(5);
-        switch (loan.getStatus()) {
-            case PENDING:
-                data=addPendingData(data,loan);
-                break;
-            case ACTIVE:
-                data=addPayBacksData(data,loan);
-                data=addActiveData(data,loan);
-                data=addPaymentData(data,loan);
-                break;
-        }
 
-        data.setAlignment(Pos.CENTER_LEFT);
-        data.getChildren().add(button);
-        ScrollPane layout = new ScrollPane();
-        layout.setContent(data);
-        Scene scene = new Scene(data,500,100);
-        popUpWindow.setScene(scene);
-        popUpWindow.show();
-    }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         for (int i = 0; i > loanDTO.getPayBacks().size(); i++) {
             PayBackDTO payBackDTO = loanDTO.getPayBacks().get(i);
@@ -198,6 +164,7 @@ public class informationController {
         }
         return data;
     }
+
     public VBox addActiveData(VBox data,LoanDTO loan) {
         addPayBacksData(data, loan);
         data = addActiveTimeData(data, loan);
@@ -230,10 +197,14 @@ public class informationController {
         data.getChildren().addAll(label,label1);
         return data;
     }
+
     public void updateClientUser(){
      //   accountBalanceProp.set(bodyUser.getClientBalance());
         setUser(bodyUser.getClientDTO());
         showData();
 
     }
+
+
+
 }

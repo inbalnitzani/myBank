@@ -251,8 +251,7 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void promoteTime() {
-        Global.changeWorldTimeByOne();
-        time++;
+
         TreeMap<Integer, List<Payment>> payments = makePaymentsLists();
         while (!payments.isEmpty()) {
             int currKey = payments.firstKey();
@@ -260,6 +259,8 @@ public class Bank implements Serializable, BankInterface {
             setLoansInRiSK(payments.get(currKey));
             payments.remove(currKey);
         }
+        Global.changeWorldTimeByOne();
+        time++;
     }
 
     public TreeMap<Integer, List<Payment>> makePaymentsLists() {

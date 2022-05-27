@@ -57,11 +57,10 @@ public class paymentController {
     public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
-        for (int yaz = 0; yaz<= time; yaz++) {
+        for (int yaz = 1; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-                if (paymentsByYaz.containsKey(yaz+1)&&!paymentsByYaz.get(yaz+1).isPaid())
-                if (paymentsByYaz.containsKey(yaz)&&!paymentsByYaz.get(yaz).isPaid())
+                if (paymentsByYaz.containsKey(yaz))
                     notificationList.getItems().add("Yaz: "+yaz+
                             "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz+1).getAmount());
             }
@@ -141,7 +140,7 @@ public class paymentController {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
             }
              else {
-            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
+                bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
              bodyUser.updateClientInfo();
         }

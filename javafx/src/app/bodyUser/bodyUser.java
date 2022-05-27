@@ -71,8 +71,11 @@ public class bodyUser {
         return mainController.findMatchLoans(clientName,terms);
     }
     public ClientDTO getClientDTO(){return clientDTO;}
-    public ObservableList<LoanDTO> getLoans(){return (ObservableList<LoanDTO>) mainController.getLoans();}
-    public void withdrawFromAcount(String clientName,int amount) throws NotEnoughMoney {
+
+//    public List<LoanDTO> getLoans(){return  mainController.getLoans();
+  //  }
+    public void withdrawFromAcount(String clientName,double amount) throws NotEnoughMoney {
+
         mainController.withdrawFromAccount(clientName,amount);
     }
 

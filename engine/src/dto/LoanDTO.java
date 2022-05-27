@@ -245,5 +245,23 @@ public class LoanDTO {
         return unPaidTimes;
     }
 
+    public String getStatusInfo() {
+
+        if (Status.PENDING.equals(status))
+            return "Pending: The amount left to activate loan is: " +
+                    (getOriginalAmount() - getAmountCollectedPending());
+        else if (Status.ACTIVE.equals(status))
+            return "Active: Next payment yaz is: " + (getNextPaymentTime())+
+                    "\nfor a total of: " + getNextPaymentAmount();
+        else if (Status.RISK.equals(status))
+            return "Risk: " + getUnPaidPayment().size() +
+                    " Payments have not been paid" +
+                    "\n for a total of: " + (getNextPaymentAmount() - getTotalAmountPerPayment());
+        else if (Status.FINISHED.equals(status))
+            return "Finished: Time activated: " + getActiveTime() +
+                    "Time finished: " + getLastPaymentTime();
+        else if (Status.NEW.equals(status)) return "New";
+        return null;
+    }
 }
 
