@@ -54,7 +54,11 @@ public class TaskManager {
                 loadMoneyToAccount();
                 break;
             case 5:
-                withdrawMoney();
+                try {
+                    withdrawMoney();
+                } catch (Exception e){
+
+                }
                 break;
             case 6:
                 startOfInlay();
@@ -167,7 +171,7 @@ public class TaskManager {
         System.out.println(amountToCharge+" NIS were added to "+clientName+"'s account successfully");
     }
 
-    public void withdrawMoney()  {
+    public void withdrawMoney() {
         String clientName = getClientNameForAction();
         double maxAmountToWithdraw = bank.getCurrBalance(clientName);
         if(maxAmountToWithdraw==0)
