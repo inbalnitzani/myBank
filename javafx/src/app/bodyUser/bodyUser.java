@@ -66,7 +66,7 @@ public class bodyUser {
     }
     public void showData(){
         informationComponentController.showData();
-         paymentComponentController.showData();
+        paymentComponentController.showData();
     }
     public void chargeAccount(double amount){
         mainController.chargeAccount(clientDTO.getFullName(),amount);

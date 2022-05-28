@@ -41,12 +41,14 @@ public class paymentController {
     @FXML private Label amountError;
 
 
+
     @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
             } else if (loan.getStatus().equals(Status.RISK)) {
+
                 payRiskLoan(loan);
 
             } else {
@@ -66,17 +68,7 @@ public class paymentController {
         }
 
     }
-    public void payRiskLoan(LoanDTO loanDTO) throws Exception {
-        double amount = Double.parseDouble(amountToPay.getText());
-        if (amount <= 0 || amount > loanDTO.getNextPaymentAmount())
-                throw  new Exception();
-        else if (amount == loanDTO.getNextPaymentAmount()) {
-            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(), loanDTO.getNextPaymentAmount(), loanDTO.getNextPaymentTime());
-        }
-            else {
-            bodyUser.mainController.payApartOfDebt(loanDTO.getId(),amount);
-        }
-    }
+
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
             paiedMassege.setText("");
@@ -97,14 +89,24 @@ public class paymentController {
             else acceptButton.setDisable(true);
         }
     }
-
-    @FXML
-    void payAllListener(ActionEvent event) {
+    @FXML void payAllListener(ActionEvent event) {
         if (payAllCheckBox.isSelected())
             acceptButton.setDisable(false);
     }
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
+    }
+    public void payRiskLoan(LoanDTO loanDTO) throws Exception {
+        double amount = Double.parseDouble(amountToPay.getText());
+        if (amount <= 0 || amount > loanDTO.getNextPaymentAmount()) {
+            throw  new Exception();
+        }
+        amountError.setText("");
+        if (amount == loanDTO.getNextPaymentAmount()) {
+            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(), loanDTO.getNextPaymentAmount(), loanDTO.getNextPaymentTime());
+        } else {
+            bodyUser.mainController.payApartOfDebt(loanDTO.getId(),amount);
+        }
     }
     public void setClient(ClientDTO client) {
         this.client = client;
@@ -120,25 +122,6 @@ public class paymentController {
         showPaymentsControl();
 
     }
-    public void showNtifications(){
-        List<String> notifications = bodyUser.getClientDTO().getNotifications();
-
-        int yaz = bodyUser.mainController.getTime();
-        for (LoanDTO loan:loansList) {
-            Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-            PaymentDTO payment= paymentsByYaz.get(yaz);
-            if (payment!=null){
-                if(!payment.isPaid())
-                    notifications.add("Yaz: "+yaz+
-                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
-
-            }
-        }
-        bodyUser.getClientDTO().setNotifications(notifications);
-        notificationList.getItems().clear();
-        notificationList.getItems().addAll(notifications);
-    }
-
     public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();

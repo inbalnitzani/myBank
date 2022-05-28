@@ -6,7 +6,6 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollBar?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -14,14 +13,12 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.payment.paymentController">
    <columnConstraints>
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="96.0" minWidth="10.0" prefWidth="27.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="257.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="346.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="23.0" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="300.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+      <ColumnConstraints hgrow="SOMETIMES" minWidth="4.0" prefWidth="20.0" />
+      <ColumnConstraints hgrow="ALWAYS" maxWidth="1.7976931348623157E308" minWidth="10.0" />
       <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" prefWidth="26.0" />
    </columnConstraints>
    <rowConstraints>
@@ -35,13 +32,13 @@
       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
    </rowConstraints>
    <children>
-      <TableView fx:id="loanerLoans" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-      <Label text="Payment controls" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-      <ListView fx:id="notificationList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="4" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
-      <Label text="Loaner loans" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+      <TableView fx:id="loanerLoans" maxHeight="-Infinity" maxWidth="-Infinity" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Payment controls" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+      <ListView fx:id="notificationList" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" GridPane.vgrow="ALWAYS" />
+      <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Loaner loans" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="5">
          <children>
-            <CheckBox fx:id="payAllCheckBox" disable="true" mnemonicParsing="false" onAction="#payAllListener" text="pay all back" />
+            <CheckBox fx:id="payAllCheckBox" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#payAllListener" text="pay all back" />
             <Label fx:id="payAllLable">
                <HBox.margin>
                   <Insets left="10.0" />
@@ -49,9 +46,9 @@
             </Label>
          </children>
       </HBox>
-      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+      <HBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="4">
          <children>
-            <ComboBox fx:id="choosePayment" onAction="#clientChosePayment" prefWidth="150.0" />
+            <ComboBox fx:id="choosePayment" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#clientChosePayment" prefWidth="150.0" />
             <Label fx:id="totalAmount" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                <HBox.margin>
                   <Insets left="10.0" />
@@ -59,7 +56,7 @@
             </Label>
          </children>
       </HBox>
-      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="6">
+      <GridPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="6">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="98.0" minWidth="59.0" prefWidth="59.0" />
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
@@ -68,13 +65,12 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Button fx:id="acceptButton" disable="true" mnemonicParsing="false" onAction="#acceptButtonListener" text="accept" />
+            <Button fx:id="acceptButton" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#acceptButtonListener" text="accept" />
             <Label fx:id="paiedMassege" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
          </children>
       </GridPane>
-      <TextField fx:id="amountToPay" disable="true" GridPane.columnIndex="2" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
-      <Label fx:id="amountError" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="2" GridPane.rowIndex="5" />
-      <Label text="the amount of debt you would like to pay:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-      <ScrollBar GridPane.columnIndex="1" GridPane.columnSpan="4" GridPane.rowIndex="7" />
+      <TextField fx:id="amountToPay" disable="true" GridPane.columnIndex="3" GridPane.hgrow="NEVER" GridPane.rowIndex="4" GridPane.vgrow="NEVER" />
+      <Label fx:id="amountError" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+      <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="the amount you would like to pay:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
    </children>
 </GridPane>
