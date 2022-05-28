@@ -49,7 +49,9 @@ public class bodyAdmin {
         clients=new TableView<>();
     }
     @FXML void increaseYaz(ActionEvent event) {
-        if(!mainController.increaseYaz()){
+        if(mainController.increaseYaz()){
+            updateData();
+        }else {
             increaseYazError.setText("No file in system!");
         }
     }

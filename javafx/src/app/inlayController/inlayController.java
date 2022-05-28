@@ -308,6 +308,7 @@ public class inlayController {
             errorMinTime.setText("");
             minInterestForLoan.setValue("");
             maxLoansExist.setText("");
+            maxOwnership.setValue(100);
         }
         center.getChildren().clear();
     }
