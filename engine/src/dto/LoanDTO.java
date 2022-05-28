@@ -262,6 +262,28 @@ public class LoanDTO {
     public String getStatusInfo() {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(3);
+        double fundPayBack = 0, interestPayBack = 0;
+
+        String paymentsStr = "Payments:\n";
+        List<PaymentDTO> paid = payments.values().stream()
+                .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
+        for (PaymentDTO payment:paid) {
+            double fund = payment.getFund();
+            double interest = payment.getInterestPart();
+            paymentsStr += "Payment time: " + payment.getActualPaidTime()
+                    + "\nfund: " + df.format(fund)
+                    + "\ninterest: " + df.format(interest) + " ."
+                    + "\nTotal amount paid: " + df.format(payment.getAmount()+'\n');
+            fundPayBack += fund;
+            interestPayBack += interest;
+        }
+        double originalFundAmount = getOriginalAmount();
+        double interestLeftToPay = getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
+        double fundLeftToPay = originalFundAmount - fundPayBack;
+        paymentsStr+= "Total fund paid back: " + df.format(fundPayBack)
+                + "\n Total interest paid back: " + df.format(interestPayBack) + "."
+                + "\nFund amount left to pay: " + df.format(fundLeftToPay)
+                + "\nInterest amount left to pay: " + df.format(interestLeftToPay) + " .";
 
         String str ="Capital: "+capital+ "\nInvestors:\n";
         for (PayBackDTO payBack:payBacks)
@@ -272,42 +294,20 @@ public class LoanDTO {
                     +"\n"+str;
 
         else if (Status.ACTIVE.equals(status)){
-            double fundPayBack = 0, interestPayBack = 0;
-
-            String paymentsStr = "Payments:\n";
-            List<PaymentDTO> paid = payments.values().stream()
-                    .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
-            for (PaymentDTO payment:paid) {
-                double fund = payment.getFund();
-                double interest = payment.getInterestPart();
-                paymentsStr += "Payment time: " + payment.getActualPaidTime()
-                        + "\nfund: " + df.format(fund)
-                        + "\ninterest: " + df.format(interest) + " ."
-                        + "\nTotal amount paid: " + df.format(payment.getAmount()+'\n');
-                fundPayBack += fund;
-                interestPayBack += interest;
-            }
-            double originalFundAmount = getOriginalAmount();
-            double interestLeftToPay = getTotalMoneyForPayingBack() - originalFundAmount - interestPayBack;
-            double fundLeftToPay = originalFundAmount - fundPayBack;
-            paymentsStr+= "Total fund paid back: " + df.format(fundPayBack)
-                    + "\n Total interest paid back: " + df.format(interestPayBack) + "."
-                    + "\nFund amount left to pay: " + df.format(fundLeftToPay)
-                    + "\nInterest amount left to pay: " + df.format(interestLeftToPay) + " .";
-
             return "ACTIVE:\ntime activated: " +activeTime+
                     "\nNext payment yaz is: " + (getNextPaymentTime())+
                     "\nfor a total of: " + getNextPaymentAmount()+
                     "\n" + str + "\n"+ paymentsStr;
         }
         else if (Status.RISK.equals(status))
-            return "Risk: " + getUnPaidPayment().size() +
-                    " Payments have not been paid" +
+            return "RISK:\ntime activated: " +activeTime+
+                    "\nNext payment yaz is: " + (getNextPaymentTime())+
+                    "\n"+getUnPaidPayment().size() + "Payments have not been paid" +
                     "\n for a total of: " + (getNextPaymentAmount())
-                    +"\n";
+                    +"\n" + paymentsStr;
         else if (Status.FINISHED.equals(status))
             return "Finished: Time activated: " + getActiveTime() +
-                    "Time finished: " + getLastPaymentTime();
+                    "Time finished: " + getLastPaymentTime()+str;
         else if (Status.NEW.equals(status)) return "New";
         return null;
     }
