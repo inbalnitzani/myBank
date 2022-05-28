@@ -227,7 +227,8 @@ public class LoanDTO {
     public List<PaymentDTO> getPaidPayment(){
         int size = payments.size();
         List<PaymentDTO> paidPayments=new ArrayList<>();
-        for (int i = getFirstPaymentTime() ; i < size ; i+=pace) {
+        int firstPaymentTime =getFirstPaymentTime();
+        for (int i = firstPaymentTime; i < size ; i+=pace) {
             PaymentDTO payment=payments.get(i);
             if(payment.isPaid())
                 paidPayments.add(payment);
@@ -240,11 +241,15 @@ public class LoanDTO {
         boolean findFirstPayment = false;
         while (!findFirstPayment) {
             PaymentDTO payment = payments.get(firstPayment);
-            if (payment != null)
+            if (payment != null){
+                findFirstPayment = true;
                 if (payment.isPaid()) {
                     firstPayment = payment.getActualPaidTime();
-                    findFirstPayment = true;
-                } else firstPayment++;
+                }
+            }
+            else {
+                firstPayment++;
+            }
         }
         return firstPayment;
     }
