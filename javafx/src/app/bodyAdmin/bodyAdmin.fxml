@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.controlsfx.control.MasterDetailPane?>
 
-<VBox fx:id="bodyAdmin" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.bodyAdmin.bodyAdmin">
+<VBox fx:id="bodyAdmin" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.bodyAdmin.bodyAdmin">
    <children>
       <GridPane prefHeight="37.0" prefWidth="600.0">
         <columnConstraints>
@@ -53,12 +53,12 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <MasterDetailPane fx:id="loansDetail" prefHeight="141.0" prefWidth="600.0" />
+      <MasterDetailPane fx:id="loansDetail" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="141.0" prefWidth="600.0" />
       <Label fx:id="clientInfo" alignment="CENTER" prefHeight="44.0" prefWidth="600.0" text="Clients Information">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <MasterDetailPane fx:id="clientsDetail" prefHeight="151.0" prefWidth="600.0" />
+      <MasterDetailPane fx:id="clientsDetail" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="151.0" prefWidth="600.0" />
    </children>
 </VBox>

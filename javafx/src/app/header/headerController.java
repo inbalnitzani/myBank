@@ -13,6 +13,7 @@ public class headerController {
     @FXML private ComboBox<String> userOptions;
     @FXML private Label file;
     @FXML private Label yaz;
+    @FXML private ComboBox<String> skin;
 
     private SimpleIntegerProperty currYaz;
     private AppController mainController;
@@ -32,6 +33,9 @@ public class headerController {
 
     public void initUserOptions() {
         userOptions.getItems().add("Admin");
+        skin.getItems().add("DEFAULT");
+        skin.getItems().add("PINK");
+        skin.getItems().add("BLUE");
     }
 
     public headerController() {

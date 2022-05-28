@@ -183,4 +183,7 @@ public class AppController {
     public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
         myBank.withdrawMoneyFromAccount(clientName, amount);
     }
+    public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
+        myBank.payApartOfDebt(loanID,amount);
+    }
 }

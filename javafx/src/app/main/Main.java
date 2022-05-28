@@ -22,6 +22,7 @@ public class Main extends Application {
         Parent root=fxmlLoader.load(url.openStream());
 
         Scene scene = new Scene(root, 1000, 500);
+        scene.getStylesheets().add(getClass().getResource("PinkMain.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }
