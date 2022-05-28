@@ -264,18 +264,17 @@ public class LoanDTO {
                 (getOriginalAmount() - getAmountCollectedPending() )+
                 "\nInvestors: ";
         for (PayBackDTO payBack:payBacks)
-            str.concat( payBack.getGiversName() +": "+ payBack.getAmountInvested());
+           // str.concat( payBack.getGiversName() +": "+ payBack.getAmountInvested());
         if (Status.PENDING.equals(status))
 
 
-            return "Pending: "+ str;
+            return "Pending: ";
         else if (Status.ACTIVE.equals(status)){
             String paymentsStr = "Payments: ";
 
             return "Active: time activated:" +activeTime+
                     "\nNext payment yaz is: " + (getNextPaymentTime())+
-                    "\nfor a total of: " + getNextPaymentAmount()+
-                    str; }
+                    "\nfor a total of: " + getNextPaymentAmount();}
         else if (Status.RISK.equals(status))
             return "Risk: " + getUnPaidPayment().size() +
                     " Payments have not been paid" +
