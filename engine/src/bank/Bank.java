@@ -15,6 +15,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Bank implements Serializable, BankInterface {
 
@@ -283,20 +284,20 @@ public class Bank implements Serializable, BankInterface {
 
     public void payAllBack(String loanID) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
-        double totalAmount = loan.totalAmountToPayBack();
+        double totalAmount = loan.totalAmountToPayBack() - loan.getAmountPaidBack();
         Client client = clients.get(loan.getOwner());
         if (client.getCurrBalance() >= totalAmount) {
             client.withdrawingMoney(totalAmount);
             loan.setAmountPaidBack(totalAmount);
-            Payment payment=loan.getPayments().get(Global.worldTime);
-            int index = 0,pace = loan.getPace(), lastPaymentTime = loan.getLastPaymentTime();
-            if(payment!=null){
-                index=Global.worldTime+pace;
+            Payment payment = loan.getPayments().get(Global.worldTime);
+            int index = 0, pace = loan.getPace(), lastPaymentTime = loan.getLastPaymentTime();
+            if (payment != null) {
+                index = Global.worldTime + pace;
                 payment.setActualPaidTime(Global.worldTime);
                 loan.setActualLastPaymentTime(Global.worldTime);
             } else {
                 loan.getNextPayment().setActualPaidTime(Global.worldTime);
-                index = loan.getNextPaymentTime()+pace;
+                index = loan.getNextPaymentTime() + pace;
             }
             for (int i = index; i <= lastPaymentTime; i += pace) {
                 loan.getPayments().remove(i);
@@ -306,5 +307,31 @@ public class Bank implements Serializable, BankInterface {
             }
             loan.setStatus(Status.FINISHED);
         } else throw new NotEnoughMoney(totalAmount);
+    }
+
+    public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
+        Loan loan = activeLoans.get(loanID);
+        Payment payment = loan.getPayments().get(Global.worldTime);
+        if(payment == null){
+            //add a new payment
+            Payment paymentToAdd = new Payment(loanID,amount,0);
+            loan.getPayments().put(Global.worldTime, paymentToAdd);
+            //decrease next payment debt
+            payment = loan.getPayments().get(loan.getNextPaymentTime());
+            payment.setAmount(payment.getAmount()-amount);
+        }
+        else {
+            payment.setAmount(payment.getAmount()-amount);
+            payment.setPaidAPartOfDebt(true);
+        }
+        loan.setAmountPaidBack(amount);
+        payment = loan.getPayments().get(Global.worldTime);
+        clients.get(loan.getOwner()).withdrawingMoney(amount);
+        for (PayBack investor : loan.getPayBacks()) {
+            payBackToInvestor(investor, amount);
+        }
+
+       // loan.setActualLastPaymentTime(Global.worldTime);
+
     }
 }
