@@ -149,7 +149,7 @@ public class inlayController {
     public void setDataAccordingToClient(){
         clientName.setText(bodyUser.getClientDTO().getFullName());
         accountBalanceProp.set(bodyUser.getClientBalance());
-        checkIfLoansExist(true);
+        resetDataForNewInvestment(true);
         investmentStatus.getChildren().clear();
     }
     private LoanTerms setInterestTerm(LoanTerms terms) {
@@ -200,19 +200,6 @@ public class inlayController {
         if(maxOwnership.getValue()!=null)
             terms.setMaxOwnershipPrecent(maxOwnership.getValue());
         return terms;
-    }
-    private void checkIfLoansExist(boolean changeUser) {
-        if (changeUser) {
-            amountToInvest.setText("");
-            errorAmount.setText("");
-            minTimeToReturn.setText("");
-            errorMinTime.setText("");
-            minInterestForLoan.setValue("");
-            maxLoansExist.setText("");
-            //
-            //
-        }
-        center.getChildren().clear();
     }
     private void showRelevantLoans(List<LoanDTO> loans) {
         if (loans.size() == 0) {
@@ -295,17 +282,7 @@ public class inlayController {
         }
         approveButton.setDisable(disableButton);
     }
-    public void updateClientUser(){
-        accountBalanceProp.set(bodyUser.getClientBalance());
-    }
-    private void startInlayProcess() {
-        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
-
-        loansToInvest.clear();
-        bodyUser.updateClientInfo();
-        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
-        bodyUser.updateClientInfo();
-
+    public void updateSuccessfully(int amountLeft){
         Label label = new Label();
         if (amountLeft == 0) {
             label.setText("Investment successfully completed!");
@@ -317,13 +294,32 @@ public class inlayController {
                 label.setText("Invested " + (originalAmountToInvest - amountLeft) + " out of " + originalAmountToInvest + " successfully");
             }
         }
-        amountToInvest.setText("");
-        errorAmount.setText("");
-        errorMinTime.setText("");
-        minInterestForLoan.setValue("");
         investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
+    }
+    public void updateClientUser(){
+        accountBalanceProp.set(bodyUser.getClientBalance());
+    }
+    private void resetDataForNewInvestment(boolean changeUser) {
+        if (changeUser) {
+            amountToInvest.setText("");
+            errorAmount.setText("");
+            minTimeToReturn.setText("");
+            errorMinTime.setText("");
+            minInterestForLoan.setValue("");
+            maxLoansExist.setText("");
+            maxOwnership.setValue(100);
+        }
         center.getChildren().clear();
+    }
+    private void startInlayProcess() {
+        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
+
+        loansToInvest.clear();
+        bodyUser.updateClientInfo();
+        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
+        updateSuccessfully(amountLeft);
+        resetDataForNewInvestment(true);
         center.getChildren().add(investmentStatus);
         buttom.getChildren().clear();
         approveButton.setDisable(true);

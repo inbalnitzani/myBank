@@ -39,16 +39,16 @@ public class bodyUser {
 
     }
     public void updateClientInfo(){
-        clientDTO=mainController.getClientByName(clientDTO.getFullName());
-
-        scrambleComponentController.updateClientUser();
-        informationComponentController.updateClientUser();
-        paymentComponentController.updateClientUser();
-
+        if (clientDTO!=null){
+            clientDTO=mainController.getClientByName(clientDTO.getFullName());
+            scrambleComponentController.updateClientUser();
+            informationComponentController.updateClientUser();
+            paymentComponentController.updateClientUser();
+        }
     }
 
     public void increaseYaz(){
-      //  paymentComponentController.showNotifications();
+        updateClientInfo();
     }
     public int startInlayProcess(List<LoanDTO> loansToInvest, String clientName){
          return mainController.startInlayProcess(loansToInvest,clientName);
