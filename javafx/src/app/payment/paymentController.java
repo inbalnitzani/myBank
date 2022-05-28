@@ -70,9 +70,10 @@ public class paymentController {
         double amount = Double.parseDouble(amountToPay.getText());
         if (amount <= 0 || amount > loanDTO.getNextPaymentAmount())
                 throw  new Exception();
-        else if (amount == loanDTO.getNextPaymentAmount())
+        else if (amount == loanDTO.getNextPaymentAmount()) {
             bodyUser.mainController.payBackNextPayment(choosePayment.getValue(), loanDTO.getNextPaymentAmount(), loanDTO.getNextPaymentTime());
-        else {
+        }
+            else {
             bodyUser.mainController.payApartOfDebt(loanDTO.getId(),amount);
         }
     }
