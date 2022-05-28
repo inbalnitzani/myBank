@@ -20,6 +20,7 @@ public class bodyUser {
     @FXML private Parent informationComponent;
     @FXML private paymentController paymentComponentController;
     @FXML private Parent paymentComponent;
+
     private ClientDTO clientDTO;
     public AppController mainController;
 

@@ -1,6 +1,7 @@
 package app.payment;
 
 import app.bodyUser.bodyUser;
+import bank.Global;
 import client.Movement;
 import dto.ClientDTO;
 import dto.LoanDTO;
@@ -35,30 +36,71 @@ public class paymentController {
     @FXML private Label payAllLable;
     @FXML private ListView<String> notificationList;
     @FXML private Label totalAmount;
+    @FXML private Label paiedMassege;
+    @FXML private TextField amountToPay;
+    @FXML private Label amountError;
+
 
     @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
+            } else if (loan.getStatus().equals(Status.RISK)) {
+                payRiskLoan(loan);
+
             } else {
                 bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             bodyUser.updateClientInfo();
+            paiedMassege.setText("The payment was successfully made");
+            acceptButton.setDisable(true);
+            amountToPay.setDisable(true);
         }
         catch (NotEnoughMoney e){
             payAllLable.setText("NOTICE: you do not have enough money ");
         }
+        catch (Exception e){
+            amountError.setText("Please Enter a positive number that is no larger then the total amount of the next payment.");
+            amountToPay.clear();
+        }
+
+    }
+    public void payRiskLoan(LoanDTO loanDTO) throws Exception {
+        double amount = Double.parseDouble(amountToPay.getText());
+        if (amount <= 0 || amount > loanDTO.getNextPaymentAmount())
+                throw  new Exception();
+        else if (amount == loanDTO.getNextPaymentAmount())
+            bodyUser.mainController.payBackNextPayment(choosePayment.getValue(), loanDTO.getNextPaymentAmount(), loanDTO.getNextPaymentTime());
+        else {
+            bodyUser.mainController.payApartOfDebt(loanDTO.getId(),amount);
+        }
     }
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
+            paiedMassege.setText("");
             LoanDTO loan = loans.get(choosePayment.getValue());
             double total = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
             totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
             payAllLable.setText("the amount left to pay all back at once is:" + total);
             payAllCheckBox.setDisable(false);
-            acceptButton.setDisable(false);
+            amountToPay.setDisable(true);
+            int nextPaymentTime =loan.getNextPaymentTime();
+            if(loan.getStatus().equals(Status.RISK))
+            {
+                acceptButton.setDisable(false);
+                amountToPay.setDisable(false);
+            }
+            else if( nextPaymentTime== Global.worldTime&&!loan.getPayments().get(nextPaymentTime).isPaid())
+                acceptButton.setDisable(false);
+            else acceptButton.setDisable(true);
         }
+    }
+
+    @FXML
+    void payAllListener(ActionEvent event) {
+        if (payAllCheckBox.isSelected())
+            acceptButton.setDisable(false);
     }
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
@@ -102,15 +144,19 @@ public class paymentController {
         for (int yaz = 1; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-                if (paymentsByYaz.containsKey(yaz)&&(!paymentsByYaz.get(yaz).isPaid()))
+                if (paymentsByYaz.containsKey(yaz))
+                        if(!paymentsByYaz.get(yaz).isPaid()||paymentsByYaz.get(yaz).getActualPaidTime()==yaz)
                     notificationList.getItems().add("Yaz: "+yaz+
-                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getAmount());
+                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getOriginalAmaount());
             }
         }
 
     }
     public void showPaymentsControl(){
         choosePayment.getItems().clear();
+        payAllLable.setText("");
+        totalAmount.setText("");
+        paiedMassege.setText("");
         List<LoanDTO> active =loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
                 .collect(Collectors.toList());
         List<LoanDTO> inRisk = loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)

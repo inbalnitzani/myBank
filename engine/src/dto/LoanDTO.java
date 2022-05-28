@@ -259,17 +259,28 @@ public class LoanDTO {
     }
 
     public String getStatusInfo() {
-
+        String str ="Capital: "+capital+
+                "\nThe amount left to activate loan is: " +
+                (getOriginalAmount() - getAmountCollectedPending() )+
+                "\nInvestors: ";
+        for (PayBackDTO payBack:payBacks)
+            str.concat( payBack.getGiversName() +": "+ payBack.getAmountInvested());
         if (Status.PENDING.equals(status))
-            return "Pending: The amount left to activate loan is: " +
-                    (getOriginalAmount() - getAmountCollectedPending());
-        else if (Status.ACTIVE.equals(status))
-            return "Active: Next payment yaz is: " + (getNextPaymentTime())+
-                    "\nfor a total of: " + getNextPaymentAmount();
+
+
+            return "Pending: "+ str;
+        else if (Status.ACTIVE.equals(status)){
+            String paymentsStr = "Payments: ";
+
+            return "Active: time activated:" +activeTime+
+                    "\nNext payment yaz is: " + (getNextPaymentTime())+
+                    "\nfor a total of: " + getNextPaymentAmount()+
+                    str; }
         else if (Status.RISK.equals(status))
             return "Risk: " + getUnPaidPayment().size() +
                     " Payments have not been paid" +
-                    "\n for a total of: " + (getNextPaymentAmount());
+                    "\n for a total of: " + (getNextPaymentAmount())
+                    +"\n";
         else if (Status.FINISHED.equals(status))
             return "Finished: Time activated: " + getActiveTime() +
                     "Time finished: " + getLastPaymentTime();
