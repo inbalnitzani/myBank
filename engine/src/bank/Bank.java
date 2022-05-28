@@ -331,7 +331,7 @@ public class Bank implements Serializable, BankInterface {
             payBackToInvestor(investor, amount);
         }
 
-        loan.setActualLastPaymentTime(Global.worldTime);
+       // loan.setActualLastPaymentTime(Global.worldTime);
 
     }
 }

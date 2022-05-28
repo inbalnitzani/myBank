@@ -150,6 +150,7 @@ public class inlayController {
         clientName.setText(bodyUser.getClientDTO().getFullName());
         accountBalanceProp.set(bodyUser.getClientBalance());
         checkIfLoansExist(true);
+        investmentStatus.getChildren().clear();
     }
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = minInterestForLoan.getValue();
@@ -320,7 +321,7 @@ public class inlayController {
         errorAmount.setText("");
         errorMinTime.setText("");
         minInterestForLoan.setValue("");
-    //    investmentStatus.getChildren().clear();
+        investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
         center.getChildren().clear();
         center.getChildren().add(investmentStatus);
