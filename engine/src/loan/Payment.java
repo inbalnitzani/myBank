@@ -15,6 +15,7 @@ public class Payment implements Serializable {
 
     public void addToAmount(double amount) {
         this.amount += amount;
+        this.originalAmaount += originalAmaount;
 
     }
     public boolean isPaid(){

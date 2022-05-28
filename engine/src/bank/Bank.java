@@ -312,17 +312,20 @@ public class Bank implements Serializable, BankInterface {
     public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(Global.worldTime);
-        if (payment != null) {
-            payment.setAmount(payment.getAmount()-amount);
-        } else {
-            double percentage = (double) loan.getInterestRate() / 100.0;
-            loan.getPayments().put(Global.worldTime, new Payment(loanID, amount, percentage));
+        if(payment == null){
+            //add a new payment
+            Payment paymentToAdd = new Payment(loanID,amount,0);
+            loan.getPayments().put(Global.worldTime, paymentToAdd);
+            //decrease next payment debt
             payment = loan.getPayments().get(loan.getNextPaymentTime());
             payment.setAmount(payment.getAmount()-amount);
         }
-        payment = loan.getPayments().get(Global.worldTime);
-        payment.setPaidAPartOfDebt(true);
+        else {
+            payment.setAmount(payment.getAmount()-amount);
+            payment.setPaidAPartOfDebt(true);
+        }
         loan.setAmountPaidBack(amount);
+        payment = loan.getPayments().get(Global.worldTime);
         clients.get(loan.getOwner()).withdrawingMoney(amount);
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, amount);
