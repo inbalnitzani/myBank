@@ -105,6 +105,7 @@ public class bodyAdmin {
         showClients();
     }
     public void showLoanData( ) {
+        loans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
         loansData.addAll(mainController.getLoans());
 
@@ -130,7 +131,7 @@ public class bodyAdmin {
             LoanDTO loan =loans.getSelectionModel().getSelectedItem();
             if (loan != null){
                 VBox vBox= createDetailNodeByLoanStatus(loan);
-                loansDetail.setDetailNode(vBox);
+                loansDetail.setDetailNode(new ScrollPane(vBox));
             }
         });
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
@@ -169,14 +170,14 @@ public class bodyAdmin {
     }
     public VBox addRiskData(VBox vBox,LoanDTO loan){
         List<Integer> unpaidPayments=loan.getUnPaidPayment();
-        Label label=new Label("Total of: "+unpaidPayments.size()+"unpaid payments at times:");
-        String times="-";
+        Label label=new Label("Total of: "+unpaidPayments.size()+" unpaid payments at times:");
+        String times=" - ";
         for(int time:unpaidPayments) {
             times = times.concat(String.valueOf(time));
             times = times.concat("-");
         }
         Label label2=new Label(times);
-        Label label3=new Label("Missing  until now: "+ loan.getTotalAmountPerPayment());
+        Label label3=new Label("Missing until now: "+ loan.getTotalAmountPerPayment());
         vBox.getChildren().addAll(label,label2,label3);
         return vBox;
     }
@@ -214,6 +215,7 @@ public class bodyAdmin {
         return data;
     }
     private void showClients() {
+        clients.getColumns().clear();
         TableColumn<ClientDTO, String> idNameCol = new TableColumn<>("Client name");
         TableColumn<ClientDTO, Integer> currBalanceCol = new TableColumn<>("Balance");
         TableColumn<ClientDTO, Integer> asGiverCol = new TableColumn<>("Total loans as giver");
@@ -232,7 +234,7 @@ public class bodyAdmin {
                 createLoanData(client.getLoansAsBorrower(), data);
                 data.getChildren().add(new Label("Loans as Lender:"));
                 createLoanData(client.getLoansAsGiver(), data);
-                clientsDetail.setDetailNode(data);
+                clientsDetail.setDetailNode(new ScrollPane(data));
             }
         });
 
