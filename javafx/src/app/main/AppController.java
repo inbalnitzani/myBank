@@ -94,6 +94,7 @@ public class AppController {
                 }
             } else {
                 mainComponent.setCenter(userComponentRoot);
+                bodyAdminController.clearErrors();
                 bodyUserController.updateUserViewer(user);
                 bodyUserController.showData();
             }
@@ -112,12 +113,13 @@ public class AppController {
         return fileInSystem.get();
     }
 
-    public void increaseYaz() {
+    public boolean increaseYaz() {
         if(isFileInSystem()){
             myBank.promoteTime();
             time.setValue(myBank.getWorldTime());
             bodyUserController.increaseYaz();
         }
+        return isFileInSystem();
     }
 
     public void showError(Exception err){
