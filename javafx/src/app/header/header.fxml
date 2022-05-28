@@ -10,7 +10,7 @@
    <children>
       <VBox prefHeight="200.0" prefWidth="100.0">
          <children>
-            <ComboBox fx:id="skin" prefHeight="27.0" prefWidth="107.0" />
+            <ComboBox fx:id="skin" onAction="#chooseSkin" prefHeight="27.0" prefWidth="107.0" />
          </children>
       </VBox>
       <VBox fillWidth="false" minHeight="10.0" prefHeight="62.0" prefWidth="137.0">
