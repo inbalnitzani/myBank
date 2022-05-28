@@ -2,6 +2,7 @@ package app.header;
 
 import app.constParameters;
 import app.main.AppController;
+import com.sun.xml.internal.ws.api.streaming.XMLStreamWriterFactory;
 import dto.ClientDTO;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
@@ -37,6 +38,22 @@ public class headerController {
         skin.getItems().add("PINK");
         skin.getItems().add("COLOURFUL");
     }
+
+    @FXML
+    void chooseSkin(ActionEvent event) {
+        switch (skin.getValue()) {
+            case DEFAULT:
+                mainController.setSkin("Default");
+                break;
+            case PINK:
+                mainController.setSkin("Default");
+                break;
+            case COLOURFUL:
+                mainController.setSkin("Default");
+                break;
+        }
+    }
+
 
     public headerController() {
     }
