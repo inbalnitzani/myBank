@@ -40,6 +40,8 @@ public class bodyAdmin {
     private TableView<ClientDTO> clients;
     @FXML private MasterDetailPane loansDetail;
     @FXML private MasterDetailPane clientsDetail;
+    @FXML private Label increaseYazError;
+
     private AppController mainController;
 
     public bodyAdmin(){
@@ -47,7 +49,10 @@ public class bodyAdmin {
         clients=new TableView<>();
     }
     @FXML void increaseYaz(ActionEvent event) {
-        mainController.increaseYaz();}
+        if(!mainController.increaseYaz()){
+            increaseYazError.setText("No file in system!");
+        }
+    }
     @FXML void loadNewFile(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
@@ -59,7 +64,11 @@ public class bodyAdmin {
         if (mainController.getFile(path)) {
             showDataAdminScreen();
             mainController.setDataUser();
+            increaseYazError.setText("");
         }
+    }
+    public void clearErrors(){
+        increaseYazError.setText("");
     }
     public void updateLoansData() {
         loans.setItems(FXCollections.observableArrayList(mainController.getLoans()));
