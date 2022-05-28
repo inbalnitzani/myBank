@@ -15,6 +15,7 @@
 <?import org.controlsfx.control.CheckComboBox?>
 
 <VBox prefHeight="568.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
+
    <children>
       <BorderPane prefHeight="657.0" prefWidth="747.0">
          <center>
@@ -119,3 +120,4 @@
       </BorderPane>
    </children>
 </VBox>
+ 
