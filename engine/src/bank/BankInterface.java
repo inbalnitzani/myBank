@@ -47,4 +47,4 @@ public interface BankInterface {
      void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney;
      void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney;
 
-     }
+}

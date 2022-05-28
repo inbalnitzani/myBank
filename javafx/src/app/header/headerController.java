@@ -35,7 +35,7 @@ public class headerController {
         userOptions.getItems().add("Admin");
         skin.getItems().add("DEFAULT");
         skin.getItems().add("PINK");
-        skin.getItems().add("BLUE");
+        skin.getItems().add("COLOURFUL");
     }
 
     public headerController() {

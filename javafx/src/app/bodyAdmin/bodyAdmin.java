@@ -49,7 +49,9 @@ public class bodyAdmin {
         clients=new TableView<>();
     }
     @FXML void increaseYaz(ActionEvent event) {
-        if(!mainController.increaseYaz()){
+        if(mainController.increaseYaz()){
+            updateData();
+        }else {
             increaseYazError.setText("No file in system!");
         }
     }
@@ -159,7 +161,7 @@ public class bodyAdmin {
         }
         return vBox;
     }
-   public VBox addFinishedData(VBox vBox,LoanDTO loan) {
+    public VBox addFinishedData(VBox vBox,LoanDTO loan) {
         Label firstPayment = new Label("First payment time: " + loan.getFirstPaymentTime());
         Label lastPayment = new Label("Last payment time: " + loan.getLastPaymentTime());
         vBox.getChildren().addAll(firstPayment, lastPayment);
@@ -291,7 +293,3 @@ public class bodyAdmin {
         return data;
     }
 }
-
-
-
-

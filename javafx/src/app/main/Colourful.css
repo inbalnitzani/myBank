@@ -1,0 +1,55 @@
+.root{
+    -fx-background-color: #FFF0F5;
+}
+.combo-box{
+    -fx-background-color: #FAFAD2;
+    -fx-border-color: #00BFFF;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-text-fill: #00BFFF;
+}
+.button{
+    -fx-background-color: #ADD8E6;
+    -fx-border-color: #20B2AA;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-text-fill: #0000CD;
+}
+.label{
+    -fx-c: #FF1493;
+    -fx-text-fill:  #FFA500;
+    -fx-font: Cursive;
+}
+.table-view{
+    -fx-background-radius: 30;
+    -fx-background-color: #E6E6FA;
+}
+
+.scroll-bar{
+    -fx-fill: PINK;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.maserDetailPane{
+    -fx-background-color: #D8BFD8;
+    -fx-border-color: #FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.text-field{
+    -fx-border-color: #663399;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.check-box{
+    -fx-text-fill: #663399;
+}
+.list-view{
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.tab-pane-header{
+    -fx-text-fill:#F08080;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
