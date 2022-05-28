@@ -45,5 +45,6 @@ public interface BankInterface {
      void payAllBack(String loanID) throws NotEnoughMoney;
      void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney;
      void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney;
+     void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney;
 
      }
