@@ -10,6 +10,15 @@ public class Payment implements Serializable {
     private boolean paidAPartOfDebt = false;
     private int riskPayTime=0;
     private boolean payAll=false;
+    private boolean newPayment=false;
+
+    public boolean isNewPayment() {
+        return newPayment;
+    }
+
+    public void setNewPayment(boolean newPayment) {
+        this.newPayment = newPayment;
+    }
 
     public Payment(String loanID, double amountIncludeInterest, double percentageInteger) {
         this.loanID = loanID;
