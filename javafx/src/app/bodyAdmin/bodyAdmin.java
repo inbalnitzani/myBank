@@ -138,6 +138,37 @@ public class bodyAdmin {
         loans.setItems(loansData);
         setLoansInfo();
     }
+    public void setMainController(AppController mainController) {
+        this.mainController = mainController;
+    }
+    private void showClients() {
+        clients.getColumns().clear();
+        TableColumn<ClientDTO, String> idNameCol = new TableColumn<>("Client name");
+        TableColumn<ClientDTO, Integer> currBalanceCol = new TableColumn<>("Balance");
+        TableColumn<ClientDTO, Integer> asGiverCol = new TableColumn<>("Total loans as giver");
+        TableColumn<ClientDTO, Integer> asTakenCol = new TableColumn<>("Total loans as taken");
+
+        idNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+        currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
+        asGiverCol.setCellValueFactory(new PropertyValueFactory<>("sumAsLender"));
+        asTakenCol.setCellValueFactory(new PropertyValueFactory<>("sumAsBorrower"));
+
+        clients.setOnMouseClicked(event -> {
+            ClientDTO client =clients.getSelectionModel().getSelectedItem();
+            if (client != null) {
+                VBox data = new VBox();
+                data.getChildren().add(new Label("Loans as borrower:"));
+                createLoanData(client.getLoansAsBorrower(), data);
+                data.getChildren().add(new Label("Loans as Lender:"));
+                createLoanData(client.getLoansAsGiver(), data);
+                clientsDetail.setDetailNode(new ScrollPane(data));
+            }
+        });
+
+        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol);
+        clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
+        setClientInfo();
+    }
     public VBox createDetailNodeByLoanStatus(LoanDTO loan) {
         VBox vBox = new VBox();
         switch (loan.getStatus()) {
@@ -214,34 +245,6 @@ public class bodyAdmin {
         }
         return data;
     }
-    private void showClients() {
-        clients.getColumns().clear();
-        TableColumn<ClientDTO, String> idNameCol = new TableColumn<>("Client name");
-        TableColumn<ClientDTO, Integer> currBalanceCol = new TableColumn<>("Balance");
-        TableColumn<ClientDTO, Integer> asGiverCol = new TableColumn<>("Total loans as giver");
-        TableColumn<ClientDTO, Integer> asTakenCol = new TableColumn<>("Total loans as taken");
-
-        idNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
-        asGiverCol.setCellValueFactory(new PropertyValueFactory<>("sumAsLender"));
-        asTakenCol.setCellValueFactory(new PropertyValueFactory<>("sumAsBorrower"));
-
-        clients.setOnMouseClicked(event -> {
-            ClientDTO client =clients.getSelectionModel().getSelectedItem();
-            if (client != null) {
-                VBox data = new VBox();
-                data.getChildren().add(new Label("Loans as borrower:"));
-                createLoanData(client.getLoansAsBorrower(), data);
-                data.getChildren().add(new Label("Loans as Lender:"));
-                createLoanData(client.getLoansAsGiver(), data);
-                clientsDetail.setDetailNode(new ScrollPane(data));
-            }
-        });
-
-        clients.getColumns().addAll(idNameCol,currBalanceCol,asGiverCol,asTakenCol);
-        clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
-        setClientInfo();
-    }
     public VBox addPayBacksData(VBox data,LoanDTO loanDTO){
         data.getChildren().add(new Label("Lenders: "));
         List<PayBackDTO> payBackList = loanDTO.getPayBacks();
@@ -278,9 +281,6 @@ public class bodyAdmin {
         Label label1 = new Label("Total fund left to pay:" + loan.getFundLeftToPay() + " -- Total interest left to pay:" + loan.getInterestLeftToPay());
         data.getChildren().addAll(label, label1);
         return data;
-    }
-    public void setMainController(AppController mainController) {
-        this.mainController = mainController;
     }
     public VBox createLabelsPaidPaymentData(VBox data,List<PaymentDTO> paidPayments){
         int size=paidPayments.size();

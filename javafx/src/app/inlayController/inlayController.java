@@ -39,19 +39,19 @@ public class inlayController {
     @FXML private AnchorPane rightErea;
     @FXML private TextField maxLoansExist;
     @FXML private ComboBox<Integer> maxOwnership;
+    @FXML private Button approveButton;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
-    private Button approveButton;
     private SimpleDoubleProperty accountBalanceProp;
     private TableView<LoanDTO> optionalLoans;
 
     @FXML public void initialize() {
-        approveButton = new Button("Approve Inlay");
         for (int i = 1; i <= 100; i++) {
             minInterestForLoan.getItems().add(Integer.toString(i));
             maxOwnership.getItems().add(i);
         }
         accountBalance.textProperty().bind(accountBalanceProp.asString());
+        approveButton.setDisable(true);
     }
     @FXML void startInlay(ActionEvent event) {
         boolean amountToInvest =checkAmountToInvest();
@@ -62,6 +62,19 @@ public class inlayController {
             List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
             showRelevantLoans(matchLoans);
         }
+    }
+    @FXML private void startInlayProcess() {
+        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
+
+        loansToInvest.clear();
+        bodyUser.updateClientInfo();
+        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
+        updateSuccessfully(amountLeft);
+        resetDataForNewInvestment(true);
+        center.getChildren().add(investmentStatus);
+        buttom.getChildren().clear();
+        approveButton.setDisable(true);
+        rightErea.getChildren().clear();
     }
     public boolean checkMaxLoansExist() {
         String input = maxLoansExist.getCharacters().toString().trim();
@@ -151,6 +164,7 @@ public class inlayController {
         accountBalanceProp.set(bodyUser.getClientBalance());
         resetDataForNewInvestment(true);
         investmentStatus.getChildren().clear();
+        approveButton.setDisable(true);
     }
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = minInterestForLoan.getValue();
@@ -244,7 +258,6 @@ public class inlayController {
             center.getChildren().clear();
             buttom.getChildren().clear();
             center.getChildren().add(optionalLoans);
-            buttom.getChildren().add(approveButton);
         }
     }
     public void addMoreInfo(LoanDTO loan){
@@ -311,19 +324,6 @@ public class inlayController {
             maxOwnership.setValue(100);
         }
         center.getChildren().clear();
-    }
-    private void startInlayProcess() {
-        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
-
-        loansToInvest.clear();
-        bodyUser.updateClientInfo();
-        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
-        updateSuccessfully(amountLeft);
-        resetDataForNewInvestment(true);
-        center.getChildren().add(investmentStatus);
-        buttom.getChildren().clear();
-        approveButton.setDisable(true);
-        rightErea.getChildren().clear();
     }
     private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
         Label label2=new Label(value);
