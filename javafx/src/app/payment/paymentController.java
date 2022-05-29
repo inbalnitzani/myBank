@@ -69,6 +69,7 @@ public class paymentController {
         }
 
     }
+
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
             paiedMassege.setText("");

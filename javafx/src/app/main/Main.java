@@ -3,14 +3,20 @@ package app.main;
 import javafx.animation.ScaleTransition;
 import javafx.animation.Timeline;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.TriangleMesh;
+import javafx.scene.control.ComboBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.net.URL;
 
 import javafx.animation.RotateTransition;
@@ -134,10 +140,15 @@ public class Main extends Application {
         URL url=getClass().getResource("mainController.fxml");
         fxmlLoader.setLocation(url);
         Parent root=fxmlLoader.load(url.openStream());
+        Group root1 = new Group();
+        Group root2 = new Group();
+        Group root3 = new Group();
 
+<<<<<<< HEAD
         Scene scene = new Scene(root, 1000, 500);
         scene.getStylesheets().add(getClass().getResource("PinkMain.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.show();
     }*/
+
 
