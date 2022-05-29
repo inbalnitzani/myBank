@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class Main extends Application {
     Scene scene;
-    VBox data=new VBox( );
+    VBox data=new VBox(2);
 
     Button pinkButton=new Button("Pink Version");
     Button colorfulButton=new Button("Colorful Version");
@@ -34,7 +34,7 @@ public class Main extends Application {
         fxmlLoader.setLocation(url);
         ScrollPane root = fxmlLoader.load(url.openStream());
 
-
+        root.fitToHeightProperty();
         data.getChildren().addAll(hBox,root);
         scene = new Scene(data, 1000, 500);
         scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm());
