@@ -71,7 +71,7 @@
                   <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                   <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="242.0" text="Find match loans!" textFill="#e40101" textOverrun="CENTER_ELLIPSIS" GridPane.rowIndex="5">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="19.0" />
                      </font>
                   </Button>
                   <Label fx:id="errorAmount" prefHeight="24.0" prefWidth="317.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
@@ -89,6 +89,11 @@
                   <TextField fx:id="maxLoansExist" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                   <ComboBox fx:id="maxOwnership" prefHeight="36.0" prefWidth="106.0" GridPane.columnIndex="4" GridPane.rowIndex="5" />
                   <Label fx:id="errorMaxLoans" prefHeight="47.0" prefWidth="258.0" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                  <Button fx:id="approveButton" mnemonicParsing="false" onAction="#startInlayProcess" prefHeight="63.0" prefWidth="136.0" text="Start Inlay !" textFill="#e11717" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Button>
                </children>
                <padding>
                   <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
@@ -120,4 +125,3 @@
       </BorderPane>
    </children>
 </VBox>
- 
