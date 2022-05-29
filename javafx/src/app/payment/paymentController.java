@@ -124,7 +124,7 @@ public class paymentController {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
                 PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
                 if (paymentDTO!=null )
-                    if(!paymentDTO.isPaid() ||(paymentDTO.isPayAll())){
+                    if(!paymentDTO.getPaidAPartOfDebt() || (paymentDTO.isPayAll())){
                         notificationList.getItems().add("Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
                                 "\na total of: "+(paymentDTO.getOriginalAmount()));
                 }
