@@ -238,7 +238,7 @@ public class inlayController {
                                                 loansToInvest.remove(loan);
                                                 btn.setText("Invest this loan");
                                             } else if (!loansToInvest.contains(loan)) {
-                                                btn.setText("invested!");
+                                                btn.setText("Chosen!");
                                                 loansToInvest.add(loan);
                                             }
                                             setDisableApproveButton();

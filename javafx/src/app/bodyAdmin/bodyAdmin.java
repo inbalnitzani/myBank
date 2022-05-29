@@ -290,7 +290,11 @@ public class bodyAdmin {
             double totalAmount = paymentDTO.getAmount();
             double fund = totalAmount/(1+(loan.getInterestRate()/100.0));
             Label label = new Label("Payment " + (i + 1) + ":");
-            Label label1 = new Label("Paying time: " + paymentDTO.getActualPaidTime());
+            int time = paymentDTO.getActualPaidTime();
+            if(!paymentDTO.isPaid()&&paymentDTO.getPaidAPartOfDebt()){
+                time=paymentDTO.getRiskPayTime();
+            }
+            Label label1 = new Label("Paying time: " + time);
             Label label2 = new Label("Fund: " + fund);
             Label label3 = new Label("Interest: " +(totalAmount-fund));
             Label label4 = new Label("Total: " + totalAmount);
