@@ -35,7 +35,7 @@ public class Payment implements Serializable {
     public Payment(String loanID, double fund, double percentage) {
         this.loanID = loanID;
         this.interesetByPercentage = percentage;
-        this.amount = fund * (percentage + 1);
+        this.amount = fund ;
         originalAmaount = amount;
     }
 
