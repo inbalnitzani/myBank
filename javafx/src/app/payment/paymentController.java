@@ -28,10 +28,10 @@ public class paymentController {
     @FXML private ComboBox<String> choosePayment;
     @FXML private CheckBox payAllCheckBox;
     @FXML private Button acceptButton;
-    @FXML private Label payAllLable;
+    @FXML private Label payAllLabel;
     @FXML private ListView<String> notificationList;
     @FXML private Label totalAmount;
-    @FXML private Label paiedMassege;
+    @FXML private Label paidMassage;
     @FXML private TextField amountToPay;
     @FXML private Label amountError;
 
@@ -40,19 +40,20 @@ public class paymentController {
         try {
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
+
             } else if (loan.getStatus().equals(Status.RISK)) {
                 payRiskLoan(loan);
             } else {
                 bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             bodyUser.updateClientInfo();
-            paiedMassege.setText("The payment was successfully made");
+            paidMassage.setText("The payment was successfully made");
             acceptButton.setDisable(true);
             amountToPay.setDisable(true);
             amountToPay.clear();
         }
         catch (NotEnoughMoney e){
-            payAllLable.setText("NOTICE: you do not have enough money ");
+            payAllLabel.setText("NOTICE: you do not have enough money ");
         }
         catch (Exception e){
             amountError.setText("Please Enter a positive number that is no larger then the total amount of the next payment.");
@@ -62,12 +63,12 @@ public class paymentController {
     }
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
-            paiedMassege.setText("");
+            paidMassage.setText("");
             LoanDTO loan = loans.get(choosePayment.getValue());
             double totalToCompleteLoan = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
             double totalPayment = loan.getNextPaymentAmount();
             totalAmount.setText("next payment is a total of: " + totalPayment);
-            payAllLable.setText("the amount left to pay all back at once is:" + totalToCompleteLoan);
+            payAllLabel.setText("the amount left to pay all back at once is:" + totalToCompleteLoan);
             payAllCheckBox.setDisable(false);
             amountToPay.setDisable(true);
             int nextPaymentTime =loan.getNextPaymentTime();
@@ -118,20 +119,14 @@ public class paymentController {
     public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
-        String str;
         for (int yaz = 1; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
                 PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
                 if (paymentDTO!=null )
-                    if(!paymentDTO.isPaid() ||(!paymentDTO.getPaidAPartOfDebt() && paymentDTO.getAmount()>paymentDTO.getOriginalAmount())){
-                        str = "Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
-                                "\na total of: "+(paymentDTO.getOriginalAmount());
-
-                       if(!notificationList.getItems().contains(str)){
-                           notificationList.getItems().add(str);
-                       }
-
+                    if(!paymentDTO.isPaid() ||(paymentDTO.isPayAll())){
+                        notificationList.getItems().add("Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
+                                "\na total of: "+(paymentDTO.getOriginalAmount()));
                 }
             }
         }
@@ -140,9 +135,9 @@ public class paymentController {
 
     public void showPaymentsControl(){
         choosePayment.getItems().clear();
-        payAllLable.setText("");
+        payAllLabel.setText("");
         totalAmount.setText("");
-        paiedMassege.setText("");
+        paidMassage.setText("");
         List<LoanDTO> active =loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
                 .collect(Collectors.toList());
         List<LoanDTO> inRisk = loansList.stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)
@@ -189,7 +184,6 @@ public class paymentController {
         loanerLoans.setItems(FXCollections.observableArrayList(loansList));
     }
     public void updateClientUser(){
-      //  accountBalanceProp.set(bodyUser.getClientBalance());
         setClient(bodyUser.getClientDTO());
         loansList=client.getLoansAsBorrower();
         showData();

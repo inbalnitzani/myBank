@@ -294,6 +294,7 @@ public class Bank implements Serializable, BankInterface {
             Payment payment = loan.getPayments().get(Global.worldTime);
             int index = 0, pace = loan.getPace(), lastPaymentTime = loan.getLastPaymentTime();
             if (payment != null) {
+                payment.setPayAll(true);
                 payment.setAmount(totalAmount);
                 index = Global.worldTime + pace;
                 payment.setActualPaidTime(Global.worldTime);
