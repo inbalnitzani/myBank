@@ -18,7 +18,6 @@
 .label{
     -fx-c: #FF1493;
     -fx-text-fill: #FF1493;
-    -fx-font: Cursive;
 }
 .table-view{
     -fx-background-radius: 30;
@@ -61,4 +60,8 @@
     -fx-background-color: #FF1493;
     -fx-border-radius: 30;
     -fx-background-color: #FF1493;
+}
+.button:hover {
+    -fx-background-color: #ff009c;
+    -fx-text-fill: WHITE;
 }
