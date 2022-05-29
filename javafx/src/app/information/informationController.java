@@ -74,7 +74,6 @@ public class informationController {
     }
     public void updateUserViewer(ClientDTO user){
         this.user = user;
-        //amountErrorLabel.setText("");
         balance.setText("Your current balance is: "+ user.getCurrBalance());
     }
     public void showData() {

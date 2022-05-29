@@ -21,7 +21,7 @@ public class ClientDTO {
         this.asLender = new ConvertDTO().createListLoanDto(client.getLoanListAsGiver());
         this.sumAsLender=asLender.size();
         setMovements(client.getMovements());
-        notifications=new ArrayList<>();
+        notifications=client.getNotifications();
     }
 
     public void setNotifications(List<String> notifications) {

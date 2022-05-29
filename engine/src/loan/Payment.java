@@ -28,7 +28,7 @@ public class Payment implements Serializable {
         return actualPaidTime;
     }
     public void addToOriginalAmount(double amount) {
-        this.originalAmount += originalAmount;
+        this.originalAmount += amount;
     }
     public boolean isPaid(){
         if(actualPaidTime!= 0) return true;
