@@ -9,6 +9,7 @@ public class Payment implements Serializable {
     private int actualPaidTime = 0;
     private boolean paidAPartOfDebt = false;
     private int riskPayTime=0;
+    private boolean payAll=false;
 
     public Payment(String loanID, double amountIncludeInterest, double percentageInteger) {
         this.loanID = loanID;
@@ -17,6 +18,13 @@ public class Payment implements Serializable {
         this.originalAmount = amountIncludeInterest;
     }
 
+    public void setPayAll(boolean payAll) {
+        this.payAll = payAll;
+    }
+
+    public boolean isPayAll() {
+        return payAll;
+    }
 
     public int getRiskPayTime() {
         return riskPayTime;
