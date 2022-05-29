@@ -186,9 +186,7 @@ public class LoanDTO {
     }
 
     public void calculateInfo(){
-        List<PaymentDTO> paid = this.payments.values().stream()
-                .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
-
+        List<PaymentDTO> paid =getPaidPayment();
         this.fundPaid=0;
         this.interestPaid=0;
         if (!paid.isEmpty()) {
@@ -229,13 +227,14 @@ public class LoanDTO {
     }
 
     public double getNextPaymentAmount(){
-        return payments.get(getNextPaymentTime()).getAmount();
+        PaymentDTO payment = payments.get(getNextPaymentTime());
+        return payment.getOriginalAmount()-payment.getAmount();
     }
 
     public List<PaymentDTO> getPaidPayment() {
         List<PaymentDTO> paymentDTOList = new ArrayList<>();
         for (PaymentDTO paymentDTO : payments.values()) {
-            if (paymentDTO.isPaid())
+            if (paymentDTO.isPaid() || paymentDTO.getPaidAPartOfDebt() ||paymentDTO.getRiskPayTime()!=0)
                 paymentDTOList.add(paymentDTO);
         }
         return paymentDTOList;
@@ -273,17 +272,21 @@ public class LoanDTO {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(3);
         double fundPayBack = 0, interestPayBack = 0;
-
+        int time=0;
         String paymentsStr = "Payments:\n";
-        List<PaymentDTO> paid = payments.values().stream()
-                .filter(payment -> payment.getActualPaidTime() != 0).collect(Collectors.toList());
+        List<PaymentDTO> paid=getPaidPayment();
         for (PaymentDTO payment:paid) {
+            if(!payment.isPaid()&&payment.getPaidAPartOfDebt()) {
+                time  =payment.getRiskPayTime();
+            }else {
+                time=payment.getActualPaidTime();
+            }
             double fund = payment.getFund();
             double interest = payment.getInterestPart();
-            paymentsStr += "Payment time: " + payment.getActualPaidTime()
+            paymentsStr += "\nPayment time: " + time
                     + "\nfund: " + df.format(fund)
                     + "\ninterest: " + df.format(interest) + " ."
-                    + "\nTotal amount paid: " + df.format(payment.getAmount()+'\n');
+                    + "\nTotal amount paid: " + df.format(payment.getAmount())+"\n";
             fundPayBack += fund;
             interestPayBack += interest;
         }

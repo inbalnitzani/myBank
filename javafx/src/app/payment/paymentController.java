@@ -2,24 +2,18 @@ package app.payment;
 
 import app.bodyUser.bodyUser;
 import bank.Global;
-import client.Movement;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
-import dto.MovementDTO;
 import dto.PaymentDTO;
 import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import loan.Loan;
-import loan.Payment;
 import loan.Status;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,18 +35,15 @@ public class paymentController {
     @FXML private TextField amountToPay;
     @FXML private Label amountError;
 
-
-
     @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
             if (payAllCheckBox.isSelected()) {
                 bodyUser.mainController.payAllBack(choosePayment.getValue());
             } else if (loan.getStatus().equals(Status.RISK)) {
-
                 payRiskLoan(loan);
-
             } else {
+
                 bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             bodyUser.updateClientInfo();
@@ -69,14 +60,14 @@ public class paymentController {
         }
 
     }
-
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
             paiedMassege.setText("");
             LoanDTO loan = loans.get(choosePayment.getValue());
-            double total = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
-            totalAmount.setText("next payment is a total of: " + loan.getNextPaymentAmount());
-            payAllLable.setText("the amount left to pay all back at once is:" + total);
+            double totalToCompleteLoan = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
+            double totalPayment = loan.getNextPaymentAmount();
+            totalAmount.setText("next payment is a total of: " + totalPayment);
+            payAllLable.setText("the amount left to pay all back at once is:" + totalToCompleteLoan);
             payAllCheckBox.setDisable(false);
             amountToPay.setDisable(true);
             int nextPaymentTime =loan.getNextPaymentTime();
@@ -129,10 +120,12 @@ public class paymentController {
         for (int yaz = 1; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-                if (paymentsByYaz.containsKey(yaz))
-                        if(!paymentsByYaz.get(yaz).isPaid()||paymentsByYaz.get(yaz).getActualPaidTime()==yaz)
+                PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
+                if (paymentDTO!=null)
+                        if(!paymentDTO.isPaid()||paymentDTO.getActualPaidTime()==yaz)
                     notificationList.getItems().add("Yaz: "+yaz+
-                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +"\na total of: "+paymentsByYaz.get(yaz).getOriginalAmaount());
+                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +
+                            "\na total of: "+(paymentDTO.getOriginalAmount()));
             }
         }
 

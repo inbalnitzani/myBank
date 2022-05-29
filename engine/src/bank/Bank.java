@@ -3,7 +3,6 @@ import dto.ClientDTO;
 import dto.ConvertDTO;
 import dto.LoanDTO;
 import client.Client;
-import dto.PaymentDTO;
 import exception.*;
 import loan.*;
 import schema.AbsDescriptor;
@@ -15,7 +14,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Bank implements Serializable, BankInterface {
 
@@ -206,12 +204,12 @@ public class Bank implements Serializable, BankInterface {
     public void paymentProcess(List<Payment> paymentList) throws NotEnoughMoney {
         for (Payment payment : paymentList) {
             Loan loan = activeLoans.get(payment.getLoanID());
-            double totalAmount = payment.getAmount();
+            double totalAmountLeftToPay = payment.getOriginalAmount()-payment.getAmount();
             Client owner = clients.get(loan.getOwner());
-            if (owner.getCurrBalance() < totalAmount) {
-                setInRisk(loan, totalAmount);
+            if (owner.getCurrBalance() < totalAmountLeftToPay) {
+                setInRisk(loan, totalAmountLeftToPay);
             } else {
-                payBack(loan, totalAmount, payment);
+                payBack(loan, totalAmountLeftToPay, payment);
             }
         }
     }
@@ -234,6 +232,7 @@ public class Bank implements Serializable, BankInterface {
             client.withdrawingMoney(totalAmount);
             loan.setAmountPaidBack(totalAmount);
             payment.setActualPaidTime(Global.worldTime);
+            payment.setAmount(totalAmount);
             for (PayBack investor : loan.getPayBacks()) {
                 payBackToInvestor(investor, totalAmount);
             }
@@ -249,7 +248,10 @@ public class Bank implements Serializable, BankInterface {
     public void promoteTime() {
         List<Payment> payments = makePaymentsLists();
         for (Payment payment : payments) {
-            setInRisk(activeLoans.get(payment.getLoanID()), payment.getAmount());
+      double originalAmount = payment.getOriginalAmount();
+            double paidAmount = payment.getAmount();
+            double amountLeft = (originalAmount*(1+payment.getPercentage()))-paidAmount;
+            setInRisk(activeLoans.get(payment.getLoanID()), amountLeft);
         }
         Global.changeWorldTimeByOne();
         time++;
@@ -260,7 +262,7 @@ public class Bank implements Serializable, BankInterface {
         for (Loan loan : activeLoans.values()) {
             Payment payment = loan.getPayments().get(Global.worldTime);
             if (payment != null) {
-                if (!payment.isPaid())
+                if (!payment.isPaid() ||payment.getPaidAPartOfDebt())
                     paymentsList.add(payment);
             }
         }
@@ -272,9 +274,9 @@ public class Bank implements Serializable, BankInterface {
         int nextTimePay = loan.getPace() + Global.worldTime;
         Map<Integer, Payment> paymentList = loan.getPayments();
         if (paymentList.containsKey(nextTimePay))
-            paymentList.get(nextTimePay).addToAmount(totalAmount);
+            paymentList.get(nextTimePay).addToOriginalAmount(totalAmount);
         else {
-            paymentList.put(nextTimePay, new Payment(loan.getLoansID(), (totalAmount / (1 + (loan.getInterestRate()) / 100.0)), loan.getInterestRate() / 100.0));
+            paymentList.put(nextTimePay, new Payment(loan.getLoansID(), totalAmount, loan.getInterestRate()));
         }
     }
 
@@ -292,11 +294,14 @@ public class Bank implements Serializable, BankInterface {
             Payment payment = loan.getPayments().get(Global.worldTime);
             int index = 0, pace = loan.getPace(), lastPaymentTime = loan.getLastPaymentTime();
             if (payment != null) {
+                payment.setAmount(totalAmount);
                 index = Global.worldTime + pace;
                 payment.setActualPaidTime(Global.worldTime);
                 loan.setActualLastPaymentTime(Global.worldTime);
             } else {
-                loan.getNextPayment().setActualPaidTime(Global.worldTime);
+                payment =  loan.getNextPayment();
+                payment.setActualPaidTime(Global.worldTime);
+                payment.setAmount(totalAmount);
                 index = loan.getNextPaymentTime() + pace;
             }
             for (int i = index; i <= lastPaymentTime; i += pace) {
@@ -317,17 +322,18 @@ public class Bank implements Serializable, BankInterface {
             Payment paymentToAdd = new Payment(loanID,amount,loan.getInterestRate());
             loan.getPayments().put(Global.worldTime, paymentToAdd);
             paymentToAdd.setActualPaidTime(Global.worldTime);
+            paymentToAdd.setAmount(amount);
+
             payment = loan.getPayments().get(loan.getNextPaymentTime());
-            payment.setAmount(payment.getAmount()-amount);
+            payment.setOriginalAmount(payment.getOriginalAmount()-amount);
         }
         else {
+            payment.setRiskPayTime(Global.worldTime);
             payment.setAmount(amount);
             payment.setPaidAPartOfDebt(true);
-            Payment next= loan.getPayments().get(loan.getNextPaymentTime());
-            next.setAmount(next.getAmount()-amount);
         }
+
         loan.setAmountPaidBack(amount);
-//        payment = loan.getPayments().get(Global.worldTime);
         clients.get(loan.getOwner()).withdrawingMoney(amount);
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, amount);
