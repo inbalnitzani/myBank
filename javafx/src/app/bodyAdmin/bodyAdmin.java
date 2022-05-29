@@ -184,6 +184,7 @@ public class bodyAdmin {
                 vBox = addActiveTimeData(vBox, loan);
                 break;
             case RISK:
+                vBox = addPaymentData(vBox, loan);
                 vBox = addActiveTimeData(vBox, loan);
                 vBox = addRiskData(vBox, loan);
                 break;
@@ -274,7 +275,7 @@ public class bodyAdmin {
         if (paidPayments.isEmpty()){
             data.getChildren().add(new Label("No money has been returned yet"));
         } else {
-            data = createLabelsPaidPaymentData(data, paidPayments);
+            data = createLabelsPaidPaymentData(data, paidPayments,loan);
         }
         loan.calculateInfo();
         Label label = new Label("Total fund paid:" + loan.getFundPaid() + " -- Total interest paid:" + loan.getInterestPaid());
@@ -282,14 +283,17 @@ public class bodyAdmin {
         data.getChildren().addAll(label, label1);
         return data;
     }
-    public VBox createLabelsPaidPaymentData(VBox data,List<PaymentDTO> paidPayments){
+    public VBox createLabelsPaidPaymentData(VBox data,List<PaymentDTO> paidPayments,LoanDTO loan){
         int size=paidPayments.size();
         for (int i = 0; i < size; i++) {
+            PaymentDTO paymentDTO = paidPayments.get(i);
+            double totalAmount = paymentDTO.getAmount();
+            double fund = totalAmount/(1+(loan.getInterestRate()/100.0));
             Label label = new Label("Payment " + (i + 1) + ":");
-            Label label1 = new Label("Paying time: " + paidPayments.get(i).getActualPaidTime());
-            Label label2 = new Label("Fund: " + paidPayments.get(i).getAmount());
-            Label label3 = new Label("Interest: " + paidPayments.get(i).getInterestPart());
-            Label label4 = new Label("Total: " + (paidPayments.get(i).getInterestPart() + paidPayments.get(i).getAmount()));
+            Label label1 = new Label("Paying time: " + paymentDTO.getActualPaidTime());
+            Label label2 = new Label("Fund: " + fund);
+            Label label3 = new Label("Interest: " +(totalAmount-fund));
+            Label label4 = new Label("Total: " + totalAmount);
             data.getChildren().addAll(label, label1, label2, label3, label4);
         }
         return data;

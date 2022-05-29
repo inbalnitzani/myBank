@@ -43,10 +43,10 @@ public class LoanDTO {
         this.lastRiskTime =loan.getLastRiskTime();
         this.finalAmount=capital*(interestRate/100+1);
         setPayBacks(loan.getPayBacks());
-        int lastPay= loan.getActualLastPaymentTime();
-        if(lastPay==0) {
-            lastPay= loan.getLastPaymentTime();}
-        setPayments(loan.getPayments(), loan.getFirstPaymentTime(), lastPay);
+//        int lastPay= loan.getActualLastPaymentTime();
+//        if(lastPay==0) {
+//            lastPay= loan.getLastPaymentTime();}
+        setPayments(loan.getPayments());
     }
 
     // PRIVATE SETTERS
@@ -62,11 +62,19 @@ public class LoanDTO {
         return (amountNextPayment - getTotalAmountPerPayment()) / getTotalAmountPerPayment();
     }
 
-    private void setPayments(Map<Integer, Payment> payments, int firstPayTime, int lastPayTime) {
+    private void setPayments(Map<Integer, Payment> paymentsToCheck) {
         this.payments = new HashMap<>();
-        if (payments.size() != 0) {
-            for (int i = firstPayTime; i <= lastPayTime; i += pace) {
-                this.payments.put(i, new PaymentDTO(payments.get(i)));
+        int size =paymentsToCheck.size();
+        int i=1, paymentAdd=0;
+        if (size != 0) {
+            while (paymentAdd<size)
+            {
+                Payment payment=paymentsToCheck.get(i);
+                if (payment!=null){
+                    payments.put(i,new PaymentDTO(payment));
+                    paymentAdd++;
+                }
+                i++;
             }
         }
     }
@@ -224,16 +232,13 @@ public class LoanDTO {
         return payments.get(getNextPaymentTime()).getAmount();
     }
 
-    public List<PaymentDTO> getPaidPayment(){
-        int size = payments.size();
-        List<PaymentDTO> paidPayments=new ArrayList<>();
-        int firstPaymentTime =getFirstPaymentTime();
-        for (int i = firstPaymentTime; i < size ; i+=pace) {
-            PaymentDTO payment=payments.get(i);
-            if(payment.isPaid())
-                paidPayments.add(payment);
+    public List<PaymentDTO> getPaidPayment() {
+        List<PaymentDTO> paymentDTOList = new ArrayList<>();
+        for (PaymentDTO paymentDTO : payments.values()) {
+            if (paymentDTO.isPaid())
+                paymentDTOList.add(paymentDTO);
         }
-        return paidPayments;
+        return paymentDTOList;
     }
 
     public int getFirstPaymentTime() {

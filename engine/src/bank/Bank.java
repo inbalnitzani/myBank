@@ -314,18 +314,20 @@ public class Bank implements Serializable, BankInterface {
         Payment payment = loan.getPayments().get(Global.worldTime);
         if(payment == null){
             //add a new payment
-            Payment paymentToAdd = new Payment(loanID,amount,0);
+            Payment paymentToAdd = new Payment(loanID,amount,loan.getInterestRate());
             loan.getPayments().put(Global.worldTime, paymentToAdd);
-            //decrease next payment debt
+            paymentToAdd.setActualPaidTime(Global.worldTime);
             payment = loan.getPayments().get(loan.getNextPaymentTime());
             payment.setAmount(payment.getAmount()-amount);
         }
         else {
-            payment.setAmount(payment.getAmount()-amount);
+            payment.setAmount(amount);
             payment.setPaidAPartOfDebt(true);
+            Payment next= loan.getPayments().get(loan.getNextPaymentTime());
+            next.setAmount(next.getAmount()-amount);
         }
         loan.setAmountPaidBack(amount);
-        payment = loan.getPayments().get(Global.worldTime);
+//        payment = loan.getPayments().get(Global.worldTime);
         clients.get(loan.getOwner()).withdrawingMoney(amount);
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, amount);
