@@ -43,13 +43,13 @@ public class paymentController {
             } else if (loan.getStatus().equals(Status.RISK)) {
                 payRiskLoan(loan);
             } else {
-
                 bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             bodyUser.updateClientInfo();
             paiedMassege.setText("The payment was successfully made");
             acceptButton.setDisable(true);
             amountToPay.setDisable(true);
+            amountToPay.clear();
         }
         catch (NotEnoughMoney e){
             payAllLable.setText("NOTICE: you do not have enough money ");
@@ -91,7 +91,7 @@ public class paymentController {
     public void payRiskLoan(LoanDTO loanDTO) throws Exception {
         double amount = Double.parseDouble(amountToPay.getText());
         if (amount <= 0 || amount > loanDTO.getNextPaymentAmount()) {
-            throw  new Exception();
+            throw new Exception();
         }
         amountError.setText("");
         if (amount == loanDTO.getNextPaymentAmount()) {
@@ -114,22 +114,30 @@ public class paymentController {
         showPaymentsControl();
 
     }
+
     public void showNotifications(){
         notificationList.getItems().clear();
         int time = bodyUser.mainController.getTime();
+        String str;
         for (int yaz = 1; yaz<= time; yaz++) {
             for (LoanDTO loan:loansList) {
                 Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
                 PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
-                if (paymentDTO!=null)
-                        if(!paymentDTO.isPaid()||paymentDTO.getActualPaidTime()==yaz)
-                    notificationList.getItems().add("Yaz: "+yaz+
-                            "\nIt is time to pay back for "+'"'+loan.getId()+'"' +
-                            "\na total of: "+(paymentDTO.getOriginalAmount()));
+                if (paymentDTO!=null )
+                    if(!paymentDTO.isPaid() ||(!paymentDTO.getPaidAPartOfDebt() && paymentDTO.getAmount()>paymentDTO.getOriginalAmount())){
+                        str = "Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
+                                "\na total of: "+(paymentDTO.getOriginalAmount());
+
+                       if(!notificationList.getItems().contains(str)){
+                           notificationList.getItems().add(str);
+                       }
+
+                }
             }
         }
 
     }
+
     public void showPaymentsControl(){
         choosePayment.getItems().clear();
         payAllLable.setText("");

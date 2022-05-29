@@ -250,7 +250,7 @@ public class Bank implements Serializable, BankInterface {
         for (Payment payment : payments) {
       double originalAmount = payment.getOriginalAmount();
             double paidAmount = payment.getAmount();
-            double amountLeft = (originalAmount*(1+payment.getPercentage()))-paidAmount;
+            double amountLeft = originalAmount-paidAmount;
             setInRisk(activeLoans.get(payment.getLoanID()), amountLeft);
         }
         Global.changeWorldTimeByOne();
@@ -323,6 +323,7 @@ public class Bank implements Serializable, BankInterface {
             loan.getPayments().put(Global.worldTime, paymentToAdd);
             paymentToAdd.setActualPaidTime(Global.worldTime);
             paymentToAdd.setAmount(amount);
+            paymentToAdd.setPaidAPartOfDebt(true);
 
             payment = loan.getPayments().get(loan.getNextPaymentTime());
             payment.setOriginalAmount(payment.getOriginalAmount()-amount);

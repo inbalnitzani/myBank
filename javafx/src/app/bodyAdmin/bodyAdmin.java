@@ -184,6 +184,7 @@ public class bodyAdmin {
                 vBox = addActiveTimeData(vBox, loan);
                 break;
             case RISK:
+                vBox = addPayBacksData(vBox, loan);
                 vBox = addPaymentData(vBox, loan);
                 vBox = addActiveTimeData(vBox, loan);
                 vBox = addRiskData(vBox, loan);
@@ -209,7 +210,7 @@ public class bodyAdmin {
             times = times.concat("-");
         }
         Label label2=new Label(times);
-        Label label3=new Label("Missing until now: "+ loan.getTotalAmountPerPayment());
+        Label label3=new Label("Missing until now: "+ loan.getNextPaymentAmount());
         vBox.getChildren().addAll(label,label2,label3);
         return vBox;
     }

@@ -12,13 +12,22 @@ public class Client implements Serializable {
     private List<Loan> asLender;
     private List<Loan> asBorrower;
     private Map<Integer, List<Movement>> movements;
-
+private List<String> notifications;
     public Client(String name, int accountBalance) {
         fullName = name;
         currBalance = accountBalance;
         asLender = new ArrayList<>();
         asBorrower = new ArrayList<>();
         movements = new HashMap<>();
+        notifications=new ArrayList<>();
+    }
+
+    public void setNotifications(List<String> notifications) {
+        this.notifications = notifications;
+    }
+
+    public List<String> getNotifications() {
+        return notifications;
     }
 
     public void addLoanToBorrowerList(Loan loan) {
