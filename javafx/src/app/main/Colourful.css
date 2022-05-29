@@ -53,3 +53,10 @@
     -fx-background-radius: 30;
     -fx-border-radius: 30;
 }
+.table-view .table-row-cell {
+    -fx-background-color: #FFF0F5;
+}
+.table-view .table-row-cell:selected {
+    -fx-background-color: #D8BFD8;
+    -fx-border-radius: 30;
+}
