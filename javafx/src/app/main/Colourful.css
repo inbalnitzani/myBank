@@ -60,3 +60,7 @@
     -fx-background-color: #D8BFD8;
     -fx-border-radius: 30;
 }
+.button:hover {
+    -fx-background-color: #1f4275;
+    -fx-text-fill: WHITE;
+}
