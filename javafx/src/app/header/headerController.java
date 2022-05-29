@@ -14,14 +14,13 @@ public class headerController {
     @FXML private ComboBox<String> userOptions;
     @FXML private Label file;
     @FXML private Label yaz;
-    @FXML private ComboBox<String> skin;
 
     private SimpleIntegerProperty currYaz;
     private AppController mainController;
 
     @FXML public void initialize() {
         yaz.setText("No file in system");
-        initUserOptions();
+        userOptions.getItems().add("Admin");
     }
 
     @FXML void chooseUser(ActionEvent event) {
@@ -31,29 +30,6 @@ public class headerController {
     public Label getYaz() {
         return yaz;
     }
-
-    public void initUserOptions() {
-        userOptions.getItems().add("Admin");
-        skin.getItems().add("DEFAULT");
-        skin.getItems().add("PINK");
-        skin.getItems().add("COLOURFUL");
-    }
-
-    @FXML
-    void chooseSkin(ActionEvent event) {
-        switch (skin.getValue()) {
-      //      case DEFAULT:
-       //         mainController.setSkin("Default");
-       //         break;
-        //    case PINK:
-         //       mainController.setSkin("Default");
-          //      break;
-           // case COLOURFUL:
-            //    mainController.setSkin("Default");
-             //   break;
-        }
-    }
-
 
     public headerController() {
     }
