@@ -219,7 +219,7 @@ public class Bank implements Serializable, BankInterface {
         Client borrower = clients.get(investor.getClientDTOGivers());
         borrower.addMoneyToAccount(amount);
     }
-
+//hello
     public void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(yaz);
