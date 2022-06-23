@@ -261,6 +261,7 @@ public class Bank implements Serializable, BankInterface {
         List<Payment> paymentsList = new ArrayList<>();
         for (Loan loan : activeLoans.values()) {
             Payment payment = loan.getPayments().get(Global.worldTime);
+          //  if(payment.isNewPayment())
             if (payment != null) {
                 if (!payment.isPaid() ||payment.getPaidAPartOfDebt())
                     paymentsList.add(payment);
@@ -325,6 +326,9 @@ public class Bank implements Serializable, BankInterface {
             paymentToAdd.setActualPaidTime(Global.worldTime);
             paymentToAdd.setAmount(amount);
             paymentToAdd.setPaidAPartOfDebt(true);
+            paymentToAdd.setNewPayment(true);
+
+
 
             payment = loan.getPayments().get(loan.getNextPaymentTime());
             payment.setOriginalAmount(payment.getOriginalAmount()-amount);

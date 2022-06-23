@@ -11,6 +11,15 @@ public class PaymentDTO {
     private boolean paidAPartOfDebt;
     private int riskPayTime;
     private boolean payAll;
+    private boolean newPayment;
+
+    public boolean isNewPayment() {
+        return newPayment;
+    }
+
+    public void setNewPayment(boolean newPayment) {
+        this.newPayment = newPayment;
+    }
 
     public boolean isPayAll() {
         return payAll;
@@ -29,6 +38,7 @@ public class PaymentDTO {
         paidAPartOfDebt = payment.getPaidAPartOfDebt();
         this.riskPayTime=payment.getRiskPayTime();
         this.payAll=payment.isPayAll();
+        this.newPayment=payment.isNewPayment();
     }
 
     public void setRiskPayTime(int riskPayTime) {

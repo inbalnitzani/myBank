@@ -21,7 +21,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import loan.LoanTerms;
-import loan.Payment;
 
 import java.io.IOException;
 import java.net.URL;
@@ -140,7 +139,7 @@ public class AppController {
 
     public boolean getFile(String path) {
         boolean validFile=false;
-        try {
+        try{
             myBank.getXMLFile(path);
             headerComponentController.updateComponentForNewFile(path);
             fileInSystem.set(true);

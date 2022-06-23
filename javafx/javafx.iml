@@ -9,5 +9,6 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="engine" />
     <orderEntry type="library" name="controlsfx-8.40.14" level="project" />
+    <orderEntry type="module" module-name="demo" />
   </component>
 </module>
