@@ -2,6 +2,7 @@ package app.main;
 import app.bodyAdmin.bodyAdmin;
 import app.bodyUser.bodyUser;
 import app.header.headerController;
+import app.login.CustomerAppController;
 import bank.Bank;
 import bank.BankInterface;
 import dto.ClientDTO;
@@ -32,26 +33,25 @@ import static app.constParameters.BODY_USER_PATH;
 
 public class AppController {
 
-    @FXML private headerController headerComponentController;
-    @FXML private Parent headerComponent;
     @FXML private BorderPane mainComponent;
+    private headerController headerController;
+    private Parent headerComponent;
     private bodyAdmin bodyAdminController;
     private bodyUser bodyUserController;
+    private CustomerAppController loginController;
+    private Parent loginComponentRoot;
     private Parent adminComponentRoot;
     private Parent userComponentRoot;
     private BankInterface myBank;
     private SimpleBooleanProperty fileInSystem;
     private SimpleIntegerProperty time;
 
-    @FXML
-    public void initialize() throws IOException {
-        if (headerComponentController != null) {
-            headerComponentController.setMainController(this);
+    @FXML public void initialize() throws IOException {
+        if (loginController != null) {
+            loginController.setMainController(this);
         }
-        loadAdmin();
-        loadUser();
-        headerComponentController.getYaz().textProperty().bind(time.asString());
-
+        loadLoginScreen();
+        mainComponent.setTop(loginComponentRoot);
     }
 
     public AppController() {
@@ -62,6 +62,34 @@ public class AppController {
 
     public void setDataUser(){
         bodyUserController.setDataForNewFile();
+    }
+
+    public void loadHeader() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("/app/header/header.fxml");
+        fxmlLoader.setLocation(url);
+        headerComponent = fxmlLoader.load(url.openStream());
+        headerController = fxmlLoader.getController();
+        headerController.setMainController(this);
+    }
+
+    public void loginSuccess(String client) throws IOException {
+        loadAdmin();
+        loadUser();
+        loadHeader();
+        mainComponent.getChildren().clear();
+        mainComponent.setTop(headerComponent);
+        headerController.getYaz().textProperty().bind(time.asString());
+
+    }
+
+    public void loadLoginScreen() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("/app/login/customerLoginPage.fxml");
+        fxmlLoader.setLocation(url);
+        loginComponentRoot = fxmlLoader.load(url.openStream());
+        loginController = fxmlLoader.getController();
+        loginController.setMainController(this);
     }
 
     public void loadAdmin() throws IOException {
@@ -105,7 +133,7 @@ public class AppController {
     }
 
     public void setUserOptions() {
-        headerComponentController.setUsersComboBox();
+        headerController.setUsersComboBox();
     }
 
     public boolean isFileInSystem() {
@@ -141,7 +169,7 @@ public class AppController {
         boolean validFile=false;
         try{
             myBank.getXMLFile(path);
-            headerComponentController.updateComponentForNewFile(path);
+            headerController.updateComponentForNewFile(path);
             fileInSystem.set(true);
             time.setValue(myBank.getWorldTime());
             validFile=true;
@@ -149,7 +177,6 @@ public class AppController {
             showError(err);
         }return validFile;
     }
-
 
     public List<LoanDTO> getLoans(){return myBank.getAllLoans();}
 
@@ -178,11 +205,14 @@ public class AppController {
     public void payAllBack(String loanID) throws NotEnoughMoney {
         myBank.payAllBack(loanID);
     }
+
     public void payBackNextPayment(String loanID, double totalAmount,int yaz) throws NotEnoughMoney {
         myBank.payBackNextPayment(loanID,totalAmount,yaz);}
+
     public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
         myBank.withdrawMoneyFromAccount(clientName, amount);
     }
+
     public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
         myBank.payApartOfDebt(loanID,amount);
     }

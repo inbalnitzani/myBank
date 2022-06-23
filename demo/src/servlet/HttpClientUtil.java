@@ -1,4 +1,4 @@
-package util;
+package servlet;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,7 +23,7 @@ public class HttpClientUtil {
         simpleCookieManager.removeCookiesOf(domain);
     }
 
-    public static void sync(String finalUrl, Callback callback) {
+    public static void run(String finalUrl, Callback callback) {
         Request request = new Request.Builder()
                 .url(finalUrl)
                 .build();

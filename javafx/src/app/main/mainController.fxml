@@ -5,10 +5,6 @@
 
 <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="595.0" prefWidth="645.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.main.AppController">
    <content>
-      <BorderPane fx:id="mainComponent" minHeight="-Infinity" prefHeight="637.0" prefWidth="676.0">
-         <top>
-            <fx:include fx:id="headerComponent" source="../header/header.fxml" />
-         </top>
-      </BorderPane>
+      <BorderPane fx:id="mainComponent" minHeight="-Infinity" prefHeight="602.0" prefWidth="630.0" />
    </content>
 </ScrollPane>
