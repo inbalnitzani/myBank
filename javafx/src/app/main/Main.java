@@ -30,7 +30,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Bank");
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("mainController.fxml");
+        URL url = getClass().getResource("/app/main/mainController.fxml");
         fxmlLoader.setLocation(url);
         ScrollPane root = fxmlLoader.load(url.openStream());
 
