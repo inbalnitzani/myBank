@@ -1,11 +1,10 @@
-package bank;
+package engine;
 
 import client.Client;
 import loan.Loan;
 import loan.LoanTerms;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 

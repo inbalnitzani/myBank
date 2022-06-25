@@ -2,6 +2,9 @@ package app.information;
 
 import app.bodyUser.bodyUser;
 import dto.*;
+import dto.ClientDTO;
+import dto.LoanDTO;
+import dto.MovementDTO;
 import exception.NotEnoughMoney;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

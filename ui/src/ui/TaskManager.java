@@ -2,9 +2,9 @@ package ui;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
-import bank.Bank;
-import bank.BankInterface;
-import bank.Global;
+import engine.Bank;
+import engine.BankInterface;
+import engine.Global;
 import exception.FileException;
 import exception.NotEnoughMoney;
 import loan.LoanTerms;

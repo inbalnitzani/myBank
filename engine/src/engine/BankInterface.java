@@ -1,8 +1,7 @@
-package bank;
+package engine;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
-import dto.PaymentDTO;
 import exception.*;
 import loan.Loan;
 import loan.LoanTerms;
@@ -12,7 +11,6 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public interface BankInterface {
 

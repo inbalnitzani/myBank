@@ -1,7 +1,7 @@
 package app.login;
 
 import app.main.AppController;
-import bank.Bank;
+import engine.Bank;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -20,14 +20,10 @@ public class CustomerAppController {
 
     private Bank bank;
     private Stage primaryStage;
-    @FXML
-    private ScrollPane mainComponent;
-    @FXML
-    private TextField userNameTF;
-    @FXML
-    private Button loginBTN;
-    @FXML
-    private Label msgLabel;
+    @FXML private ScrollPane mainComponent;
+    @FXML private TextField userNameTF;
+    @FXML private Button loginBTN;
+    @FXML private Label msgLabel;
     private AppController mainController;
 
     public CustomerAppController() {
@@ -52,28 +48,28 @@ public class CustomerAppController {
                 .build()
                 .toString();
 
-        HttpClientUtil.run(finalUrl, new Callback() {
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() ->
-                        msgLabel.setText("There is no " + userNameTF.getText() + " in system!")
+                        msgLabel.setText("Failure!")
                 );
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                System.out.println("good");
                 if (response.code() != 200) {
                     Platform.runLater(() ->
                             msgLabel.setText("There is no " + userNameTF.getText() + " in system!")
                     );
-                } else {
+                }
+                else {
                     Platform.runLater(() ->
                             msgLabel.setText("hello" + userNameTF.getText())
                     );
                     Platform.runLater(() -> {
                             try {
-                                mainController.loginSuccess("mai");
+                                mainController.loginSuccess(userNameTF.getText());
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

@@ -1,13 +1,34 @@
-package bank;
+package engine;
 import dto.ClientDTO;
 import dto.ConvertDTO;
 import dto.LoanDTO;
 import client.Client;
 import exception.*;
+import exception.CategoriesException;
+import exception.CustomerException;
+import exception.IdException;
+import exception.InterestException;
+import exception.NamesException;
+import exception.NegativeBalanceException;
+import exception.NegativeLoanCapitalException;
+import exception.NegativeTimeException;
+import exception.NotEnoughMoney;
+import exception.PaceException;
+import exception.XmlException;
 import loan.*;
+import loan.Loan;
+import loan.LoanTerms;
+import loan.PayBack;
+import loan.Payment;
+import loan.Status;
+import schema.AbsCategories;
+import schema.AbsCustomer;
+import schema.AbsCustomers;
 import schema.AbsDescriptor;
 import file.File;
 import schema.*;
+import schema.AbsLoan;
+import schema.AbsLoans;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,13 +36,13 @@ import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.*;
 
-public class Bank implements Serializable, BankInterface {
+public class Bank implements Serializable, engine.BankInterface {
 
     private Set<String> categories;
     private Map<String, Loan> activeLoans;
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
-    private MatchLoans matchLoans;
+    private engine.MatchLoans matchLoans;
     private int time = 1;
 
     public Bank() {
@@ -51,7 +72,7 @@ public class Bank implements Serializable, BankInterface {
         file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
         convertToBank(info);
         time = 1;
-        Global.setWorldTime(1);
+        engine.Global.setWorldTime(1);
         readFile = true;
         return readFile;
     }
@@ -65,7 +86,7 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
-        matchLoans = new MatchLoans(clients.get(clientName), terms);
+        matchLoans = new engine.MatchLoans(clients.get(clientName), terms);
         Map<String, Loan> loans = new HashMap<>();
         matchLoans.checkRelevantLoans(loans, waitingLoans, clients);
         List<LoanDTO> loanDTOS = new ConvertDTO().createListLoanDto(loans.values());
@@ -90,7 +111,7 @@ public class Bank implements Serializable, BankInterface {
     }
 
     public void saveStateToFile(String fileName) throws IOException {
-        time = Global.worldTime;
+        time = engine.Global.worldTime;
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
             out.writeObject(this);
             out.flush();
@@ -142,7 +163,7 @@ public class Bank implements Serializable, BankInterface {
     }
 
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance("schema");
+        JAXBContext jc = JAXBContext.newInstance("engineBank/schema");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
@@ -231,13 +252,13 @@ public class Bank implements Serializable, BankInterface {
         if (client.getCurrBalance() >= totalAmount) {
             client.withdrawingMoney(totalAmount);
             loan.setAmountPaidBack(totalAmount);
-            payment.setActualPaidTime(Global.worldTime);
+            payment.setActualPaidTime(engine.Global.worldTime);
             payment.setAmount(totalAmount);
             for (PayBack investor : loan.getPayBacks()) {
                 payBackToInvestor(investor, totalAmount);
             }
             if (loan.getAmountPaidBack() == loan.totalAmountToPayBack()) {
-                loan.setActualLastPaymentTime(Global.worldTime);
+                loan.setActualLastPaymentTime(engine.Global.worldTime);
                 loan.setStatus(Status.FINISHED);
             } else {
                 loan.setStatus(Status.ACTIVE);
@@ -253,14 +274,14 @@ public class Bank implements Serializable, BankInterface {
             double amountLeft = originalAmount-paidAmount;
             setInRisk(activeLoans.get(payment.getLoanID()), amountLeft);
         }
-        Global.changeWorldTimeByOne();
+        engine.Global.changeWorldTimeByOne();
         time++;
     }
 
     public List<Payment> makePaymentsLists() {
         List<Payment> paymentsList = new ArrayList<>();
         for (Loan loan : activeLoans.values()) {
-            Payment payment = loan.getPayments().get(Global.worldTime);
+            Payment payment = loan.getPayments().get(engine.Global.worldTime);
           //  if(payment.isNewPayment())
             if (payment != null) {
                 if (!payment.isPaid() ||payment.getPaidAPartOfDebt())
@@ -272,7 +293,7 @@ public class Bank implements Serializable, BankInterface {
 
     public void setInRisk(Loan loan, double totalAmount) {
         loan.setRiskTime();
-        int nextTimePay = loan.getPace() + Global.worldTime;
+        int nextTimePay = loan.getPace() + engine.Global.worldTime;
         Map<Integer, Payment> paymentList = loan.getPayments();
         if (paymentList.containsKey(nextTimePay))
             paymentList.get(nextTimePay).addToOriginalAmount(totalAmount);
@@ -292,17 +313,17 @@ public class Bank implements Serializable, BankInterface {
         if (client.getCurrBalance() >= totalAmount) {
             client.withdrawingMoney(totalAmount);
             loan.setAmountPaidBack(totalAmount);
-            Payment payment = loan.getPayments().get(Global.worldTime);
+            Payment payment = loan.getPayments().get(engine.Global.worldTime);
             int index = 0, pace = loan.getPace(), lastPaymentTime = loan.getLastPaymentTime();
             if (payment != null) {
                 payment.setPayAll(true);
                 payment.setAmount(totalAmount);
-                index = Global.worldTime + pace;
-                payment.setActualPaidTime(Global.worldTime);
-                loan.setActualLastPaymentTime(Global.worldTime);
+                index = engine.Global.worldTime + pace;
+                payment.setActualPaidTime(engine.Global.worldTime);
+                loan.setActualLastPaymentTime(engine.Global.worldTime);
             } else {
                 payment =  loan.getNextPayment();
-                payment.setActualPaidTime(Global.worldTime);
+                payment.setActualPaidTime(engine.Global.worldTime);
                 payment.setAmount(totalAmount);
                 index = loan.getNextPaymentTime() + pace;
             }
@@ -318,12 +339,12 @@ public class Bank implements Serializable, BankInterface {
 
     public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
-        Payment payment = loan.getPayments().get(Global.worldTime);
+        Payment payment = loan.getPayments().get(engine.Global.worldTime);
         if(payment == null){
             //add a new payment
             Payment paymentToAdd = new Payment(loanID,amount,loan.getInterestRate());
-            loan.getPayments().put(Global.worldTime, paymentToAdd);
-            paymentToAdd.setActualPaidTime(Global.worldTime);
+            loan.getPayments().put(engine.Global.worldTime, paymentToAdd);
+            paymentToAdd.setActualPaidTime(engine.Global.worldTime);
             paymentToAdd.setAmount(amount);
             paymentToAdd.setPaidAPartOfDebt(true);
             paymentToAdd.setNewPayment(true);
@@ -334,7 +355,7 @@ public class Bank implements Serializable, BankInterface {
             payment.setOriginalAmount(payment.getOriginalAmount()-amount);
         }
         else {
-            payment.setRiskPayTime(Global.worldTime);
+            payment.setRiskPayTime(engine.Global.worldTime);
             payment.setAmount(amount);
             payment.setPaidAPartOfDebt(true);
         }
