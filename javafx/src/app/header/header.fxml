@@ -10,11 +10,8 @@
    <children>
       <VBox fillWidth="false" minHeight="10.0" prefHeight="62.0" prefWidth="137.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="137.0" text="View By" textFill="#ab2525">
-               <font>
-                  <Font size="20.0" />
-               </font></Label>
             <ComboBox fx:id="userOptions" onAction="#chooseUser" prefHeight="27.0" prefWidth="200.0" promptText="Choose User" />
+            <Label fx:id="clientName" prefHeight="47.0" prefWidth="137.0" />
          </children>
       </VBox>
       <Label fx:id="file" prefHeight="62.0" prefWidth="277.0" text="File Path">

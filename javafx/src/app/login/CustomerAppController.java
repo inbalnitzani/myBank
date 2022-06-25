@@ -3,6 +3,7 @@ package app.login;
 import app.main.AppController;
 import engine.Bank;
 import com.sun.istack.internal.NotNull;
+import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -57,24 +58,26 @@ public class CustomerAppController {
             }
 
             @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (response.code() != 200) {
-                    Platform.runLater(() ->
-                            msgLabel.setText("There is no " + userNameTF.getText() + " in system!")
-                    );
-                }
-                else {
-                    Platform.runLater(() ->
-                            msgLabel.setText("hello" + userNameTF.getText())
-                    );
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status =response.code();
+                if (status != HttpServletResponse.SC_OK) {
+                    if(status == HttpServletResponse.SC_FORBIDDEN){
+                        Platform.runLater(() ->
+                                msgLabel.setText("You must enter a name!")
+                        );
+                    }else {
+                        Platform.runLater(() ->
+                                msgLabel.setText(userNameTF.getText()+" is already in system. Please enter a different name")
+                        );
+                    }
+                } else {
                     Platform.runLater(() -> {
-                            try {
-                                mainController.loginSuccess(userNameTF.getText());
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                        try {
+                            mainController.loginSuccess(userNameTF.getText());
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                    );
+                    });
                 }
             }
         });

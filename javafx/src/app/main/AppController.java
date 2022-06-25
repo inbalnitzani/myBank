@@ -64,23 +64,23 @@ public class AppController {
         bodyUserController.setDataForNewFile();
     }
 
-    public void loadHeader() throws IOException {
+    public void loadHeader(String clientName) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
         URL url = getClass().getResource("/app/header/header.fxml");
         fxmlLoader.setLocation(url);
         headerComponent = fxmlLoader.load(url.openStream());
         headerController = fxmlLoader.getController();
         headerController.setMainController(this);
+        headerController.updateClientName(clientName);
     }
 
     public void loginSuccess(String client) throws IOException {
         loadAdmin();
         loadUser();
-        loadHeader();
+        loadHeader(client);
         mainComponent.getChildren().clear();
         mainComponent.setTop(headerComponent);
         headerController.getYaz().textProperty().bind(time.asString());
-
     }
 
     public void loadLoginScreen() throws IOException {
