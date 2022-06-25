@@ -1,5 +1,5 @@
 package ui;
-import bank.Global;
+import engine.Global;
 import dto.*;
 import loan.Status;
 

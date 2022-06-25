@@ -1,7 +1,7 @@
 package app.payment;
 
 import app.bodyUser.bodyUser;
-import bank.Global;
+import engine.Global;
 
 import dto.ClientDTO;
 import dto.LoanDTO;

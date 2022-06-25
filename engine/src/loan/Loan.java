@@ -1,7 +1,7 @@
 package loan;
 
 import client.Client;
-import bank.Global;
+import engine.Global;
 
 import java.io.Serializable;
 import java.util.*;

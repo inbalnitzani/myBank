@@ -1,6 +1,6 @@
 package client;
 
-import bank.Global;
+import engine.Global;
 import exception.NotEnoughMoney;
 import loan.Loan;
 import java.io.Serializable;

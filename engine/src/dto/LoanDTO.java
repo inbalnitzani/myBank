@@ -4,11 +4,10 @@ import loan.Loan;
 import loan.PayBack;
 import loan.Payment;
 import loan.Status;
-import bank.Global;
+import engine.Global;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class LoanDTO {
     //DATA MEMBERS
