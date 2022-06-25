@@ -11,11 +11,11 @@ public class ServletUtils {
 
     public static UserManager getUserManager(ServletContext servletContext) {
 
-     //   synchronized (userManagerLock) {
+        synchronized (userManagerLock) {
             if (servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME) == null) {
                 servletContext.setAttribute(USER_MANAGER_ATTRIBUTE_NAME, new UserManager());
             }
-     //   }
+        }
         return (UserManager) servletContext.getAttribute(USER_MANAGER_ATTRIBUTE_NAME);
     }
 

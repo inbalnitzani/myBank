@@ -7,7 +7,7 @@ public class SessionUtils {
 
     public static String getUsername (HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        Object sessionAttribute = session != null ? session.getAttribute(Constants.USERNAME) : null;
+        Object sessionAttribute = session != null ? session.getAttribute(Constants.NAME) : null;
         return sessionAttribute != null ? sessionAttribute.toString() : null;
     }
 

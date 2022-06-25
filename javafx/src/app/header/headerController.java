@@ -15,6 +15,7 @@ import java.io.IOException;
 
 public class headerController {
     @FXML private ComboBox<String> userOptions;
+    @FXML private Label clientName;
     @FXML private Label file;
     @FXML private Label yaz;
     private final StringProperty errorMessageProperty = new SimpleStringProperty();
@@ -31,6 +32,9 @@ public class headerController {
         mainController.changeUser(userOptions.getValue());
     }
 
+    public void updateClientName(String client){
+        clientName.setText(client);
+    }
     public Label getYaz() {
         return yaz;
     }
