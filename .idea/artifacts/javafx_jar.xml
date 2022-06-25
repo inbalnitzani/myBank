@@ -2,7 +2,7 @@
   <artifact type="jar" name="javafx:jar">
     <output-path>$PROJECT_DIR$/out/artifacts/javafx_jar</output-path>
     <root id="archive" name="javafx.jar">
-      <element id="module-output" name="javafx" />
+      <element id="module-output" name="customerApp" />
       <element id="module-output" name="engine" />
       <element id="extracted-dir" path="$USER_HOME$/Downloads/08. Java FX/08. Java FX/tools/controlsfx/controlsfx-8.40.14.jar" path-in-jar="/" />
     </root>

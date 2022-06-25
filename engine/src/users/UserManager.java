@@ -7,6 +7,7 @@ import java.util.Set;
 public class UserManager {
 
     private final Set<String> usersSet;
+    private Boolean adminInSystem=false;
 
     public UserManager() {
         usersSet = new HashSet<>();
@@ -27,4 +28,10 @@ public class UserManager {
     public boolean isUserExists(String username) {
         return usersSet.contains(username);
     }
+
+    public synchronized void addAdmin(){adminInSystem=true;}
+
+    public synchronized void removeAdminFromSystem(){adminInSystem=false;}
+
+    public boolean isAdminInSystem(){return adminInSystem;}
 }
