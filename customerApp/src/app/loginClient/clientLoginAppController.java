@@ -1,7 +1,7 @@
 package app.loginClient;
 
 import app.constParameters;
-import app.main.AppController;
+import app.mainScreenClient.mainScreenClientController;
 import engine.Bank;
 import com.sun.istack.internal.NotNull;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import servlet.HttpClientUtil;
 
 import java.io.IOException;
 
-public class CustomerAppController {
+public class clientLoginAppController {
 
     private Bank bank;
     private Stage primaryStage;
@@ -26,14 +26,11 @@ public class CustomerAppController {
     @FXML private TextField userNameTF;
     @FXML private Button loginBTN;
     @FXML private Label msgLabel;
-    private AppController mainController;
+    private mainScreenClientController mainController;
 
-    public CustomerAppController() {
-        this.bank = new Bank();
-    }
 
-    public void setMainController(AppController mainController) {
-        this.mainController = mainController;
+    public void setMainController(mainScreenClientController mainController){
+        this.mainController=mainController;
     }
 
     public void setPrimaryStage(Stage primaryStage) {
@@ -77,13 +74,15 @@ public class CustomerAppController {
                         );
                     }
                 } else {
-                    Platform.runLater(() -> {
-                        try {
-                            mainController.loginClientSuccess(userNameTF.getText());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
+                    Platform.runLater(() ->
+                            {
+                                try {
+                                    mainController.loginClientSuccess(userNameTF.getText());
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                    );
                 }
             }
         });

@@ -1,7 +1,6 @@
 package app.loginClient;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -14,21 +13,16 @@ public class CustomerApp extends Application {
 
         primaryStage.setTitle("Login Page");
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("customerLoginPage.fxml");
+        URL url = getClass().getResource("clientLoginPage.fxml");
         fxmlLoader.setLocation(url);
         ScrollPane root = fxmlLoader.load(url.openStream());
 
-        CustomerAppController customerAppController = fxmlLoader.getController();
+        clientLoginAppController customerAppController = fxmlLoader.getController();
         customerAppController.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root);
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-        primaryStage.setOnCloseRequest(event -> {
-            customerAppController.logout(primaryStage);
-        });
-
-    }
+       }
 }

@@ -1,6 +1,8 @@
 package servlet;
 
 import app.constParameters;
+import engine.Bank;
+import engine.BankInterface;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -18,12 +20,10 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     @Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      //  response.setStatus(HttpServletResponse.SC_OK);
          processRequest(request,response);
     }
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
 
         String loginType=request.getParameter(constParameters.LOGIN_TYPE);
@@ -42,9 +42,13 @@ public class LoginServlet extends HttpServlet {
         } else {
             if (userManager.isUserExists(usernameFromParameter)) {
                 response.setStatus(HttpServletResponse.SC_CONFLICT);
-            } else synchronized (this) {
+            } else {
+                synchronized (userManager) {
                     userManager.addUser(usernameFromParameter);
                     response.setStatus(HttpServletResponse.SC_OK);
+                    BankInterface bank=ServletUtils.getBank(getServletContext());
+                    bank.addNewUserToBank(usernameFromParameter);
+                }
             }
         }
     }
@@ -57,7 +61,7 @@ public class LoginServlet extends HttpServlet {
         } else {
             if (usernameFromParameter == null || usernameFromParameter.isEmpty()) {
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-            } else synchronized (this) {
+            } else synchronized (userManager) {
                 userManager.addUser(usernameFromParameter);
                 response.setStatus(HttpServletResponse.SC_OK);
             }

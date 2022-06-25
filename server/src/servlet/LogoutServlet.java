@@ -32,14 +32,15 @@ public class LogoutServlet extends HttpServlet {
     }
     public void clientLogout(HttpServletRequest request, HttpServletResponse response) {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        synchronized (this) {
-            userManager.removeUser(request.getParameter(Constants.NAME).trim());
+        synchronized (userManager) {
+            String name = request.getParameter(Constants.NAME);
+            userManager.removeUser(name.trim());
         }
         response.setStatus(HttpServletResponse.SC_OK);
     }
     public void adminLogout(HttpServletResponse response) {
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
-        synchronized (this) {
+        synchronized (userManager) {
             userManager.removeAdminFromSystem();
             response.setStatus(HttpServletResponse.SC_OK);
         }

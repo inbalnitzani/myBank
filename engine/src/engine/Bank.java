@@ -369,4 +369,21 @@ public class Bank implements Serializable, engine.BankInterface {
        // loan.setActualLastPaymentTime(Global.worldTime);
 
     }
+
+    public void addNewUserToBank(String name){
+        clients.put(name,new Client(name,0));
+    }
+
+    public void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
+        boolean readFile = false;
+        InputStream inputStream = new FileInputStream(filePath);
+        AbsDescriptor info = deserializeFrom(inputStream);
+        File file = new File();
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
+//        convertToBank(info);
+//        time = 1;
+//        engine.Global.setWorldTime(1);
+//        readFile = true;
+//        return readFile;
+    }
 }
