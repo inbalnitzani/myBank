@@ -1,8 +1,11 @@
-package app.main;
+public class historyNOTIMPORTANT {
+
+    //Main and appController if you need
+    /*package app.main;
 import app.bodyAdmin.bodyAdmin;
 import app.bodyUser.bodyUser;
 import app.header.headerController;
-import app.loginClient.clientLoginAppController;
+import app.loginClient.CustomerAppController;
 import engine.Bank;
 import engine.BankInterface;
 import dto.ClientDTO;
@@ -38,7 +41,7 @@ public class AppController {
     private Parent headerComponent;
     private bodyAdmin bodyAdminController;
     private bodyUser bodyUserController;
-    private clientLoginAppController loginController;
+    private CustomerAppController loginController;
     private Parent loginComponentRoot;
     private Parent adminComponentRoot;
     private Parent userComponentRoot;
@@ -48,7 +51,7 @@ public class AppController {
 
     @FXML public void initialize() throws IOException {
         if (loginController != null) {
-          //  loginController.setMainController(this);
+            loginController.setMainController(this);
         }
         loadLoginScreen();
         mainComponent.setTop(loginComponentRoot);
@@ -85,11 +88,11 @@ public class AppController {
 
     public void loadLoginScreen() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader();
-        URL url = getClass().getResource("/app/loginClient/clientLoginPage.fxml");
+        URL url = getClass().getResource("/app/loginClient/customerLoginPage.fxml");
         fxmlLoader.setLocation(url);
         loginComponentRoot = fxmlLoader.load(url.openStream());
         loginController = fxmlLoader.getController();
-       // loginController.setMainController(this);
+        loginController.setMainController(this);
     }
 
     public void loadAdmin() throws IOException {
@@ -216,4 +219,65 @@ public class AppController {
     public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
         myBank.payApartOfDebt(loanID,amount);
     }
+}*/
+
+
+
+    /*package app.main;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import java.net.URL;
+
+public class Main extends Application {
+    Scene scene;
+    VBox data=new VBox(2);
+
+    Button pinkButton=new Button("Pink Version");
+    Button colorfulButton=new Button("Colorful Version");
+    Button defaultButton=new Button("Boring Version");
+    HBox hBox = new HBox(pinkButton,colorfulButton,defaultButton);
+
+
+    public static void main(String args[]) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        primaryStage.setTitle("Bank");
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        URL url = getClass().getResource("/app/main/mainController.fxml");
+        fxmlLoader.setLocation(url);
+        ScrollPane root = fxmlLoader.load(url.openStream());
+
+        root.fitToHeightProperty();
+        data.getChildren().addAll(hBox,root);
+        scene = new Scene(data, 1000, 500);
+        scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm());
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+
+        pinkButton.setOnAction(event -> {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(getClass().getResource("PinkMain.css").toExternalForm());
+        });
+
+        colorfulButton.setOnAction(event -> {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(getClass().getResource("Colourful.css").toExternalForm());
+        });
+
+        defaultButton.setOnAction(event -> {
+            scene.getStylesheets().clear();
+            scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm());
+        });
+    }
+}*/
 }

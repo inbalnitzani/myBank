@@ -41,8 +41,14 @@ public interface BankInterface {
      ClientDTO getClientByName(String name);
 
      void payAllBack(String loanID) throws NotEnoughMoney;
+
      void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney;
+
      void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney;
+
      void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney;
 
+     void addNewUserToBank(String name);
+
+     void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
 }

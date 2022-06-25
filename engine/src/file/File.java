@@ -10,7 +10,7 @@ public class File {
     public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
         isXmlFile(fileName);
         checkCategories(categories,loans);
-        checkCustomer(clients,loans);
+      //  checkCustomer(clients,loans);
         checkNames(clients);
         checkTime(loans);
         checkNumbers(loans,clients);
@@ -82,19 +82,19 @@ public class File {
                 throw new IdException(curID);
         }
     }
-    public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
-        boolean valid;
-        for (AbsLoan loan : loans) {
-            valid = false;
-            String customer = loan.getAbsOwner().trim();
-            for (AbsCustomer curCustomer : customers) {
-                if (curCustomer.getName().equalsIgnoreCase(customer))
-                    valid = true;
-            }
-            if (valid == false)
-                throw new CustomerException(customers,loan);
-        }
-    }
+//    public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
+//        boolean valid;
+//        for (AbsLoan loan : loans) {
+//            valid = false;
+//            String customer = loan.getAbsOwner().trim();
+//            for (AbsCustomer curCustomer : customers) {
+//                if (curCustomer.getName().equalsIgnoreCase(customer))
+//                    valid = true;
+//            }
+//            if (valid == false)
+//                throw new CustomerException(customers,loan);
+//        }
+//    }
     public void checkTime(Collection<AbsLoan> loans) throws PaceException, NegativeTimeException {
         for (AbsLoan loan:loans) {
            if((loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz()) != 0)
