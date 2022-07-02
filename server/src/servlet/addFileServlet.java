@@ -25,7 +25,7 @@ public class addFileServlet extends HttpServlet {
        try {
            bank.addNewXMLFile(request.getParameter("Path"));
        } catch (Exception err){
-
+           System.out.println(err);
        }
     }
 }
