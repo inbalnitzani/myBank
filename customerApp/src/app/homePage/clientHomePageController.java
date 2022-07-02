@@ -1,17 +1,16 @@
 package app.homePage;
 
-import app.constParameters;
+import app.createLoan.createLoanController;
 import app.mainScreenClient.mainScreenClientController;
 import com.sun.istack.internal.NotNull;
-import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -20,18 +19,22 @@ import servlet.HttpClientUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class clientHomePageController {
 
     @FXML private Label clientName;
     @FXML private Label currentYaz;
+    @FXML private Button insertFile;
     private mainScreenClientController mainController;
     private SimpleIntegerProperty yazProperty;
-    @FXML private Button insertFile;
+    @FXML private createLoanController createLoanComponentController;
+    @FXML private Parent createLoanComponent;
 
     @FXML public void initialize() {
         yazProperty.setValue(1);
         currentYaz.textProperty().bind(yazProperty.asString());
+        createLoanComponentController.setHomePageController(this);
     }
 
     @FXML void insertFileToSystem(ActionEvent event) {
@@ -86,6 +89,7 @@ public class clientHomePageController {
                 }
             });
         }
+
 
     public clientHomePageController(){
             yazProperty=new SimpleIntegerProperty();

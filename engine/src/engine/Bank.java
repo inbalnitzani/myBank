@@ -380,10 +380,14 @@ public class Bank implements Serializable, engine.BankInterface {
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
         file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
-//        convertToBank(info);
+        convertToBank(info);
 //        time = 1;
 //        engine.Global.setWorldTime(1);
 //        readFile = true;
 //        return readFile;
+    }
+
+    public boolean checkLoanExist(String loanName){
+         return activeLoans.containsKey(loanName) || waitingLoans.containsKey(loanName);
     }
 }

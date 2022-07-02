@@ -44,7 +44,10 @@
                 </Tab>
                 <Tab text="Create New Loan">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <fx:include fx:id="createLoanComponent" source="../createLoan/createLoan.fxml" />
+                           </children></AnchorPane>
                   </content>
                 </Tab>
                   <Tab text="Account Information">
