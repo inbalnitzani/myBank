@@ -53,4 +53,7 @@ public interface BankInterface {
      void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
 
      boolean checkLoanExist(String loanName);
-}
+
+     void addNewLoan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace);
+
+     }

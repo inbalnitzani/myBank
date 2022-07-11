@@ -74,15 +74,13 @@ public class clientLoginAppController {
                         );
                     }
                 } else {
-                    Platform.runLater(() ->
-                            {
-                                try {
-                                    mainController.loginClientSuccess(userNameTF.getText());
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                    );
+                    Platform.runLater(() -> {
+                        try {
+                            mainController.loginClientSuccess(userNameTF.getText());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
                 }
             }
         });

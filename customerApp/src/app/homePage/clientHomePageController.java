@@ -104,6 +104,6 @@ public class clientHomePageController {
     }
 
     public String getClientName(){
-        return clientName.toString();
+        return clientName.getText();
     }
 }
