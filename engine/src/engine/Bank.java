@@ -390,4 +390,13 @@ public class Bank implements Serializable, engine.BankInterface {
     public boolean checkLoanExist(String loanName){
          return activeLoans.containsKey(loanName) || waitingLoans.containsKey(loanName);
     }
+    public void addNewLoan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace) {
+        Loan loan = new Loan(id, owner, amount, rate, categoryName, totalYazTime, pace);
+        waitingLoans.put(id, loan);
+        addLoanToClient(loan, owner);
+    }
+    private void addLoanToClient(Loan loan, String owner){
+        Client client=this.clients.get(owner);
+        client.addLoanToBorrowerList(loan);
+    }
 }

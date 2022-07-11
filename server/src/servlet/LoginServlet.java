@@ -1,9 +1,7 @@
 package servlet;
 
 import app.constParameters;
-import engine.Bank;
 import engine.BankInterface;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,15 +9,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import users.UserManager;
 import utils.Constants;
 import utils.ServletUtils;
-import utils.SessionUtils;
-
-import java.io.IOException;
-
 
 @WebServlet(name = "LoginServlet", urlPatterns = "/login")
 public class LoginServlet extends HttpServlet {
 
-    @Override protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override protected void doGet(HttpServletRequest request, HttpServletResponse response) {
          processRequest(request,response);
     }
 
@@ -45,9 +39,9 @@ public class LoginServlet extends HttpServlet {
             } else {
                 synchronized (userManager) {
                     userManager.addUser(usernameFromParameter);
-                    response.setStatus(HttpServletResponse.SC_OK);
                     BankInterface bank=ServletUtils.getBank(getServletContext());
                     bank.addNewUserToBank(usernameFromParameter);
+                    response.setStatus(HttpServletResponse.SC_OK);
                 }
             }
         }

@@ -2,6 +2,7 @@ package app.createLoan;
 
 import app.homePage.clientHomePageController;
 import com.sun.istack.internal.NotNull;
+import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -188,9 +189,10 @@ public class createLoanController {
     public void generateNewLoan(){
 
         String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/newLoanServlet")
+                .parse("http://localhost:8080/demo_Web_exploded/newLoan")
                 .newBuilder()
                 .addQueryParameter("loanName", name.getText())
+                .addQueryParameter("owner", homePageController.getClientName())
                 .addQueryParameter("Amount",amount.getText())
                 .addQueryParameter("Interest", interest.getText())
                 .addQueryParameter("Category",getChosenCategory())
@@ -200,20 +202,46 @@ public class createLoanController {
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {}
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!");
+                    clearAllLabel();
+                });
+
+            }
             @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
-//                String answer = response.header("IsLoanExist");
-//                if (answer.equals("true")) {
-//                    Platform.runLater(() -> {
-//                        errorName.setText(loanName + " is already exist");
-//                    });
-//                }
-//                else {
-//                    Platform.runLater(() -> {
-//                        errorName.setText("");
-//                    });
-//                }
+               int status = response.code();
+                if (status == HttpServletResponse.SC_FORBIDDEN) {
+                    Platform.runLater(() ->
+                            errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!")
+                    );
+                }
+                else if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->
+                        errorApprove.setText("Loan added successfully!")
+                    );
+                }
+                else {
+                    Platform.runLater(() ->
+                            errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!")
+                    );
+                }
+                clearAllLabel();
             }
         });
+    }
+    public void clearAllLabel(){
+        name.setText("");
+        amount.setText("");
+        interest.setText("");
+        pace.setText("");
+        totalTime.setText("");
+        errorAmount.setText("");
+        errorName.setText("");
+        errorInterest.setText("");
+        errorTotalTime.setText("");
+        errorPace.setText("");
+        errorCategory.setText("");
+        addNewCategory.setText("");
     }
 }
