@@ -1,0 +1,32 @@
+
+.combo-box{
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #A9A9A9;
+    -fx-text-fill: BLACK;
+}
+.button{
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #A9A9A9;
+    -fx-text-fill: BLACK;
+}
+.label{
+    -fx-text-fill:  BLACK;
+
+}
+
+.maserDetailPane{
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #A9A9A9;
+    -fx-text-fill: BLACK;
+}
+.text-field{
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #A9A9A9;
+    -fx-text-fill: BLACK;
+}
+
+.tab-pane-header{
+    -fx-background-color: #FAF0E6;
+    -fx-border-color: #A9A9A9;
+    -fx-text-fill: BLACK;
+}
