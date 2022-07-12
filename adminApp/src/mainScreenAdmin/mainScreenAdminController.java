@@ -1,6 +1,7 @@
 package mainScreenAdmin;
 
 import dto.ClientDTO;
+import dto.LoanDTO;
 import homePage.adminHomePageController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,8 +9,10 @@ import javafx.scene.Parent;
 import javafx.scene.layout.BorderPane;
 import loginAdmin.adminAppController;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
 import java.util.List;
 
 public class mainScreenAdminController {
@@ -25,9 +28,9 @@ public class mainScreenAdminController {
         this.name = name;
     }
 
-    //public String getClientName(){
-    //    return homePageController.getAdminName();
-    //}
+    public String getClientName(){
+        return name;
+    }
 
     public adminHomePageController getHomePageController() {
         return homePageController;
@@ -47,10 +50,10 @@ public class mainScreenAdminController {
         LoginAppController.setMainController(this);
     }
 
-    public void loginSuccess(/*String name*/) throws IOException {
+    public void loginSuccess(String name) throws IOException {
         mainComponent.getChildren().clear();
+        setName(name);
         loadHomePage();
-       // homePageController.setName(name);
         mainComponent.setTop(homePageComponent);
     }
 
@@ -61,10 +64,15 @@ public class mainScreenAdminController {
         homePageComponent = fxmlLoader.load(url.openStream());
         homePageController = fxmlLoader.getController();
         homePageController.setMainController(this);
+        homePageController.showClients();
+
     }
 
 
     public List<ClientDTO> getClients() {
         return LoginAppController.getClients();
+    }
+    public List<LoanDTO> getLoans(){
+        return LoginAppController.getLoans();
     }
 }

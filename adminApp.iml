@@ -16,5 +16,8 @@
     <orderEntry type="library" exported="" name="kotlin-stdlib-1.4.10" level="project" />
     <orderEntry type="library" exported="" name="okhttp-4.9.1" level="project" />
     <orderEntry type="library" exported="" name="controlsfx-8.40.14" level="project" />
+    <orderEntry type="library" name="gson-2.1" level="project" />
+    <orderEntry type="library" name="gson-2.1-javadoc" level="project" />
+    <orderEntry type="library" name="gson-2.1-sources" level="project" />
   </component>
 </module>
