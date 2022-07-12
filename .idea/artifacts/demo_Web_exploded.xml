@@ -7,6 +7,19 @@
         <element id="directory" name="classes">
           <element id="module-output" name="server" />
           <element id="module-output" name="engine" />
+          <element id="module-output" name="customerApp" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/../../javaProj/myBank/out/artifacts/server_war_exploded/WEB-INF/lib/annotations-13.0.jar" />
+          <element id="file-copy" path="$USER_HOME$/Library/Mobile Documents/com~apple~CloudDocs/מסמכים חשובים/myBank/out/artifacts/server_Web_exploded/WEB-INF/lib/annotations-13.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../okHttp/okHttp/annotations-13.0.jar" />
+          <element id="library" level="project" name="okio-2.8.0" />
+          <element id="file-copy" path="$USER_HOME$/Library/Mobile Documents/com~apple~CloudDocs/מסמכים חשובים/myBank/out/artifacts/server_Web_exploded/WEB-INF/lib/annotations-13.0 2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/../../javaProj/myBank/out/artifacts/server_Web_exploded/WEB-INF/lib/annotations-13.0 2.jar" />
+          <element id="file-copy" path="$USER_HOME$/Library/Mobile Documents/com~apple~CloudDocs/מסמכים חשובים/myBank/out/artifacts/server_war_exploded/WEB-INF/lib/annotations-13.0.jar" />
+          <element id="library" level="project" name="kotlin-stdlib-1.4.10" />
+          <element id="library" level="project" name="okhttp-4.9.1" />
+          <element id="library" level="project" name="controlsfx-8.40.14" />
         </element>
       </element>
     </root>

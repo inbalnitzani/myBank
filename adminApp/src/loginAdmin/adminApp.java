@@ -17,7 +17,7 @@ public class adminApp extends Application {
         fxmlLoader.setLocation(url);
         ScrollPane root = fxmlLoader.load(url.openStream());
 
-        AdminAppController adminAppController = fxmlLoader.getController();
+        adminAppController adminAppController = fxmlLoader.getController();
         adminAppController.setPrimaryStage(primaryStage);
 
         Scene scene = new Scene(root);

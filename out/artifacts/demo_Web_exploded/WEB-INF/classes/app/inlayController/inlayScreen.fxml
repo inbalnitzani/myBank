@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import org.controlsfx.control.CheckComboBox?>
+
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="568.0" prefWidth="747.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.inlayController.inlayController">
+
+    <children>
+        <BorderPane prefHeight="657.0" prefWidth="747.0">
+            <center>
+                <AnchorPane fx:id="center" maxWidth="1.7976931348623157E308" prefHeight="277.0" prefWidth="547.0" BorderPane.alignment="CENTER" />
+            </center>
+            <bottom>
+                <AnchorPane fx:id="buttom" prefHeight="146.0" prefWidth="747.0" BorderPane.alignment="CENTER" />
+            </bottom>
+            <top>
+                <GridPane prefHeight="214.0" prefWidth="748.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="10.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="278.0" minWidth="10.0" prefWidth="158.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="278.0" minWidth="10.0" prefWidth="47.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="307.0" minWidth="10.0" prefWidth="298.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="266.0" minWidth="10.0" prefWidth="107.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="136.0" minHeight="0.0" prefHeight="35.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="309.0" minHeight="35.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="309.0" minHeight="35.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="329.0" minHeight="35.0" prefHeight="28.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="880.0" minHeight="35.0" prefHeight="25.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1157.0" minHeight="35.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1157.0" minHeight="35.0" prefHeight="26.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="1157.0" minHeight="35.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label prefHeight="27.0" prefWidth="204.0" text="Client Name: " GridPane.rowIndex="1" />
+                        <Label fx:id="clientName" prefHeight="27.0" prefWidth="302.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label fx:id="accountBalance" prefHeight="26.0" prefWidth="297.0" text="Balance:" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <Label prefHeight="25.0" prefWidth="229.0" text="Enter amount:" GridPane.rowIndex="2">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="amountToInvest" prefHeight="25.0" prefWidth="62.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <Label prefHeight="25.0" prefWidth="232.0" text="Enter minimum time to refund:" GridPane.rowIndex="3">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="minTimeToReturn" prefHeight="25.0" prefWidth="69.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <Label prefHeight="26.0" prefWidth="212.0" text="Choose categories for loan:" GridPane.rowIndex="4">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <CheckComboBox fx:id="categoriesForLoan" prefHeight="25.0" prefWidth="225.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <Label prefHeight="25.0" prefWidth="211.0" text="Choose minimum interest:" GridPane.rowIndex="5">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="TOP" />
+                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="242.0" text="Find match loans!" textFill="#e40101" textOverrun="CENTER_ELLIPSIS" GridPane.rowIndex="6">
+                            <font>
+                                <Font name="System Bold" size="19.0" />
+                            </font>
+                        </Button>
+                        <Label fx:id="errorAmount" prefHeight="24.0" prefWidth="317.0" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <Label fx:id="errorMinTime" prefHeight="34.0" prefWidth="292.0" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <Label prefHeight="153.0" prefWidth="292.0" text="Maximum loans to the borrower:" GridPane.columnIndex="3" GridPane.rowIndex="4">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <Label prefHeight="38.0" prefWidth="258.0" text="Maximum percentage of ownership" GridPane.columnIndex="3" GridPane.rowIndex="6">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                        <TextField fx:id="maxLoansExist" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="maxOwnership" prefHeight="36.0" prefWidth="106.0" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                        <Label fx:id="errorMaxLoans" prefHeight="47.0" prefWidth="258.0" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <Button fx:id="approveButton" mnemonicParsing="false" onAction="#startInlayProcess" prefHeight="63.0" prefWidth="136.0" text="Start Inlay !" textFill="#e11717" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <font>
+                                <Font name="System Bold" size="18.0" />
+                            </font>
+                        </Button>
+                    </children>
+                    <padding>
+                        <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
+                    </padding>
+                </GridPane>
+            </top>
+            <right>
+                <GridPane prefHeight="274.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="114.0" minWidth="10.0" prefWidth="103.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="152.0" minWidth="10.0" prefWidth="97.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="130.0" minHeight="0.0" prefHeight="22.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="330.0" minHeight="0.0" prefHeight="17.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="366.0" minHeight="10.0" prefHeight="230.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label prefHeight="20.0" prefWidth="113.0" text="More information">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="currentLoanId" prefHeight="69.0" prefWidth="97.0" GridPane.rowIndex="1" />
+                        <AnchorPane fx:id="rightErea" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2" />
+                    </children>
+                </GridPane>
+            </right>
+        </BorderPane>
+    </children>
+</VBox>
