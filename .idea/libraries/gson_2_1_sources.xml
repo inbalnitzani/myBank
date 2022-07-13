@@ -2,6 +2,8 @@
   <library name="gson-2.1-sources">
     <CLASSES />
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../gson-2.1-sources.jar!/" />
+    </SOURCES>
   </library>
 </component>
