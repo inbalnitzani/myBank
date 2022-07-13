@@ -25,6 +25,7 @@ public class adminHomePageController {
     @FXML TableColumn<ClientDTO, Integer> currBalanceCol;
     @FXML private TableView<LoanDTO> loans;
 
+
     private Timer timer;
     private TimerTask listRefresher;
 
@@ -38,7 +39,7 @@ public class adminHomePageController {
         });
     }
     public void startListRefresher() {
-        listRefresher = new clientsListRefresher(this::updateUsersList);
+        listRefresher = new clientsListRefresher(this::showClients,this::showLoanData);
         timer = new Timer();
         timer.schedule(listRefresher, 0, 2000);
     }
@@ -46,21 +47,21 @@ public class adminHomePageController {
         this.mainController = mainController;
     }
 
-    public void showClients() {
+    public void showClients(List<ClientDTO> clients) {
         clientsInfoTable.getColumns().clear();
 
         idNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
         currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
 
         clientsInfoTable.getColumns().addAll(idNameCol, currBalanceCol);
-        clientsInfoTable.setItems(FXCollections.observableArrayList(mainController.getClients()));
+        clientsInfoTable.setItems(FXCollections.observableArrayList(clients));
        // clientsDetail.setMasterNode(clientsInfoTable);
         //clientsDetail.setDetailSide(Side.RIGHT);
 
 
     }
 
-    public void showLoanData( ) {
+    public void showLoanData(List<LoanDTO> loansList) {
         loans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
         loansData.addAll(mainController.getLoans());
@@ -91,7 +92,7 @@ public class adminHomePageController {
             }
         });*/
         loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        loans.setItems(loansData);
+        loans.setItems(FXCollections.observableArrayList(loansList));
         //setLoansInfo();
     }
 /*
