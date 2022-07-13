@@ -101,7 +101,6 @@ public class clientHomePageController {
 
     public void newLoansInSystem(){
         informationComponentController.showData();
-
     }
 
     public clientHomePageController(){

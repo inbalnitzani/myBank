@@ -1,6 +1,9 @@
 package app.createLoan;
 import app.homePage.clientHomePageController;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
+import dto.LoanDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -14,6 +17,8 @@ import okhttp3.HttpUrl;
 import okhttp3.Response;
 import servlet.HttpClientUtil;
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
 
 public class createLoanController {
     @FXML private TextField name;
@@ -33,52 +38,28 @@ public class createLoanController {
     private clientHomePageController homePageController;
 
 
-    public void setHomePageController(clientHomePageController controller){
-        this.homePageController=controller;
+    public void setHomePageController(clientHomePageController controller) {
+        this.homePageController = controller;
     }
 
-    @FXML public void initialize() {}
+    @FXML public void initialize() {
+        setCategories();
+    }
+
     @FXML void createNewLoanButton(ActionEvent event) {
-        boolean validDetails = checkName();
-        validDetails &= checkAmount();
-        validDetails &= checkInterest();
-        validDetails &= checkTotalTime();
-        validDetails &= checkPace();
-        validDetails &= checkCategory();
-        if (validDetails) {
-            generateNewLoan();
-            homePageController.newLoansInSystem();
+        String loanName = name.getText().trim();
+        if (loanName != null && loanName != "") {
+            boolean validDetails = checkAmount();
+            validDetails &= checkInterest();
+            validDetails &= checkTotalTime();
+            validDetails &= checkPace();
+            validDetails &= checkCategory();
+            if (validDetails) {
+                generateNewLoan();
+            }
         }
     }
 
-    public boolean checkName(){
-        String loanName = name.getText().trim();
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/checkLoanExist")
-                .newBuilder()
-                .addQueryParameter("loanName", loanName)
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
-                String answer = response.header("IsLoanExist");
-                if (answer.equals("true")) {
-                    Platform.runLater(() -> {
-                        errorName.setText(loanName + " is already exist");
-                    });
-                }
-                else {
-                    Platform.runLater(() -> {
-                        errorName.setText("");
-                    });
-                }
-            }
-        });
-        boolean validName = (errorName.getText()=="");
-        return validName;
-    }
     public boolean checkAmount() {
         String amountString = amount.getText();
         Double amountNumber;
@@ -97,63 +78,122 @@ public class createLoanController {
             return vaildInput;
         }
     }
-    public boolean checkInterest(){
-        String interestString =interest.getText();
-        Integer interestNumber;
-        boolean validInput=false;
+
+    public List<String> getCategories(String categoriesJSON){
+        Gson gson = new Gson();
+        List<String> categories=null;
         try {
-            interestNumber=Integer.parseInt(interestString);
-            if(interestNumber>0 && interestNumber<=100){
+            Type listType = new TypeToken<List<String>>(){}.getType();
+            categories= gson.fromJson(categoriesJSON, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return categories;
+        }
+    }
+
+    public void setCategories(){
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/categories")
+                .newBuilder()
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                    errorApprove.setText("Unknown error occurred! PLease try again!");
+                });
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->{
+                        try {
+                            List<String> allCategories = getCategories(response.body().string());
+                            categories.getItems().clear();
+                            categories.getItems().addAll(allCategories);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        String responseBody = null;
+                        try {
+                            responseBody = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        errorApprove.setText(responseBody);
+                    });
+                }
+            }
+        });
+    }
+
+    public boolean checkInterest() {
+        String interestString = interest.getText();
+        Integer interestNumber;
+        boolean validInput = false;
+        try {
+            interestNumber = Integer.parseInt(interestString);
+            if (interestNumber > 0 && interestNumber <= 100) {
                 errorInterest.setText("");
-                validInput=true;
+                validInput = true;
             }
         } finally {
-            if(!validInput){
+            if (!validInput) {
                 errorInterest.setText("Please enter an integer between 1 to 100!");
                 interest.clear();
             }
             return validInput;
         }
     }
-    public boolean checkPace(){
-        String paceString =pace.getText();
+
+    public boolean checkPace() {
+        String paceString = pace.getText();
         Integer paceNumber;
-        boolean validInput=false;
+        boolean validInput = false;
         try {
-            paceNumber=Integer.parseInt(paceString);
-            if(paceNumber<0){
+            paceNumber = Integer.parseInt(paceString);
+            if (paceNumber < 0) {
                 errorPace.setText("Please enter a positive number");
             } else {
                 String totalTimeForRefundString = totalTime.getText();
-                if(totalTimeForRefundString!=null){
+                if (totalTimeForRefundString != null) {
                     Integer totalTimeForRefundInteger = Integer.parseInt(totalTimeForRefundString);
-                    if(totalTimeForRefundInteger%paceNumber == 0){
+                    if (totalTimeForRefundInteger % paceNumber == 0) {
                         errorPace.setText("");
-                        validInput=true;
+                        validInput = true;
                     } else {
                         errorPace.setText("Please enter a valid pace!");
                     }
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             errorPace.setText("Please enter a positive integer!");
             pace.clear();
-        } finally{
+        } finally {
             return validInput;
         }
     }
-    public boolean checkTotalTime(){
-        String totalTimeString =totalTime.getText();
+
+    public boolean checkTotalTime() {
+        String totalTimeString = totalTime.getText();
         Integer totalTimeNumber;
-        boolean validInput=false;
+        boolean validInput = false;
         try {
-            totalTimeNumber=Integer.parseInt(totalTimeString);
-            if(totalTimeNumber>0){
+            totalTimeNumber = Integer.parseInt(totalTimeString);
+            if (totalTimeNumber > 0) {
                 errorTotalTime.setText("");
-                validInput=true;
+                validInput = true;
             }
         } finally {
-            if(!validInput){
+            if (!validInput) {
                 errorTotalTime.setText("Please enter a positive integer!");
                 totalTime.clear();
             }
@@ -161,71 +201,93 @@ public class createLoanController {
         }
 
     }
+
     public boolean checkCategory() {
         String addNewCategoryString = addNewCategory.getText();
         String chosenCategoryString = categories.getValue();
-        boolean validInput=false;
-        if(!addNewCategoryString.equals("") && chosenCategoryString!=null){
+        boolean validInput = false;
+        if (!addNewCategoryString.equals("") && chosenCategoryString != null) {
             errorCategory.setText("Please choose one from the two options..");
-        } else if( addNewCategoryString.equals("") && chosenCategoryString ==null){
+            categories.setValue("");
+            addNewCategory.setText("");
+        } else if (addNewCategoryString.equals("") && chosenCategoryString == null) {
             errorCategory.setText("Please choose category!");
         } else {
+            String category=addNewCategory.getText();
+            if(category!=""){
+                if(categories.getItems().contains(category)) {
+                    categories.setValue(category);
+                    addNewCategory.setText("");
+                }
+            }
             errorCategory.setText("");
-            validInput=true;
+            validInput = true;
         }
         return validInput;
     }
-    public String getChosenCategory(){
+
+    public String getChosenCategory() {
         String category = addNewCategory.getText();
-        if(category.equals(""))
+        if (category.equals(""))
             return categories.getValue();
         return category;
     }
-    public void generateNewLoan(){
 
+    public void generateNewLoan() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/newLoan")
                 .newBuilder()
                 .addQueryParameter("loanName", name.getText())
                 .addQueryParameter("owner", homePageController.getClientName())
-                .addQueryParameter("Amount",amount.getText())
+                .addQueryParameter("Amount", amount.getText())
                 .addQueryParameter("Interest", interest.getText())
-                .addQueryParameter("Category",getChosenCategory())
-                .addQueryParameter("TotalTime",totalTime.getText())
-                .addQueryParameter("Pace",pace.getText())
+                .addQueryParameter("Category", getChosenCategory())
+                .addQueryParameter("TotalTime", totalTime.getText())
+                .addQueryParameter("Pace", pace.getText())
                 .build()
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() -> {
                     errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!");
                     clearAllLabel();
                 });
 
             }
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
-               int status = response.code();
-                if (status == HttpServletResponse.SC_FORBIDDEN) {
-                    Platform.runLater(() ->
-                            errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!")
-                    );
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->{
+                        errorApprove.setText("Loan added successfully!");
+                        synchronized (this){
+                            if(addNewCategory.getText()!=""){
+                                setCategories();
+                                //updateSomeOneToKnowAll!!!!!!!!!!!!!!
+                            }
+                        }
+                        homePageController.newLoansInSystem();
+                    });
+                } else {
+                    Platform.runLater(() -> {
+                        String responseBody = null;
+                        try {
+                            responseBody = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        errorApprove.setText(responseBody);
+                    });
                 }
-                else if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() ->
-                        errorApprove.setText("Loan added successfully!")
-                    );
-                }
-                else {
-                    Platform.runLater(() ->
-                            errorApprove.setText("Unknown error occurred! Loan has not been added to system. PLease try again!")
-                    );
-                }
-                clearAllLabel();
             }
         });
+        clearAllLabel();
     }
-    public void clearAllLabel(){
+
+    public void clearAllLabel() {
         name.setText("");
         amount.setText("");
         interest.setText("");

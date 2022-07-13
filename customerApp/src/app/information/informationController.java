@@ -130,7 +130,7 @@ public class informationController {
     public void showData() {
         showLoansByType("borrower");
         showLoansByType("lender");
-        balance.setText("Your current balance is: "+ user.getCurrBalance());
+//        balance.setText("Your current balance is: "+ user.getCurrBalance());
       //  showLonersLoans(user.getLoansAsBorrower());
       //  showLoansAsLender(user.getLoansAsGiver());
         showAllTransactionsToClient();
@@ -160,10 +160,7 @@ public class informationController {
 
             @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
-                if (status == HttpServletResponse.SC_FORBIDDEN) {
-                    Platform.runLater(() -> {}
-                    );
-                } else if (status == HttpServletResponse.SC_OK) {
+                if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
                             Map<Integer,List<MovementDTO>> movements= getMovements(response.body().string());
@@ -173,6 +170,9 @@ public class informationController {
                             e.printStackTrace();
                         }
                     });
+                } else {
+                    Platform.runLater(() -> {}
+                    );
                 }
             }
         });
@@ -202,9 +202,9 @@ public class informationController {
             return movements;
         }
     }
-    public void showLonersLoans(Collection<LoanDTO> loans) {
-        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
-    }
+//    public void showLonersLoans(Collection<LoanDTO> loans) {
+//        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
+//    }
     public void showLoansByType(String loansType){
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/loans")
@@ -231,8 +231,11 @@ public class informationController {
                             List<LoanDTO> loanDTOS = getLoans(response.body().string());
                             switch (loansType){
                                 case "borrower":
-                                    loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));                                    break;
+                                    //setLoansLonerTables();
+                                    loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
+                                    break;
                                 case "lender":
+                                    //setLoansLenderTables();
                                     loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                             }
@@ -244,9 +247,9 @@ public class informationController {
             }
         });
     }
-    public void showLoansAsLender(Collection<LoanDTO> loans) {
-        loansAsLender.setItems(FXCollections.observableArrayList(loans));
-    }
+//    public void showLoansAsLender(Collection<LoanDTO> loans) {
+//        loansAsLender.setItems(FXCollections.observableArrayList(loans));
+//    }
     public void updateClientUser(){
         updateUserViewer(bodyUser.getClientDTO());
         showData();
@@ -300,18 +303,18 @@ public class informationController {
 
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
     }
-    public void setTransactionTable(){
-    transactionTable.getColumns().clear();
+    public void setTransactionTable() {
+        transactionTable.getColumns().clear();
 
-    TableColumn<MovementDTO, String> amountCol = new TableColumn<>("Amount");
-    TableColumn<MovementDTO, Integer> balanceBeforeCol = new TableColumn<>("Balance before");
-    TableColumn<MovementDTO, Integer> balanceAfterCol = new TableColumn<>("Balance after");
-    TableColumn<MovementDTO, Integer> yazCol = new TableColumn<>("Yaz");
+        TableColumn<MovementDTO, String> amountCol = new TableColumn<>("Amount");
+        TableColumn<MovementDTO, Integer> balanceBeforeCol = new TableColumn<>("Balance before");
+        TableColumn<MovementDTO, Integer> balanceAfterCol = new TableColumn<>("Balance after");
+        TableColumn<MovementDTO, Integer> yazCol = new TableColumn<>("Yaz");
 
-    amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-    balanceBeforeCol.setCellValueFactory(new PropertyValueFactory<>("amountBeforeMovement"));
-    balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
-    yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
-    transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
-}
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        balanceBeforeCol.setCellValueFactory(new PropertyValueFactory<>("amountBeforeMovement"));
+        balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
+        yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
+        transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
+    }
 }
