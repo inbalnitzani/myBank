@@ -21,12 +21,14 @@ public class checkLoanExistServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("text/html;charset=UTF-8");
         BankInterface bank= ServletUtils.getBank(getServletContext());
-        try {
-            Boolean answer = bank.checkLoanExist(request.getParameter("loanName"));
-            response.addHeader("IsLoanExist",answer.toString());
-            response.setStatus(HttpServletResponse.SC_OK);
-        } catch (Exception err){
-            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+        synchronized (bank){
+            try {
+                Boolean answer = bank.checkLoanNameExist(request.getParameter("loanName"));
+                response.addHeader("IsLoanExist",answer.toString());
+                response.setStatus(HttpServletResponse.SC_OK);
+            } catch (Exception err){
+                response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            }
         }
     }
 }
