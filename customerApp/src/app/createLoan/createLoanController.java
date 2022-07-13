@@ -21,20 +21,34 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class createLoanController {
-    @FXML private TextField name;
-    @FXML private TextField amount;
-    @FXML private TextField interest;
-    @FXML private TextField pace;
-    @FXML private TextField totalTime;
-    @FXML private Label errorAmount;
-    @FXML private Label errorName;
-    @FXML private Label errorInterest;
-    @FXML private Label errorTotalTime;
-    @FXML private Label errorPace;
-    @FXML private Label errorApprove;
-    @FXML private Label errorCategory;
-    @FXML private ComboBox<String> categories;
-    @FXML private TextField addNewCategory;
+    @FXML
+    private TextField name;
+    @FXML
+    private TextField amount;
+    @FXML
+    private TextField interest;
+    @FXML
+    private TextField pace;
+    @FXML
+    private TextField totalTime;
+    @FXML
+    private Label errorAmount;
+    @FXML
+    private Label errorName;
+    @FXML
+    private Label errorInterest;
+    @FXML
+    private Label errorTotalTime;
+    @FXML
+    private Label errorPace;
+    @FXML
+    private Label errorApprove;
+    @FXML
+    private Label errorCategory;
+    @FXML
+    private ComboBox<String> categories;
+    @FXML
+    private TextField addNewCategory;
     private clientHomePageController homePageController;
 
 
@@ -42,11 +56,13 @@ public class createLoanController {
         this.homePageController = controller;
     }
 
-    @FXML public void initialize() {
+    @FXML
+    public void initialize() {
         setCategories();
     }
 
-    @FXML void createNewLoanButton(ActionEvent event) {
+    @FXML
+    void createNewLoanButton(ActionEvent event) {
         String loanName = name.getText().trim();
         if (loanName != null && loanName != "") {
             boolean validDetails = checkAmount();
@@ -79,12 +95,13 @@ public class createLoanController {
         }
     }
 
-    public List<String> getCategories(String categoriesJSON){
+    public List<String> getCategories(String categoriesJSON) {
         Gson gson = new Gson();
-        List<String> categories=null;
+        List<String> categories = null;
         try {
-            Type listType = new TypeToken<List<String>>(){}.getType();
-            categories= gson.fromJson(categoriesJSON, listType);
+            Type listType = new TypeToken<List<String>>() {
+            }.getType();
+            categories = gson.fromJson(categoriesJSON, listType);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -92,7 +109,7 @@ public class createLoanController {
         }
     }
 
-    public void setCategories(){
+    public void setCategories() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/categories")
                 .newBuilder()
@@ -111,7 +128,7 @@ public class createLoanController {
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() ->{
+                    Platform.runLater(() -> {
                         try {
                             List<String> allCategories = getCategories(response.body().string());
                             categories.getItems().clear();
@@ -213,9 +230,9 @@ public class createLoanController {
         } else if (addNewCategoryString.equals("") && chosenCategoryString == null) {
             errorCategory.setText("Please choose category!");
         } else {
-            String category=addNewCategory.getText();
-            if(category!=""){
-                if(categories.getItems().contains(category)) {
+            String category = addNewCategory.getText();
+            if (category != "") {
+                if (categories.getItems().contains(category)) {
                     categories.setValue(category);
                     addNewCategory.setText("");
                 }
@@ -261,10 +278,10 @@ public class createLoanController {
             public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() ->{
+                    Platform.runLater(() -> {
                         errorApprove.setText("Loan added successfully!");
-                        synchronized (this){
-                            if(addNewCategory.getText()!=""){
+                        synchronized (this) {
+                            if (addNewCategory.getText() != "") {
                                 setCategories();
                                 //updateSomeOneToKnowAll!!!!!!!!!!!!!!
                             }
