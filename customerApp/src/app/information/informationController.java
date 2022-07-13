@@ -1,18 +1,27 @@
 package app.information;
 
 import app.bodyUser.bodyUser;
-import dto.*;
+import app.homePage.clientHomePageController;
+import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
 import exception.NotEnoughMoney;
+import jakarta.servlet.http.HttpServletResponse;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
+import servlet.HttpClientUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -23,12 +32,15 @@ public class informationController {
     @FXML private TableView<LoanDTO> loansAsLender;
     @FXML private TableView<MovementDTO> transactionTable;
     @FXML private TextField amount;
-    @FXML private Button chargeButton;
-    @FXML private Button withdrawButton;
     @FXML private Label balance;
     @FXML private Label amountErrorLabel;
     private bodyUser bodyUser;
     private ClientDTO user;
+    private clientHomePageController homePageController;
+
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
+    }
 
     @FXML void chargeListener(ActionEvent event) {
         try {
@@ -36,16 +48,55 @@ public class informationController {
             if (toAdd <= 0) {
                 amountErrorLabel.setText("Please enter a positive number!");
             } else {
-                bodyUser.chargeAccount(toAdd);
-                bodyUser.updateClientInfo();
-                amountErrorLabel.setText("Account charged successfully!");
-                showTransactions();
+                loadMoneyToAccount();
+//                bodyUser.chargeAccount(toAdd);
+//                bodyUser.updateClientInfo();
+//                amountErrorLabel.setText("Account charged successfully!");
+//                showTransactions();
             }
         } catch (Exception e) {
             amountErrorLabel.setText("Please enter a positive number!");
         } finally {
             amount.clear();
         }
+    }
+
+    public void loadMoneyToAccount(){
+
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/changeAccountBalanceServlet")
+                .newBuilder()
+                .addQueryParameter("owner", homePageController.getClientName())
+                .addQueryParameter("amount",amount.getText())
+                .addQueryParameter("TypeMovement","charge")
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() ->
+                        amountErrorLabel.setText("Unknown error occurred! PLease try again!")
+                );
+            }
+
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_FORBIDDEN) {
+                    Platform.runLater(() ->
+                            amountErrorLabel.setText("Unknown error occurred! PLease try again!")
+                    );
+                } else if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->
+                            amountErrorLabel.setText("Amount charged successfully!")
+                    );
+                }
+            }
+        });
+        clearAllLabel();
+    }
+
+    public void clearAllLabel(){
+        amount.setText("");
     }
     @FXML void withdrawListener(ActionEvent event) {
         try {

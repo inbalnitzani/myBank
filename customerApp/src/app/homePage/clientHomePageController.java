@@ -1,7 +1,9 @@
 package app.homePage;
 
 import app.createLoan.createLoanController;
+import app.information.informationController;
 import app.mainScreenClient.mainScreenClientController;
+import app.payment.paymentController;
 import com.sun.istack.internal.NotNull;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -25,16 +27,23 @@ public class clientHomePageController {
 
     @FXML private Label clientName;
     @FXML private Label currentYaz;
+    @FXML private Label accountBalance;
     @FXML private Button insertFile;
     private mainScreenClientController mainController;
     private SimpleIntegerProperty yazProperty;
     @FXML private createLoanController createLoanComponentController;
     @FXML private Parent createLoanComponent;
+    @FXML private app.information.informationController informationComponentController;
+    @FXML private Parent informationComponent;
+    @FXML private paymentController paymentComponentController;
+    @FXML private Parent paymentComponent;
 
     @FXML public void initialize() {
         yazProperty.setValue(1);
         currentYaz.textProperty().bind(yazProperty.asString());
         createLoanComponentController.setHomePageController(this);
+        informationComponentController.setHomePageController(this);
+        paymentComponentController.setHomePageController(this);
     }
 
     @FXML void insertFileToSystem(ActionEvent event) {
@@ -105,5 +114,8 @@ public class clientHomePageController {
 
     public String getClientName(){
         return clientName.getText();
+    }
+    public void setAccountBalance(Double balance){
+        this.accountBalance.setText(String.valueOf(balance));
     }
 }
