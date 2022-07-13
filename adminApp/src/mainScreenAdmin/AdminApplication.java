@@ -50,7 +50,7 @@ public class AdminApplication extends Application {
         primaryStage.setOnCloseRequest(event -> {
             adminHomePageController homePageController = mainScreenAdminController.getHomePageController();
             if(homePageController!=null){
-                //logoutFromSystem(mainScreenAdminController.getClientName());----------------------------------------
+                logoutFromSystem(mainScreenAdminController.getClientName());
             }
             ((Stage) primaryStage.getScene().getWindow()).close();
         });///////////////////////////////////////////////////////////

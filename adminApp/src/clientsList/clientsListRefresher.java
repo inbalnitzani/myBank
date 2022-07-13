@@ -2,6 +2,8 @@ package clientsList;
 
 import com.google.gson.Gson;
 import dto.ClientDTO;
+import dto.LoanDTO;
+import dto.infoForAdminDTO;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -10,26 +12,27 @@ import org.jetbrains.annotations.NotNull;
 import servlet.HttpClientUtil;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
 public class clientsListRefresher extends TimerTask {
-    private final Consumer<Map<String,ClientDTO>> usersListConsumer;
+    private final Consumer<List<ClientDTO>> usersListConsumer;
+    private final Consumer<List<LoanDTO>> loansConsumer;
 
-
-    public clientsListRefresher( Consumer<Map<String,ClientDTO>> usersListConsumer) {
+    public clientsListRefresher(Consumer<List<ClientDTO>> usersListConsumer, Consumer<List<LoanDTO>> loansConsumer) {
         this.usersListConsumer = usersListConsumer;
+        this.loansConsumer = loansConsumer;
     }
 
     @Override
     public void run() {
         String finalUrl = HttpUrl
-                .parse("")
-                        .newBuilder()
-                                .build()
-                                        .toString();
+                .parse("http://localhost:8080/demo_Web_exploded/adminRefresh")
+                .newBuilder()
+                .build()
+                .toString();
         HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -40,9 +43,9 @@ public class clientsListRefresher extends TimerTask {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String json = response.body().string();
                 Gson gson = new Gson();
-                Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
-                usersListConsumer.accept(info);
-                //usersListConsumer.accept(info.getLoans());
+                infoForAdminDTO info = gson.fromJson(json, infoForAdminDTO.class);
+                usersListConsumer.accept(info.getClientsInfo());
+                loansConsumer.accept(info.getLoansInfo());
             }
 
         });
