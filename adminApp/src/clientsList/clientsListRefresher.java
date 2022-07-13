@@ -1,6 +1,6 @@
 package clientsList;
 
-import com.google.gson.Gson;
+
 import dto.ClientDTO;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -39,9 +39,9 @@ public class clientsListRefresher extends TimerTask {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 String json = response.body().string();
-                Gson gson = new Gson();
-                Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
-                usersListConsumer.accept(info);
+            //    Gson gson = new Gson();
+             //   Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
+              //  usersListConsumer.accept(info);
                 //usersListConsumer.accept(info.getLoans());
             }
 

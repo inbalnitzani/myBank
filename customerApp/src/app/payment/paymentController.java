@@ -1,6 +1,7 @@
 package app.payment;
 
 import app.bodyUser.bodyUser;
+import app.homePage.clientHomePageController;
 import engine.Global;
 
 import dto.ClientDTO;
@@ -34,7 +35,12 @@ public class paymentController {
     @FXML private Label paidMassage;
     @FXML private TextField amountToPay;
     @FXML private Label amountError;
+    private clientHomePageController homePageController;
 
+
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
+    }
     @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {

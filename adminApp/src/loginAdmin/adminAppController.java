@@ -1,6 +1,5 @@
 package loginAdmin;
 
-import app.constParameters;
 import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
@@ -56,7 +55,7 @@ public class adminAppController {
                 .parse("http://localhost:8080/demo_Web_exploded/login")
                 .newBuilder()
                 .addQueryParameter("Name", userNameTF.getText())
-                .addQueryParameter(constParameters.LOGIN_TYPE,constParameters.TYPE_ADMIN)
+                .addQueryParameter("LOGIN_TYPE","admin")
                 .build()
                 .toString();
 

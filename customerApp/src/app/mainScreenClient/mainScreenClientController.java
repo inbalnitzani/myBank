@@ -56,15 +56,8 @@ public class mainScreenClientController {
         mainClientComponent.getChildren().clear();
         loadHomePage();
         homePageController.setClientName(clientName);
+        homePageController.setAccountBalance(0.0);
         mainClientComponent.setTop(homePageComponent);
-    }
-
-
-    public void logout(Stage stage){
-        Stage stage1=(Stage) mainClientComponent.getScene().getWindow();
-        stage1.close();
-//        primaryStage=(Stage) mainComponent.getScene().getWindow();
-//        primaryStage.close();
     }
 
     public String getClientName(){

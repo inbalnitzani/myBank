@@ -1,6 +1,5 @@
 package mainScreenAdmin;
 
-import app.constParameters;
 import com.sun.istack.internal.NotNull;
 import homePage.adminHomePageController;
 import javafx.application.Application;
@@ -75,7 +74,7 @@ public class AdminApplication extends Application {
                 .parse("http://localhost:8080/demo_Web_exploded/logout")
                 .newBuilder()
                 .addQueryParameter("Name", name)
-                .addQueryParameter(constParameters.LOGIN_TYPE, constParameters.TYPE_CLIENT)
+                .addQueryParameter("LOGIN_TYPE","client")
                 .build()
                 .toString();
 
