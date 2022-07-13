@@ -1,8 +1,9 @@
 package loginAdmin;
 
 import app.constParameters;
-import app.main.AppController;
 import com.sun.istack.internal.NotNull;
+import dto.ClientDTO;
+import dto.LoanDTO;
 import engine.Bank;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
@@ -13,6 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import mainScreenAdmin.mainScreenAdminController;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -20,8 +22,10 @@ import okhttp3.Response;
 import servlet.HttpClientUtil;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.List;
 
-public class AdminAppController {
+public class adminAppController {
 
     private Bank bank;
     private Stage primaryStage;
@@ -30,16 +34,18 @@ public class AdminAppController {
     @FXML private TextField userNameTF;
     @FXML private Button loginBTN;
     @FXML private Label msgLabel;
-    private AppController mainController;
+    private mainScreenAdminController mainController;
 
-    public AdminAppController() {
+    public adminAppController() {
         this.bank = new Bank();
     }
-
-    public void setMainController(AppController mainController) {
+    public List<ClientDTO> getClients(){return bank.getClients(); }
+    public void setMainController(mainScreenAdminController mainController) {
         this.mainController = mainController;
     }
-
+    public List<LoanDTO> getLoans(){
+        return bank.getAllLoans();
+    }
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -53,6 +59,7 @@ public class AdminAppController {
                 .addQueryParameter(constParameters.LOGIN_TYPE,constParameters.TYPE_ADMIN)
                 .build()
                 .toString();
+
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
@@ -77,8 +84,11 @@ public class AdminAppController {
                     }
                 } else {
                     Platform.runLater(() -> {
-                        System.out.println("hi");
-                            //mainController.loginAdminSuccess(userNameTF.getText());
+                        try {
+                            mainController.loginSuccess(userNameTF.getText());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     });
                 }
             }

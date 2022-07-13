@@ -1,10 +1,7 @@
 <component name="libraryTable">
   <library name="kotlin-stdlib-common-1.4.10">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../okHttp/okHttp/kotlin-stdlib-common-1.4.10.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
-    <jarDirectory url="jar://$PROJECT_DIR$/../okHttp/okHttp/kotlin-stdlib-common-1.4.10.jar!/" recursive="false" />
   </library>
 </component>

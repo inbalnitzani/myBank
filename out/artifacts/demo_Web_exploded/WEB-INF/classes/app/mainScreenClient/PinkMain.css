@@ -1,0 +1,67 @@
+.root{
+    -fx-background-color: #FFF0F5;
+}
+.combo-box{
+    -fx-background-color: PINK;
+    -fx-border-color: #FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-text-fill: #FF1493;
+}
+.button{
+    -fx-background-color: PINK;
+    -fx-border-color: #FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+    -fx-text-fill: #FF1493;
+}
+.label{
+    -fx-c: #FF1493;
+    -fx-text-fill: #FF1493;
+}
+.table-view{
+    -fx-background-radius: 30;
+}
+
+.scroll-bar{
+    -fx-fill: PINK;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.maserDetailPane{
+    -fx-background-color: PINK;
+    -fx-border-color: #FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.text-field{
+    -fx-border-color: #FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.check-box{
+    -fx-text-fill: #FF1493;
+}
+.list-view{
+    -fx-text-fill:#FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+.tab-pane-header{
+    -fx-text-fill:#FF1493;
+    -fx-background-radius: 30;
+    -fx-border-radius: 30;
+}
+
+.table-view .table-row-cell {
+    -fx-background-color: #FFF0F5;
+}
+.table-view .table-row-cell:selected {
+    -fx-background-color: #FF1493;
+    -fx-border-radius: 30;
+    -fx-background-color: #FF1493;
+}
+.button:hover {
+    -fx-background-color: #ff009c;
+    -fx-text-fill: WHITE;
+}
