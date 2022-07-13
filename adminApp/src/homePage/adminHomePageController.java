@@ -25,6 +25,7 @@ public class adminHomePageController {
     @FXML TableColumn<ClientDTO, Integer> currBalanceCol;
     @FXML private TableView<LoanDTO> loans;
 
+
     private Timer timer;
     private TimerTask listRefresher;
 
