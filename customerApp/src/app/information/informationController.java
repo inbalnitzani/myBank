@@ -2,11 +2,12 @@ package app.information;
 
 import app.bodyUser.bodyUser;
 import app.homePage.clientHomePageController;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
-import exception.NotEnoughMoney;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -20,11 +21,9 @@ import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
 import servlet.HttpClientUtil;
-
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.lang.reflect.Type;
+import java.util.*;
 
 public class informationController {
 
@@ -38,21 +37,15 @@ public class informationController {
     private ClientDTO user;
     private clientHomePageController homePageController;
 
-    public void setHomePageController(clientHomePageController controller){
-        this.homePageController=controller;
-    }
-
     @FXML void chargeListener(ActionEvent event) {
         try {
             double toAdd = Double.parseDouble(amount.getText());
             if (toAdd <= 0) {
                 amountErrorLabel.setText("Please enter a positive number!");
             } else {
-                loadMoneyToAccount();
-//                bodyUser.chargeAccount(toAdd);
-//                bodyUser.updateClientInfo();
-//                amountErrorLabel.setText("Account charged successfully!");
-//                showTransactions();
+                changeAccountBalance("charge");
+                showAllTransactionsToClient();
+                //bodyUser.updateClientInfo();
             }
         } catch (Exception e) {
             amountErrorLabel.setText("Please enter a positive number!");
@@ -60,57 +53,16 @@ public class informationController {
             amount.clear();
         }
     }
-
-    public void loadMoneyToAccount(){
-
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/changeAccountBalanceServlet")
-                .newBuilder()
-                .addQueryParameter("owner", homePageController.getClientName())
-                .addQueryParameter("amount",amount.getText())
-                .addQueryParameter("TypeMovement","charge")
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() ->
-                        amountErrorLabel.setText("Unknown error occurred! PLease try again!")
-                );
-            }
-
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
-                int status = response.code();
-                if (status == HttpServletResponse.SC_FORBIDDEN) {
-                    Platform.runLater(() ->
-                            amountErrorLabel.setText("Unknown error occurred! PLease try again!")
-                    );
-                } else if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() ->
-                            amountErrorLabel.setText("Amount charged successfully!")
-                    );
-                }
-            }
-        });
-        clearAllLabel();
-    }
-
-    public void clearAllLabel(){
-        amount.setText("");
-    }
     @FXML void withdrawListener(ActionEvent event) {
         try {
             double toWithdraw = Double.parseDouble(amount.getText());
             if(toWithdraw<=0){
                 amountErrorLabel.setText("Please Enter a positive number.");
             } else {
-                bodyUser.withdrawFromAccount(user.getFullName(), toWithdraw);
-                bodyUser.updateClientInfo();
-                amountErrorLabel.setText("Withdraw from account successfully.");
-                showTransactions();
+                changeAccountBalance("withdraw");
+                showAllTransactionsToClient();
+//                bodyUser.updateClientInfo();
             }
-        } catch (NotEnoughMoney exception) {
-            amountErrorLabel.setText("NOTICE: you do not have enough money in your account");
         } catch (Exception e){
             amountErrorLabel.setText("Please Enter a positive number.");
         } finally {
@@ -121,6 +73,52 @@ public class informationController {
 
 
     }
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
+    }
+    public void changeAccountBalance(String typeMovement){
+
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/changeAccountBalance")
+                .newBuilder()
+                .addQueryParameter("owner", homePageController.getClientName())
+                .addQueryParameter("amount",amount.getText())
+                .addQueryParameter("TypeMovement",typeMovement)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() ->
+                amountErrorLabel.setText("Unknown error occurred! PLease try again!")
+                );
+            }
+
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                 if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        amountErrorLabel.setText("Finished successfully!");
+                        homePageController.setAccountBalance(Double.valueOf(response.header("accountBalance")));
+                    });
+                } else {
+                     Platform.runLater(() ->{
+                         String responseBody = null;
+                         try {
+                             responseBody = response.body().string();
+                         } catch (IOException e) {
+                             e.printStackTrace();
+                         }
+                         amountErrorLabel.setText(responseBody);
+                     });
+                 }
+            }
+        });
+        clearAllLabel();
+    }
+    public void clearAllLabel(){
+        amount.setText("");
+    }
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
 
@@ -130,14 +128,16 @@ public class informationController {
         balance.setText("Your current balance is: "+ user.getCurrBalance());
     }
     public void showData() {
-        balance.setText("Your current balance is: "+ user.getCurrBalance());
-        showLonersLoans(user.getLoansAsBorrower());
-        showLoansAsLender(user.getLoansAsGiver());
-        showTransactions();
+        showLoansByType("borrower");
+        showLoansByType("lender");
+//        balance.setText("Your current balance is: "+ user.getCurrBalance());
+      //  showLonersLoans(user.getLoansAsBorrower());
+      //  showLoansAsLender(user.getLoansAsGiver());
+        showAllTransactionsToClient();
     }
-    public void showTransactions() {
+    public void createTransactionTable(Map<Integer,List<MovementDTO>> movementDTOList) {
         ObservableList<MovementDTO> transactionData = FXCollections.observableArrayList();
-        List<List<MovementDTO>> movements = new ArrayList<>(user.getMovements().values());
+        List<List<MovementDTO>> movements = new ArrayList<>(movementDTOList.values());
         for (List<MovementDTO> moveList : movements) {
             for (MovementDTO movement : moveList) {
                 transactionData.add(movement);
@@ -145,12 +145,111 @@ public class informationController {
         }
         transactionTable.setItems(transactionData);
     }
-    public void showLonersLoans(Collection<LoanDTO> loans) {
-        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
+    public void showAllTransactionsToClient(){
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/movements")
+                .newBuilder()
+                .addQueryParameter("client", homePageController.getClientName())
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() ->{}
+                );
+            }
+
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        try {
+                            Map<Integer,List<MovementDTO>> movements= getMovements(response.body().string());
+                            createTransactionTable(movements);
+                            setTransactionTable();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> {}
+                    );
+                }
+            }
+        });
     }
-    public void showLoansAsLender(Collection<LoanDTO> loans) {
-        loansAsLender.setItems(FXCollections.observableArrayList(loans));
+    public List<LoanDTO> getLoans(String loansJSON){
+        Gson gson = new Gson();
+        List<LoanDTO> loans=null;
+        try {
+            Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
+            loans= gson.fromJson(loansJSON, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return loans;
+        }
     }
+    public Map<Integer,List<MovementDTO>> getMovements(String movementJson) {
+        Gson gson = new Gson();
+        Map<Integer, List<MovementDTO>> movements = null;
+        try {
+            Type listType = new TypeToken<Map<Integer, List<MovementDTO>>>() {
+            }.getType();
+            movements = gson.fromJson(movementJson, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            return movements;
+        }
+    }
+//    public void showLonersLoans(Collection<LoanDTO> loans) {
+//        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
+//    }
+    public void showLoansByType(String loansType){
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/loans")
+                .newBuilder()
+                .addQueryParameter("client", homePageController.getClientName())
+                .addQueryParameter("loansType", loansType)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() ->{}
+                );
+            }
+
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_FORBIDDEN) {
+                    Platform.runLater(() -> {}
+                    );
+                } else if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        try {
+                            List<LoanDTO> loanDTOS = getLoans(response.body().string());
+                            switch (loansType){
+                                case "borrower":
+                                    //setLoansLonerTables();
+                                    loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
+                                    break;
+                                case "lender":
+                                    //setLoansLenderTables();
+                                    loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
+                                    break;
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                }
+            }
+        });
+    }
+//    public void showLoansAsLender(Collection<LoanDTO> loans) {
+//        loansAsLender.setItems(FXCollections.observableArrayList(loans));
+//    }
     public void updateClientUser(){
         updateUserViewer(bodyUser.getClientDTO());
         showData();
@@ -204,18 +303,18 @@ public class informationController {
 
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
     }
-    public void setTransactionTable(){
-    transactionTable.getColumns().clear();
+    public void setTransactionTable() {
+        transactionTable.getColumns().clear();
 
-    TableColumn<MovementDTO, String> amountCol = new TableColumn<>("Amount");
-    TableColumn<MovementDTO, Integer> balanceBeforeCol = new TableColumn<>("Balance before");
-    TableColumn<MovementDTO, Integer> balanceAfterCol = new TableColumn<>("Balance after");
-    TableColumn<MovementDTO, Integer> yazCol = new TableColumn<>("Yaz");
+        TableColumn<MovementDTO, String> amountCol = new TableColumn<>("Amount");
+        TableColumn<MovementDTO, Integer> balanceBeforeCol = new TableColumn<>("Balance before");
+        TableColumn<MovementDTO, Integer> balanceAfterCol = new TableColumn<>("Balance after");
+        TableColumn<MovementDTO, Integer> yazCol = new TableColumn<>("Yaz");
 
-    amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
-    balanceBeforeCol.setCellValueFactory(new PropertyValueFactory<>("amountBeforeMovement"));
-    balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
-    yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
-    transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
-}
+        amountCol.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        balanceBeforeCol.setCellValueFactory(new PropertyValueFactory<>("amountBeforeMovement"));
+        balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
+        yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
+        transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
+    }
 }

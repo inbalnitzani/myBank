@@ -18,7 +18,6 @@ public class LoginServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
-
         String loginType=request.getParameter("LOGIN_TYPE");
         if (loginType.equals("client")) {
             clientLogin(request,response);
@@ -29,18 +28,19 @@ public class LoginServlet extends HttpServlet {
     public void clientLogin(HttpServletRequest request, HttpServletResponse response){
         UserManager userManager = ServletUtils.getUserManager(getServletContext());
         String usernameFromParameter = request.getParameter(Constants.NAME).trim();
-
-        if (usernameFromParameter == null || usernameFromParameter.isEmpty()) {
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } else {
-            if (userManager.isUserExists(usernameFromParameter)) {
-                response.setStatus(HttpServletResponse.SC_CONFLICT);
+        synchronized (userManager){
+            if (usernameFromParameter == null || usernameFromParameter.isEmpty()) {
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             } else {
-                synchronized (userManager) {
-                    userManager.addUser(usernameFromParameter);
-                    BankInterface bank=ServletUtils.getBank(getServletContext());
-                    bank.addNewUserToBank(usernameFromParameter);
-                    response.setStatus(HttpServletResponse.SC_OK);
+                if (userManager.isUserExists(usernameFromParameter)) {
+                    response.setStatus(HttpServletResponse.SC_CONFLICT);
+                } else {
+                    synchronized (userManager) {
+                        userManager.addUser(usernameFromParameter);
+                        BankInterface bank=ServletUtils.getBank(getServletContext());
+                        bank.addNewUserToBank(usernameFromParameter);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
                 }
             }
         }

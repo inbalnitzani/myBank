@@ -99,6 +99,9 @@ public class clientHomePageController {
             });
         }
 
+    public void newLoansInSystem(){
+        informationComponentController.showData();
+    }
 
     public clientHomePageController(){
             yazProperty=new SimpleIntegerProperty();
