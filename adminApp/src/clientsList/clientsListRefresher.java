@@ -6,6 +6,7 @@ import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.infoForAdminDTO;
+import javafx.application.Platform;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -44,8 +45,12 @@ public class clientsListRefresher extends TimerTask {
                 String json = response.body().string();
                 Gson gson = new Gson();
                 infoForAdminDTO info = gson.fromJson(json, infoForAdminDTO.class);
-                usersListConsumer.accept(info.getClientsInfo());
-                loansConsumer.accept(info.getLoansInfo());
+                Platform.runLater(()->{
+
+                    usersListConsumer.accept(info.getClientsInfo());
+                    loansConsumer.accept(info.getLoansInfo());
+                });
+
             //    Gson gson = new Gson();
              //   Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
               //  usersListConsumer.accept(info);

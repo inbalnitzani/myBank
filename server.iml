@@ -25,9 +25,10 @@
     <orderEntry type="library" exported="" name="kotlin-stdlib-1.4.10" level="project" />
     <orderEntry type="library" exported="" name="kotlin-stdlib-common-1.4.10" level="project" />
     <orderEntry type="module" module-name="engine" exported="" />
-    <orderEntry type="library" exported="" name="okio-2.8.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1-javadoc" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1-sources" level="project" />
+    <orderEntry type="library" name="controlsfx-8.40.141" level="project" />
+    <orderEntry type="library" exported="" name="okio-2.8.0" level="project" />
   </component>
 </module>

@@ -12,6 +12,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainScreenAdmin.mainScreenAdminController;
 
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -29,15 +30,7 @@ public class adminHomePageController {
     private Timer timer;
     private TimerTask listRefresher;
 
-    private void updateUsersList(Map<String,ClientDTO> clientDTOList) {
-        Platform.runLater(() -> {
-            clientsInfoTable.getColumns().clear();
-            ObservableList<ClientDTO> clientInfo = FXCollections.observableArrayList();
-            clientInfo.addAll(clientDTOList.values());
-            clientsInfoTable.setItems(clientInfo);
-            clientsInfoTable.getColumns().addAll(idNameCol,currBalanceCol);
-        });
-    }
+
     public void startListRefresher() {
         listRefresher = new clientsListRefresher(this::showClients,this::showLoanData);
         timer = new Timer();
@@ -48,41 +41,45 @@ public class adminHomePageController {
     }
 
     public void showClients(List<ClientDTO> clients) {
-        clientsInfoTable.getColumns().clear();
+        Platform.runLater(() -> {
+            clientsInfoTable.getColumns().clear();
 
-        idNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
-        currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
+            idNameCol.setCellValueFactory(new PropertyValueFactory<>("fullName"));
+            currBalanceCol.setCellValueFactory(new PropertyValueFactory<>("currBalance"));
 
-        clientsInfoTable.getColumns().addAll(idNameCol, currBalanceCol);
-        clientsInfoTable.setItems(FXCollections.observableArrayList(clients));
-       // clientsDetail.setMasterNode(clientsInfoTable);
-        //clientsDetail.setDetailSide(Side.RIGHT);
+            clientsInfoTable.getColumns().addAll(idNameCol, currBalanceCol);
+            clientsInfoTable.setItems(FXCollections.observableArrayList(clients));
+            // clientsDetail.setMasterNode(clientsInfoTable);
+            //clientsDetail.setDetailSide(Side.RIGHT);
 
 
+        });
     }
 
+
     public void showLoanData(List<LoanDTO> loansList) {
-        loans.getColumns().clear();
-        ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
-        loansData.addAll(mainController.getLoans());
+        Platform.runLater(() -> {
+            loans.getColumns().clear();
+            ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
+            loansData.addAll(mainController.getLoans());
 
-        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
-        TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
-        TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
-        TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
-        TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
-        TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
-        TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
-        TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
+            TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
+            TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
+            TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
+            TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
+            TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
+            TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
+            TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
+            TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
 
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
-        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-        capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
-        totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
-        interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
-        paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
+            categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+            capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
+            totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
+            interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
+            paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
+            statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         /*loans.setOnMouseClicked(event -> {
             LoanDTO loan =loans.getSelectionModel().getSelectedItem();
@@ -91,9 +88,10 @@ public class adminHomePageController {
                 loansDetail.setDetailNode(new ScrollPane(vBox));
             }
         });*/
-        loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        loans.setItems(FXCollections.observableArrayList(loansList));
-        //setLoansInfo();
+            loans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+            loans.setItems(FXCollections.observableArrayList(loansList));
+            //setLoansInfo();
+        });
     }
 /*
     public void setLoansInfo() {
