@@ -1,12 +1,10 @@
 package app.createLoan;
-
 import app.homePage.clientHomePageController;
 import com.sun.istack.internal.NotNull;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -14,11 +12,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
-import org.controlsfx.control.CheckComboBox;
 import servlet.HttpClientUtil;
-
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class createLoanController {
     @FXML private TextField name;
