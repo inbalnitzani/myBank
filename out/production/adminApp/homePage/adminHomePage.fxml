@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Tab?>
-<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import org.controlsfx.control.ToggleSwitch?>
 
 <ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="homePage.adminHomePageController">
   <content>
@@ -18,43 +18,33 @@
             <GridPane prefHeight="400.0" prefWidth="600.0">
               <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="0.0" prefWidth="0.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="411.0" minWidth="10.0" prefWidth="411.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="10.0" prefWidth="51.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="231.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="10.0" prefWidth="13.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="411.0" minWidth="10.0" prefWidth="380.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="334.0" minWidth="0.0" prefWidth="12.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="10.0" prefWidth="92.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="3.0" prefWidth="11.0" />
               </columnConstraints>
               <rowConstraints>
                 <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="364.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="364.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="390.0" minHeight="10.0" prefHeight="365.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="390.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="390.0" minHeight="0.0" prefHeight="29.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="390.0" minHeight="10.0" prefHeight="182.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                    <tabs>
-                      <Tab text="Loans">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                 <children>
-                                    <TableView fx:id="loans" layoutX="-1.0" prefHeight="320.0" prefWidth="379.0" />
-                                 </children></AnchorPane>
-                        </content>
-                      </Tab>
-                      <Tab text="YAZ controller">
-                        <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                        </content>
-                      </Tab>
-                    </tabs>
-                  </TabPane>
-                  <TableView fx:id="clientsInfoTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+                  <TableView fx:id="loans" prefHeight="169.0" prefWidth="379.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  <TableView fx:id="clientsInfoTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
                     <columns>
                       <TableColumn fx:id="idNameCol" prefWidth="75.0" text="Client" />
                       <TableColumn fx:id="currBalanceCol" prefWidth="75.0" text="Balance" />
                     </columns>
                   </TableView>
-                  <Label text="Clients information:" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                  <Label text="Clients information:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <ToggleSwitch text="REWIND:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                  <Button mnemonicParsing="false" text="Increase YAZ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                  <Label text="Loans information:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                </children>
             </GridPane>
          </children></AnchorPane>
