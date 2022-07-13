@@ -2,6 +2,7 @@ package engine;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
+import dto.MovementDTO;
 import exception.*;
 import loan.Loan;
 import loan.LoanTerms;
@@ -11,6 +12,7 @@ import javax.xml.bind.JAXBException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface BankInterface {
 
@@ -20,11 +22,17 @@ public interface BankInterface {
 
      List<String> getCategories();
 
-     void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney;
+     double withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney;
 
      List<LoanDTO> getAllLoans();
 
-     void loadMoney(String clientName, int amountToLoad);
+     double loadMoney(String clientName, double amountToLoad);
+
+     Map<Integer,List<MovementDTO>> getMovementsByClientName(String client);
+
+     List<LoanDTO> getLenderLoansByName(String clientName);
+
+     List<LoanDTO> getBorrowerLoansByName(String clientName);
 
      double getCurrBalance(String clientName);
 
@@ -52,7 +60,7 @@ public interface BankInterface {
 
      void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
 
-     boolean checkLoanExist(String loanName);
+     boolean checkLoanNameExist(String loanName);
 
      void addNewLoan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace);
 

@@ -69,16 +69,18 @@ private List<String> notifications;
         return asBorrower;
     }
 
-    public void addMoneyToAccount(double moneyToAdd) {
+    public double addMoneyToAccount(double moneyToAdd) {
         Movement movement = new Movement(currBalance, moneyToAdd, Global.worldTime);
         addMovement(movement);
         currBalance += moneyToAdd;
+        return currBalance;
     }
 
-    public void withdrawingMoney(double sumToPull) throws NotEnoughMoney {
+    public double withdrawingMoney(double sumToPull) throws NotEnoughMoney {
         if(sumToPull<=currBalance) {
             addMovement(new Movement(currBalance, -sumToPull, Global.worldTime));
             currBalance -= sumToPull;
+            return currBalance;
         }
         else throw new NotEnoughMoney(sumToPull){};
     }

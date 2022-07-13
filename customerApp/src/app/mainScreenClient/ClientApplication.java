@@ -42,7 +42,6 @@ public class ClientApplication extends Application {
         URL url = getClass().getResource("mainScreenClient.fxml");
         fxmlLoader.setLocation(url);
         ScrollPane root = fxmlLoader.load(url.openStream());
-        mainScreenClientController mainScreenClientController = fxmlLoader.getController();
 
         root.fitToHeightProperty();
         data.getChildren().addAll(hBox,root);
@@ -51,16 +50,6 @@ public class ClientApplication extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-        //////////////////////////////////////////////////////////
-        primaryStage.setOnCloseRequest(event -> {
-            clientHomePageController homePageController = mainScreenClientController.getHomePageController();
-            if(homePageController!=null){
-                logoutFromSystem(mainScreenClientController.getClientName());
-            }
-            ((Stage) primaryStage.getScene().getWindow()).close();
-        });///////////////////////////////////////////////////////////
 
         pinkButton.setOnAction(event -> {
             scene.getStylesheets().clear();
@@ -77,20 +66,6 @@ public class ClientApplication extends Application {
             scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm());
         });
     }
-    public void logoutFromSystem(String name){
-        String finalUrl = HttpUrl
-            .parse("http://localhost:8080/demo_Web_exploded/logout")
-            .newBuilder()
-            .addQueryParameter("Name", name)
-            .addQueryParameter(constParameters.LOGIN_TYPE, constParameters.TYPE_CLIENT)
-            .build()
-            .toString();
-
-            HttpClientUtil.runAsync(finalUrl, new Callback() {
-                @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {}
-                @Override public void onResponse(@NotNull Call call, @NotNull Response response) {}
-            });
-        }
-    }
+}
 
 
