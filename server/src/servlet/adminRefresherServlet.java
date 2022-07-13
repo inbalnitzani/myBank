@@ -1,7 +1,6 @@
 package servlet;
 
 import com.google.gson.Gson;
-import dto.infoForAdminDTO;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
