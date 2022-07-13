@@ -11,10 +11,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainScreenAdmin.mainScreenAdminController;
-
-import java.awt.*;
+import javafx.scene.control.Label;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,11 +23,15 @@ public class adminHomePageController {
     @FXML TableColumn<ClientDTO, String> idNameCol;
     @FXML TableColumn<ClientDTO, Integer> currBalanceCol;
     @FXML private TableView<LoanDTO> loans;
-
+    @FXML private Label hello;
 
     private Timer timer;
     private TimerTask listRefresher;
 
+
+    public void setHello(String name) {
+        hello.setText("Hello " + name);
+    }
 
     public void startListRefresher() {
         listRefresher = new clientsListRefresher(this::showClients,this::showLoanData);

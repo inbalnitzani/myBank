@@ -65,6 +65,8 @@ public class mainScreenAdminController {
         homePageController = fxmlLoader.getController();
         homePageController.setMainController(this);
         homePageController.startListRefresher();
+        homePageController.setHello(name);
+
 
     }
 

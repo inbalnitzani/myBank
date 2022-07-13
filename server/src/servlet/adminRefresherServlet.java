@@ -1,13 +1,10 @@
 package servlet;
 
 import com.google.gson.Gson;
-<<<<<<< HEAD
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.infoForAdminDTO;
 import engine.BankInterface;
-=======
->>>>>>> main
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;

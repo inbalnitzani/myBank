@@ -45,6 +45,7 @@
                   <Button mnemonicParsing="false" text="Increase YAZ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                   <Label text="Loans information:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label fx:id="hello" text="hello" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
          </children></AnchorPane>
