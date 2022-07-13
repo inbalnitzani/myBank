@@ -1,6 +1,8 @@
 package clientsList;
 
+
 import com.google.gson.Gson;
+import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.infoForAdminDTO;
@@ -8,12 +10,10 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.Response;
-import org.jetbrains.annotations.NotNull;
 import servlet.HttpClientUtil;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
@@ -46,6 +46,10 @@ public class clientsListRefresher extends TimerTask {
                 infoForAdminDTO info = gson.fromJson(json, infoForAdminDTO.class);
                 usersListConsumer.accept(info.getClientsInfo());
                 loansConsumer.accept(info.getLoansInfo());
+            //    Gson gson = new Gson();
+             //   Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
+              //  usersListConsumer.accept(info);
+                //usersListConsumer.accept(info.getLoans());
             }
 
         });

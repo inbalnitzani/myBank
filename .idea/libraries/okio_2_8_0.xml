@@ -1,10 +1,6 @@
 <component name="libraryTable">
   <library name="okio-2.8.0">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../okHttp/okHttp/okio-2.8.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../javaProj/myBank/out/artifacts/server_war_exploded/WEB-INF/lib/okio-2.8.0.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../javaProj/myBank/out/artifacts/server_Web_exploded/WEB-INF/lib/okio-2.8.0.jar!/" />
-    </CLASSES>
+    <CLASSES />
     <JAVADOC />
     <SOURCES />
   </library>

@@ -1,6 +1,4 @@
 package servlet;
-
-import app.constParameters;
 import engine.BankInterface;
 import exception.*;
 import jakarta.servlet.annotation.WebServlet;

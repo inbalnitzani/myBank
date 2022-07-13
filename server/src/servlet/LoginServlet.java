@@ -1,6 +1,5 @@
 package servlet;
 
-import app.constParameters;
 import engine.BankInterface;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,8 +19,8 @@ public class LoginServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
         response.setContentType("text/html;charset=UTF-8");
 
-        String loginType=request.getParameter(constParameters.LOGIN_TYPE);
-        if (loginType.equals(constParameters.TYPE_CLIENT)) {
+        String loginType=request.getParameter("LOGIN_TYPE");
+        if (loginType.equals("client")) {
             clientLogin(request,response);
         } else {
             adminLogin(request,response);
