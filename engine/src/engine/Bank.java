@@ -1,9 +1,10 @@
 package engine;
+import client.Movement;
 import dto.ClientDTO;
 import dto.ConvertDTO;
 import dto.LoanDTO;
 import client.Client;
-import exception.*;
+import dto.MovementDTO;
 import exception.CategoriesException;
 import exception.CustomerException;
 import exception.IdException;
@@ -15,7 +16,6 @@ import exception.NegativeTimeException;
 import exception.NotEnoughMoney;
 import exception.PaceException;
 import exception.XmlException;
-import loan.*;
 import loan.Loan;
 import loan.LoanTerms;
 import loan.PayBack;
@@ -26,7 +26,6 @@ import schema.AbsCustomer;
 import schema.AbsCustomers;
 import schema.AbsDescriptor;
 import file.File;
-import schema.*;
 import schema.AbsLoan;
 import schema.AbsLoans;
 
@@ -77,14 +76,27 @@ public class Bank implements Serializable, engine.BankInterface {
         return readFile;
     }
 
-    public void withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
-        clients.get(clientName).withdrawingMoney(amountToWithdraw);
+    public double withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
+        return clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
 
-    public void loadMoney(String clientName, int amountToLoad) {
-        clients.get(clientName).addMoneyToAccount(amountToLoad);
+    public double loadMoney(String clientName, double amountToLoad) {
+        return clients.get(clientName).addMoneyToAccount(amountToLoad);
     }
 
+    public Map<Integer,List<MovementDTO>> getMovementsByClientName(String client){
+        ClientDTO clientDTO=new ClientDTO(clients.get(client));
+        return clientDTO.getMovements();
+    }
+
+    public List<LoanDTO> getBorrowerLoansByName(String clientName){
+        ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
+        return clientDTO.getLoansAsBorrower();
+    }
+    public List<LoanDTO> getLenderLoansByName(String clientName){
+        ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
+        return clientDTO.getLoansAsGiver();
+    }
     public List<LoanDTO> findMatchLoans(String clientName, LoanTerms terms) {
         matchLoans = new engine.MatchLoans(clients.get(clientName), terms);
         Map<String, Loan> loans = new HashMap<>();

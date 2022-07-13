@@ -37,8 +37,7 @@ public class createLoanController {
         this.homePageController=controller;
     }
 
-    @FXML public void initialize() {
-    }
+    @FXML public void initialize() {}
     @FXML void createNewLoanButton(ActionEvent event) {
         boolean validDetails = checkName();
         validDetails &= checkAmount();
@@ -48,6 +47,7 @@ public class createLoanController {
         validDetails &= checkCategory();
         if (validDetails) {
             generateNewLoan();
+            homePageController.newLoansInSystem();
         }
     }
 

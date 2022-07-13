@@ -1,11 +1,10 @@
 package dto;
 
 import client.Client;
+import client.Movement;
 import loan.Loan;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 
 public class ConvertDTO {
 
@@ -40,4 +39,6 @@ public class ConvertDTO {
         }
         return loansToInvest;
     }
+
+
 }

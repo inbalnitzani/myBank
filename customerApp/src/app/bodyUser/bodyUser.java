@@ -76,7 +76,6 @@ public class bodyUser {
     }
     public ClientDTO getClientDTO(){return clientDTO;}
     public void withdrawFromAccount(String clientName, double amount) throws NotEnoughMoney {
-
         mainController.withdrawFromAccount(clientName,amount);
     }
 
