@@ -7,23 +7,20 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kotlin.jvm.Synchronized;
-import users.UserManager;
 import utils.ServletUtils;
 
 
-@WebServlet(name = "increaseYaz", urlPatterns = "/increaseYaz")
-public class increaseYazServlet extends HttpServlet{
+@WebServlet(name = "rewind", urlPatterns = "/rewind")
+public class rewindServlet extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("text/html;charset=UTF-8");
         try {
             Gson gson = new Gson();
             BankInterface bank = ServletUtils.getBank(getServletContext());
+            bank.setRewind(true);
             synchronized (bank) {
 
-                bank.promoteTime();
-                bank.saveStateToMap();
                 int curYaz = bank.getWorldTime();
                 String json = gson.toJson(curYaz);
 

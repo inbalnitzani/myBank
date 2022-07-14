@@ -11,6 +11,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainScreenAdmin.mainScreenAdminController;
 import javafx.scene.control.Label;
@@ -35,16 +36,45 @@ public class adminHomePageController {
     @FXML private TableView<LoanDTO> loans;
     @FXML private Label hello;
     @FXML private Label YAZlabel;
+    @FXML private TextField chooseYaz;
+
 
     private Timer timer;
     private TimerTask listRefresher;
 
-
-    public void setHello(String name) {
+    @FXML public void initialize(String name) {
         hello.setText("Hello " + name);
+        startListRefresher();
+        setYaz();
+        chooseYaz.setDisable(true);
     }
-    public void setYAZlabel(int currYaz){
-        YAZlabel.setText("Current yaz is: " + currYaz);
+    public void setYAZlabel(int currYaz){        YAZlabel.setText("Current yaz is: " + currYaz);
+    }
+    public void setYaz(){
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/yaz")
+                .newBuilder()
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                System.out.println("failed");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+                String  currYaz = response.header("yaz");
+
+                Platform.runLater(()->{
+                    setYAZlabel(Integer.parseInt(currYaz));
+
+                });
+            }
+        });
     }
 
     @FXML
@@ -91,13 +121,11 @@ public class adminHomePageController {
 
             clientsInfoTable.getColumns().addAll(idNameCol, currBalanceCol);
             clientsInfoTable.setItems(FXCollections.observableArrayList(clients));
-            // clientsDetail.setMasterNode(clientsInfoTable);
-            //clientsDetail.setDetailSide(Side.RIGHT);
+
 
 
         });
     }
-
 
     public void showLoanData(List<LoanDTO> loansList) {
         Platform.runLater(() -> {
@@ -135,15 +163,5 @@ public class adminHomePageController {
             //setLoansInfo();
         });
     }
-/*
-    public void setLoansInfo() {
-        loansDetail.setMasterNode(loans);
-        loansDetail.setDetailSide(Side.RIGHT);
-        loansDetail.setDetailNode(new Label("To see more information\nclick on the loan."));
-        loansDetail.setShowDetailNode(true);
-    }*/
-
-
-
 
 }

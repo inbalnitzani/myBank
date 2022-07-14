@@ -1,10 +1,7 @@
 package engine;
 import client.Movement;
-import dto.ClientDTO;
-import dto.ConvertDTO;
-import dto.LoanDTO;
+import dto.*;
 import client.Client;
-import dto.MovementDTO;
 import exception.CategoriesException;
 import exception.CustomerException;
 import exception.IdException;
@@ -44,6 +41,8 @@ public class Bank implements Serializable, engine.BankInterface {
     private engine.MatchLoans matchLoans;
     private int version;
     private int time = 1;
+    private Boolean rewind = false;
+    private Map<Integer, stateDTO> states;
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -51,6 +50,8 @@ public class Bank implements Serializable, engine.BankInterface {
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
         version=1;
+        states = new HashMap<Integer, stateDTO>();
+
     }
 
     public List<ClientDTO> getClients() {
@@ -132,6 +133,10 @@ public class Bank implements Serializable, engine.BankInterface {
         }
     }
 
+    public void saveStateToMap() {
+        time = engine.Global.worldTime;
+        states.put(time,new stateDTO(categories,activeLoans,waitingLoans,clients,time));
+    }
     public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest, int ownershipAttention) {
         int sumLoans = loans.size(), firstPayment = (amountToInvest / sumLoans) + (amountToInvest % sumLoans);
         while (sumLoans > 0) {
@@ -434,5 +439,13 @@ public class Bank implements Serializable, engine.BankInterface {
     private void addLoanToClient(Loan loan, String owner){
         Client client=this.clients.get(owner);
         client.addLoanToBorrowerList(loan);
+    }
+
+    public void setRewind(Boolean val) {
+        this.rewind = val;
+    }
+
+    public Boolean getRewind() {
+        return rewind;
     }
 }
