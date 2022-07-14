@@ -20,7 +20,6 @@ public class bodyUser {
     @FXML private Parent informationComponent;
     @FXML private paymentController paymentComponentController;
     @FXML private Parent paymentComponent;
-
     private ClientDTO clientDTO;
     public AppController mainController;
 
@@ -32,7 +31,6 @@ public class bodyUser {
         }
     }
     public void updateUserViewer(String client) {
-        clientDTO = mainController.getClientByName(client);
         informationComponentController.updateUserViewer(clientDTO);
         paymentComponentController.setClient(clientDTO);
         scrambleComponentController.setDataAccordingToClient();
@@ -41,7 +39,6 @@ public class bodyUser {
     public void updateClientInfo(){
         if (clientDTO!=null){
             clientDTO=mainController.getClientByName(clientDTO.getFullName());
-            scrambleComponentController.updateClientUser();
             informationComponentController.updateClientUser();
             paymentComponentController.updateClientUser();
         }
@@ -55,7 +52,7 @@ public class bodyUser {
     }
     public bodyUser(){}
     public void setDataForNewFile(){
-        scrambleComponentController.setInlayDataForNewFile();
+        scrambleComponentController.initializeInlayData();
         informationComponentController.setInformationDataForNewFile();
         paymentComponentController.setPaymentsDataForNewFile();
     }

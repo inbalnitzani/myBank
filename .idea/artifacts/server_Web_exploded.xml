@@ -9,14 +9,11 @@
           <element id="module-output" name="engine" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="kotlin-stdlib-1.4.10" />
-          <element id="library" level="project" name="gson-2.1" />
-          <element id="library" level="project" name="okio-2.8.0" />
           <element id="library" level="project" name="okhttp-4.9.1" />
-          <element id="library" level="project" name="controlsfx-8.40.14" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../okHttp/okHttp/okio-2.8.0.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../okHttp/okHttp/okhttp-4.9.1.jar" />
-          <element id="file-copy" path="$PROJECT_DIR$/../../okHttp/okHttp/annotations-13.0.jar" />
+          <element id="library" level="project" name="controlsfx-8.40.141" />
+          <element id="library" level="project" name="okio-2.8.0" />
+          <element id="library" level="project" name="kotlin-stdlib-1.4.10" />
+          <element id="library" level="project" name="gson-2.1-sources" />
         </element>
       </element>
     </root>
