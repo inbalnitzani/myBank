@@ -126,9 +126,11 @@ public class inlayController {
             return loans;
         }
     }
-    public void sendLoansToServlet(){
+    public void startInlayProcess(){
+        Gson gson = new Gson();
+        String json = gson.toJson(loansToInvest);
         String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/startInlayProccess")
+                .parse("http://localhost:8080/demo_Web_exploded/startInlayProcess")
                 .newBuilder()
                 .addQueryParameter("client", homePageController.getClientName())
                 .build()
@@ -146,10 +148,16 @@ public class inlayController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
-                            List<LoanDTO> loans= getLoans(response.body().string());
+                            int amountLeft = Integer.parseInt(response.header("amountLeft"));
                             loansToInvest.clear();
-                            loansToInvest.addAll(loans);
-                            showRelevantLoans(loansToInvest);
+//                            bodyUser.updateClientInfo();
+                            updateSuccessfully(amountLeft);
+                            resetDataForNewInvestment(true);
+                            center.getChildren().add(investmentStatus);
+                            buttom.getChildren().clear();
+                            approveButton.setDisable(true);
+                            rightErea.getChildren().clear();
+                            homePageController.updateAccountBalance();
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -160,19 +168,19 @@ public class inlayController {
                 }
             }
         };
-    //    HttpClientUtil.runPostReq(finalUrl, json, callback);
+        HttpClientUtil.runPostReq(finalUrl, json, callback);
     }
-    @FXML private void startInlayProcess() {
-        int amountLeft = bodyUser.startInlayProcess(loansToInvest,homePageController.getClientName());
-        loansToInvest.clear();
-        bodyUser.updateClientInfo();
-        updateSuccessfully(amountLeft);
-        resetDataForNewInvestment(true);
-        center.getChildren().add(investmentStatus);
-        buttom.getChildren().clear();
-        approveButton.setDisable(true);
-        rightErea.getChildren().clear();
-    }
+//    @FXML private void startInlayProcess() {
+//        int amountLeft = bodyUser.startInlayProcess(loansToInvest,homePageController.getClientName());
+//        loansToInvest.clear();
+//        bodyUser.updateClientInfo();
+//        updateSuccessfully(amountLeft);
+//        resetDataForNewInvestment(true);
+//        center.getChildren().add(investmentStatus);
+//        buttom.getChildren().clear();
+//        approveButton.setDisable(true);
+//        rightErea.getChildren().clear();
+//    }
     public boolean checkMaxLoansExist() {
         String input = maxLoansExist.getCharacters().toString().trim();
         boolean validInput = false;

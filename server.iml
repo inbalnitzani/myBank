@@ -25,7 +25,7 @@
     <orderEntry type="library" exported="" name="kotlin-stdlib-1.4.10" level="project" />
     <orderEntry type="library" exported="" name="kotlin-stdlib-common-1.4.10" level="project" />
     <orderEntry type="module" module-name="engine" exported="" />
-    <orderEntry type="library" exported="" name="okio-2.8.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1" level="project" />
+    <orderEntry type="library" exported="" name="okio-2.8.0" level="project" />
   </component>
 </module>

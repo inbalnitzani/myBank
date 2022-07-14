@@ -46,6 +46,58 @@ public class clientHomePageController {
     @FXML private Parent inlayComponent;
     @FXML private inlayController inlayComponentController;
 
+    @FXML void insertFileToSystem(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+        if (selectedFile == null) {
+            return;
+        }
+        String filePath = selectedFile.getAbsolutePath();
+
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/addFileServlet")
+                .newBuilder()
+                .addQueryParameter("Name", clientName.getText())
+                .addQueryParameter("Path", filePath)
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+//                    Platform.runLater(() ->
+//                            msgLabel.setText("Failure!")
+//                    );
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
+//                    int status =response.code();
+//                    if (status != HttpServletResponse.SC_OK) {
+//                        if(status == HttpServletResponse.SC_FORBIDDEN){
+//                            Platform.runLater(() ->
+//                                    msgLabel.setText("You must enter a name!")
+//                            );
+//                        }else {
+//                            Platform.runLater(() ->
+//                                    msgLabel.setText(userNameTF.getText()+" is already in system. Please enter a different name")
+//                            );
+//                        }
+//                    } else {
+//                        Platform.runLater(() ->
+//                                {
+//                                    try {
+//                                        mainController.loginClientSuccess(userNameTF.getText());
+//                                    } catch (IOException e) {
+//                                        e.printStackTrace();
+//                                    }
+//                                }
+//                        );
+//                    }
+            }
+        });
+    }
     @FXML public void initialize() {
         getYazFromBank();
         createLoanComponentController.setHomePageController(this);
@@ -57,7 +109,6 @@ public class clientHomePageController {
             updateCategories();
         }
     }
-
     public void getYazFromBank(){
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/yaz")
@@ -91,7 +142,6 @@ public class clientHomePageController {
     public List<String> getCategories(){
         return categories;
     }
-
     public List<String> readCategoriesFromJson(String categoriesJSON) {
         Gson gson = new Gson();
         List<String> categories = null;
@@ -146,59 +196,6 @@ public class clientHomePageController {
             }
         });
     }
-
-    @FXML void insertFileToSystem(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
-        File selectedFile = fileChooser.showOpenDialog(null);
-        if (selectedFile == null) {
-            return;
-        }
-        String filePath = selectedFile.getAbsolutePath();
-
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/addFileServlet")
-                .newBuilder()
-                .addQueryParameter("Name", clientName.getText())
-                .addQueryParameter("Path", filePath)
-                .build()
-                .toString();
-
-            HttpClientUtil.runAsync(finalUrl, new Callback() {
-                @Override
-                public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                    Platform.runLater(() ->
-//                            msgLabel.setText("Failure!")
-//                    );
-                }
-
-                @Override
-                public void onResponse(@NotNull Call call, @NotNull Response response) {
-//                    int status =response.code();
-//                    if (status != HttpServletResponse.SC_OK) {
-//                        if(status == HttpServletResponse.SC_FORBIDDEN){
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText("You must enter a name!")
-//                            );
-//                        }else {
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText(userNameTF.getText()+" is already in system. Please enter a different name")
-//                            );
-//                        }
-//                    } else {
-//                        Platform.runLater(() ->
-//                                {
-//                                    try {
-//                                        mainController.loginClientSuccess(userNameTF.getText());
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                        );
-//                    }
-                }
-            });
-        }
     public void newLoansInSystem(){
         informationComponentController.showData();
     }
@@ -219,5 +216,8 @@ public class clientHomePageController {
     }
     public void setAccountBalance(Double balance){
         this.accountBalance.setText(String.valueOf(balance));
+    }
+    public void updateAccountBalance(){
+        accountBalance.setText(String.valueOf(getCurrentBalance()));
     }
 }
