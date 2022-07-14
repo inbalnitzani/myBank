@@ -143,6 +143,7 @@ public class informationController {
                 transactionData.add(movement);
             }
         }
+        transactionTable.getItems().clear();
         transactionTable.setItems(transactionData);
     }
     public void showAllTransactionsToClient(){
@@ -316,5 +317,8 @@ public class informationController {
         balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
         yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
+    }
+    public void refreshData(Map<Integer,List<MovementDTO>> movements){
+        createTransactionTable(movements);
     }
 }

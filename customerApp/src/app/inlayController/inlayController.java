@@ -69,7 +69,6 @@ public class inlayController {
         if (amountToInvest && minTimeForLoan && maxLoansExist) {
             LoanTerms terms = updateTerms();
             findMatchLoans(terms);
-            //showRelevantLoans(loansToInvest);
         }
     }
     public void findMatchLoans(LoanTerms terms){
@@ -95,7 +94,7 @@ public class inlayController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
-                            List<LoanDTO> loans= getLoans(response.body().string());
+                            List<LoanDTO> loans= getLoansFromJson(response.body().string());
                             loansToInvest.clear();
                             loansToInvest.addAll(loans);
                             showRelevantLoans(loansToInvest);
@@ -111,7 +110,7 @@ public class inlayController {
         };
         HttpClientUtil.runPostReq(finalUrl, json, callback);
     }
-    public List<LoanDTO> getLoans(String loansJSON){
+    public List<LoanDTO> getLoansFromJson(String loansJSON){
         Gson gson = new Gson();
         List<LoanDTO> loans = null;
         try {
@@ -158,6 +157,7 @@ public class inlayController {
                             approveButton.setDisable(true);
                             rightErea.getChildren().clear();
                             homePageController.updateAccountBalance();
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -181,6 +181,7 @@ public class inlayController {
 //        approveButton.setDisable(true);
 //        rightErea.getChildren().clear();
 //    }
+
     public boolean checkMaxLoansExist() {
         String input = maxLoansExist.getCharacters().toString().trim();
         boolean validInput = false;
@@ -510,5 +511,9 @@ public class inlayController {
     public void initializeInlayData(){
         setCategoriesOptions();
         initializeOptionalLoans();
+    }
+    public void refreshData(){
+        categoriesForLoan.getItems().clear();;
+        categoriesForLoan.getItems().addAll(homePageController.getCategories());
     }
 }
