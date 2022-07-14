@@ -1,30 +1,25 @@
 package servlet;
 
 import com.google.gson.Gson;
-import dto.ClientDTO;
-import dto.LoanDTO;
-import dto.infoForAdminDTO;
-import engine.BankInterface;
+import engine.Bank;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import utils.ServletUtils;
 
-import java.util.List;
 
+@WebServlet(name = "increaseYaz", urlPatterns = "/increaseYaz")
+public class increaseYazServlet extends HttpServlet{
 
-@WebServlet(name = "adminRefresh", urlPatterns = "/adminRefresh")
-public class adminRefresherServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response){
         response.setContentType("text/html;charset=UTF-8");
         try {
             Gson gson = new Gson();
-            BankInterface bank = ServletUtils.getBank(getServletContext());
-            List<ClientDTO> clients = bank.getClients();
-            List<LoanDTO> loans = bank.getAllLoans();
-            infoForAdminDTO info = new infoForAdminDTO(clients,loans);
-            String json = gson.toJson(info);
+            Bank bank = ServletUtils.getBank(getServletContext());
+            bank.promoteTime();
+            int curYaz = bank.getWorldTime();
+            String json = gson.toJson(curYaz);
 
             response.getWriter().println(json);
             response.getWriter().flush();
