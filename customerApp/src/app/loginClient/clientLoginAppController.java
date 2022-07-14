@@ -37,7 +37,7 @@ public class clientLoginAppController {
         this.primaryStage = primaryStage;
     }
 
-     @FXML void login(ActionEvent event) throws IOException {
+     @FXML void login(ActionEvent event) {
 
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/login")

@@ -195,6 +195,20 @@ public class Bank implements Serializable, engine.BankInterface {
         setLoans(info.getAbsLoans());
     }
 
+    public void addNewDataToBank(AbsDescriptor info){
+        for (String category:info.getAbsCategories().getAbsCategory()){
+            if(!categories.contains(category))
+                categories.add(category);
+        }
+        for (AbsLoan loan:info.getAbsLoans().getAbsLoan()){
+            String owner = stringConvertor(loan.getAbsOwner());
+            String id = stringConvertor(loan.getId());
+            Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
+            this.waitingLoans.put(id, newLoan);
+            clients.get(owner).addLoanToBorrowerList(newLoan);
+        }
+    }
+
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
         if (!this.categories.isEmpty())
