@@ -43,6 +43,7 @@ public class Bank implements Serializable, engine.BankInterface {
     private Map<String, Client> clients;
     private engine.MatchLoans matchLoans;
     private int time = 1;
+    private Boolean rewind = false;
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -411,5 +412,13 @@ public class Bank implements Serializable, engine.BankInterface {
     private void addLoanToClient(Loan loan, String owner){
         Client client=this.clients.get(owner);
         client.addLoanToBorrowerList(loan);
+    }
+
+    public void setRewind(Boolean val) {
+        this.rewind = val;
+    }
+
+    public Boolean getRewind() {
+        return rewind;
     }
 }
