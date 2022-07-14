@@ -1,20 +1,27 @@
 package app.homePage;
 
 import app.createLoan.createLoanController;
+import app.refreshdata.dataRefresher;
 import app.inlayController.inlayController;
 import app.mainScreenClient.mainScreenClientController;
 import app.payment.paymentController;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
+import dto.LoanDTO;
+import dto.MovementDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -25,18 +32,17 @@ import servlet.HttpClientUtil;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class clientHomePageController {
 
+    @FXML private Button insertFile;
     @FXML private Label clientName;
     @FXML private Label currentYaz;
     @FXML private Label accountBalance;
-    @FXML private Button insertFile;
+    private List<String> categories;
     private mainScreenClientController mainController;
     private SimpleIntegerProperty yazProperty;
-    private List<String> categories;
     @FXML private createLoanController createLoanComponentController;
     @FXML private Parent createLoanComponent;
     @FXML private app.information.informationController informationComponentController;
@@ -45,6 +51,8 @@ public class clientHomePageController {
     @FXML private Parent paymentComponent;
     @FXML private Parent inlayComponent;
     @FXML private inlayController inlayComponentController;
+    private Timer timer;
+  //  private TimerTask listRefresher;
 
     @FXML void insertFileToSystem(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
@@ -219,5 +227,36 @@ public class clientHomePageController {
     }
     public void updateAccountBalance(){
         accountBalance.setText(String.valueOf(getCurrentBalance()));
+    }
+    public void startDataRefresher() {
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements);
+        refresher.setHomePageController(this);
+        timer = new Timer();
+        timer.schedule(refresher, 0, 2000);
+    }
+
+    public void showCategories(List<String> newCategories) {
+        Platform.runLater(() -> {
+            categories.clear();
+            this.categories=newCategories;
+            inlayComponentController.refreshData();
+            createLoanComponentController.refreshData();
+        });
+    }
+    public void showMovements(Map<Integer,List<MovementDTO>> movements) {
+        Platform.runLater(() -> {
+            informationComponentController.refreshData(movements);
+        });
+    }
+
+    public void showYaz(int yaz) {
+        Platform.runLater(() ->
+           currentYaz.setText(String.valueOf(yaz))
+        );
+    }
+    public void showBalance(Double balance) {
+        Platform.runLater(() ->
+            accountBalance.setText(String.valueOf(balance))
+        );
     }
 }

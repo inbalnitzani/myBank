@@ -50,14 +50,11 @@ public class createLoanController {
     private TextField addNewCategory;
     private clientHomePageController homePageController;
 
-
     public void setHomePageController(clientHomePageController controller) {
         this.homePageController = controller;
     }
-
     @FXML public void initialize() {
     }
-
     @FXML void createNewLoanButton(ActionEvent event) {
         String loanName = name.getText().trim();
         if (loanName != null && loanName != "") {
@@ -71,7 +68,6 @@ public class createLoanController {
             }
         }
     }
-
     public boolean checkAmount() {
         String amountString = amount.getText();
         Double amountNumber;
@@ -90,7 +86,6 @@ public class createLoanController {
             return vaildInput;
         }
     }
-
     public List<String> getCategories(String categoriesJSON) {
         Gson gson = new Gson();
         List<String> categories = null;
@@ -104,12 +99,10 @@ public class createLoanController {
             return categories;
         }
     }
-
     public void setCategories() {
         categories.getItems().clear();
         categories.getItems().addAll(homePageController.getCategories());
     }
-
     public boolean checkInterest() {
         String interestString = interest.getText();
         Integer interestNumber;
@@ -128,7 +121,6 @@ public class createLoanController {
             return validInput;
         }
     }
-
     public boolean checkPace() {
         String paceString = pace.getText();
         Integer paceNumber;
@@ -156,7 +148,6 @@ public class createLoanController {
             return validInput;
         }
     }
-
     public boolean checkTotalTime() {
         String totalTimeString = totalTime.getText();
         Integer totalTimeNumber;
@@ -176,7 +167,6 @@ public class createLoanController {
         }
 
     }
-
     public boolean checkCategory() {
         String addNewCategoryString = addNewCategory.getText();
         String chosenCategoryString = categories.getValue();
@@ -200,14 +190,12 @@ public class createLoanController {
         }
         return validInput;
     }
-
     public String getChosenCategory() {
         String category = addNewCategory.getText();
         if (category.equals(""))
             return categories.getValue();
         return category;
     }
-
     public void generateNewLoan() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/newLoan")
@@ -261,7 +249,6 @@ public class createLoanController {
         });
         clearAllLabel();
     }
-
     public void clearAllLabel() {
         name.setText("");
         amount.setText("");
@@ -275,5 +262,9 @@ public class createLoanController {
         errorPace.setText("");
         errorCategory.setText("");
         addNewCategory.setText("");
+    }
+    public void refreshData(){
+        categories.getItems().clear();;
+        categories.getItems().addAll(homePageController.getCategories());
     }
 }
