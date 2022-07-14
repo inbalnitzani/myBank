@@ -15,8 +15,8 @@
           <element id="file-copy" path="$PROJECT_DIR$/../okHttp/okHttp/annotations-13.0.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/../okHttp/okHttp/okio-2.8.0.jar" />
           <element id="library" level="project" name="controlsfx-8.40.14" />
-          <element id="library" level="project" name="gson-2.1-sources1" />
->>>>>>> main
+          <element id="library" level="project" name="gson-2.1-javadoc" />
+          <element id="library" level="project" name="gson-2.1" />
         </element>
       </element>
     </root>
