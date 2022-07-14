@@ -16,6 +16,7 @@
           <element id="file-copy" path="$PROJECT_DIR$/../okHttp/okHttp/okio-2.8.0.jar" />
           <element id="library" level="project" name="controlsfx-8.40.14" />
           <element id="library" level="project" name="gson-2.1-sources1" />
+>>>>>>> main
         </element>
       </element>
     </root>

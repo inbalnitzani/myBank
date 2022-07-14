@@ -1,9 +1,11 @@
 package loginAdmin;
 
+import app.constParameters;
 import com.sun.istack.internal.NotNull;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import engine.Bank;
+import engine.BankInterface;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -20,13 +22,14 @@ import okhttp3.HttpUrl;
 import okhttp3.Response;
 import servlet.HttpClientUtil;
 
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
 public class adminAppController {
 
-    private Bank bank;
+    private BankInterface bank;
     private Stage primaryStage;
     @FXML
     private ScrollPane mainComponent;
