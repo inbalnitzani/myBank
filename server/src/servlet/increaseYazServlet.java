@@ -2,10 +2,13 @@ package servlet;
 
 import com.google.gson.Gson;
 import engine.Bank;
+import engine.BankInterface;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kotlin.jvm.Synchronized;
+import users.UserManager;
 import utils.ServletUtils;
 
 
@@ -16,13 +19,17 @@ public class increaseYazServlet extends HttpServlet{
         response.setContentType("text/html;charset=UTF-8");
         try {
             Gson gson = new Gson();
-            Bank bank = ServletUtils.getBank(getServletContext());
-            bank.promoteTime();
-            int curYaz = bank.getWorldTime();
-            String json = gson.toJson(curYaz);
+            BankInterface bank = ServletUtils.getBank(getServletContext());
+            synchronized (bank) {
 
-            response.getWriter().println(json);
-            response.getWriter().flush();
+                bank.promoteTime();
+                bank.saveStateToMap();
+                int curYaz = bank.getWorldTime();
+                String json = gson.toJson(curYaz);
+
+                response.getWriter().println(json);
+                response.getWriter().flush();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

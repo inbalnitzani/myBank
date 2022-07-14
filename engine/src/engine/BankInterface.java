@@ -64,4 +64,6 @@ public interface BankInterface {
 
      void addNewLoan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace);
      Boolean getRewind();
+      void setRewind(Boolean value);
+      void saveStateToMap();
      }

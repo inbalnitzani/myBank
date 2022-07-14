@@ -64,9 +64,8 @@ public class mainScreenAdminController {
         homePageComponent = fxmlLoader.load(url.openStream());
         homePageController = fxmlLoader.getController();
         homePageController.setMainController(this);
-        homePageController.startListRefresher();
-        homePageController.setHello(name);
-        homePageController.setYAZlabel(0);
+        homePageController.initialize(name);
+
 
 
     }
