@@ -6,7 +6,6 @@ import schema.AbsLoan;
 import java.util.*;
 
 public class File {
-
     public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
         isXmlFile(fileName);
         checkCategories(categories,loans);

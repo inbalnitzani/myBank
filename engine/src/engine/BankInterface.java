@@ -66,4 +66,6 @@ public interface BankInterface {
      Boolean getRewind();
       void setRewind(Boolean value);
       void saveStateToMap();
+
+     int getVersion();
      }

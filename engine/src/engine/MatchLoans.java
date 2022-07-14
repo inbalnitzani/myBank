@@ -24,11 +24,11 @@ public class MatchLoans implements Serializable {
             for (Loan loan : loansToCheck.values()) {
                 if (loan.getOwner().equals(client.getFullName())) {
                     continue;
-                } else if (!loanTerms.getCategories().contains(loan.getCategory())) {
+                } if (!loanTerms.categories.isEmpty() && !loanTerms.categories.contains(loan.getCategory())){
+                        continue;
+                } if (loan.getInterestRate() < loanTerms.getMinInterestForTimeUnit()) {
                     continue;
-                } else if (loan.getInterestRate() < loanTerms.getMinInterestForTimeUnit()) {
-                    continue;
-                } else if (loan.getTotalYazTime() < loanTerms.getMinTotalYaz() && loanTerms.getMinTotalYaz() != 0) {
+                } if (loan.getTotalYazTime() < loanTerms.getMinTotalYaz() && loanTerms.getMinTotalYaz() != 0) {
                     continue;
                 } else {
                     matchLoans.put(loan.getLoansID(), loan);

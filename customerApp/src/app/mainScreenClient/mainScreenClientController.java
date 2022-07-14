@@ -50,6 +50,7 @@ public class mainScreenClientController {
         homePageComponent = fxmlLoader.load(url.openStream());
         homePageController = fxmlLoader.getController();
         homePageController.setMainController(this);
+        homePageController.startDataRefresher();
     }
 
     public void loginClientSuccess(String clientName) throws IOException {

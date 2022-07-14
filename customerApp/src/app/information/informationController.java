@@ -143,6 +143,7 @@ public class informationController {
                 transactionData.add(movement);
             }
         }
+        transactionTable.getItems().clear();
         transactionTable.setItems(transactionData);
     }
     public void showAllTransactionsToClient(){
@@ -179,7 +180,7 @@ public class informationController {
     }
     public List<LoanDTO> getLoans(String loansJSON){
         Gson gson = new Gson();
-        List<LoanDTO> loans=null;
+        List<LoanDTO> loans=new ArrayList<>();
         try {
             Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
             loans= gson.fromJson(loansJSON, listType);
@@ -316,5 +317,8 @@ public class informationController {
         balanceAfterCol.setCellValueFactory(new PropertyValueFactory<>("amountAfterMovement"));
         yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
+    }
+    public void refreshData(Map<Integer,List<MovementDTO>> movements){
+        createTransactionTable(movements);
     }
 }

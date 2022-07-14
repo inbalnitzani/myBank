@@ -3,7 +3,6 @@ import app.homePage.clientHomePageController;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
-import dto.LoanDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -51,18 +50,12 @@ public class createLoanController {
     private TextField addNewCategory;
     private clientHomePageController homePageController;
 
-
     public void setHomePageController(clientHomePageController controller) {
         this.homePageController = controller;
     }
-
-    @FXML
-    public void initialize() {
-        setCategories();
+    @FXML public void initialize() {
     }
-
-    @FXML
-    void createNewLoanButton(ActionEvent event) {
+    @FXML void createNewLoanButton(ActionEvent event) {
         String loanName = name.getText().trim();
         if (loanName != null && loanName != "") {
             boolean validDetails = checkAmount();
@@ -75,7 +68,6 @@ public class createLoanController {
             }
         }
     }
-
     public boolean checkAmount() {
         String amountString = amount.getText();
         Double amountNumber;
@@ -94,7 +86,6 @@ public class createLoanController {
             return vaildInput;
         }
     }
-
     public List<String> getCategories(String categoriesJSON) {
         Gson gson = new Gson();
         List<String> categories = null;
@@ -108,50 +99,10 @@ public class createLoanController {
             return categories;
         }
     }
-
     public void setCategories() {
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/categories")
-                .newBuilder()
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> {
-                    errorApprove.setText("Unknown error occurred! PLease try again!");
-                });
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                int status = response.code();
-                if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() -> {
-                        try {
-                            List<String> allCategories = getCategories(response.body().string());
-                            categories.getItems().clear();
-                            categories.getItems().addAll(allCategories);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        String responseBody = null;
-                        try {
-                            responseBody = response.body().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        errorApprove.setText(responseBody);
-                    });
-                }
-            }
-        });
+        categories.getItems().clear();
+        categories.getItems().addAll(homePageController.getCategories());
     }
-
     public boolean checkInterest() {
         String interestString = interest.getText();
         Integer interestNumber;
@@ -170,7 +121,6 @@ public class createLoanController {
             return validInput;
         }
     }
-
     public boolean checkPace() {
         String paceString = pace.getText();
         Integer paceNumber;
@@ -198,7 +148,6 @@ public class createLoanController {
             return validInput;
         }
     }
-
     public boolean checkTotalTime() {
         String totalTimeString = totalTime.getText();
         Integer totalTimeNumber;
@@ -218,7 +167,6 @@ public class createLoanController {
         }
 
     }
-
     public boolean checkCategory() {
         String addNewCategoryString = addNewCategory.getText();
         String chosenCategoryString = categories.getValue();
@@ -242,14 +190,12 @@ public class createLoanController {
         }
         return validInput;
     }
-
     public String getChosenCategory() {
         String category = addNewCategory.getText();
         if (category.equals(""))
             return categories.getValue();
         return category;
     }
-
     public void generateNewLoan() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/newLoan")
@@ -282,7 +228,7 @@ public class createLoanController {
                         errorApprove.setText("Loan added successfully!");
                         synchronized (this) {
                             if (addNewCategory.getText() != "") {
-                                setCategories();
+                                homePageController.updateCategories();
                                 //updateSomeOneToKnowAll!!!!!!!!!!!!!!
                             }
                         }
@@ -303,7 +249,6 @@ public class createLoanController {
         });
         clearAllLabel();
     }
-
     public void clearAllLabel() {
         name.setText("");
         amount.setText("");
@@ -317,5 +262,9 @@ public class createLoanController {
         errorPace.setText("");
         errorCategory.setText("");
         addNewCategory.setText("");
+    }
+    public void refreshData(){
+        categories.getItems().clear();;
+        categories.getItems().addAll(homePageController.getCategories());
     }
 }

@@ -1,9 +1,7 @@
 package servlet;
 
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
+import okhttp3.*;
+
 import java.util.function.Consumer;
 
 public class HttpClientUtil {
@@ -33,6 +31,16 @@ public class HttpClientUtil {
         call.enqueue(callback);
     }
 
+    public static void runPostReq(String finalUrl, String body, Callback callback) {
+        Request request = new Request.Builder()
+                .url(finalUrl)
+                .post(RequestBody.create(body.getBytes()))
+                .build();
+
+        Call call = HttpClientUtil.HTTP_CLIENT.newCall(request);
+
+        call.enqueue(callback);
+    }
     public static void mission(String finalUrl,Callback callback) {
         Request request = new Request.Builder()
                 .url(finalUrl)

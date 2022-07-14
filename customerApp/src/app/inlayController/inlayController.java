@@ -1,8 +1,12 @@
 package app.inlayController;
 
 import app.bodyUser.bodyUser;
+import app.homePage.clientHomePageController;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import dto.LoanDTO;
-import javafx.beans.property.SimpleDoubleProperty;
+import jakarta.servlet.http.HttpServletResponse;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +19,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.*;
 import javafx.util.Callback;
 import loan.LoanTerms;
+import okhttp3.Call;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
 import org.controlsfx.control.CheckComboBox;
+import servlet.HttpClientUtil;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -24,8 +35,6 @@ import java.util.Set;
 public class inlayController {
 
     private bodyUser bodyUser;
-    @FXML private Label clientName;
-    @FXML private Label accountBalance;
     @FXML private TextField amountToInvest;
     @FXML private TextField minTimeToReturn;
     @FXML private ComboBox<String> minInterestForLoan;
@@ -42,15 +51,15 @@ public class inlayController {
     @FXML private Button approveButton;
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
-    private SimpleDoubleProperty accountBalanceProp;
     private TableView<LoanDTO> optionalLoans;
+    private clientHomePageController homePageController;
 
     @FXML public void initialize() {
         for (int i = 1; i <= 100; i++) {
             minInterestForLoan.getItems().add(Integer.toString(i));
             maxOwnership.getItems().add(i);
         }
-        accountBalance.textProperty().bind(accountBalanceProp.asString());
+        initializeOptionalLoans();
         approveButton.setDisable(true);
     }
     @FXML void startInlay(ActionEvent event) {
@@ -59,23 +68,120 @@ public class inlayController {
         boolean maxLoansExist = checkMaxLoansExist();
         if (amountToInvest && minTimeForLoan && maxLoansExist) {
             LoanTerms terms = updateTerms();
-            List<LoanDTO> matchLoans = bodyUser.findMatchLoans(bodyUser.getClientDTO().getFullName(), terms);
-            showRelevantLoans(matchLoans);
+            findMatchLoans(terms);
         }
     }
-    @FXML private void startInlayProcess() {
-        int amountLeft = bodyUser.startInlayProcess(loansToInvest, clientName.textProperty().getValue());
+    public void findMatchLoans(LoanTerms terms){
+        Gson gson = new Gson();
+        String json = gson.toJson(terms);
 
-        loansToInvest.clear();
-        bodyUser.updateClientInfo();
-        accountBalanceProp.set(bodyUser.getClientDTO().getCurrBalance());
-        updateSuccessfully(amountLeft);
-        resetDataForNewInvestment(true);
-        center.getChildren().add(investmentStatus);
-        buttom.getChildren().clear();
-        approveButton.setDisable(true);
-        rightErea.getChildren().clear();
+        String finalUrl = HttpUrl
+            .parse("http://localhost:8080/demo_Web_exploded/findMatchLoans")
+            .newBuilder()
+            .addQueryParameter("client", homePageController.getClientName())
+            .build()
+            .toString();
+
+        okhttp3.Callback callback = new okhttp3.Callback() {
+            @Override
+            public void onFailure(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response)  {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        try {
+                            List<LoanDTO> loans= getLoansFromJson(response.body().string());
+                            loansToInvest.clear();
+                            loansToInvest.addAll(loans);
+                            showRelevantLoans(loansToInvest);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> {}
+                    );
+                }
+            }
+        };
+        HttpClientUtil.runPostReq(finalUrl, json, callback);
     }
+    public List<LoanDTO> getLoansFromJson(String loansJSON){
+        Gson gson = new Gson();
+        List<LoanDTO> loans = null;
+        try {
+            Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
+            loans = gson.fromJson(loansJSON, listType);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (loans==null){
+                loans=new ArrayList<>();
+            }
+            return loans;
+        }
+    }
+    public void startInlayProcess(){
+        Gson gson = new Gson();
+        String json = gson.toJson(loansToInvest);
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/startInlayProcess")
+                .newBuilder()
+                .addQueryParameter("client", homePageController.getClientName())
+                .build()
+                .toString();
+
+        okhttp3.Callback callback = new okhttp3.Callback() {
+            @Override
+            public void onFailure(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response)  {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        try {
+                            int amountLeft = Integer.parseInt(response.header("amountLeft"));
+                            loansToInvest.clear();
+//                            bodyUser.updateClientInfo();
+                            updateSuccessfully(amountLeft);
+                            resetDataForNewInvestment(true);
+                            center.getChildren().add(investmentStatus);
+                            buttom.getChildren().clear();
+                            approveButton.setDisable(true);
+                            rightErea.getChildren().clear();
+                            homePageController.updateAccountBalance();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                } else {
+                    Platform.runLater(() -> {}
+                    );
+                }
+            }
+        };
+        HttpClientUtil.runPostReq(finalUrl, json, callback);
+    }
+//    @FXML private void startInlayProcess() {
+//        int amountLeft = bodyUser.startInlayProcess(loansToInvest,homePageController.getClientName());
+//        loansToInvest.clear();
+//        bodyUser.updateClientInfo();
+//        updateSuccessfully(amountLeft);
+//        resetDataForNewInvestment(true);
+//        center.getChildren().add(investmentStatus);
+//        buttom.getChildren().clear();
+//        approveButton.setDisable(true);
+//        rightErea.getChildren().clear();
+//    }
+
     public boolean checkMaxLoansExist() {
         String input = maxLoansExist.getCharacters().toString().trim();
         boolean validInput = false;
@@ -102,7 +208,6 @@ public class inlayController {
     public inlayController(){
         loansToInvest=new ArrayList<>();
         investmentStatus=new Pane();
-        accountBalanceProp=new SimpleDoubleProperty();
         optionalLoans = new TableView<>();
     }
     public boolean checkMinTime() {
@@ -131,37 +236,34 @@ public class inlayController {
     public boolean checkAmountToInvest() {
         String input = amountToInvest.getCharacters().toString().trim();
         boolean validInput = false;
-        double currBalance = bodyUser.getClientBalance();
-        try {
-            int number=Integer.parseInt(input);
-            if(currBalance==0){
-                errorAmount.setText("Current balance is 0. CAN'T INVEST! ");
-            } else if (number < 0) {
-                errorAmount.setText(number + " is a negative number! Please enter a positive amount.");
-            } else if(number==0) {
-                errorAmount.setText("Please enter a positive amount.");
-            } else if (number > currBalance) {
-                errorAmount.setText("Current balance is: " + currBalance + ". Please enter amount lower than " + currBalance);
-            } else {
-                validInput = true;
-                errorAmount.setText("");
+        double currBalance = homePageController.getCurrentBalance();
+        if(currBalance==0){
+            errorAmount.setText("Current balance is 0. CAN'T INVEST! ");
+        } else {
+            try {
+                int number = Integer.parseInt(input);
+                if (number <=0) {
+                    errorAmount.setText("Please enter a positive amount!");
+                } else if (number > currBalance) {
+                    errorAmount.setText("You don't have enough money!!");
+                } else {
+                    validInput = true;
+                    errorAmount.setText("");
+                }
+            } catch (Exception err) {
+                if (input.equals("")) {
+                    errorAmount.setText("Amount is a mandatory field!");
+                    amountToInvest.clear();
+                } else {
+                    errorAmount.setText("Please enter an Integer!");
+                }
             }
-        } catch (Exception err) {
-            if (input.equals("")) {
-                errorAmount.setText("Amount is a mandatory field!");
-                amountToInvest.clear();
-            } else {
-                errorAmount.setText("Please enter an Integer!");
-            }
-        } finally {
-            if (!validInput)
-                amountToInvest.setText("");
         }
-    return validInput;
+        if (!validInput)
+            amountToInvest.setText("");
+        return validInput;
     }
     public void setDataAccordingToClient(){
-        clientName.setText(bodyUser.getClientDTO().getFullName());
-        accountBalanceProp.set(bodyUser.getClientBalance());
         resetDataForNewInvestment(true);
         investmentStatus.getChildren().clear();
         approveButton.setDisable(true);
@@ -182,9 +284,7 @@ public class inlayController {
     private LoanTerms setCategoriesTerm(LoanTerms terms) {
         Set<String> chosenCategory = new HashSet<>();
         ObservableList<String> userChoose = categoriesForLoan.getCheckModel().getCheckedItems();
-        if (userChoose.size() == 0) {
-            chosenCategory.addAll(bodyUser.getCategories());
-        } else {
+        if (userChoose.size()!= 0) {
             for (String category : userChoose)
                 chosenCategory.add(category);
         }
@@ -204,7 +304,7 @@ public class inlayController {
         LoanTerms terms = new LoanTerms();
         terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
         terms=setMaxLoansForOwner(terms);
-        terms= setTimeTerm(terms);
+        terms=setTimeTerm(terms);
         terms=setCategoriesTerm(terms);
         terms=setInterestTerm(terms);
         terms=setMaxOwnership(terms);
@@ -251,9 +351,11 @@ public class inlayController {
                             return cell;
                         }
                     };
-                        TableColumn column=optionalLoans.getColumns().get(optionalLoans.getColumns().size()-1);
-            column.setCellFactory(cellFactory);
 
+            if (optionalLoans.getColumns().size()!=0) {
+                TableColumn column = optionalLoans.getColumns().get(optionalLoans.getColumns().size() - 1);
+                column.setCellFactory(cellFactory);
+            }
             optionalLoans.setItems(FXCollections.observableArrayList(loans));
             center.getChildren().clear();
             buttom.getChildren().clear();
@@ -310,8 +412,8 @@ public class inlayController {
         investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
     }
-    public void updateClientUser(){
-        accountBalanceProp.set(bodyUser.getClientBalance());
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
     }
     private void resetDataForNewInvestment(boolean changeUser) {
         if (changeUser) {
@@ -334,7 +436,7 @@ public class inlayController {
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
-    public void setOptionalLoans(){
+    public void initializeOptionalLoans(){
 
         optionalLoans.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("Id");
@@ -394,26 +496,24 @@ public class inlayController {
 
         optionalLoans.getColumns().addAll(idCol, categoryCol, capitalCol, paceCol, interestCol, statusCol, investLoanActionCol);
 
-        //optionalLoans.setItems(FXCollections.observableArrayList(loans));
-        //center.getChildren().clear();
-        //buttom.getChildren().clear();
         optionalLoans.setOnMouseClicked(event -> {
             LoanDTO choice =optionalLoans.getSelectionModel().getSelectedItem();
             if (choice != null){
                 addMoreInfo(choice);
             }
         });
-
-      //  center.getChildren().add(optionalLoans);
-       // buttom.getChildren().add(approveButton);
     }
     public void setCategoriesOptions(){
         if(categoriesForLoan.getItems().size()>0)
             categoriesForLoan.getItems().clear();
-        categoriesForLoan.getItems().addAll(bodyUser.getCategories());
+        categoriesForLoan.getItems().addAll(homePageController.getCategories());
     }
-    public void setInlayDataForNewFile(){
+    public void initializeInlayData(){
         setCategoriesOptions();
-        setOptionalLoans();
+        initializeOptionalLoans();
+    }
+    public void refreshData(){
+        categoriesForLoan.getItems().clear();;
+        categoriesForLoan.getItems().addAll(homePageController.getCategories());
     }
 }
