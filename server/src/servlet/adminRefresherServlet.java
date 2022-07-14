@@ -1,24 +1,18 @@
 package servlet;
 
 import com.google.gson.Gson;
-<<<<<<< HEAD
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.infoForAdminDTO;
 import engine.BankInterface;
-=======
->>>>>>> main
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import users.UserManager;
 import utils.ServletUtils;
 
 import java.util.List;
-import java.util.Set;
 
-import static java.lang.System.out;
 
 @WebServlet(name = "adminRefresh", urlPatterns = "/adminRefresh")
 public class adminRefresherServlet extends HttpServlet {

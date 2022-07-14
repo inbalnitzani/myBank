@@ -24,7 +24,9 @@
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="117.0" minWidth="3.0" prefWidth="11.0" />
               </columnConstraints>
               <rowConstraints>
+                  <RowConstraints maxHeight="364.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="129.0" minHeight="0.0" prefHeight="0.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="364.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="364.0" minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                   <RowConstraints maxHeight="364.0" minHeight="0.0" prefHeight="25.0" vgrow="SOMETIMES" />
                 <RowConstraints maxHeight="390.0" minHeight="10.0" prefHeight="150.0" vgrow="SOMETIMES" />
@@ -33,18 +35,20 @@
                 <RowConstraints maxHeight="51.0" minHeight="10.0" prefHeight="16.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <TableView fx:id="loans" prefHeight="169.0" prefWidth="379.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                  <TableView fx:id="clientsInfoTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+                  <TableView fx:id="loans" prefHeight="169.0" prefWidth="379.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                  <TableView fx:id="clientsInfoTable" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="7">
                     <columns>
                       <TableColumn fx:id="idNameCol" prefWidth="75.0" text="Client" />
                       <TableColumn fx:id="currBalanceCol" prefWidth="75.0" text="Balance" />
                     </columns>
                   </TableView>
-                  <Label text="Clients information:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                  <ToggleSwitch text="REWIND:" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                  <Button mnemonicParsing="false" text="Increase YAZ" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-                  <Label text="Loans information:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <Label text="Clients information:" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                  <ToggleSwitch fx:id="rewind" text="REWIND:" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                  <Button mnemonicParsing="false" onAction="#increaseYaz" text="Increase YAZ" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" GridPane.rowIndex="1" />
+                  <Label text="Loans information:" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                  <Label fx:id="hello" text="hello" GridPane.columnIndex="1" />
+                  <Label fx:id="YAZlabel" text="Label" GridPane.columnIndex="3" />
                </children>
             </GridPane>
          </children></AnchorPane>
