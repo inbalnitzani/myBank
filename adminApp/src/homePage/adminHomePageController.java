@@ -1,17 +1,27 @@
 package homePage;
 
 import clientsList.clientsListRefresher;
+import com.google.gson.Gson;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import mainScreenAdmin.mainScreenAdminController;
 import javafx.scene.control.Label;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.HttpUrl;
+import okhttp3.Response;
+import org.jetbrains.annotations.NotNull;
+import servlet.HttpClientUtil;
+
+import java.io.IOException;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -24,6 +34,7 @@ public class adminHomePageController {
     @FXML TableColumn<ClientDTO, Integer> currBalanceCol;
     @FXML private TableView<LoanDTO> loans;
     @FXML private Label hello;
+    @FXML private Label YAZlabel;
 
     private Timer timer;
     private TimerTask listRefresher;
@@ -31,6 +42,35 @@ public class adminHomePageController {
 
     public void setHello(String name) {
         hello.setText("Hello " + name);
+    }
+    public void setYAZlabel(int currYaz){
+        YAZlabel.setText("Current yaz is: " + currYaz);
+    }
+
+    @FXML
+    void increaseYaz(ActionEvent event) {
+      String finalUrl = HttpUrl
+              .parse("http://localhost:8080/demo_Web_exploded/increaseYaz")
+              .newBuilder()
+              .build()
+              .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                System.out.println("failed");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+                int currYaz = gson.fromJson(json,int.class);
+                Platform.runLater(()->{
+                    setYAZlabel(currYaz);
+
+                });
+            }
+        });
     }
 
     public void startListRefresher() {

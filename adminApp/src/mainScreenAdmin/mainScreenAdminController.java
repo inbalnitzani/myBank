@@ -66,10 +66,10 @@ public class mainScreenAdminController {
         homePageController.setMainController(this);
         homePageController.startListRefresher();
         homePageController.setHello(name);
+        homePageController.setYAZlabel(0);
 
 
     }
-
 
     public List<ClientDTO> getClients() {
         return LoginAppController.getClients();
