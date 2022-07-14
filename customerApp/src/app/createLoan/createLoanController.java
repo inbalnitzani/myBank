@@ -3,7 +3,6 @@ import app.homePage.clientHomePageController;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
-import dto.LoanDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -56,13 +55,10 @@ public class createLoanController {
         this.homePageController = controller;
     }
 
-    @FXML
-    public void initialize() {
-        setCategories();
+    @FXML public void initialize() {
     }
 
-    @FXML
-    void createNewLoanButton(ActionEvent event) {
+    @FXML void createNewLoanButton(ActionEvent event) {
         String loanName = name.getText().trim();
         if (loanName != null && loanName != "") {
             boolean validDetails = checkAmount();
@@ -110,46 +106,8 @@ public class createLoanController {
     }
 
     public void setCategories() {
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/categories")
-                .newBuilder()
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() -> {
-                    errorApprove.setText("Unknown error occurred! PLease try again!");
-                });
-            }
-
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
-                int status = response.code();
-                if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() -> {
-                        try {
-                            List<String> allCategories = getCategories(response.body().string());
-                            categories.getItems().clear();
-                            categories.getItems().addAll(allCategories);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        String responseBody = null;
-                        try {
-                            responseBody = response.body().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        errorApprove.setText(responseBody);
-                    });
-                }
-            }
-        });
+        categories.getItems().clear();
+        categories.getItems().addAll(homePageController.getCategories());
     }
 
     public boolean checkInterest() {
@@ -282,7 +240,7 @@ public class createLoanController {
                         errorApprove.setText("Loan added successfully!");
                         synchronized (this) {
                             if (addNewCategory.getText() != "") {
-                                setCategories();
+                                homePageController.updateCategories();
                                 //updateSomeOneToKnowAll!!!!!!!!!!!!!!
                             }
                         }

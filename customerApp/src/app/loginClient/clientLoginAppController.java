@@ -37,12 +37,7 @@ public class clientLoginAppController {
         this.primaryStage = primaryStage;
     }
 
-    /*
-    public void logout(Stage stage){
-        primaryStage=(Stage) mainComponent.getScene().getWindow();
-        primaryStage.close();
-    }*/
-    @FXML void login(ActionEvent event) throws IOException {
+     @FXML void login(ActionEvent event) throws IOException {
 
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/login")
@@ -56,7 +51,7 @@ public class clientLoginAppController {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() ->
-                        msgLabel.setText("Failure!")
+                        msgLabel.setText("ERROR!! Unknown problem occurred. Please try later...")
                 );
             }
 

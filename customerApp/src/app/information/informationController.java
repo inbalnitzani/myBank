@@ -179,7 +179,7 @@ public class informationController {
     }
     public List<LoanDTO> getLoans(String loansJSON){
         Gson gson = new Gson();
-        List<LoanDTO> loans=null;
+        List<LoanDTO> loans=new ArrayList<>();
         try {
             Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
             loans= gson.fromJson(loansJSON, listType);

@@ -108,7 +108,7 @@ public class paymentController {
         }
     }
     public void setClient(ClientDTO client) {
-        this.client = client;
+//        this.client = client;
     }
     public void showData(){
         loans = new HashMap<>();

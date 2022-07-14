@@ -1,7 +1,8 @@
 <component name="libraryTable">
   <library name="okhttp-4.9.1">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../javaProj/myBank/out/artifacts/server_war_exploded/WEB-INF/lib/okhttp-4.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../okHttp/okHttp/okhttp-4.9.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../okHttp/okHttp/annotations-13.0.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />
