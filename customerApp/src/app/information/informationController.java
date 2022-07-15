@@ -232,11 +232,11 @@ public class informationController {
                             List<LoanDTO> loanDTOS = getLoans(response.body().string());
                             switch (loansType){
                                 case "borrower":
-                                    //setLoansLonerTables();
+                                    setLoansLonerTables(loanDTOS);
                                     loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                                 case "lender":
-                                    //setLoansLenderTables();
+                                    setLoansLenderTables(loanDTOS);
                                     loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                             }
@@ -256,11 +256,11 @@ public class informationController {
         showData();
     }
     public void setInformationDataForNewFile(){
-        setLoansLonerTables();
-        setLoansLenderTables();
+        setLoansLonerTables(null);
+        setLoansLenderTables(null);
         setTransactionTable();
     }
-    public void setLoansLonerTables()  {
+    public void setLoansLonerTables(List<LoanDTO> loanDTOS)  {
         loansAsLoner.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -281,8 +281,10 @@ public class informationController {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
 
         loansAsLoner.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+        loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
+
     }
-    public void setLoansLenderTables() {
+    public void setLoansLenderTables(List<LoanDTO> loanDTOS) {
         loansAsLender.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -303,6 +305,8 @@ public class informationController {
         statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
 
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+        loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
+
     }
     public void setTransactionTable() {
         transactionTable.getColumns().clear();
@@ -318,7 +322,13 @@ public class informationController {
         yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
     }
-    public void refreshData(Map<Integer,List<MovementDTO>> movements){
+    public void refreshMovementsData(Map<Integer,List<MovementDTO>> movements){
         createTransactionTable(movements);
+    }
+    public void refreshLoansLonerData(List<LoanDTO> loans){
+        setLoansLonerTables(loans);
+    }
+    public void refreshLenderLonerData(List<LoanDTO> loans){
+        setLoansLenderTables(loans);
     }
 }

@@ -13,15 +13,11 @@ import dto.MovementDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -51,9 +47,22 @@ public class clientHomePageController {
     @FXML private Parent paymentComponent;
     @FXML private Parent inlayComponent;
     @FXML private inlayController inlayComponentController;
+    private int version;
     private Timer timer;
   //  private TimerTask listRefresher;
 
+    @FXML public void initialize() {
+        getYazFromBank();
+        createLoanComponentController.setHomePageController(this);
+        informationComponentController.setHomePageController(this);
+        paymentComponentController.setHomePageController(this);
+        inlayComponentController.setHomePageController(this);
+        categories=new ArrayList<>();
+        synchronized (this){
+            updateCategories();
+        }
+        version=1;
+    }
     @FXML void insertFileToSystem(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("xml files", "*.xml"));
@@ -106,16 +115,11 @@ public class clientHomePageController {
             }
         });
     }
-    @FXML public void initialize() {
-        getYazFromBank();
-        createLoanComponentController.setHomePageController(this);
-        informationComponentController.setHomePageController(this);
-        paymentComponentController.setHomePageController(this);
-        inlayComponentController.setHomePageController(this);
-        categories=new ArrayList<>();
-        synchronized (this){
-            updateCategories();
-        }
+    public void setVersion(int version) {
+        this.version = version;
+    }
+    public int getVersion() {
+        return version;
     }
     public void getYazFromBank(){
         String finalUrl = HttpUrl
@@ -229,12 +233,11 @@ public class clientHomePageController {
         accountBalance.setText(String.valueOf(getCurrentBalance()));
     }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
     }
-
     public void showCategories(List<String> newCategories) {
         Platform.runLater(() -> {
             categories.clear();
@@ -245,18 +248,33 @@ public class clientHomePageController {
     }
     public void showMovements(Map<Integer,List<MovementDTO>> movements) {
         Platform.runLater(() -> {
-            informationComponentController.refreshData(movements);
+            informationComponentController.refreshMovementsData(movements);
         });
     }
-
     public void showYaz(int yaz) {
         Platform.runLater(() ->
            currentYaz.setText(String.valueOf(yaz))
         );
     }
+    public void showVersion(int version) {
+        Platform.runLater(() ->
+                this.version=version
+        );
+    }
+
     public void showBalance(Double balance) {
         Platform.runLater(() ->
             accountBalance.setText(String.valueOf(balance))
+        );
+    }
+    public void showLoanLender(List<LoanDTO> loanDTOS) {
+        Platform.runLater(() ->
+                informationComponentController.refreshLenderLonerData(loanDTOS)
+        );
+    }
+    public void showLoanLoner(List<LoanDTO> loanDTOS) {
+        Platform.runLater(() ->
+                informationComponentController.refreshLoansLonerData(loanDTOS)
         );
     }
 }

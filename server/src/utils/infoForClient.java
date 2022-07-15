@@ -7,18 +7,29 @@ import dto.MovementDTO;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class infoForClient {
     private List<String> categories;
     private Double balance;
     private int yaz;
     private Map<Integer,List<MovementDTO>> movements;
+    private List<LoanDTO> loanLender;
+    private List<LoanDTO> loanLoner;
+    private int version;
 
-    public infoForClient(List<String> categories, Double balance, int yaz,Map<Integer,List<MovementDTO>> movements){
+    public infoForClient(List<String> categories, Double balance, int yaz,Map<Integer,List<MovementDTO>> movements,List<LoanDTO> loanLender,List<LoanDTO> loanLoner, int version){
         this.balance=balance;
         this.categories=categories;
         this.yaz=yaz;
         this.movements=movements;
+        this.loanLender=loanLender;
+        this.loanLoner=loanLoner;
+        this.version=version;
+    }
+
+    public int getVersion() {
+        return version;
     }
 
     public Map<Integer, List<MovementDTO>> getMovements() {
@@ -35,5 +46,13 @@ public class infoForClient {
 
     public int getYaz() {
         return yaz;
+    }
+
+    public List<LoanDTO> getLoanLender() {
+        return loanLender;
+    }
+
+    public List<LoanDTO> getLoanLoner() {
+        return loanLoner;
     }
 }
