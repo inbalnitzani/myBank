@@ -1,6 +1,7 @@
 package servlet;
 
 import com.google.gson.Gson;
+import dto.stateDTO;
 import engine.Bank;
 import engine.BankInterface;
 import jakarta.servlet.annotation.WebServlet;
@@ -8,6 +9,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import utils.ServletUtils;
+
+import java.util.Map;
 
 
 @WebServlet(name = "rewind", urlPatterns = "/rewind")
@@ -21,8 +24,8 @@ public class rewindServlet extends HttpServlet{
             bank.setRewind(true);
             synchronized (bank) {
 
-                int curYaz = bank.getWorldTime();
-                String json = gson.toJson(curYaz);
+                stateDTO state = bank.getStates().get(Integer.parseInt(request.getParameter("yaz")));
+                String json = gson.toJson(state);
 
                 response.getWriter().println(json);
                 response.getWriter().flush();

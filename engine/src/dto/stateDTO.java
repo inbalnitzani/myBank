@@ -1,27 +1,25 @@
 package dto;
 
-import client.Client;
-import loan.Loan;
+import java.util.List;
 
-import java.util.Map;
-import java.util.Set;
 
 public class stateDTO {
-    private Set<String> categories;
-    private Map<String, Loan> activeLoans;
-    private Map<String, Loan> waitingLoans;
-    private Map<String, Client> clients;
+    private List <LoanDTO> loans;
+    private List<ClientDTO> clients;
     private int time;
 
 
-    public stateDTO(Set<String> categories,Map<String,Loan> activeLoans,
-                    Map<String, Loan> waitingLoans,Map<String, Client> clients,int time){
-        this.categories = categories;
-        this.activeLoans = activeLoans;
+    public stateDTO(List<LoanDTO> loans,List<ClientDTO> clients,int time){
+        this.loans = loans;
         this.clients = clients;
-        this.waitingLoans = waitingLoans;
         this.time = time;
     }
 
+    public List<ClientDTO> getClients() {
+        return clients;
+    }
 
+    public List<LoanDTO> getLoans() {
+        return loans;
+    }
 }

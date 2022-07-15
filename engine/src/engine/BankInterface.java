@@ -3,6 +3,7 @@ package engine;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
+import dto.stateDTO;
 import exception.*;
 import loan.Loan;
 import loan.LoanTerms;
@@ -66,9 +67,11 @@ public interface BankInterface {
 
      Boolean getRewind();
 
-     void setRewind(Boolean value);
+      void setRewind(Boolean value);
 
-     void saveStateToMap();
+      void saveStateToMap();
 
-     int getVersion();
+      Map<Integer,stateDTO> getStates();
+
+      int getVersion();
 }

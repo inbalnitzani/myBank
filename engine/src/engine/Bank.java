@@ -52,7 +52,9 @@ public class Bank implements Serializable, engine.BankInterface {
         version=1;
         states = new HashMap<Integer, stateDTO>();
     }
-
+    public Map<Integer,stateDTO> getStates(){
+        return states;
+    }
     public List<ClientDTO> getClients() {
         return new ConvertDTO().createListClientDTO(clients.values());
     }
@@ -130,7 +132,7 @@ public class Bank implements Serializable, engine.BankInterface {
     }
     public void saveStateToMap() {
         time = engine.Global.worldTime;
-        states.put(time,new stateDTO(categories,activeLoans,waitingLoans,clients,time));
+        states.put(time,new stateDTO(getAllLoans(),getClients(),time));
     }
     public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest, int ownershipAttention) {
         int sumLoans = loans.size(), firstPayment = (amountToInvest / sumLoans) + (amountToInvest % sumLoans);
