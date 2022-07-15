@@ -3,6 +3,7 @@ package app.refreshdata;
 import app.homePage.clientHomePageController;
 import com.google.gson.Gson;
 import com.sun.istack.internal.NotNull;
+import dto.LoanDTO;
 import dto.MovementDTO;
 import dto.infoForAdminDTO;
 import javafx.application.Platform;
@@ -26,15 +27,21 @@ import java.util.function.Consumer;
         private final Consumer <Integer> yazConsumer;
         private final Consumer <Map<Integer,List<MovementDTO>>> movements;
         private clientHomePageController homePageController;
+        private Consumer <List<LoanDTO>> loanLenderConsumer;
+        private Consumer <List<LoanDTO>> loanLonerConsumer;
+        private Consumer<Integer> version;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
         }
-        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements ) {
+        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version) {
             this.categoriesConsumer = categoriesConsumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
             this.movements = movements;
+            this.loanLonerConsumer = loanLonerConsumer;
+            this.loanLenderConsumer = loanLenderConsumer;
+            this.version=version;
         }
 
         @Override
@@ -43,6 +50,7 @@ import java.util.function.Consumer;
                     .parse("http://localhost:8080/demo_Web_exploded/clientRefresh")
                     .newBuilder()
                     .addQueryParameter("client", homePageController.getClientName())
+                    .addQueryParameter("version", String.valueOf(homePageController.getVersion()))
                     .build()
                     .toString();
 
@@ -54,15 +62,21 @@ import java.util.function.Consumer;
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    String json = response.body().string();
-                    Gson gson = new Gson();
-                    infoForClient info = gson.fromJson(json, infoForClient.class);
-                    Platform.runLater(()->{
-                        balanceConsumer.accept(info.getBalance());
-                        yazConsumer.accept(info.getYaz());
-                        categoriesConsumer.accept(info.getCategories());
-                        movements.accept(info.getMovements());
-                    });
+                   Boolean needToRefresh = Boolean.valueOf(response.header("NeedToRefresh"));
+                   if(needToRefresh) {
+                       String json = response.body().string();
+                       Gson gson = new Gson();
+                       infoForClient info = gson.fromJson(json, infoForClient.class);
+                       Platform.runLater(() -> {
+                           balanceConsumer.accept(info.getBalance());
+                           yazConsumer.accept(info.getYaz());
+                           categoriesConsumer.accept(info.getCategories());
+                           movements.accept(info.getMovements());
+                           loanLenderConsumer.accept(info.getLoanLender());
+                           loanLonerConsumer.accept(info.getLoanLoner());
+                           version.accept(info.getVersion());
+                       });
+                   }
                 }
             });
         }

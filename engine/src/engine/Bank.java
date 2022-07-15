@@ -51,7 +51,6 @@ public class Bank implements Serializable, engine.BankInterface {
         categories = new HashSet<String>();
         version=1;
         states = new HashMap<Integer, stateDTO>();
-
     }
     public Map<Integer,stateDTO> getStates(){
         return states;
@@ -109,7 +108,6 @@ public class Bank implements Serializable, engine.BankInterface {
         List<LoanDTO> loanDTOS = new ConvertDTO().createListLoanDto(loans.values());
         return loanDTOS;
     }
-
     public void addInvestorToLoan(Loan loan, Client client, int amountToInvestPerLoan) {
         PayBack payBack = loan.checkClientAlreadyInvested(client);
         Status loanStatus = loan.addNewInvestorToLoan(client, amountToInvestPerLoan, payBack);
@@ -122,11 +120,9 @@ public class Bank implements Serializable, engine.BankInterface {
             clients.get(loan.getOwner()).addMoneyToAccount(loan.getCapital());
         }
     }
-
     public int getWorldTime() {
         return time;
     }
-
     public void saveStateToFile(String fileName) throws IOException {
         time = engine.Global.worldTime;
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName))) {
@@ -134,7 +130,6 @@ public class Bank implements Serializable, engine.BankInterface {
             out.flush();
         }
     }
-
     public void saveStateToMap() {
         time = engine.Global.worldTime;
         states.put(time,new stateDTO(getAllLoans(),getClients(),time));
@@ -164,7 +159,6 @@ public class Bank implements Serializable, engine.BankInterface {
         }
         return amountToInvest;
     }
-
     public void sortListByLeftAmount(List<Loan> loansToInvest) {
         Collections.sort(loansToInvest, new Comparator<Loan>() {
             public int compare(Loan loan1, Loan loan2) {
@@ -174,7 +168,6 @@ public class Bank implements Serializable, engine.BankInterface {
             }
         });
     }
-
     public int startInlayProcess(List<LoanDTO> loansDTOToInvest, String clientName) {
         Client client = clients.get(clientName);
         List<Loan> loansToInvest = new ConvertDTO().createListLoan(loansDTOToInvest, waitingLoans);
@@ -442,11 +435,9 @@ public class Bank implements Serializable, engine.BankInterface {
         Client client=this.clients.get(owner);
         client.addLoanToBorrowerList(loan);
     }
-
     public void setRewind(Boolean val) {
         this.rewind = val;
     }
-
     public Boolean getRewind() {
         return rewind;
     }

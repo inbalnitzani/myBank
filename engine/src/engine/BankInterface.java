@@ -29,7 +29,7 @@ public interface BankInterface {
 
      double loadMoney(String clientName, double amountToLoad);
 
-     Map<Integer,List<MovementDTO>> getMovementsByClientName(String client);
+     Map<Integer, List<MovementDTO>> getMovementsByClientName(String client);
 
      List<LoanDTO> getLenderLoansByName(String clientName);
 
@@ -64,9 +64,14 @@ public interface BankInterface {
      boolean checkLoanNameExist(String loanName);
 
      void addNewLoan(String id, String owner, int amount, int rate, String categoryName, int totalYazTime, int pace);
+
      Boolean getRewind();
+
       void setRewind(Boolean value);
+
       void saveStateToMap();
-     Map<Integer,stateDTO> getStates();
-     int getVersion();
-     }
+
+      Map<Integer,stateDTO> getStates();
+
+      int getVersion();
+}
