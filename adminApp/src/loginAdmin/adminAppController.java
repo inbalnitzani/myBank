@@ -38,15 +38,15 @@ public class adminAppController {
     @FXML private Label msgLabel;
     private mainScreenAdminController mainController;
 
+    public List<ClientDTO> getClients(){return bank.getClients(); }
+    public List<LoanDTO> getLoans(){
+        return bank.getAllLoans();
+    }
     public adminAppController() {
         this.bank = new Bank();
     }
-    public List<ClientDTO> getClients(){return bank.getClients(); }
     public void setMainController(mainScreenAdminController mainController) {
         this.mainController = mainController;
-    }
-    public List<LoanDTO> getLoans(){
-        return bank.getAllLoans();
     }
     public void setPrimaryStage(Stage primaryStage) {
         this.primaryStage = primaryStage;

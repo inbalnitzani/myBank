@@ -1,11 +1,7 @@
 package servlet;
-
-import client.Movement;
 import com.google.gson.Gson;
-import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
-import dto.infoForAdminDTO;
 import engine.BankInterface;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -13,7 +9,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import utils.ServletUtils;
 import utils.infoForClient;
-
 import java.util.List;
 import java.util.Map;
 
@@ -34,19 +29,28 @@ public class clientRefreshServlet extends HttpServlet {
         protected void processRequest(HttpServletRequest request, HttpServletResponse response) {
             response.setContentType("text/html;charset=UTF-8");
             String clientName = request.getParameter("client");
-
+            int versionClient = Integer.parseInt(request.getParameter("version"));
             try {
-                Gson gson = new Gson();
                 BankInterface bank = ServletUtils.getBank(getServletContext());
-                synchronized (bank){
-                    int yaz = bank.getWorldTime();
-                    List<String> categories = bank.getCategories();
-                    Double balance = bank.getCurrBalance(clientName);
-                    Map<Integer,List<MovementDTO>> movements = bank.getMovementsByClientName(clientName);
-                    infoForClient info = new infoForClient(categories,balance,yaz,movements);
-                    String json = gson.toJson(info);
-                    response.getWriter().println(json);
-                    response.getWriter().flush();
+                synchronized (bank) {
+                    Gson gson = new Gson();
+                    int version = bank.getVersion();
+                    if (version != versionClient) {
+                        int yaz = bank.getWorldTime();
+                        List<String> categories = bank.getCategories();
+                        Double balance = bank.getCurrBalance(clientName);
+                        Map<Integer, List<MovementDTO>> movements = bank.getMovementsByClientName(clientName);
+                        List<LoanDTO> loansLender = bank.getLenderLoansByName(clientName);
+                        List<LoanDTO> loansBorrower = bank.getBorrowerLoansByName(clientName);
+                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version);
+                        String json = gson.toJson(info);
+                        response.addHeader("NeedToRefresh", "true");
+                        response.getWriter().println(json);
+                        response.getWriter().flush();
+                    } else {
+                        response.addHeader("NeedToRefresh", "false");
+                        response.addHeader("version", String.valueOf(version));
+                    }
                     response.setStatus(HttpServletResponse.SC_OK);
                 }
             } catch (Exception e) {

@@ -156,8 +156,6 @@ public class inlayController {
                             buttom.getChildren().clear();
                             approveButton.setDisable(true);
                             rightErea.getChildren().clear();
-                            homePageController.updateAccountBalance();
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
