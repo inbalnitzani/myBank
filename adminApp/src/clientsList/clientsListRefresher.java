@@ -25,38 +25,34 @@ public class clientsListRefresher extends TimerTask {
     public clientsListRefresher(Consumer<List<ClientDTO>> usersListConsumer, Consumer<List<LoanDTO>> loansConsumer) {
         this.usersListConsumer = usersListConsumer;
         this.loansConsumer = loansConsumer;
+
     }
 
     @Override
     public void run() {
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/adminRefresh")
-                .newBuilder()
-                .build()
-                .toString();
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                System.out.println("OnFailure");
-            }
+            String finalUrl = HttpUrl
+                    .parse("http://localhost:8080/demo_Web_exploded/adminRefresh")
+                    .newBuilder()
+                    .build()
+                    .toString();
+            HttpClientUtil.runAsync(finalUrl, new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                    System.out.println("OnFailure");
+                }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                String json = response.body().string();
-                Gson gson = new Gson();
-                infoForAdminDTO info = gson.fromJson(json, infoForAdminDTO.class);
-                Platform.runLater(()->{
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    String json = response.body().string();
+                    Gson gson = new Gson();
+                    infoForAdminDTO info = gson.fromJson(json, infoForAdminDTO.class);
+                    Platform.runLater(() -> {
 
-                    usersListConsumer.accept(info.getClientsInfo());
-                    loansConsumer.accept(info.getLoansInfo());
-                });
+                        usersListConsumer.accept(info.getClientsInfo());
+                        loansConsumer.accept(info.getLoansInfo());
+                    });
+                }
+            });
+        }
 
-            //    Gson gson = new Gson();
-             //   Map<String,ClientDTO> info = gson.fromJson(json, Map.class);
-              //  usersListConsumer.accept(info);
-                //usersListConsumer.accept(info.getLoans());
-            }
-
-        });
-    }
 }

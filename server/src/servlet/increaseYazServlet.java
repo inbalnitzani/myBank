@@ -22,8 +22,8 @@ public class increaseYazServlet extends HttpServlet{
             BankInterface bank = ServletUtils.getBank(getServletContext());
             synchronized (bank) {
 
-                bank.promoteTime();
                 bank.saveStateToMap();
+                bank.promoteTime();
                 int curYaz = bank.getWorldTime();
                 String json = gson.toJson(curYaz);
 
