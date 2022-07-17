@@ -43,6 +43,8 @@ public class Bank implements Serializable, engine.BankInterface {
     private int time = 1;
     private Boolean rewind = false;
     private Map<Integer, stateDTO> states;
+    private Integer lookingBack;
+
 
     public Bank() {
         clients = new HashMap<String, Client>();
@@ -52,6 +54,12 @@ public class Bank implements Serializable, engine.BankInterface {
         version=1;
         states = new HashMap<Integer, stateDTO>();
     }
+    public void setLookingBack(Integer val){lookingBack = val;}
+
+    public Integer getLookingBack() {
+        return lookingBack;
+    }
+
     public Map<Integer,stateDTO> getStates(){
         return states;
     }
