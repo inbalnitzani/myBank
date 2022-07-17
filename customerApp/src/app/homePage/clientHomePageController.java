@@ -168,6 +168,8 @@ public class clientHomePageController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (categories == null)
+                categories = new ArrayList<>();
             return categories;
         }
     }
@@ -238,10 +240,16 @@ public class clientHomePageController {
         accountBalance.setText(String.valueOf(getCurrentBalance()));
     }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
+    }
+    public void setRewind(Integer lookingBack){
+        Platform.runLater(()->{
+
+
+        });
     }
     public void showCategories(List<String> newCategories) {
         Platform.runLater(() -> {

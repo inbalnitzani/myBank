@@ -42,7 +42,10 @@ public class clientRefreshServlet extends HttpServlet {
                         Map<Integer, List<MovementDTO>> movements = bank.getMovementsByClientName(clientName);
                         List<LoanDTO> loansLender = bank.getLenderLoansByName(clientName);
                         List<LoanDTO> loansBorrower = bank.getBorrowerLoansByName(clientName);
-                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version);
+                        Integer lookingBack = 0;
+                        if (bank.getRewind())
+                            lookingBack = bank.getLookingBack();
+                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version,lookingBack);
                         String json = gson.toJson(info);
                         response.addHeader("NeedToRefresh", "true");
                         response.getWriter().println(json);

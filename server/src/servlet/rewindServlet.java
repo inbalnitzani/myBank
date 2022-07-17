@@ -21,10 +21,12 @@ public class rewindServlet extends HttpServlet{
         try {
             Gson gson = new Gson();
             BankInterface bank = ServletUtils.getBank(getServletContext());
-            bank.setRewind(true);
+            Integer lookingBack = Integer.parseInt(request.getParameter("yaz"));
+            bank.setLookingBack(lookingBack);
+
             synchronized (bank) {
 
-                stateDTO state = bank.getStates().get(Integer.parseInt(request.getParameter("yaz")));
+                stateDTO state = bank.getStates().get(lookingBack);
                 String json = gson.toJson(state);
 
                 response.getWriter().println(json);
