@@ -1,5 +1,4 @@
 package engine;
-import client.Movement;
 import dto.*;
 import client.Client;
 import exception.CategoriesException;
@@ -59,52 +58,43 @@ public class Bank implements Serializable, engine.BankInterface {
         version++;
         setRewind(true);
     }
-
     public Integer getLookingBack() {
         return lookingBack;
     }
-
     public Map<Integer,stateDTO> getStates(){
         return states;
     }
     public List<ClientDTO> getClients() {
         return new ConvertDTO().createListClientDTO(clients.values());
     }
-
     public List<String> getCategories() {
         return new ConvertDTO().createListCategories(categories);
     }
-
     public double getCurrBalance(String clientName) {
         return clients.get(clientName).getCurrBalance();
     }
-
     public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(),filePath);
         convertToBank(info);
         time = 1;
         engine.Global.setWorldTime(1);
         readFile = true;
         return readFile;
     }
-
     public double withdrawMoneyFromAccount(String clientName, double amountToWithdraw) throws NotEnoughMoney {
         return clients.get(clientName).withdrawingMoney(amountToWithdraw);
     }
-
     public double loadMoney(String clientName, double amountToLoad) {
         return clients.get(clientName).addMoneyToAccount(amountToLoad);
     }
-
     public Map<Integer,List<MovementDTO>> getMovementsByClientName(String client){
         ClientDTO clientDTO=new ClientDTO(clients.get(client));
         return clientDTO.getMovements();
     }
-
     public List<LoanDTO> getBorrowerLoansByName(String clientName){
         ClientDTO clientDTO = new ClientDTO(clients.get(clientName));
         return clientDTO.getLoansAsBorrower();
@@ -188,17 +178,14 @@ public class Bank implements Serializable, engine.BankInterface {
         version++;
         return addInvestorToLoans(loansToInvest, client, matchLoans.getAmountToInvest(), maxOwnershipAttention);
     }
-
     public int getVersion() {
         return version;
     }
-
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance("engineBank/schema");
+        JAXBContext jc = JAXBContext.newInstance("schema");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
-
     public List<LoanDTO> getAllLoans() {
         Map<String, Loan> loans = new HashMap<>();
         for (Loan loan : waitingLoans.values())
@@ -207,27 +194,23 @@ public class Bank implements Serializable, engine.BankInterface {
             loans.put(loan.getLoansID(), loan);
         return new ConvertDTO().createListLoanDto(loans.values());
     }
-
     public void convertToBank(AbsDescriptor info) {
         setCategories(info.getAbsCategories());
-        setClients(info.getAbsCustomers());
         setLoans(info.getAbsLoans());
     }
-
-    public void addNewDataToBank(AbsDescriptor info){
+    public void addNewDataToBank(AbsDescriptor info, String clientName){
         for (String category:info.getAbsCategories().getAbsCategory()){
             if(!categories.contains(category))
                 categories.add(category);
         }
         for (AbsLoan loan:info.getAbsLoans().getAbsLoan()){
-            String owner = stringConvertor(loan.getAbsOwner());
+            String owner = clientName;
             String id = stringConvertor(loan.getId());
             Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
             clients.get(owner).addLoanToBorrowerList(newLoan);
         }
     }
-
     public void setCategories(AbsCategories absCategories) {
         List<String> categories = absCategories.getAbsCategory();
         if (!this.categories.isEmpty())
@@ -236,7 +219,6 @@ public class Bank implements Serializable, engine.BankInterface {
             this.categories.add(stringConvertor(category));
         }
     }
-
     public void setClients(AbsCustomers absCustomers) {
         List<AbsCustomer> customerList = absCustomers.getAbsCustomer();
         if (!this.clients.isEmpty()) {
@@ -247,11 +229,9 @@ public class Bank implements Serializable, engine.BankInterface {
             this.clients.put(stringConvertor(customer.getName()), newClient);
         }
     }
-
     public String stringConvertor(String str) {
         return str.trim().toLowerCase();
     }
-
     public void setLoans(AbsLoans absLoans) {
         List<AbsLoan> loanList = absLoans.getAbsLoan();
         if (!this.waitingLoans.isEmpty()) {
@@ -266,7 +246,6 @@ public class Bank implements Serializable, engine.BankInterface {
             clients.get(owner).addLoanToBorrowerList(newLoan);
         }
     }
-
     public void paymentProcess(List<Payment> paymentList) throws NotEnoughMoney {
         for (Payment payment : paymentList) {
             Loan loan = activeLoans.get(payment.getLoanID());
@@ -279,20 +258,17 @@ public class Bank implements Serializable, engine.BankInterface {
             }
         }
     }
-
     public void payBackToInvestor(PayBack investor, double totalAmount) {
         double amount = investor.getPercentage() * totalAmount;
         Client borrower = clients.get(investor.getClientDTOGivers());
         borrower.addMoneyToAccount(amount);
     }
-//hello
     public void payBackNextPayment(String loanID, double totalAmount, int yaz) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(yaz);
         payBack(loan, totalAmount, payment);
         version++;
     }
-
     public void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney {
         Client client = clients.get(loan.getOwner());
         if (client.getCurrBalance() >= totalAmount) {
@@ -311,7 +287,6 @@ public class Bank implements Serializable, engine.BankInterface {
             }
         } else throw new NotEnoughMoney(totalAmount);
     }
-
     public void promoteTime() {
         List<Payment> payments = makePaymentsLists();
         for (Payment payment : payments) {
@@ -324,7 +299,6 @@ public class Bank implements Serializable, engine.BankInterface {
         time++;
         version++;
     }
-
     public List<Payment> makePaymentsLists() {
         List<Payment> paymentsList = new ArrayList<>();
         for (Loan loan : activeLoans.values()) {
@@ -337,7 +311,6 @@ public class Bank implements Serializable, engine.BankInterface {
         }
         return paymentsList;
     }
-
     public void setInRisk(Loan loan, double totalAmount) {
         loan.setRiskTime();
         int nextTimePay = loan.getPace() + engine.Global.worldTime;
@@ -348,11 +321,9 @@ public class Bank implements Serializable, engine.BankInterface {
             paymentList.put(nextTimePay, new Payment(loan.getLoansID(), totalAmount, loan.getInterestRate()));
         }
     }
-
     public ClientDTO getClientByName(String name) {
         return new ClientDTO(clients.get(name));
     }
-
     public void payAllBack(String loanID) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
         double totalAmount = loan.totalAmountToPayBack() - loan.getAmountPaidBack();
@@ -384,7 +355,6 @@ public class Bank implements Serializable, engine.BankInterface {
             version++;
         } else throw new NotEnoughMoney(totalAmount);
     }
-
     public void payApartOfDebt(String loanID, double amount) throws NotEnoughMoney {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(engine.Global.worldTime);
@@ -417,25 +387,18 @@ public class Bank implements Serializable, engine.BankInterface {
        // loan.setActualLastPaymentTime(Global.worldTime);
 
     }
-
     public void addNewUserToBank(String name){
         clients.put(name,new Client(name,0));
     }
 
-    public void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
-        boolean readFile = false;
+    public void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException, JAXBException {
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
-        convertToBank(info);
-      //  version++;
-//        time = 1;
-//        engine.Global.setWorldTime(1);
-//        readFile = true;
-//        return readFile;
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), filePath);
+        addNewDataToBank(info, clientName);
+        version++;
     }
-
     public boolean checkLoanNameExist(String loanName){
          return activeLoans.containsKey(loanName) || waitingLoans.containsKey(loanName);
     }
