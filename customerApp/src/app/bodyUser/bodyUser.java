@@ -27,7 +27,7 @@ public class bodyUser {
         if (scrambleComponentController!=null && informationComponentController!=null) {
             this.scrambleComponentController.setBodyUser(this);
             this.informationComponentController.setBodyUser(this);
-            this.paymentComponentController.setBodyUser(this);
+          //  this.paymentComponentController.setBodyUser(this);
         }
     }
     public void updateUserViewer(String client) {

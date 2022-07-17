@@ -1,9 +1,7 @@
 package app.payment;
-
 import app.bodyUser.bodyUser;
 import app.homePage.clientHomePageController;
 import com.sun.istack.internal.NotNull;
-import engine.Global;
 
 import dto.ClientDTO;
 import dto.LoanDTO;
@@ -31,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class paymentController {
-    private bodyUser bodyUser;
+   // private bodyUser bodyUser;
     private Map<String,LoanDTO> loans;
     private List<LoanDTO> loansList;
     @FXML private TableView<LoanDTO> loanerLoans;
@@ -46,13 +44,6 @@ public class paymentController {
     @FXML private Label amountError;
     private clientHomePageController homePageController;
 
-    public paymentController(){
-        loans=new HashMap<>();
-        loansList=new ArrayList<>();
-    }
-    public void setHomePageController(clientHomePageController controller){
-        this.homePageController=controller;
-    }
     @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
@@ -66,7 +57,7 @@ public class paymentController {
 //                bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             paidMassage.setText("The payment was successfully made");
-            bodyUser.updateClientInfo();
+        //    bodyUser.updateClientInfo();
             acceptButton.setDisable(true);
             amountToPay.setDisable(true);
             amountToPay.clear();
@@ -79,39 +70,6 @@ public class paymentController {
             amountToPay.clear();
         }
 
-    }
-    public void payAllBack(){
-        String finalUrl = HttpUrl
-                .parse("http://localhost:8080/demo_Web_exploded/payAllBack")
-                .newBuilder()
-                .addQueryParameter("loanId", choosePayment.getValue())
-                .build()
-                .toString();
-
-        HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() ->
-                        payAllLabel.setText("ERROR! Unknown problem occurred! Please try again..")
-                );
-            }
-
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
-                int status = response.code();
-                if (status == HttpServletResponse.SC_OK) {
-                    Platform.runLater(() -> {
-                        paidMassage.setText("The payment was successfully made");
-                        bodyUser.updateClientInfo();
-                        acceptButton.setDisable(true);
-                        amountToPay.setDisable(true);
-                        amountToPay.clear();
-                    });
-                } else {
-                    Platform.runLater(() ->{
-                        payAllLabel.setText("NOTICE: you do not have enough money ");
-                    });
-                }
-            }
-        });
     }
     @FXML void clientChosePayment(ActionEvent event) {
         if(choosePayment.getValue()!= null) {
@@ -138,9 +96,49 @@ public class paymentController {
         if (payAllCheckBox.isSelected())
             acceptButton.setDisable(false);
     }
-    public void setBodyUser(bodyUser bodyUser) {
-        this.bodyUser = bodyUser;
+    public paymentController(){
+        loans=new HashMap<>();
+        loansList=new ArrayList<>();
     }
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
+    }
+    public void payAllBack(){
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/payAllBack")
+                .newBuilder()
+                .addQueryParameter("loanId", choosePayment.getValue())
+                .build()
+                .toString();
+
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() ->
+                        payAllLabel.setText("ERROR! Unknown problem occurred! Please try again..")
+                );
+            }
+
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+                int status = response.code();
+                if (status == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() -> {
+                        paidMassage.setText("The payment was successfully made");
+                    //    bodyUser.updateClientInfo();
+                        acceptButton.setDisable(true);
+                        amountToPay.setDisable(true);
+                        amountToPay.clear();
+                    });
+                } else {
+                    Platform.runLater(() ->{
+                        payAllLabel.setText("NOTICE: you do not have enough money ");
+                    });
+                }
+            }
+        });
+    }
+   // public void setBodyUser(bodyUser bodyUser) {
+   //     this.bodyUser = bodyUser;
+  //  }
     public void payRiskLoan(LoanDTO loanDTO) throws Exception {
         String amountString = amountToPay.getText();
         if(amountString!=null && !amountString.equals(""))
@@ -183,7 +181,7 @@ public class paymentController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         paidMassage.setText("The payment was successfully made");
-                        bodyUser.updateClientInfo();
+                  //      bodyUser.updateClientInfo();
                         acceptButton.setDisable(true);
                         amountToPay.setDisable(true);
                         amountToPay.clear();
@@ -260,22 +258,6 @@ public class paymentController {
         }
 
     }
-//    public void showNotifications(){
-//        notificationList.getItems().clear();
-//        int time = bodyUser.mainController.getTime();
-//        for (int yaz = 1; yaz<= time; yaz++) {
-//            for (LoanDTO loan:loansList) {
-//                Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
-//                PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
-//                if (paymentDTO!=null )
-//                    if(!paymentDTO.getPaidAPartOfDebt() || (paymentDTO.isPayAll() || !paymentDTO.isNewPayment())){
-//                        notificationList.getItems().add("Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
-//                                "\na total of: "+(paymentDTO.getOriginalAmount()));
-//                    }
-//            }
-//        }
-//
-    //    }
     public void updateBorrowerLoans(List<LoanDTO> loans){
     this.loans.clear();
     loanerLoans.getColumns().clear();
@@ -329,9 +311,6 @@ public class paymentController {
             }
         }
     }
-    //    public void setPaymentsDataForNewFile(){
-    //        setLonerLoans(null);
-    //    }
     public void updateClientUser(){
 //        setClient(bodyUser.getClientDTO());
 //        loansList=client.getLoansAsBorrower();
@@ -342,8 +321,4 @@ public class paymentController {
         showPaymentsControl();
         showNotifications();
     }
-    //    public void showLonersLoans(List<LoanDTO> loansList) {
-//        //loanerLoans.setItems(FXCollections.observableArrayList(loansList));
-//        loanerLoans.setItems(FXCollections.observableArrayList(loansList));
-//    }
 }
