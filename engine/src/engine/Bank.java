@@ -54,7 +54,11 @@ public class Bank implements Serializable, engine.BankInterface {
         version=1;
         states = new HashMap<Integer, stateDTO>();
     }
-    public void setLookingBack(Integer val){lookingBack = val;}
+    public void setLookingBack(Integer val){
+        lookingBack = val;
+        version++;
+        setRewind(true);
+    }
 
     public Integer getLookingBack() {
         return lookingBack;
@@ -310,13 +314,14 @@ public class Bank implements Serializable, engine.BankInterface {
     public void promoteTime() {
         List<Payment> payments = makePaymentsLists();
         for (Payment payment : payments) {
-      double originalAmount = payment.getOriginalAmount();
+            double originalAmount = payment.getOriginalAmount();
             double paidAmount = payment.getAmount();
-            double amountLeft = originalAmount-paidAmount;
+            double amountLeft = originalAmount - paidAmount;
             setInRisk(activeLoans.get(payment.getLoanID()), amountLeft);
         }
         engine.Global.changeWorldTimeByOne();
         time++;
+        version++;
     }
 
     public List<Payment> makePaymentsLists() {

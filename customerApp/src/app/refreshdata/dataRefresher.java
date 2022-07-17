@@ -30,11 +30,12 @@ import java.util.function.Consumer;
         private Consumer <List<LoanDTO>> loanLenderConsumer;
         private Consumer <List<LoanDTO>> loanLonerConsumer;
         private Consumer<Integer> version;
+        private Consumer<Integer> lookingBack;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
         }
-        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version) {
+        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version,Consumer<Integer> lookingBack) {
             this.categoriesConsumer = categoriesConsumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
@@ -42,6 +43,7 @@ import java.util.function.Consumer;
             this.loanLonerConsumer = loanLonerConsumer;
             this.loanLenderConsumer = loanLenderConsumer;
             this.version=version;
+            this.lookingBack = lookingBack;
         }
 
         @Override
@@ -75,6 +77,7 @@ import java.util.function.Consumer;
                            loanLenderConsumer.accept(info.getLoanLender());
                            loanLonerConsumer.accept(info.getLoanLoner());
                            version.accept(info.getVersion());
+                           lookingBack.accept(info.getLookingBack());
                        });
                    }
                 }

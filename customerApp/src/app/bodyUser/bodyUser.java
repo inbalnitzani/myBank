@@ -54,7 +54,7 @@ public class bodyUser {
     public void setDataForNewFile(){
         scrambleComponentController.initializeInlayData();
         informationComponentController.setInformationDataForNewFile();
-        paymentComponentController.setPaymentsDataForNewFile();
+    //    paymentComponentController.setPaymentsDataForNewFile();
     }
     public double getClientBalance(){return clientDTO.getCurrBalance();}
     public List<String> getCategories(){return mainController.getCategories();}

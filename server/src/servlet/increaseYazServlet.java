@@ -21,12 +21,10 @@ public class increaseYazServlet extends HttpServlet{
             Gson gson = new Gson();
             BankInterface bank = ServletUtils.getBank(getServletContext());
             synchronized (bank) {
-
                 bank.saveStateToMap();
                 bank.promoteTime();
                 int curYaz = bank.getWorldTime();
                 String json = gson.toJson(curYaz);
-
                 response.getWriter().println(json);
                 response.getWriter().flush();
             }
