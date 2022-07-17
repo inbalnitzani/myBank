@@ -45,7 +45,6 @@ public class Bank implements Serializable, engine.BankInterface {
     private Map<Integer,Map<String,ClientDTO>>clientsStates;
     private Integer lookingBack;
 
-
     public Bank() {
         clients = new HashMap<String, Client>();
         activeLoans = new HashMap<String, Loan>();

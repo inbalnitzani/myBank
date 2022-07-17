@@ -32,42 +32,28 @@ import java.util.stream.Collectors;
 
 public class paymentController {
     private bodyUser bodyUser;
-    private ClientDTO client;
-    private Map<String, LoanDTO> loans;
+    private Map<String,LoanDTO> loans;
     private List<LoanDTO> loansList;
-    @FXML
-    private TableView<LoanDTO> loanerLoans;
-    @FXML
-    private ComboBox<String> choosePayment;
-    @FXML
-    private CheckBox payAllCheckBox;
-    @FXML
-    private Button acceptButton;
-    @FXML
-    private Label payAllLabel;
-    @FXML
-    private ListView<String> notificationList;
-    @FXML
-    private Label totalAmount;
-    @FXML
-    private Label paidMassage;
-    @FXML
-    private TextField amountToPay;
-    @FXML
-    private Label amountError;
+    @FXML private TableView<LoanDTO> loanerLoans;
+    @FXML private ComboBox<String> choosePayment;
+    @FXML private CheckBox payAllCheckBox;
+    @FXML private Button acceptButton;
+    @FXML private Label payAllLabel;
+    @FXML private ListView<String> notificationList;
+    @FXML private Label totalAmount;
+    @FXML private Label paidMassage;
+    @FXML private TextField amountToPay;
+    @FXML private Label amountError;
     private clientHomePageController homePageController;
 
-    public paymentController() {
-        loans = new HashMap<>();
-        loansList = new ArrayList<>();
+    public paymentController(){
+        loans=new HashMap<>();
+        loansList=new ArrayList<>();
     }
-
-    public void setHomePageController(clientHomePageController controller) {
-        this.homePageController = controller;
+    public void setHomePageController(clientHomePageController controller){
+        this.homePageController=controller;
     }
-
-    @FXML
-    void acceptButtonListener(ActionEvent event) {
+    @FXML void acceptButtonListener(ActionEvent event) {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
             if (payAllCheckBox.isSelected()) {
@@ -84,16 +70,17 @@ public class paymentController {
             acceptButton.setDisable(true);
             amountToPay.setDisable(true);
             amountToPay.clear();
-        } catch (NotEnoughMoney e) {
+        }
+        catch (NotEnoughMoney e){
             payAllLabel.setText("NOTICE: you do not have enough money ");
-        } catch (Exception e) {
+        }
+        catch (Exception e){
             amountError.setText("Please Enter a positive number that is no larger then the total amount of the next payment.");
             amountToPay.clear();
         }
 
     }
-
-    public void payAllBack() {
+    public void payAllBack(){
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/payAllBack")
                 .newBuilder()
@@ -102,15 +89,13 @@ public class paymentController {
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() ->
                         payAllLabel.setText("ERROR! Unknown problem occurred! Please try again..")
                 );
             }
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) {
+            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
@@ -218,8 +203,8 @@ public class paymentController {
                 .parse("http://localhost:8080/demo_Web_exploded/payBackNextPayment")
                 .newBuilder()
                 .addQueryParameter("loanId", choosePayment.getValue())
-                .addQueryParameter("yaz", String.valueOf(loanDTO.getNextPaymentTime()))
-                .addQueryParameter("totalAmount", String.valueOf(loanDTO.getNextPaymentAmount()))
+                .addQueryParameter("yaz", String.valueOf(loanDTO.getNextPaymentTime(yaz)))
+                .addQueryParameter("totalAmount", String.valueOf(loanDTO.getNextPaymentAmount(yaz)))
                 .build()
                 .toString();
         HttpClientUtil.runAsync(finalUrl, new Callback() {
@@ -236,7 +221,7 @@ public class paymentController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         paidMassage.setText("The payment was successfully made");
-                        bodyUser.updateClientInfo();
+//                        bodyUser.updateClientInfo();
                         acceptButton.setDisable(true);
                         amountToPay.setDisable(true);
                         amountToPay.clear();
@@ -256,13 +241,13 @@ public class paymentController {
 
     public void showData() {
         loans = new HashMap<>();
-        loansList = client.getLoansAsBorrower();
+//        loansList = client.getLoansAsBorrower();
         for (LoanDTO loan : loansList) {
             loans.put(loan.getId(), loan);
         }
 //        showLonersLoans(loansList);
         showNotifications();
-        showPaymentsControl();
+   //     showPaymentsControl();
     }
 
     public void showNotifications() {
@@ -281,63 +266,88 @@ public class paymentController {
         }
 
     }
+//    public void showNotifications(){
+//        notificationList.getItems().clear();
+//        int time = bodyUser.mainController.getTime();
+//        for (int yaz = 1; yaz<= time; yaz++) {
+//            for (LoanDTO loan:loansList) {
+//                Map<Integer,PaymentDTO> paymentsByYaz = loan.getPayments();
+//                PaymentDTO paymentDTO = paymentsByYaz.get(yaz);
+//                if (paymentDTO!=null )
+//                    if(!paymentDTO.getPaidAPartOfDebt() || (paymentDTO.isPayAll() || !paymentDTO.isNewPayment())){
+//                        notificationList.getItems().add("Yaz: "+yaz+"\nIt is time to pay back for "+'"'+loan.getId()+'"' +
+//                                "\na total of: "+(paymentDTO.getOriginalAmount()));
+//                    }
+//            }
+//        }
+//
+    //    }
+    public void updateBorrowerLoans(List<LoanDTO> loans){
+    this.loans.clear();
+    loanerLoans.getColumns().clear();
 
-    public void showPaymentsControl() {
+    for (LoanDTO loanDTO:loans) {
+        this.loans.put(loanDTO.getId(), loanDTO);
+    }
+    TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
+    TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
+    TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
+    TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
+    TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
+    TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
+    TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
+
+    idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+    categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+    capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
+    totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
+    interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
+    paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
+    statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
+
+    loanerLoans.getColumns().addAll(idCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+    loanerLoans.setItems(FXCollections.observableArrayList(loans));
+}
+    public void showPaymentsControl(){
         choosePayment.getItems().clear();
         payAllLabel.setText("");
         totalAmount.setText("");
         paidMassage.setText("");
-        List<LoanDTO> active = loansList.stream().filter(loanDTO -> loanDTO.getStatus() == Status.ACTIVE)
+        List<LoanDTO> active =loans.values().stream().filter(loanDTO -> loanDTO.getStatus()==Status.ACTIVE)
                 .collect(Collectors.toList());
-        List<LoanDTO> inRisk = loansList.stream().filter(loanDTO -> loanDTO.getStatus() == Status.RISK)
+        List<LoanDTO> inRisk = loans.values().stream().filter(loanDTO -> loanDTO.getStatus()==Status.RISK)
                 .collect(Collectors.toList());
-        if (active.isEmpty() && inRisk.isEmpty()) {
+        if(active.isEmpty()&&inRisk.isEmpty()){
             payAllCheckBox.setDisable(true);
             acceptButton.setDisable(true);
             choosePayment.setDisable(true);
-        } else {
-            choosePayment.setDisable(false);
-
+        }
+        else {
+            int yaz = homePageController.getCurrentYaz();
             for (LoanDTO loan : active)
-                if (loan.getStatus().equals(Status.ACTIVE))
+                if (loan.getStatus().equals(Status.ACTIVE) && loan.getNextPaymentTime(homePageController.getCurrentYaz()) == yaz)
                     choosePayment.getItems().add(loan.getLoansID());
             for (LoanDTO loan : inRisk) {
                 choosePayment.getItems().add(loan.getLoansID());
             }
+            if (!choosePayment.getItems().isEmpty()) {
+                choosePayment.setDisable(false);
+            }
         }
     }
-
     //    public void setPaymentsDataForNewFile(){
-//        setLonerLoans(null);
-//    }
-    public void updateLonerLoans(List<LoanDTO> loans) {
-        this.loans.clear();
-        loanerLoans.getColumns().clear();
-
-        for (LoanDTO loanDTO : loans) {
-            this.loans.put(loanDTO.getId(), loanDTO);
-        }
-
-        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID loan");
-        TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
-        TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
-        TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
-        TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
-        TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
-        TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
-
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-        capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
-        totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
-        interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
-        paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
-
-        loanerLoans.getColumns().addAll(idCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        loanerLoans.setItems(FXCollections.observableArrayList(loans));
+    //        setLonerLoans(null);
+    //    }
+    public void updateClientUser(){
+//        setClient(bodyUser.getClientDTO());
+//        loansList=client.getLoansAsBorrower();
+//        showData();
     }
-
+    public void refreshPayment(List<LoanDTO> loans){
+        updateBorrowerLoans(loans);
+        showPaymentsControl();
+        showNotifications();
+    }
     //    public void showLonersLoans(List<LoanDTO> loansList) {
 //        //loanerLoans.setItems(FXCollections.observableArrayList(loansList));
 //        loanerLoans.setItems(FXCollections.observableArrayList(loansList));
