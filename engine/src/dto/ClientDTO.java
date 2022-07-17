@@ -67,7 +67,7 @@ public class ClientDTO {
         return movements;
     }
 
-    public int getCurrBalance() {
+    public double getCurrBalance() {
         return currBalance;
     }
 

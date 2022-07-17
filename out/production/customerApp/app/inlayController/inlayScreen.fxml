@@ -67,7 +67,7 @@
                             </font>
                         </Label>
                         <ComboBox fx:id="minInterestForLoan" prefHeight="25.0" prefWidth="241.0" GridPane.columnIndex="1" GridPane.rowIndex="4" GridPane.valignment="TOP" />
-                        <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="242.0" text="Find match loans!" textFill="#e40101" textOverrun="CENTER_ELLIPSIS" GridPane.rowIndex="5">
+                        <Button fx:id="findButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#startInlay" prefHeight="25.0" prefWidth="242.0" text="Find match loans!" textFill="#e40101" textOverrun="CENTER_ELLIPSIS" GridPane.rowIndex="5">
                             <font>
                                 <Font name="System Bold" size="19.0" />
                             </font>

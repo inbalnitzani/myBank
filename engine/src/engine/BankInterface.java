@@ -1,9 +1,6 @@
 package engine;
 
-import dto.ClientDTO;
-import dto.LoanDTO;
-import dto.MovementDTO;
-import dto.stateDTO;
+import dto.*;
 import exception.*;
 import loan.Loan;
 import loan.LoanTerms;
@@ -71,10 +68,11 @@ public interface BankInterface {
 
       void saveStateToMap();
 
-      Map<Integer,stateDTO> getStates();
+      Map<Integer,stateDTO> getAdminStates();
 
       int getVersion();
       void setLookingBack(Integer val);
 
      Integer getLookingBack();
+     clientStateDTO getClientForRewind(String name, Integer time);
 }

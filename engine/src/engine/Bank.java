@@ -1,5 +1,4 @@
 package engine;
-import client.Movement;
 import dto.*;
 import client.Client;
 import exception.CategoriesException;
@@ -42,7 +41,8 @@ public class Bank implements Serializable, engine.BankInterface {
     private int version;
     private int time = 1;
     private Boolean rewind = false;
-    private Map<Integer, stateDTO> states;
+    private Map<Integer, stateDTO> adminStates;
+    private Map<Integer,Map<String,ClientDTO>>clientsStates;
     private Integer lookingBack;
 
 
@@ -52,21 +52,29 @@ public class Bank implements Serializable, engine.BankInterface {
         waitingLoans = new HashMap<String, Loan>();
         categories = new HashSet<String>();
         version=1;
-        states = new HashMap<Integer, stateDTO>();
+        adminStates = new HashMap<Integer, stateDTO>();
+        clientsStates = new HashMap<Integer,Map<String,ClientDTO>>();
     }
     public void setLookingBack(Integer val){
         lookingBack = val;
         version++;
-        setRewind(true);
+        if (val != 0)
+            setRewind(true);
+        else setRewind(false);
     }
 
     public Integer getLookingBack() {
         return lookingBack;
     }
 
-    public Map<Integer,stateDTO> getStates(){
-        return states;
+    public Map<Integer,stateDTO> getAdminStates(){
+        return adminStates;
     }
+
+    public Map<Integer, Map<String,ClientDTO>> getClientsStates() {
+        return clientsStates;
+    }
+
     public List<ClientDTO> getClients() {
         return new ConvertDTO().createListClientDTO(clients.values());
     }
@@ -144,7 +152,13 @@ public class Bank implements Serializable, engine.BankInterface {
     }
     public void saveStateToMap() {
         time = engine.Global.worldTime;
-        states.put(time,new stateDTO(getAllLoans(),getClients(),time));
+        List<ClientDTO> clientDTOList = getClients();
+        adminStates.put(time,new stateDTO(getAllLoans(),clientDTOList));
+        Map<String,ClientDTO> clientDTOMap = new HashMap<String,ClientDTO>();
+        for (ClientDTO client: clientDTOList) {
+            clientDTOMap.put(client.getFullName(),client);
+        }
+        clientsStates.put(time, clientDTOMap);
     }
     public int addInvestorToLoans(List<Loan> loans, Client client, int amountToInvest, int ownershipAttention) {
         int sumLoans = loans.size(), firstPayment = (amountToInvest / sumLoans) + (amountToInvest % sumLoans);
@@ -453,5 +467,8 @@ public class Bank implements Serializable, engine.BankInterface {
     }
     public Boolean getRewind() {
         return rewind;
+    }
+    public clientStateDTO getClientForRewind(String name,Integer time){
+        return new clientStateDTO(rewind,time,clientsStates.get(time).get(name));
     }
 }

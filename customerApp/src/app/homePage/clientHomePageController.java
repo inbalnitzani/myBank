@@ -10,6 +10,7 @@ import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
 import dto.LoanDTO;
 import dto.MovementDTO;
+import dto.clientStateDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -247,6 +248,21 @@ public class clientHomePageController {
     }
     public void setRewind(Integer lookingBack){
         Platform.runLater(()->{
+            if (lookingBack != 0) {
+                currentYaz.setText("REWIND looking back on yaz: " + lookingBack);
+                insertFile.setDisable(true);
+                createLoanComponentController.setDisable();
+                informationComponentController.setDisable();
+                paymentComponentController.setDisable();
+                inlayComponentController.setDisable();
+            }
+            else {
+                insertFile.setDisable(false);
+                createLoanComponentController.setAble();
+                informationComponentController.setAble();
+                paymentComponentController.setAble();
+                inlayComponentController.setAble();
+            }
 
 
         });

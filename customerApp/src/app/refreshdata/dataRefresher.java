@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.sun.istack.internal.NotNull;
 import dto.LoanDTO;
 import dto.MovementDTO;
+import dto.clientStateDTO;
 import dto.infoForAdminDTO;
 import javafx.application.Platform;
 import okhttp3.Call;
@@ -70,14 +71,14 @@ import java.util.function.Consumer;
                        Gson gson = new Gson();
                        infoForClient info = gson.fromJson(json, infoForClient.class);
                        Platform.runLater(() -> {
-                           balanceConsumer.accept(info.getBalance());
-                           yazConsumer.accept(info.getYaz());
-                           categoriesConsumer.accept(info.getCategories());
-                           movements.accept(info.getMovements());
-                           loanLenderConsumer.accept(info.getLoanLender());
-                           loanLonerConsumer.accept(info.getLoanLoner());
-                           version.accept(info.getVersion());
-                           lookingBack.accept(info.getLookingBack());
+                               balanceConsumer.accept(info.getBalance());
+                               yazConsumer.accept(info.getYaz());
+                               categoriesConsumer.accept(info.getCategories());
+                               movements.accept(info.getMovements());
+                               loanLenderConsumer.accept(info.getLoanLender());
+                               loanLonerConsumer.accept(info.getLoanLoner());
+                               version.accept(info.getVersion());
+                               lookingBack.accept(info.getLookingBack());
                        });
                    }
                 }
