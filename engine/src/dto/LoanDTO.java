@@ -56,8 +56,8 @@ public class LoanDTO {
         }
     }
 
-    public double sumMissingPayments() {
-        double amountNextPayment = payments.get(getNextPaymentTime()).getAmount();
+    public double sumMissingPayments(int globalTime) {
+        double amountNextPayment = payments.get(getNextPaymentTime(globalTime)).getAmount();
         return (amountNextPayment - getTotalAmountPerPayment()) / getTotalAmountPerPayment();
     }
 
@@ -122,9 +122,9 @@ public class LoanDTO {
         return getTotalMoneyForPayingBack() / (totalYazTime / pace);
     }
 
-    public int getNextPaymentTime() {
+    public int getNextPaymentTime(int worldTime) {
         boolean findNextPayment = false;
-        int nextPayment = Global.worldTime;
+        int nextPayment = worldTime;
         while (!findNextPayment) {
             PaymentDTO paymentDTO = payments.get(nextPayment);
             if (paymentDTO != null) {
@@ -225,8 +225,8 @@ public class LoanDTO {
         return owner;
     }
 
-    public double getNextPaymentAmount(){
-        PaymentDTO payment = payments.get(getNextPaymentTime());
+    public double getNextPaymentAmount(int globalTime){
+        PaymentDTO payment = payments.get(getNextPaymentTime(globalTime));
         return payment.getOriginalAmount()-payment.getAmount();
     }
 
@@ -267,7 +267,7 @@ public class LoanDTO {
         return unPaidTimes;
     }
 
-    public String getStatusInfo() {
+    public String getStatusInfo(int globalTime) {
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(3);
         double fundPayBack = 0, interestPayBack = 0;
@@ -307,15 +307,15 @@ public class LoanDTO {
 
         else if (Status.ACTIVE.equals(status)){
             return "ACTIVE:\ntime activated: " +activeTime+
-                    "\nNext payment yaz is: " + (getNextPaymentTime())+
-                    "\nfor a total of: " + getNextPaymentAmount()+
+                    "\nNext payment yaz is: " + (getNextPaymentTime(globalTime))+
+                    "\nfor a total of: " + getNextPaymentAmount(globalTime)+
                     "\n" + str + "\n"+ paymentsStr;
         }
         else if (Status.RISK.equals(status))
             return "RISK:\ntime activated: " +activeTime+
-                    "\nNext payment yaz is: " + (getNextPaymentTime())+
+                    "\nNext payment yaz is: " + (getNextPaymentTime(globalTime))+
                     "\n"+getUnPaidPayment().size() + "Payments have not been paid" +
-                    "\n for a total of: " + (getNextPaymentAmount())
+                    "\n for a total of: " + (getNextPaymentAmount(globalTime))
                     +"\n" + paymentsStr;
         else if (Status.FINISHED.equals(status))
             return "Finished: Time activated: " + getActiveTime() +

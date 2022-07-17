@@ -56,7 +56,7 @@ public interface BankInterface {
 
      void addNewUserToBank(String name);
 
-     void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
+     void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
 
      boolean checkLoanNameExist(String loanName);
 

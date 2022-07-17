@@ -1,30 +1,12 @@
 package app.mainScreenClient;
-
-import app.constParameters;
-import app.homePage.clientHomePageController;
-import com.sun.istack.internal.NotNull;
-import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.HttpUrl;
-import okhttp3.Response;
-import servlet.HttpClientUtil;
-
-import java.io.IOException;
 import java.net.URL;
 
 public class ClientApplication extends Application {
@@ -45,7 +27,7 @@ public class ClientApplication extends Application {
 
         root.fitToHeightProperty();
         data.getChildren().addAll(hBox,root);
-        scene = new Scene(data, 1000, 500);
+        scene = new Scene(data, 800, 600);
         scene.getStylesheets().add(getClass().getResource("Default.css").toExternalForm());
 
         primaryStage.setScene(scene);

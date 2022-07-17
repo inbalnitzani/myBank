@@ -6,13 +6,11 @@ import schema.AbsLoan;
 import java.util.*;
 
 public class File {
-    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, Collection<AbsCustomer> clients, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
         isXmlFile(fileName);
         checkCategories(categories,loans);
-      //  checkCustomer(clients,loans);
-        checkNames(clients);
-        checkTime(loans);
-        checkNumbers(loans,clients);
+         checkTime(loans);
+        checkNumbers(loans);
         checkInterest(loans);
         checkID(loans);
     }
@@ -23,12 +21,7 @@ public class File {
                 throw new InterestException(interest, loan.getId());
         }
     }
-    public void checkNumbers(Collection<AbsLoan> loans, Collection<AbsCustomer> clients ) throws NegativeBalanceException, NegativeLoanCapitalException {
-        for (AbsCustomer client : clients) {
-            if (client.getAbsBalance() < 0) {
-                throw new NegativeBalanceException(client.getName(), client.getAbsBalance());
-            }
-        }
+    public void checkNumbers(Collection<AbsLoan> loans) throws NegativeBalanceException, NegativeLoanCapitalException {
         for (AbsLoan loan:loans){
             if(loan.getAbsCapital()<0){
                 throw new NegativeLoanCapitalException(loan.getId(), loan.getAbsCapital());
@@ -36,7 +29,7 @@ public class File {
         }
     }
     public void checkCategories(Collection<String> categories,Collection<AbsLoan> loans) throws CategoriesException {
-       boolean valid;
+        boolean valid;
         for (AbsLoan loan:loans) {
             valid = false;
             String curCategory = loan.getAbsCategory().trim();
@@ -81,25 +74,25 @@ public class File {
                 throw new IdException(curID);
         }
     }
-//    public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
-//        boolean valid;
-//        for (AbsLoan loan : loans) {
-//            valid = false;
-//            String customer = loan.getAbsOwner().trim();
-//            for (AbsCustomer curCustomer : customers) {
-//                if (curCustomer.getName().equalsIgnoreCase(customer))
-//                    valid = true;
-//            }
-//            if (valid == false)
-//                throw new CustomerException(customers,loan);
-//        }
-//    }
+        public void checkCustomer(Collection<AbsCustomer> customers,Collection<AbsLoan> loans) throws CustomerException {
+        boolean valid;
+        for (AbsLoan loan : loans) {
+            valid = false;
+            String customer = loan.getAbsOwner().trim();
+            for (AbsCustomer curCustomer : customers) {
+                if (curCustomer.getName().equalsIgnoreCase(customer))
+                    valid = true;
+            }
+            if (valid == false)
+                throw new CustomerException(customers,loan);
+        }
+    }
     public void checkTime(Collection<AbsLoan> loans) throws PaceException, NegativeTimeException {
         for (AbsLoan loan:loans) {
-           if((loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz()) != 0)
-            throw new PaceException(loan);
-           if (loan.getAbsPaysEveryYaz()<0 ||loan.getAbsTotalYazTime()<0)
-               throw new NegativeTimeException(loan.getId());
+            if((loan.getAbsTotalYazTime() % loan.getAbsPaysEveryYaz()) != 0)
+                throw new PaceException(loan);
+            if (loan.getAbsPaysEveryYaz()<0 ||loan.getAbsTotalYazTime()<0)
+                throw new NegativeTimeException(loan.getId());
         }
     }
     public void isXmlFile(String fileName) throws XmlException {

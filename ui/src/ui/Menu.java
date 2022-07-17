@@ -428,7 +428,7 @@ public class Menu {
 
     public void printActiveLoanDetails(LoanDTO loan) {
         System.out.println("Active time is : " + loan.getActiveTime());
-        System.out.println("Next payment time: " + loan.getNextPaymentTime());
+     //   System.out.println("Next payment time: " + loan.getNextPaymentTime());
         printPaymentPaid(loan);
 
     }
@@ -504,7 +504,7 @@ public class Menu {
     public void printLittleInfoByStatus(LoanDTO loanDTO, Status status) {
         switch (status) {
             case ACTIVE:
-                System.out.println("Next payment at time: " + loanDTO.getNextPaymentTime() + ", amount: " + loanDTO.getTotalAmountPerPayment());
+          //      System.out.println("Next payment at time: " + loanDTO.getNextPaymentTime() + ", amount: " + loanDTO.getTotalAmountPerPayment());
                 break;
             case PENDING:
                 System.out.println("Missing amount to make this loan active: " + (loanDTO.getOriginalAmount() - loanDTO.getAmountCollected()));
@@ -513,9 +513,9 @@ public class Menu {
                 System.out.println("First payment time: " + loanDTO.getFirstPaymentTime() + ", last payment time: " + loanDTO.getLastPaymentTime() + ".");
                 break;
             case RISK:
-            int sumMissingPayments=(int)loanDTO.sumMissingPayments();
-                System.out.println("So far " + loanDTO.getAmountPaidBack() + " NIS have been paid and "
-                        + sumMissingPayments*loanDTO.getTotalAmountPerPayment() + " are missing, in " + sumMissingPayments + " payments");
+   //         int sumMissingPayments=(int)loanDTO.sumMissingPayments();
+              //  System.out.println("So far " + loanDTO.getAmountPaidBack() + " NIS have been paid and "
+             //           + sumMissingPayments*loanDTO.getTotalAmountPerPayment() + " are missing, in " + sumMissingPayments + " payments");
                 break;
         }
         System.out.println("");

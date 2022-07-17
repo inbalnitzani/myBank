@@ -57,7 +57,7 @@ public class bodyAdmin {
         }
         String path = selectedFile.getAbsolutePath();
         if (mainController.getFile(path)) {
-            showDataAdminScreen();
+         //   showDataAdminScreen(globalTime);
             mainController.setDataUser();
             increaseYazError.setText("");
         }
@@ -93,11 +93,11 @@ public class bodyAdmin {
         loansDetail.setDetailNode(new Label("To see more information\nclick on the loan."));
         loansDetail.setShowDetailNode(true);
     }
-    public void showDataAdminScreen() {
-        showLoanData();
+    public void showDataAdminScreen(int globalTime) {
+        showLoanData(globalTime);
         showClients();
     }
-    public void showLoanData( ) {
+    public void showLoanData(int globalTime) {
         loans.getColumns().clear();
         ObservableList<LoanDTO> loansData = FXCollections.observableArrayList();
         loansData.addAll(mainController.getLoans());
@@ -123,7 +123,7 @@ public class bodyAdmin {
         loans.setOnMouseClicked(event -> {
             LoanDTO loan =loans.getSelectionModel().getSelectedItem();
             if (loan != null){
-                VBox vBox= createDetailNodeByLoanStatus(loan);
+                VBox vBox= createDetailNodeByLoanStatus(loan,globalTime);
                 loansDetail.setDetailNode(new ScrollPane(vBox));
             }
         });
@@ -162,7 +162,7 @@ public class bodyAdmin {
         clients.setItems(FXCollections.observableArrayList(mainController.getClients()));
         setClientInfo();
     }
-    public VBox createDetailNodeByLoanStatus(LoanDTO loan) {
+    public VBox createDetailNodeByLoanStatus(LoanDTO loan, int globalTime) {
         VBox vBox = new VBox();
         switch (loan.getStatus()) {
             case FINISHED:
@@ -174,13 +174,13 @@ public class bodyAdmin {
             case ACTIVE:
                 vBox = addPayBacksData(vBox, loan);
                 vBox = addPaymentData(vBox, loan);
-                vBox = addActiveTimeData(vBox, loan);
+                vBox = addActiveTimeData(vBox, loan,globalTime);
                 break;
             case RISK:
                 vBox = addPayBacksData(vBox, loan);
                 vBox = addPaymentData(vBox, loan);
-                vBox = addActiveTimeData(vBox, loan);
-                vBox = addRiskData(vBox, loan);
+                vBox = addActiveTimeData(vBox, loan,globalTime);
+                vBox = addRiskData(vBox, loan,globalTime);
                 break;
             case NEW:
                 vBox.getChildren().add(new Label("no data"));
@@ -194,7 +194,7 @@ public class bodyAdmin {
         vBox.getChildren().addAll(firstPayment, lastPayment);
         return vBox;
     }
-    public VBox addRiskData(VBox vBox,LoanDTO loan){
+    public VBox addRiskData(VBox vBox,LoanDTO loan, int globalTime){
         List<Integer> unpaidPayments=loan.getUnPaidPayment();
         Label label=new Label("Total of: "+unpaidPayments.size()+" unpaid payments at times:");
         String times=" - ";
@@ -203,7 +203,7 @@ public class bodyAdmin {
             times = times.concat("-");
         }
         Label label2=new Label(times);
-        Label label3=new Label("Missing until now: "+ loan.getNextPaymentAmount());
+        Label label3=new Label("Missing until now: "+ loan.getNextPaymentAmount(globalTime));
         vBox.getChildren().addAll(label,label2,label3);
         return vBox;
     }
@@ -251,9 +251,9 @@ public class bodyAdmin {
         data.getChildren().add(new Label(""));
         return data;
     }
-    public VBox addActiveTimeData(VBox data, LoanDTO loan) {
+    public VBox addActiveTimeData(VBox data, LoanDTO loan, int globalTime) {
         Label label=new Label("Active time is: "+loan.getActiveTime());
-        Label label1=new Label("Next payment time: "+loan.getNextPaymentTime());
+        Label label1=new Label("Next payment time: "+loan.getNextPaymentTime(globalTime));
         data.getChildren().addAll(label,label1);
         return data;
     }

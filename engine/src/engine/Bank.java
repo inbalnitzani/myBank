@@ -92,8 +92,8 @@ public class Bank implements Serializable, engine.BankInterface {
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
-        convertToBank(info);
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(),filePath);
+        //convertToBank(info);
         time = 1;
         engine.Global.setWorldTime(1);
         readFile = true;
@@ -208,7 +208,7 @@ public class Bank implements Serializable, engine.BankInterface {
     }
 
     private AbsDescriptor deserializeFrom(InputStream inputStream) throws JAXBException {
-        JAXBContext jc = JAXBContext.newInstance("engineBank/schema");
+        JAXBContext jc = JAXBContext.newInstance("schema");
         Unmarshaller u = jc.createUnmarshaller();
         return (AbsDescriptor) u.unmarshal(inputStream);
     }
@@ -222,19 +222,19 @@ public class Bank implements Serializable, engine.BankInterface {
         return new ConvertDTO().createListLoanDto(loans.values());
     }
 
-    public void convertToBank(AbsDescriptor info) {
+    /* public void convertToBank(AbsDescriptor info) {
         setCategories(info.getAbsCategories());
         setClients(info.getAbsCustomers());
         setLoans(info.getAbsLoans());
     }
-
-    public void addNewDataToBank(AbsDescriptor info){
+     */
+    public void addNewDataToBank(AbsDescriptor info, String clientName){
         for (String category:info.getAbsCategories().getAbsCategory()){
             if(!categories.contains(category))
                 categories.add(category);
         }
         for (AbsLoan loan:info.getAbsLoans().getAbsLoan()){
-            String owner = stringConvertor(loan.getAbsOwner());
+            String owner = clientName;
             String id = stringConvertor(loan.getId());
             Loan newLoan = new Loan(id, owner, loan.getAbsCapital(), loan.getAbsIntristPerPayment(), stringConvertor(loan.getAbsCategory()), loan.getAbsTotalYazTime(), loan.getAbsPaysEveryYaz());
             this.waitingLoans.put(id, newLoan);
@@ -304,6 +304,7 @@ public class Bank implements Serializable, engine.BankInterface {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(yaz);
         payBack(loan, totalAmount, payment);
+        version++;
     }
 
     public void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney {
@@ -394,6 +395,7 @@ public class Bank implements Serializable, engine.BankInterface {
                 payBackToInvestor(investor, totalAmount);
             }
             loan.setStatus(Status.FINISHED);
+            version++;
         } else throw new NotEnoughMoney(totalAmount);
     }
 
@@ -425,7 +427,7 @@ public class Bank implements Serializable, engine.BankInterface {
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, amount);
         }
-
+        version++;
        // loan.setActualLastPaymentTime(Global.worldTime);
 
     }
@@ -434,20 +436,14 @@ public class Bank implements Serializable, engine.BankInterface {
         clients.put(name,new Client(name,0));
     }
 
-    public void addNewXMLFile(String filePath) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException {
-        boolean readFile = false;
+    public void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException, JAXBException {
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
-        convertToBank(info);
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), filePath);
+        addNewDataToBank(info, clientName);
         version++;
-//        time = 1;
-//        engine.Global.setWorldTime(1);
-//        readFile = true;
-//        return readFile;
     }
-
     public boolean checkLoanNameExist(String loanName){
          return activeLoans.containsKey(loanName) || waitingLoans.containsKey(loanName);
     }

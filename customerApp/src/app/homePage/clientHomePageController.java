@@ -10,7 +10,6 @@ import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
 import dto.LoanDTO;
 import dto.MovementDTO;
-import dto.clientStateDTO;
 import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -53,8 +52,8 @@ public class clientHomePageController {
   //  private TimerTask listRefresher;
 
 
-    public String getCurrentYaz() {
-        return currentYaz.getText();
+    public int getCurrentYaz() {
+        return Integer.parseInt(currentYaz.getText());
     }
 
     @FXML public void initialize() {
