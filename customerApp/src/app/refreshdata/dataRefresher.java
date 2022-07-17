@@ -5,7 +5,6 @@ import com.google.gson.Gson;
 import com.sun.istack.internal.NotNull;
 import dto.LoanDTO;
 import dto.MovementDTO;
-import dto.infoForAdminDTO;
 import javafx.application.Platform;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -27,20 +26,20 @@ import java.util.function.Consumer;
         private final Consumer <Integer> yazConsumer;
         private final Consumer <Map<Integer,List<MovementDTO>>> movements;
         private clientHomePageController homePageController;
-        private Consumer <List<LoanDTO>> loanLenderConsumer;
-        private Consumer <List<LoanDTO>> loanLonerConsumer;
+        private Consumer <List<LoanDTO>> loanGiverConsumer;
+        private Consumer <List<LoanDTO>> loanBorrowerConsumer;
         private Consumer<Integer> version;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
         }
-        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version) {
+        public dataRefresher(Consumer <List<String>> categoriesConsumer, Consumer <Double> balanceConsumer, Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements, Consumer <List<LoanDTO>> loanGiverConsumer, Consumer <List<LoanDTO>> loanBorrowerConsumer, Consumer<Integer> version) {
             this.categoriesConsumer = categoriesConsumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
             this.movements = movements;
-            this.loanLonerConsumer = loanLonerConsumer;
-            this.loanLenderConsumer = loanLenderConsumer;
+            this.loanBorrowerConsumer = loanBorrowerConsumer;
+            this.loanGiverConsumer = loanGiverConsumer;
             this.version=version;
         }
 
@@ -68,13 +67,13 @@ import java.util.function.Consumer;
                        Gson gson = new Gson();
                        infoForClient info = gson.fromJson(json, infoForClient.class);
                        Platform.runLater(() -> {
-                           balanceConsumer.accept(info.getBalance());
+                           version.accept(info.getVersion());
                            yazConsumer.accept(info.getYaz());
+                           balanceConsumer.accept(info.getBalance());
                            categoriesConsumer.accept(info.getCategories());
                            movements.accept(info.getMovements());
-                           loanLenderConsumer.accept(info.getLoanLender());
-                           loanLonerConsumer.accept(info.getLoanLoner());
-                           version.accept(info.getVersion());
+                           loanGiverConsumer.accept(info.getLoanLender());
+                           loanBorrowerConsumer.accept(info.getLoanLoner());
                        });
                    }
                 }

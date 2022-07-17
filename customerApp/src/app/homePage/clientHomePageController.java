@@ -49,11 +49,10 @@ public class clientHomePageController {
     @FXML private inlayController inlayComponentController;
     private int version;
     private Timer timer;
-  //  private TimerTask listRefresher;
 
 
-    public String getCurrentYaz() {
-        return currentYaz.getText();
+    public int getCurrentYaz() {
+        return Integer.parseInt(currentYaz.getText());
     }
 
     @FXML public void initialize() {
@@ -234,11 +233,8 @@ public class clientHomePageController {
     public void setAccountBalance(Double balance){
         this.accountBalance.setText(String.valueOf(balance));
     }
-    public void updateAccountBalance(){
-        accountBalance.setText(String.valueOf(getCurrentBalance()));
-    }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanGiver,this::showLoanBorrower,this::showVersion);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
@@ -257,9 +253,9 @@ public class clientHomePageController {
         });
     }
     public void showYaz(int yaz) {
-        Platform.runLater(() ->
-           currentYaz.setText(String.valueOf(yaz))
-        );
+        Platform.runLater(() -> {
+            currentYaz.setText(String.valueOf(yaz));
+        });
     }
     public void showVersion(int version) {
         Platform.runLater(() ->
@@ -271,15 +267,18 @@ public class clientHomePageController {
             accountBalance.setText(String.valueOf(balance))
         );
     }
-    public void showLoanLender(List<LoanDTO> loanDTOS) {
+    public void showLoanGiver(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshLenderLonerData(loanDTOS);
-            paymentComponentController.updateLonerLoans(loanDTOS);
+            informationComponentController.refreshGiverLonerData(loanDTOS);
         });
     }
-    public void showLoanLoner(List<LoanDTO> loanDTOS) {
+    public void showLoanBorrower(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshLoansLonerData(loanDTOS);
+            informationComponentController.refreshLoansBorrowerData(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
+
+//            paymentComponentController.showPaymentsControl();
+//            paymentComponentController.updateLonerLoans(loanDTOS);
         });
     }
 }

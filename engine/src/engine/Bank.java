@@ -278,6 +278,7 @@ public class Bank implements Serializable, engine.BankInterface {
         Loan loan = activeLoans.get(loanID);
         Payment payment = loan.getPayments().get(yaz);
         payBack(loan, totalAmount, payment);
+        version++;
     }
 
     public void payBack(Loan loan, double totalAmount, Payment payment) throws NotEnoughMoney {
@@ -368,6 +369,7 @@ public class Bank implements Serializable, engine.BankInterface {
                 payBackToInvestor(investor, totalAmount);
             }
             loan.setStatus(Status.FINISHED);
+            version++;
         } else throw new NotEnoughMoney(totalAmount);
     }
 
@@ -399,7 +401,7 @@ public class Bank implements Serializable, engine.BankInterface {
         for (PayBack investor : loan.getPayBacks()) {
             payBackToInvestor(investor, amount);
         }
-
+        version++;
        // loan.setActualLastPaymentTime(Global.worldTime);
 
     }
@@ -415,7 +417,7 @@ public class Bank implements Serializable, engine.BankInterface {
         File file = new File();
         file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), info.getAbsCustomers().getAbsCustomer(), filePath);
         convertToBank(info);
-        version++;
+      //  version++;
 //        time = 1;
 //        engine.Global.setWorldTime(1);
 //        readFile = true;

@@ -31,10 +31,8 @@ public class informationController {
     @FXML private TableView<LoanDTO> loansAsLender;
     @FXML private TableView<MovementDTO> transactionTable;
     @FXML private TextField amount;
-    @FXML private Label balance;
     @FXML private Label amountErrorLabel;
     private bodyUser bodyUser;
-    private ClientDTO user;
     private clientHomePageController homePageController;
 
     @FXML void chargeListener(ActionEvent event) {
@@ -122,10 +120,6 @@ public class informationController {
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
 
-    }
-    public void updateUserViewer(ClientDTO user){
-        this.user = user;
-        balance.setText("Your current balance is: "+ user.getCurrBalance());
     }
     public void showData() {
         showLoansByType("borrower");
@@ -232,11 +226,11 @@ public class informationController {
                             List<LoanDTO> loanDTOS = getLoans(response.body().string());
                             switch (loansType){
                                 case "borrower":
-                                    setLoansLonerTables(loanDTOS);
+                                    setLoansBorrowerTables(loanDTOS);
                                     loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                                 case "lender":
-                                    setLoansLenderTables(loanDTOS);
+                                    setLoansGiverTables(loanDTOS);
                                     loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                             }
@@ -252,15 +246,14 @@ public class informationController {
 //        loansAsLender.setItems(FXCollections.observableArrayList(loans));
 //    }
     public void updateClientUser(){
-        updateUserViewer(bodyUser.getClientDTO());
         showData();
     }
     public void setInformationDataForNewFile(){
-        setLoansLonerTables(null);
-        setLoansLenderTables(null);
+        setLoansBorrowerTables(null);
+        setLoansGiverTables(null);
         setTransactionTable();
     }
-    public void setLoansLonerTables(List<LoanDTO> loanDTOS)  {
+    public void setLoansBorrowerTables(List<LoanDTO> loanDTOS)  {
         loansAsLoner.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -284,7 +277,7 @@ public class informationController {
         loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
 
     }
-    public void setLoansLenderTables(List<LoanDTO> loanDTOS) {
+    public void setLoansGiverTables(List<LoanDTO> loanDTOS) {
         loansAsLender.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -325,10 +318,10 @@ public class informationController {
     public void refreshMovementsData(Map<Integer,List<MovementDTO>> movements){
         createTransactionTable(movements);
     }
-    public void refreshLoansLonerData(List<LoanDTO> loans){
-        setLoansLonerTables(loans);
+    public void refreshLoansBorrowerData(List<LoanDTO> loans){
+        setLoansBorrowerTables(loans);
     }
-    public void refreshLenderLonerData(List<LoanDTO> loans){
-        setLoansLenderTables(loans);
+    public void refreshGiverLonerData(List<LoanDTO> loans){
+        setLoansGiverTables(loans);
     }
 }

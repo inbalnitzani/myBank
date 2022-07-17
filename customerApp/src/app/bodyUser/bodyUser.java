@@ -31,7 +31,6 @@ public class bodyUser {
         }
     }
     public void updateUserViewer(String client) {
-        informationComponentController.updateUserViewer(clientDTO);
         paymentComponentController.setClient(clientDTO);
         scrambleComponentController.setDataAccordingToClient();
 
