@@ -3,7 +3,7 @@
     <CLASSES />
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$PROJECT_DIR$/../../gson-2.1-sources.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/gson-2.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

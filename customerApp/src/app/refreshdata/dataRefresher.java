@@ -30,6 +30,7 @@ import java.util.function.Consumer;
         private Consumer <List<LoanDTO>> loanGiverConsumer;
         private Consumer <List<LoanDTO>> loanBorrowerConsumer;
         private Consumer<Integer> version;
+        private Consumer<Integer> lookingBack;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
@@ -39,8 +40,8 @@ import java.util.function.Consumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
             this.movements = movements;
-            this.loanBorrowerConsumer = loanBorrowerConsumer;
-            this.loanGiverConsumer = loanGiverConsumer;
+            this.loanBorrowerConsumer = loanLonerConsumer;
+            this.loanGiverConsumer = loanLenderConsumer;
             this.version=version;
             this.lookingBack = lookingBack;
         }
@@ -76,8 +77,6 @@ import java.util.function.Consumer;
                            movements.accept(info.getMovements());
                            loanGiverConsumer.accept(info.getLoanLender());
                            loanBorrowerConsumer.accept(info.getLoanLoner());
-                           loanLenderConsumer.accept(info.getLoanLender());
-                           loanLonerConsumer.accept(info.getLoanLoner());
                            version.accept(info.getVersion());
                            lookingBack.accept(info.getLookingBack());
                        });

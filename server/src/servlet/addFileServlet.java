@@ -21,8 +21,9 @@ public class addFileServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("text/html;charset=UTF-8");
         BankInterface bank=ServletUtils.getBank(getServletContext());
+        String clientName = request.getParameter("Name");
        try {
-           bank.addNewXMLFile(request.getParameter("Path"));
+           bank.addNewXMLFile(request.getParameter("Path"),clientName);
        } catch (Exception err){
            System.out.println(err);
        }
