@@ -40,7 +40,7 @@
                         <RowConstraints maxHeight="1.7976931348623157E308" minHeight="13.0" prefHeight="70.0" />
                     </rowConstraints>
                     <children>
-                        <Button mnemonicParsing="false" onAction="#chargeListener" prefHeight="25.0" prefWidth="129.0" text="Charge" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                        <Button fx:id="chargeButton" mnemonicParsing="false" onAction="#chargeListener" prefHeight="25.0" prefWidth="129.0" text="Charge" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                             <GridPane.margin>
                                 <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                             </GridPane.margin>
@@ -51,7 +51,7 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                         </Button>
-                        <Button mnemonicParsing="false" onAction="#withdrawListener" prefHeight="25.0" prefWidth="93.0" text="Withdraw" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+                        <Button fx:id="withdrawButton" mnemonicParsing="false" onAction="#withdrawListener" prefHeight="25.0" prefWidth="93.0" text="Withdraw" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
                      </GridPane.margin>

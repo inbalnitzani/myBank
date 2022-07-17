@@ -50,16 +50,38 @@ public class adminHomePageController {
         if (rewindButton.getText().equals("REWIND")) {
             chooseYaz.setDisable(false);
             enterYazLabel.setText("Please enter a Yaz to review and press ENTER ");
+            refresh = false;
         }
         else {
-            chooseYaz.setDisable(true);
-            rewindButton.setText("REWIND");
-            enterYazLabel.setText(" ");
-            chooseYaz.clear();
-            refresh = true;
-
+            stopRewind();
         }
 
+    }
+    void stopRewind(){
+        chooseYaz.setDisable(true);
+        rewindButton.setText("REWIND");
+        enterYazLabel.setText(" ");
+        chooseYaz.clear();
+        refresh = true;
+
+        String finalUrl = HttpUrl
+                .parse("http://localhost:8080/demo_Web_exploded/stopRewind")
+                .newBuilder().addQueryParameter("yaz",String.valueOf(0))
+                .build()
+                .toString();
+        HttpClientUtil.runAsync(finalUrl, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+                System.out.println("failed");
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                String json = response.body().string();
+                Gson gson = new Gson();
+            }
+        });
     }
     void lookingBack(Integer yaz){
         String finalUrl = HttpUrl

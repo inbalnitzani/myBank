@@ -35,26 +35,44 @@ import java.util.Set;
 public class inlayController {
 
     private bodyUser bodyUser;
-    @FXML private TextField amountToInvest;
-    @FXML private TextField minTimeToReturn;
-    @FXML private ComboBox<String> minInterestForLoan;
-    @FXML private CheckComboBox<String> categoriesForLoan;
-    @FXML private Label errorAmount;
-    @FXML private Label errorMinTime;
-    @FXML private Label errorMaxLoans;
-    @FXML private AnchorPane center;
-    @FXML private AnchorPane buttom;
-    @FXML private Label currentLoanId;
-    @FXML private AnchorPane rightErea;
-    @FXML private TextField maxLoansExist;
-    @FXML private ComboBox<Integer> maxOwnership;
-    @FXML private Button approveButton;
+    @FXML
+    private TextField amountToInvest;
+    @FXML
+    private TextField minTimeToReturn;
+    @FXML
+    private ComboBox<String> minInterestForLoan;
+    @FXML
+    private CheckComboBox<String> categoriesForLoan;
+    @FXML
+    private Label errorAmount;
+    @FXML
+    private Label errorMinTime;
+    @FXML
+    private Label errorMaxLoans;
+    @FXML
+    private AnchorPane center;
+    @FXML
+    private AnchorPane buttom;
+    @FXML
+    private Label currentLoanId;
+    @FXML
+    private AnchorPane rightErea;
+    @FXML
+    private TextField maxLoansExist;
+    @FXML
+    private ComboBox<Integer> maxOwnership;
+    @FXML
+    private Button approveButton;
+    @FXML
+    private Button findButton;
+
     private List<LoanDTO> loansToInvest;
     private Pane investmentStatus;
     private TableView<LoanDTO> optionalLoans;
     private clientHomePageController homePageController;
 
-    @FXML public void initialize() {
+    @FXML
+    public void initialize() {
         for (int i = 1; i <= 100; i++) {
             minInterestForLoan.getItems().add(Integer.toString(i));
             maxOwnership.getItems().add(i);
@@ -62,8 +80,10 @@ public class inlayController {
         initializeOptionalLoans();
         approveButton.setDisable(true);
     }
-    @FXML void startInlay(ActionEvent event) {
-        boolean amountToInvest =checkAmountToInvest();
+
+    @FXML
+    void startInlay(ActionEvent event) {
+        boolean amountToInvest = checkAmountToInvest();
         boolean minTimeForLoan = checkMinTime();
         boolean maxLoansExist = checkMaxLoansExist();
         if (amountToInvest && minTimeForLoan && maxLoansExist) {
@@ -71,16 +91,17 @@ public class inlayController {
             findMatchLoans(terms);
         }
     }
-    public void findMatchLoans(LoanTerms terms){
+
+    public void findMatchLoans(LoanTerms terms) {
         Gson gson = new Gson();
         String json = gson.toJson(terms);
 
         String finalUrl = HttpUrl
-            .parse("http://localhost:8080/demo_Web_exploded/findMatchLoans")
-            .newBuilder()
-            .addQueryParameter("client", homePageController.getClientName())
-            .build()
-            .toString();
+                .parse("http://localhost:8080/demo_Web_exploded/findMatchLoans")
+                .newBuilder()
+                .addQueryParameter("client", homePageController.getClientName())
+                .build()
+                .toString();
 
         okhttp3.Callback callback = new okhttp3.Callback() {
             @Override
@@ -89,12 +110,12 @@ public class inlayController {
             }
 
             @Override
-            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response)  {
+            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
-                            List<LoanDTO> loans= getLoansFromJson(response.body().string());
+                            List<LoanDTO> loans = getLoansFromJson(response.body().string());
                             loansToInvest.clear();
                             loansToInvest.addAll(loans);
                             showRelevantLoans(loansToInvest);
@@ -103,29 +124,33 @@ public class inlayController {
                         }
                     });
                 } else {
-                    Platform.runLater(() -> {}
+                    Platform.runLater(() -> {
+                            }
                     );
                 }
             }
         };
         HttpClientUtil.runPostReq(finalUrl, json, callback);
     }
-    public List<LoanDTO> getLoansFromJson(String loansJSON){
+
+    public List<LoanDTO> getLoansFromJson(String loansJSON) {
         Gson gson = new Gson();
         List<LoanDTO> loans = null;
         try {
-            Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
+            Type listType = new TypeToken<List<LoanDTO>>() {
+            }.getType();
             loans = gson.fromJson(loansJSON, listType);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (loans==null){
-                loans=new ArrayList<>();
+            if (loans == null) {
+                loans = new ArrayList<>();
             }
             return loans;
         }
     }
-    public void startInlayProcess(){
+
+    public void startInlayProcess() {
         Gson gson = new Gson();
         String json = gson.toJson(loansToInvest);
         String finalUrl = HttpUrl
@@ -142,7 +167,7 @@ public class inlayController {
             }
 
             @Override
-            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response)  {
+            public void onResponse(@org.jetbrains.annotations.NotNull Call call, @org.jetbrains.annotations.NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
@@ -161,7 +186,8 @@ public class inlayController {
                         }
                     });
                 } else {
-                    Platform.runLater(() -> {}
+                    Platform.runLater(() -> {
+                            }
                     );
                 }
             }
@@ -203,44 +229,47 @@ public class inlayController {
         }
         return validInput;
     }
-    public inlayController(){
-        loansToInvest=new ArrayList<>();
-        investmentStatus=new Pane();
+
+    public inlayController() {
+        loansToInvest = new ArrayList<>();
+        investmentStatus = new Pane();
         optionalLoans = new TableView<>();
     }
+
     public boolean checkMinTime() {
         String input = minTimeToReturn.getCharacters().toString().trim();
-        boolean validInput=false;
-        if(input.equals("")){
-            validInput=true;
+        boolean validInput = false;
+        if (input.equals("")) {
+            validInput = true;
         } else {
             try {
                 int number = Integer.parseInt(input);
                 if (number < 0) {
-                errorMinTime.setText(number + " is a negative number! Please enter a positive number");
+                    errorMinTime.setText(number + " is a negative number! Please enter a positive number");
                 } else {
-                    validInput=true;
+                    validInput = true;
                     errorMinTime.setText("");
                 }
             } catch (Exception err) {
                 errorMinTime.setText(input + " is not a number. Please enter a number");
             } finally {
-            if (!validInput)
-                minTimeToReturn.setText("");
+                if (!validInput)
+                    minTimeToReturn.setText("");
             }
         }
         return validInput;
     }
+
     public boolean checkAmountToInvest() {
         String input = amountToInvest.getCharacters().toString().trim();
         boolean validInput = false;
         double currBalance = homePageController.getCurrentBalance();
-        if(currBalance==0){
+        if (currBalance == 0) {
             errorAmount.setText("Current balance is 0. CAN'T INVEST! ");
         } else {
             try {
                 int number = Integer.parseInt(input);
-                if (number <=0) {
+                if (number <= 0) {
                     errorAmount.setText("Please enter a positive amount!");
                 } else if (number > currBalance) {
                     errorAmount.setText("You don't have enough money!!");
@@ -261,58 +290,66 @@ public class inlayController {
             amountToInvest.setText("");
         return validInput;
     }
-    public void setDataAccordingToClient(){
+
+    public void setDataAccordingToClient() {
         resetDataForNewInvestment(true);
         investmentStatus.getChildren().clear();
         approveButton.setDisable(true);
     }
+
     private LoanTerms setInterestTerm(LoanTerms terms) {
         String minInterestString = minInterestForLoan.getValue();
-        if (minInterestString != null&& minInterestString!="")
+        if (minInterestString != null && minInterestString != "")
             terms.setMinInterestForTimeUnit(Integer.parseInt(minInterestString));
         return terms;
     }
-    private LoanTerms setTimeTerm(LoanTerms terms){
+
+    private LoanTerms setTimeTerm(LoanTerms terms) {
         String minTimeString = minTimeToReturn.getCharacters().toString();
         if (!minTimeString.equals("")) {
             terms.setMinTimeForLoan(Integer.parseInt(minTimeString));
         }
         return terms;
     }
+
     private LoanTerms setCategoriesTerm(LoanTerms terms) {
         Set<String> chosenCategory = new HashSet<>();
         ObservableList<String> userChoose = categoriesForLoan.getCheckModel().getCheckedItems();
-        if (userChoose.size()!= 0) {
+        if (userChoose.size() != 0) {
             for (String category : userChoose)
                 chosenCategory.add(category);
         }
         terms.setCategories(chosenCategory);
         return terms;
     }
-    private LoanTerms setMaxLoansForOwner(LoanTerms terms){
-        String maxLoans =maxLoansExist.getCharacters().toString().trim();
-        if(maxLoans.equals(""))
+
+    private LoanTerms setMaxLoansForOwner(LoanTerms terms) {
+        String maxLoans = maxLoansExist.getCharacters().toString().trim();
+        if (maxLoans.equals(""))
             terms.setMaxLoansForOwner(0);
         else {
             terms.setMaxLoansForOwner(Integer.parseInt(maxLoans));
         }
         return terms;
     }
+
     private LoanTerms updateTerms() {
         LoanTerms terms = new LoanTerms();
         terms.setMaxAmount(Integer.parseInt(amountToInvest.getCharacters().toString()));
-        terms=setMaxLoansForOwner(terms);
-        terms=setTimeTerm(terms);
-        terms=setCategoriesTerm(terms);
-        terms=setInterestTerm(terms);
-        terms=setMaxOwnership(terms);
+        terms = setMaxLoansForOwner(terms);
+        terms = setTimeTerm(terms);
+        terms = setCategoriesTerm(terms);
+        terms = setInterestTerm(terms);
+        terms = setMaxOwnership(terms);
         return terms;
     }
-    private LoanTerms setMaxOwnership(LoanTerms terms){
-        if(maxOwnership.getValue()!=null)
+
+    private LoanTerms setMaxOwnership(LoanTerms terms) {
+        if (maxOwnership.getValue() != null)
             terms.setMaxOwnershipPrecent(maxOwnership.getValue());
         return terms;
     }
+
     private void showRelevantLoans(List<LoanDTO> loans) {
         if (loans.size() == 0) {
             center.getChildren().clear();
@@ -350,7 +387,7 @@ public class inlayController {
                         }
                     };
 
-            if (optionalLoans.getColumns().size()!=0) {
+            if (optionalLoans.getColumns().size() != 0) {
                 TableColumn column = optionalLoans.getColumns().get(optionalLoans.getColumns().size() - 1);
                 column.setCellFactory(cellFactory);
             }
@@ -360,7 +397,8 @@ public class inlayController {
             center.getChildren().add(optionalLoans);
         }
     }
-    public void addMoreInfo(LoanDTO loan){
+
+    public void addMoreInfo(LoanDTO loan) {
         VBox data = new VBox();
         currentLoanId.setText(loan.getId());
         int globalTime = homePageController.getCurrentYaz();
@@ -389,6 +427,7 @@ public class inlayController {
         rightErea.getChildren().clear();
         rightErea.getChildren().add(data);
     }
+
     private void setDisableApproveButton() {
         boolean disableButton = false;
         if (loansToInvest.isEmpty()) {
@@ -396,7 +435,8 @@ public class inlayController {
         }
         approveButton.setDisable(disableButton);
     }
-    public void updateSuccessfully(int amountLeft){
+
+    public void updateSuccessfully(int amountLeft) {
         Label label = new Label();
         if (amountLeft == 0) {
             label.setText("Investment successfully completed!");
@@ -411,9 +451,11 @@ public class inlayController {
         investmentStatus.getChildren().clear();
         investmentStatus.getChildren().add(label);
     }
-    public void setHomePageController(clientHomePageController controller){
-        this.homePageController=controller;
+
+    public void setHomePageController(clientHomePageController controller) {
+        this.homePageController = controller;
     }
+
     private void resetDataForNewInvestment(boolean changeUser) {
         if (changeUser) {
             amountToInvest.setText("");
@@ -426,16 +468,19 @@ public class inlayController {
         }
         center.getChildren().clear();
     }
-    private VBox showDataAccordingLoanStatus(VBox data,String str, String value){
-        Label label2=new Label(value);
-        Label label1=new Label(str);
-        data.getChildren().add(new HBox(label1,label2));
+
+    private VBox showDataAccordingLoanStatus(VBox data, String str, String value) {
+        Label label2 = new Label(value);
+        Label label1 = new Label(str);
+        data.getChildren().add(new HBox(label1, label2));
         return data;
     }
+
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
     }
-    public void initializeOptionalLoans(){
+
+    public void initializeOptionalLoans() {
 
         optionalLoans.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("Id");
@@ -496,23 +541,44 @@ public class inlayController {
         optionalLoans.getColumns().addAll(idCol, categoryCol, capitalCol, paceCol, interestCol, statusCol, investLoanActionCol);
 
         optionalLoans.setOnMouseClicked(event -> {
-            LoanDTO choice =optionalLoans.getSelectionModel().getSelectedItem();
-            if (choice != null){
+            LoanDTO choice = optionalLoans.getSelectionModel().getSelectedItem();
+            if (choice != null) {
                 addMoreInfo(choice);
             }
         });
     }
-    public void setCategoriesOptions(){
-        if(categoriesForLoan.getItems().size()>0)
+
+    public void setCategoriesOptions() {
+        if (categoriesForLoan.getItems().size() > 0)
             categoriesForLoan.getItems().clear();
         categoriesForLoan.getItems().addAll(homePageController.getCategories());
     }
-    public void initializeInlayData(){
+
+    public void initializeInlayData() {
         setCategoriesOptions();
         initializeOptionalLoans();
     }
-    public void refreshData(){
-        categoriesForLoan.getItems().clear();;
+
+    public void refreshData() {
+        categoriesForLoan.getItems().clear();
+        ;
         categoriesForLoan.getItems().addAll(homePageController.getCategories());
+    }
+
+    public void setDisable() {
+        amountToInvest.setDisable(true);
+        minTimeToReturn.setDisable(true);
+        categoriesForLoan.setDisable(true);
+        minInterestForLoan.setDisable(true);
+        findButton.setDisable(true);
+
+    }
+
+    public void setAble() {
+        amountToInvest.setDisable(false);
+        minTimeToReturn.setDisable(false);
+        categoriesForLoan.setDisable(false);
+        minInterestForLoan.setDisable(false);
+        findButton.setDisable(false);
     }
 }

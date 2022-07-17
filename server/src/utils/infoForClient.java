@@ -4,6 +4,7 @@ import client.Movement;
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
+import dto.clientStateDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,9 @@ public class infoForClient {
     private List<LoanDTO> loanLender;
     private List<LoanDTO> loanLoner;
     private int version;
-    private Integer lookingBack = 0;
+    private Integer lookingBack;
 
-    public infoForClient(List<String> categories, Double balance, int yaz,Map<Integer,List<MovementDTO>> movements,List<LoanDTO> loanLender,List<LoanDTO> loanLoner, int version,Integer lookingBack){
+    public infoForClient(List<String> categories, Double balance, int yaz, Map<Integer,List<MovementDTO>> movements, List<LoanDTO> loanLender, List<LoanDTO> loanLoner, int version, Integer lookingBack){
         this.balance=balance;
         this.categories=categories;
         this.yaz=yaz;

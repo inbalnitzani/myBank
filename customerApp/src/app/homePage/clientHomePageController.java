@@ -49,6 +49,7 @@ public class clientHomePageController {
     @FXML private inlayController inlayComponentController;
     private int version;
     private Timer timer;
+  //  private TimerTask listRefresher;
 
 
     public int getCurrentYaz() {
@@ -167,6 +168,8 @@ public class clientHomePageController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (categories == null)
+                categories = new ArrayList<>();
             return categories;
         }
     }
@@ -233,11 +236,35 @@ public class clientHomePageController {
     public void setAccountBalance(Double balance){
         this.accountBalance.setText(String.valueOf(balance));
     }
+    public void updateAccountBalance(){
+        accountBalance.setText(String.valueOf(getCurrentBalance()));
+    }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanGiver,this::showLoanBorrower,this::showVersion);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
+    }
+    public void setRewind(Integer lookingBack){
+        Platform.runLater(()->{
+            if (lookingBack != 0) {
+                currentYaz.setText("REWIND looking back on yaz: " + lookingBack);
+                insertFile.setDisable(true);
+                createLoanComponentController.setDisable();
+                informationComponentController.setDisable();
+                paymentComponentController.setDisable();
+                inlayComponentController.setDisable();
+            }
+            else {
+                insertFile.setDisable(false);
+                createLoanComponentController.setAble();
+                informationComponentController.setAble();
+                paymentComponentController.setAble();
+                inlayComponentController.setAble();
+            }
+
+
+        });
     }
     public void showCategories(List<String> newCategories) {
         Platform.runLater(() -> {
@@ -253,9 +280,9 @@ public class clientHomePageController {
         });
     }
     public void showYaz(int yaz) {
-        Platform.runLater(() -> {
-            currentYaz.setText(String.valueOf(yaz));
-        });
+        Platform.runLater(() ->
+           currentYaz.setText(String.valueOf(yaz))
+        );
     }
     public void showVersion(int version) {
         Platform.runLater(() ->
@@ -267,18 +294,15 @@ public class clientHomePageController {
             accountBalance.setText(String.valueOf(balance))
         );
     }
-    public void showLoanGiver(List<LoanDTO> loanDTOS) {
+    public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshGiverLonerData(loanDTOS);
+            informationComponentController.refreshLenderLonerData(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
         });
     }
-    public void showLoanBorrower(List<LoanDTO> loanDTOS) {
+    public void showLoanLoner(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshLoansBorrowerData(loanDTOS);
-            paymentComponentController.refreshPayment(loanDTOS);
-
-//            paymentComponentController.showPaymentsControl();
-//            paymentComponentController.updateLonerLoans(loanDTOS);
+            informationComponentController.refreshLoansLonerData(loanDTOS);
         });
     }
 }
