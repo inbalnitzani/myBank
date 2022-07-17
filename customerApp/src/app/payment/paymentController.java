@@ -195,7 +195,7 @@ public class paymentController {
                 .parse("http://localhost:8080/demo_Web_exploded/payBackNextPayment")
                 .newBuilder()
                 .addQueryParameter("loanId", choosePayment.getValue())
-                .addQueryParameter("yaz", loanDTO.getNextPaymentTime())
+                .addQueryParameter("yaz", String.valueOf(loanDTO.getNextPaymentTime()))
                 .addQueryParameter("totalAmount", String.valueOf(loanDTO.getNextPaymentAmount()))
                 .build()
                 .toString();

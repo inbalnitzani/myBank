@@ -122,7 +122,7 @@ public class LoanDTO {
         return getTotalMoneyForPayingBack() / (totalYazTime / pace);
     }
 
-    public String getNextPaymentTime() {
+    public int getNextPaymentTime() {
         boolean findNextPayment = false;
         int nextPayment = Global.worldTime;
         while (!findNextPayment) {
