@@ -74,4 +74,7 @@ public interface BankInterface {
       Map<Integer,stateDTO> getStates();
 
       int getVersion();
+      void setLookingBack(Integer val);
+
+     Integer getLookingBack();
 }
