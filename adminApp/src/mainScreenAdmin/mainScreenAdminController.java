@@ -39,7 +39,6 @@ public class mainScreenAdminController {
     @FXML public void initialize() throws IOException {
         loadLoginPage();
         mainComponent.setTop(loginComponent);
-
     }
 
     public void loadLoginPage() throws IOException {
@@ -49,7 +48,6 @@ public class mainScreenAdminController {
         loginComponent = fxmlLoader.load(url.openStream());
         LoginAppController = fxmlLoader.getController();
         LoginAppController.setMainController(this);
-
     }
 
     public void loginSuccess(String name) throws IOException {
@@ -67,9 +65,6 @@ public class mainScreenAdminController {
         homePageController = fxmlLoader.getController();
         homePageController.setMainController(this);
         homePageController.initialize(name);
-
-
-
     }
 
     public List<ClientDTO> getClients() {
