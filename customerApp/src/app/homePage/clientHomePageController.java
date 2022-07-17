@@ -266,7 +266,6 @@ public class clientHomePageController {
                 this.version=version
         );
     }
-
     public void showBalance(Double balance) {
         Platform.runLater(() ->
             accountBalance.setText(String.valueOf(balance))
@@ -275,12 +274,12 @@ public class clientHomePageController {
     public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
+            paymentComponentController.updateLonerLoans(loanDTOS);
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLoansLonerData(loanDTOS);
-            paymentComponentController.updateLonerLoans(loanDTOS);
         });
     }
 }

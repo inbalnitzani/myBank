@@ -24,6 +24,7 @@ import okhttp3.Response;
 import servlet.HttpClientUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +47,10 @@ public class paymentController {
     @FXML private Label amountError;
     private clientHomePageController homePageController;
 
+    public paymentController(){
+        loans=new HashMap<>();
+        loansList=new ArrayList<>();
+    }
 
     public void setHomePageController(clientHomePageController controller){
         this.homePageController=controller;
