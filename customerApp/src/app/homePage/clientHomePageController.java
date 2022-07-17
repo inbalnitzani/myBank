@@ -297,7 +297,7 @@ public class clientHomePageController {
     public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
-            paymentComponentController.updateLonerLoans(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
