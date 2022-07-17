@@ -51,6 +51,11 @@ public class clientHomePageController {
     private Timer timer;
   //  private TimerTask listRefresher;
 
+
+    public String getCurrentYaz() {
+        return currentYaz.getText();
+    }
+
     @FXML public void initialize() {
         getYazFromBank();
         createLoanComponentController.setHomePageController(this);
@@ -268,13 +273,14 @@ public class clientHomePageController {
         );
     }
     public void showLoanLender(List<LoanDTO> loanDTOS) {
-        Platform.runLater(() ->
-                informationComponentController.refreshLenderLonerData(loanDTOS)
-        );
+        Platform.runLater(() -> {
+            informationComponentController.refreshLenderLonerData(loanDTOS);
+        });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
-        Platform.runLater(() ->
-                informationComponentController.refreshLoansLonerData(loanDTOS)
-        );
+        Platform.runLater(() -> {
+            informationComponentController.refreshLoansLonerData(loanDTOS);
+            paymentComponentController.updateLonerLoans(loanDTOS);
+        });
     }
 }
