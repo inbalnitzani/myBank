@@ -27,21 +27,20 @@ import java.util.function.Consumer;
         private final Consumer <Integer> yazConsumer;
         private final Consumer <Map<Integer,List<MovementDTO>>> movements;
         private clientHomePageController homePageController;
-        private Consumer <List<LoanDTO>> loanLenderConsumer;
-        private Consumer <List<LoanDTO>> loanLonerConsumer;
+        private Consumer <List<LoanDTO>> loanGiverConsumer;
+        private Consumer <List<LoanDTO>> loanBorrowerConsumer;
         private Consumer<Integer> version;
-        private Consumer<Integer> lookingBack;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
         }
-        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version,Consumer<Integer> lookingBack) {
+        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version) {
             this.categoriesConsumer = categoriesConsumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
             this.movements = movements;
-            this.loanLonerConsumer = loanLonerConsumer;
-            this.loanLenderConsumer = loanLenderConsumer;
+            this.loanBorrowerConsumer = loanBorrowerConsumer;
+            this.loanGiverConsumer = loanGiverConsumer;
             this.version=version;
             this.lookingBack = lookingBack;
         }
@@ -70,10 +69,13 @@ import java.util.function.Consumer;
                        Gson gson = new Gson();
                        infoForClient info = gson.fromJson(json, infoForClient.class);
                        Platform.runLater(() -> {
-                           balanceConsumer.accept(info.getBalance());
+                           version.accept(info.getVersion());
                            yazConsumer.accept(info.getYaz());
+                           balanceConsumer.accept(info.getBalance());
                            categoriesConsumer.accept(info.getCategories());
                            movements.accept(info.getMovements());
+                           loanGiverConsumer.accept(info.getLoanLender());
+                           loanBorrowerConsumer.accept(info.getLoanLoner());
                            loanLenderConsumer.accept(info.getLoanLender());
                            loanLonerConsumer.accept(info.getLoanLoner());
                            version.accept(info.getVersion());

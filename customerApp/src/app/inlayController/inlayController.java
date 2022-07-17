@@ -363,6 +363,7 @@ public class inlayController {
     public void addMoreInfo(LoanDTO loan){
         VBox data = new VBox();
         currentLoanId.setText(loan.getId());
+        int globalTime = homePageController.getCurrentYaz();
         switch (loan.getStatus()) {
             case NEW:
                 data.getChildren().clear();
@@ -373,12 +374,12 @@ public class inlayController {
                         String.valueOf(loan.getCapital() - loan.getAmountCollectedPending()));
                 break;
             case ACTIVE:
-                data = showDataAccordingLoanStatus(data, "Next Payment Time: ", String.valueOf(loan.getNextPaymentTime()));
-                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Time: ", String.valueOf(loan.getNextPaymentTime(globalTime)));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount(globalTime)));
                 break;
             case RISK:
                 data = showDataAccordingLoanStatus(data, "Sum missing payments: ", String.valueOf(loan.getMissingMoneyPaymentTimes()));
-                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount()));
+                data = showDataAccordingLoanStatus(data, "Next Payment Amount: ", String.valueOf(loan.getNextPaymentAmount(globalTime)));
                 break;
             case FINISHED:
                 data = showDataAccordingLoanStatus(data, "Starting Time: ", String.valueOf(loan.getActiveTime()));
