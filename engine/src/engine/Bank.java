@@ -435,7 +435,6 @@ public class Bank implements Serializable, engine.BankInterface {
     public void addNewUserToBank(String name){
         clients.put(name,new Client(name,0));
     }
-
     public void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException, JAXBException {
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
