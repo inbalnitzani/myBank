@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane prefHeight="608.0" prefWidth="748.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="app.homePage.clientHomePageController">
+   <content>
+      <VBox prefHeight="606.0" prefWidth="746.0">
+         <children>
+            <GridPane prefHeight="550.0" prefWidth="643.0">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="144.0" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="258.0" minWidth="10.0" prefWidth="200.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="133.0" minWidth="10.0" prefWidth="127.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="234.0" minWidth="10.0" prefWidth="147.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="285.0" minWidth="10.0" prefWidth="89.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="73.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints maxHeight="220.0" minHeight="10.0" prefHeight="34.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="507.0" minHeight="10.0" prefHeight="507.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label prefHeight="43.0" prefWidth="108.0" text="Client Name:">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Label>
+                  <Label fx:id="clientName" prefHeight="30.0" prefWidth="197.0" GridPane.columnIndex="1" />
+                  <Label prefHeight="51.0" prefWidth="89.0" text="Current YAZ:" GridPane.columnIndex="4">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Label>
+                  <Label fx:id="currentYaz" prefHeight="30.0" prefWidth="208.0" GridPane.columnIndex="5" />
+                  <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="512.0" prefWidth="728.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="4" GridPane.rowIndex="1">
+                    <tabs>
+                      <Tab text="Insert New File">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="720.0">
+                                 <children>
+                                    <Button fx:id="insertFile" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertFileToSystem" prefHeight="25.0" prefWidth="707.0" text="Insert New File With Loans" />
+                                    <Label fx:id="errorFile" alignment="TOP_LEFT" layoutX="14.0" layoutY="47.0" prefHeight="431.0" prefWidth="708.0" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                      <Tab text="Create New Loan">
+                        <content>
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <fx:include fx:id="createLoanComponent" source="../createLoan/createLoan.fxml" />
+                                 </children>
+                              </AnchorPane>
+                        </content>
+                      </Tab>
+                        <Tab text="Account Information">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="425.0" prefWidth="661.0">
+                                 <children>
+                                    <fx:include fx:id="informationComponent" source="../information/information.fxml" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Payment">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="471.0" prefWidth="728.0">
+                                 <children>
+                                    <GridPane layoutY="4.0" prefHeight="594.0" prefWidth="645.0">
+                                      <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                      </columnConstraints>
+                                      <rowConstraints>
+                                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                      </rowConstraints>
+                                       <children>
+                                          <fx:include fx:id="paymentComponent" source="../payment/payment.fxml" />
+                                       </children>
+                                    </GridPane>
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Loans Sales">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane prefHeight="529.0" prefWidth="671.0">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="658.0" />
+                                      </content>
+                                    </ScrollPane>
+                                    <fx:include fx:id="saleLoansComponent" source="../saleLoans/saleLoans.fxml" />
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                        <Tab text="Scramble">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane prefHeight="483.0" prefWidth="638.0">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="478.0" prefWidth="640.0">
+                                             <children>
+                                                <fx:include fx:id="inlayComponent" source="../inlayController/inlayScreen.fxml" />
+                                             </children>
+                                          </AnchorPane>
+                                      </content>
+                                    </ScrollPane>
+                                 </children></AnchorPane>
+                          </content>
+                        </Tab>
+                    </tabs>
+                  </TabPane>
+                  <Label prefHeight="80.0" prefWidth="128.0" text="Account Balance:" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="15.0" />
+                     </font></Label>
+                  <Label fx:id="accountBalance" prefHeight="121.0" prefWidth="157.0" GridPane.columnIndex="3" />
+               </children>
+            </GridPane>
+         </children>
+      </VBox>
+   </content>
+</ScrollPane>

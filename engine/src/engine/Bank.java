@@ -229,7 +229,7 @@ public class Bank implements Serializable, engine.BankInterface {
         loansForSale.forEach((k,v)->{
             if (!k.equals(name))
                 v.forEach((key,val)->{
-                    if (!key.equals(name))
+                    if (!val.getOwner().equals(name)&&val.getStatus().equals(Status.ACTIVE))
                         res.add(val);
                 });
         });
@@ -237,6 +237,12 @@ public class Bank implements Serializable, engine.BankInterface {
             return (new ConvertDTO().createListLoanDto(res));
         }
 
+    /* public void convertToBank(AbsDescriptor info) {
+            setCategories(info.getAbsCategories());
+            setClients(info.getAbsCustomers());
+            setLoans(info.getAbsLoans());
+        }
+         */
     public void addNewDataToBank(AbsDescriptor info, String clientName){
         for (String category:info.getAbsCategories().getAbsCategory()){
             if(!categories.contains(category))
@@ -365,6 +371,22 @@ public class Bank implements Serializable, engine.BankInterface {
         loan.setRiskTime();
         int nextTimePay = loan.getPace() + engine.Global.worldTime;
         Map<Integer, Payment> paymentList = loan.getPayments();
+        loan.setListedForSale(false);
+        /*List<PayBack> lenders = loan.getPayBacks();
+        String loanName = loan.getLoansID();
+        Client seller = null;
+
+        for (PayBack lender:lenders) {
+            String name = lender.getGivesALoan();
+            Map<String,Loan> curSellerLoansForSale = loansForSale.get(name);
+            if (seller!= null && curSellerLoansForSale.containsKey(loanName)) {
+                seller = clients.get(name);
+            }
+        }
+
+
+
+        loansForSale.get(seller.getFullName()).remove(loanName);*/
         if (paymentList.containsKey(nextTimePay))
             paymentList.get(nextTimePay).addToOriginalAmount(totalAmount);
         else {
@@ -477,7 +499,7 @@ public class Bank implements Serializable, engine.BankInterface {
     }
 
     public  void makeSale(String loanName, String buyerName) throws NotEnoughMoney {
-        if (loansForSale.containsKey(loanName)){
+
             Loan loan = activeLoans.get(loanName);
             List<PayBack> lenders = loan.getPayBacks();
             Client seller = null;
@@ -492,26 +514,41 @@ public class Bank implements Serializable, engine.BankInterface {
                 Map<String,Loan> curSellerLoansForSale = loansForSale.get(name);
                 if (curSellerLoansForSale.containsKey(loanName)) {
                     seller = clients.get(name);
-                    totalFund = loan.totalAmountToPayBack();
+                    totalFund = loan.getAmountCollectedPending();
                     percentage = lender.getPercentage();
                     fund = totalFund * percentage;
                     sellerPayBack = lender;
+
+
                 }
             }
+
             seller.addMoneyToAccount(fund);
+            seller.getLoanListAsGiver().remove(loan);
             buyer.withdrawingMoney(fund);
+            buyer.getLoanListAsGiver().add(loan);
+
             lenders.remove(sellerPayBack);
             lenders.add(new PayBack(buyer,fund,percentage));
+
+            loan.setListedForSale(false);
+            loansForSale.get(seller.getFullName()).remove(loanName);
+
             version++;
+
+
+
+
         }
-    }
+
 
     public void listLoanForSale(String loanName,String client){
         if (activeLoans.containsKey(loanName)) {
             Loan loan = activeLoans.get(loanName);
             if (!loansForSale.containsKey(client))
                 loansForSale.put(client,new HashMap<>());
-            loansForSale.get(client).put(loanName,loan);
+            if(loan.getStatus().equals(Status.ACTIVE))
+                loansForSale.get(client).put(loanName,loan);
             loan.setListedForSale(true);
             version++;
         }

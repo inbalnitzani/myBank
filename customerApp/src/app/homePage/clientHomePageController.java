@@ -20,6 +20,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import loan.Status;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.HttpUrl;
@@ -54,6 +55,8 @@ public class clientHomePageController {
     @FXML private saleLoansController saleLoansComponentController;
     private int version;
     private Timer timer;
+  //  private TimerTask listRefresher;
+
 
     public int getCurrentYaz() {
         return Integer.parseInt(currentYaz.getText());
@@ -246,6 +249,8 @@ public class clientHomePageController {
                 informationComponentController.setDisable();
                 paymentComponentController.setDisable();
                 inlayComponentController.setDisable();
+                saleLoansComponentController.setDisable();
+
             }
             else {
                 insertFile.setDisable(false);
@@ -253,6 +258,7 @@ public class clientHomePageController {
                 informationComponentController.setAble();
                 paymentComponentController.setAble();
                 inlayComponentController.setAble();
+                saleLoansComponentController.setAble();
             }
 
 
@@ -289,7 +295,8 @@ public class clientHomePageController {
     public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
-            saleLoansComponentController.setLoansLenderTables(loanDTOS.stream().filter(loanDTO -> !loanDTO.getListedForSale()).collect(Collectors.toList()));
+            saleLoansComponentController.setLoansLenderTables(loanDTOS.stream().filter(loanDTO -> !loanDTO.getListedForSale())
+                    .filter(loanDTO -> loanDTO.getStatus().equals(Status.ACTIVE)).collect(Collectors.toList()));
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {

@@ -71,7 +71,7 @@ public class saleLoansController {
 
                 @Override
                 public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                    //loansToSale.remove(loan);
+
                 }
             });
         }
@@ -116,65 +116,75 @@ public class saleLoansController {
     }
     public void setLoansLenderTables (List < LoanDTO > loanDTOS) {
 
-        myLoans.getColumns().clear();
-        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
-        TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
-        TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
-        TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
-        TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
-        TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
-        TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
-        TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
+        if (loanDTOS != null) {
+            myLoans.getColumns().clear();
+
+            TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
+            TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
+            TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
+            TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
+            TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
+            TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
+            TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
+            TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
 
 
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
+            categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+            capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
+            totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
+            interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
+            paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
+            statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
-        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-        capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
-        totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
-        interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
-        paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
-
-        myLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        myLoans.setItems(FXCollections.observableArrayList(loanDTOS));
-        chooseLoaneToSale.getItems().clear();
-        for (LoanDTO loan:loanDTOS) {
-            chooseLoaneToSale.getItems().add(loan.getLoansID());
+            myLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+            myLoans.setItems(FXCollections.observableArrayList(loanDTOS));
+            chooseLoaneToSale.getItems().clear();
+            for (LoanDTO loan : loanDTOS) {
+                chooseLoaneToSale.getItems().add(loan.getLoansID());
+            }
         }
 
     }
     public void setLoansToBuyTables (List < LoanDTO > loanDTOS) {
-        othersLoans.getColumns().clear();
-        TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
-        TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
-        TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
-        TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
-        TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
-        TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
-        TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
-        TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
+        if (loanDTOS != null) {
+            othersLoans.getColumns().clear();
+            TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
+            TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
+            TableColumn<LoanDTO, String> categoryCol = new TableColumn<>("Category");
+            TableColumn<LoanDTO, Integer> capitalCol = new TableColumn<>("Capital");
+            TableColumn<LoanDTO, Integer> totalTimeCol = new TableColumn<>("Total time");
+            TableColumn<LoanDTO, Integer> interestCol = new TableColumn<>("Interest");
+            TableColumn<LoanDTO, Integer> paceCol = new TableColumn<>("Payment pace");
+            TableColumn<LoanDTO, String> statusCol = new TableColumn<>("Status");
 
 
+            idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
+            ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
+            categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
+            capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
+            totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
+            interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
+            paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
+            statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-        idCol.setCellValueFactory(new PropertyValueFactory<>("id"));
-        ownerNameCol.setCellValueFactory(new PropertyValueFactory<>("owner"));
-        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-        capitalCol.setCellValueFactory(new PropertyValueFactory<>("capital"));
-        totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
-        interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
-        paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
-
-        othersLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
-        othersLoans.setItems(FXCollections.observableArrayList(loanDTOS));
-        chooseLoanToBuy.getItems().clear();
-        for (LoanDTO loan:loanDTOS) {
+            othersLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
+            othersLoans.setItems(FXCollections.observableArrayList(loanDTOS));
+            chooseLoanToBuy.getItems().clear();
+            for (LoanDTO loan : loanDTOS) {
                 chooseLoanToBuy.getItems().add(loan.getLoansID());
+            }
         }
 
     }
-
+    public void setDisable(){
+        chooseLoanToBuy.setDisable(true);
+        chooseLoaneToSale.setDisable(true);
+    }
+    public void setAble(){
+        chooseLoanToBuy.setDisable(false);
+        chooseLoaneToSale.setDisable(false);
+    }
 
 }
