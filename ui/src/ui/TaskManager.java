@@ -112,6 +112,8 @@ public class TaskManager {
                 System.out.println(e);
             } catch (JAXBException | FileNotFoundException e) {
                 System.out.println("file does not exist.");
+            } catch (Exception e) {
+                e.printStackTrace();
             }
             if (succeed) {
                 System.out.println("File read successfully");

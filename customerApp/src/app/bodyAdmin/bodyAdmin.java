@@ -34,7 +34,6 @@ public class bodyAdmin {
     @FXML private MasterDetailPane loansDetail;
     @FXML private MasterDetailPane clientsDetail;
     @FXML private Label increaseYazError;
-
     private AppController mainController;
 
     public bodyAdmin(){

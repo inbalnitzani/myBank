@@ -29,7 +29,7 @@ public class headerController {
     }
 
     @FXML void chooseUser(ActionEvent event) throws IOException {
-        mainController.changeUser(userOptions.getValue());
+//        mainController.changeUser(userOptions.getValue());
     }
 
     public void updateClientName(String client){
@@ -47,12 +47,12 @@ public class headerController {
     }
 
     public void setUsersComboBox() {
-        if (mainController.isFileInSystem()) {
-            userOptions.getItems().clear();
-            userOptions.getItems().add(constParameters.ADMIN);
-        }
-        for (ClientDTO clientDTO : mainController.getClients())
-            userOptions.getItems().add(clientDTO.getFullName());
+//        if (mainController.isFileInSystem()) {
+//            userOptions.getItems().clear();
+//            userOptions.getItems().add(constParameters.ADMIN);
+//        }
+//        for (ClientDTO clientDTO : mainController.getClients())
+//            userOptions.getItems().add(clientDTO.getFullName());
     }
 
     public void updateComponentForNewFile(String path){

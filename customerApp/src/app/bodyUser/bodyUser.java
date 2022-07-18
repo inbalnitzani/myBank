@@ -36,11 +36,11 @@ public class bodyUser {
 
     }
     public void updateClientInfo(){
-        if (clientDTO!=null){
-            clientDTO=mainController.getClientByName(clientDTO.getFullName());
-            informationComponentController.updateClientUser();
-            paymentComponentController.updateClientUser();
-        }
+//        if (clientDTO!=null){
+//            clientDTO=mainController.getClientByName(clientDTO.getFullName());
+//            informationComponentController.updateClientUser();
+//            paymentComponentController.updateClientUser();
+//        }
     }
 
     public void increaseYaz(){

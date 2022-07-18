@@ -1,8 +1,6 @@
 package app.payment;
-import app.bodyUser.bodyUser;
 import app.homePage.clientHomePageController;
 import com.sun.istack.internal.NotNull;
-
 import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.PaymentDTO;
@@ -29,7 +27,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class paymentController {
-   // private bodyUser bodyUser;
     private Map<String,LoanDTO> loans;
     private List<LoanDTO> loansList;
     @FXML private TableView<LoanDTO> loanerLoans;

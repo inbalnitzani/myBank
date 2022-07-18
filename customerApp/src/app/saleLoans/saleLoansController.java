@@ -135,7 +135,7 @@ public class saleLoansController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         myLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         myLoans.setItems(FXCollections.observableArrayList(loanDTOS));
@@ -165,7 +165,7 @@ public class saleLoansController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         othersLoans.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         othersLoans.setItems(FXCollections.observableArrayList(loanDTOS));
