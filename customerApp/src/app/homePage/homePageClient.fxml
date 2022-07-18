@@ -88,9 +88,17 @@
                               </AnchorPane>
                           </content>
                         </Tab>
-                        <Tab text="Loans Sails">
+                        <Tab text="Loans Sales">
                           <content>
-                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                 <children>
+                                    <ScrollPane prefHeight="529.0" prefWidth="671.0">
+                                      <content>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="534.0" prefWidth="658.0" />
+                                      </content>
+                                    </ScrollPane>
+                                    <fx:include fx:id="saleLoansComponent" source="../saleLoans/saleLoans.fxml" />
+                                 </children></AnchorPane>
                           </content>
                         </Tab>
                         <Tab text="Scramble">

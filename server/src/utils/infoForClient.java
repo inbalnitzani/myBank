@@ -17,10 +17,11 @@ public class infoForClient {
     private Map<Integer,List<MovementDTO>> movements;
     private List<LoanDTO> loanLender;
     private List<LoanDTO> loanLoner;
+    private List<LoanDTO> loansForSale;
     private int version;
     private Integer lookingBack;
 
-    public infoForClient(List<String> categories, Double balance, int yaz, Map<Integer,List<MovementDTO>> movements, List<LoanDTO> loanLender, List<LoanDTO> loanLoner, int version, Integer lookingBack){
+    public infoForClient(List<String> categories, Double balance, int yaz, Map<Integer,List<MovementDTO>> movements, List<LoanDTO> loanLender, List<LoanDTO> loanLoner, int version, Integer lookingBack,List<LoanDTO> loansForSale){
         this.balance=balance;
         this.categories=categories;
         this.yaz=yaz;
@@ -29,6 +30,7 @@ public class infoForClient {
         this.loanLoner=loanLoner;
         this.version=version;
         this.lookingBack = lookingBack;
+        this.loansForSale = loansForSale;
     }
 
     public int getVersion() {
@@ -60,4 +62,8 @@ public class infoForClient {
     }
 
     public Integer getLookingBack(){ return lookingBack; }
+
+    public List<LoanDTO> getLoansForSale() {
+        return loansForSale;
+    }
 }

@@ -5,6 +5,7 @@ import app.refreshdata.dataRefresher;
 import app.inlayController.inlayController;
 import app.mainScreenClient.mainScreenClientController;
 import app.payment.paymentController;
+import app.saleLoans.saleLoansController;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.sun.istack.internal.NotNull;
@@ -29,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class clientHomePageController {
 
@@ -47,6 +49,8 @@ public class clientHomePageController {
     @FXML private Parent paymentComponent;
     @FXML private Parent inlayComponent;
     @FXML private inlayController inlayComponentController;
+    @FXML private Parent saleLoansComponent;
+    @FXML private saleLoansController saleLoansComponentController;
     private int version;
     private Timer timer;
   //  private TimerTask listRefresher;
@@ -62,6 +66,7 @@ public class clientHomePageController {
         informationComponentController.setHomePageController(this);
         paymentComponentController.setHomePageController(this);
         inlayComponentController.setHomePageController(this);
+        saleLoansComponentController.setHomePageController(this);
         categories=new ArrayList<>();
         synchronized (this){
             updateCategories();
@@ -229,6 +234,7 @@ public class clientHomePageController {
     }
     public void setClientName(String clientName){
         this.clientName.setText(clientName);
+        saleLoansComponentController.setName(clientName);
     }
     public String getClientName(){
         return clientName.getText();
@@ -240,10 +246,13 @@ public class clientHomePageController {
         accountBalance.setText(String.valueOf(getCurrentBalance()));
     }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind,this::setLoansForSale);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
+    }
+    public void setLoansForSale(List<LoanDTO> loans){
+        saleLoansComponentController.setLoansToBuyTables(loans);
     }
     public void setRewind(Integer lookingBack){
         Platform.runLater(()->{
@@ -298,6 +307,7 @@ public class clientHomePageController {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
             paymentComponentController.refreshPayment(loanDTOS);
+            saleLoansComponentController.setLoansLenderTables(loanDTOS.stream().filter(loanDTO -> !loanDTO.getListedForSale()).collect(Collectors.toList()));
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
