@@ -18,10 +18,19 @@ public class Loan implements Serializable {
     private int totalYazTime, activeTime, lastRiskTime, actualLastPaymentTime=0;
     private List<PayBack> payBacks;
     private Map<Integer, Payment> payments;
+    private Boolean listedForSale = false;
 
 
     public void setActualLastPaymentTime(int actualLastPaymentTime) {
         this.actualLastPaymentTime = actualLastPaymentTime;
+    }
+
+    public Boolean getListedForSale() {
+        return listedForSale;
+    }
+
+    public void setListedForSale(Boolean listedForSale) {
+        this.listedForSale = listedForSale;
     }
 
     public int getActualLastPaymentTime() {

@@ -20,6 +20,10 @@ public class PayBack implements Serializable {
         return anountInvested;
     }
 
+    public String getGivesALoan() {
+        return givesALoan;
+    }
+
     public String getClientDTOGivers() {
         return givesALoan;
     }
