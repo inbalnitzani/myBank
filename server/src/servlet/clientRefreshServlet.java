@@ -9,10 +9,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import loan.Status;
 import utils.ServletUtils;
 import utils.infoForClient;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 @WebServlet(name = "clientRefreshServlet", urlPatterns = "/clientRefresh")
@@ -42,6 +44,8 @@ public class clientRefreshServlet extends HttpServlet {
                     Map<Integer, List<MovementDTO>> movements;
                     List<LoanDTO> loansLender;
                     List<LoanDTO> loansBorrower;
+                    List<LoanDTO> loansForSale = null;
+                    List<LoanDTO> allLoans;
                     Gson gson = new Gson();
                     int version = bank.getVersion();
                     if (version != versionClient) {
@@ -61,9 +65,11 @@ public class clientRefreshServlet extends HttpServlet {
                             movements = bank.getMovementsByClientName(clientName);
                             loansLender = bank.getLenderLoansByName(clientName);
                             loansBorrower = bank.getBorrowerLoansByName(clientName);
+                            loansForSale = bank.getLoansForSale(clientName);
+
                         }
 
-                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version,timeToLookBackAt);
+                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version,timeToLookBackAt,loansForSale);
                         String json = gson.toJson(info);
                         response.addHeader("NeedToRefresh", "true");
                         response.getWriter().println(json);

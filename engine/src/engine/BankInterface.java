@@ -24,6 +24,12 @@ public interface BankInterface {
 
      List<LoanDTO> getAllLoans();
 
+     void listLoanForSale(String loanName,String client);
+
+     List<LoanDTO> getLoansForSale(String name);
+
+     void makeSale(String loan, String buyer) throws NotEnoughMoney;
+
      double loadMoney(String clientName, double amountToLoad);
 
      Map<Integer, List<MovementDTO>> getMovementsByClientName(String client);

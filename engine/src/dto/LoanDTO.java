@@ -25,6 +25,7 @@ public class LoanDTO {
     private double fundLeftToPay;
     private double fundPaid;
     private double interestPaid;
+    private Boolean listedForSale;
 
     //CTOR
     public LoanDTO(Loan loan) {
@@ -41,6 +42,7 @@ public class LoanDTO {
         this.amountPaidBack = loan.getAmountPaidBack();
         this.lastRiskTime =loan.getLastRiskTime();
         this.finalAmount=capital*(interestRate/100+1);
+        this.listedForSale = loan.getListedForSale();
         setPayBacks(loan.getPayBacks());
 //        int lastPay= loan.getActualLastPaymentTime();
 //        if(lastPay==0) {
@@ -322,6 +324,10 @@ public class LoanDTO {
                     "Time finished: " + getLastPaymentTime()+str;
         else if (Status.NEW.equals(status)) return "New";
         return null;
+    }
+
+    public Boolean getListedForSale() {
+        return listedForSale;
     }
 }
 

@@ -30,13 +30,15 @@ import java.util.function.Consumer;
         private clientHomePageController homePageController;
         private Consumer <List<LoanDTO>> loanLenderConsumer;
         private Consumer <List<LoanDTO>> loanLonerConsumer;
+        private Consumer <List<LoanDTO>> loanToBuyConsumer;
+
         private Consumer<Integer> version;
         private Consumer<Integer> lookingBack;
 
         public void setHomePageController(clientHomePageController controller){
             this.homePageController=controller;
         }
-        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version,Consumer<Integer> lookingBack) {
+        public dataRefresher(Consumer <List<String>> categoriesConsumer,Consumer <Double> balanceConsumer,Consumer <Integer> yazConsumer, Consumer<Map<Integer,List<MovementDTO>>> movements,Consumer <List<LoanDTO>> loanLenderConsumer, Consumer <List<LoanDTO>> loanLonerConsumer,Consumer<Integer> version,Consumer<Integer> lookingBack,Consumer<List<LoanDTO>>loanToBuyConsumer) {
             this.categoriesConsumer = categoriesConsumer;
             this.balanceConsumer = balanceConsumer;
             this.yazConsumer = yazConsumer;
@@ -45,6 +47,7 @@ import java.util.function.Consumer;
             this.loanLenderConsumer = loanLenderConsumer;
             this.version=version;
             this.lookingBack = lookingBack;
+            this.loanToBuyConsumer = loanToBuyConsumer;
         }
 
         @Override
@@ -79,6 +82,7 @@ import java.util.function.Consumer;
                                loanLonerConsumer.accept(info.getLoanLoner());
                                version.accept(info.getVersion());
                                lookingBack.accept(info.getLookingBack());
+                               loanToBuyConsumer.accept(info.getLoansForSale());
                        });
                    }
                 }

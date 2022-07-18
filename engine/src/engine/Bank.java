@@ -30,6 +30,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Bank implements Serializable, engine.BankInterface {
 
@@ -37,6 +38,7 @@ public class Bank implements Serializable, engine.BankInterface {
     private Map<String, Loan> activeLoans;
     private Map<String, Loan> waitingLoans;
     private Map<String, Client> clients;
+    private Map<String,Map<String,Loan>> loansForSale;
     private engine.MatchLoans matchLoans;
     private int version;
     private int time = 1;
@@ -53,6 +55,7 @@ public class Bank implements Serializable, engine.BankInterface {
         version=1;
         adminStates = new HashMap<Integer, stateDTO>();
         clientsStates = new HashMap<Integer,Map<String,ClientDTO>>();
+        loansForSale = new HashMap<String,Map<String,Loan>>();
     }
     public void setLookingBack(Integer val){
         lookingBack = val;
@@ -221,12 +224,25 @@ public class Bank implements Serializable, engine.BankInterface {
         return new ConvertDTO().createListLoanDto(loans.values());
     }
 
+    public List<LoanDTO> getLoansForSale(String name) {
+        List<Loan> res = new ArrayList<>();
+        loansForSale.forEach((k,v)->{
+            if (!k.equals(name))
+                v.forEach((key,val)->{
+                    if (!key.equals(name))
+                        res.add(val);
+                });
+        });
+
+            return (new ConvertDTO().createListLoanDto(res));
+        }
+
     /* public void convertToBank(AbsDescriptor info) {
-        setCategories(info.getAbsCategories());
-        setClients(info.getAbsCustomers());
-        setLoans(info.getAbsLoans());
-    }
-     */
+            setCategories(info.getAbsCategories());
+            setClients(info.getAbsCustomers());
+            setLoans(info.getAbsLoans());
+        }
+         */
     public void addNewDataToBank(AbsDescriptor info, String clientName){
         for (String category:info.getAbsCategories().getAbsCategory()){
             if(!categories.contains(category))
@@ -464,5 +480,54 @@ public class Bank implements Serializable, engine.BankInterface {
     }
     public clientStateDTO getClientForRewind(String name,Integer time){
         return new clientStateDTO(rewind,time,clientsStates.get(time).get(name));
+    }
+
+    public  void makeSale(String loanName, String buyerName) throws NotEnoughMoney {
+        if (loansForSale.containsKey(loanName)){
+            Loan loan = activeLoans.get(loanName);
+            List<PayBack> lenders = loan.getPayBacks();
+            Client seller = null;
+            Client buyer = clients.get(buyerName);
+            PayBack sellerPayBack = null;
+            double totalFund;
+            double fund = 0;
+            double percentage = 0;
+
+            for (PayBack lender:lenders) {
+                String name = lender.getGivesALoan();
+                Map<String,Loan> curSellerLoansForSale = loansForSale.get(name);
+                if (curSellerLoansForSale.containsKey(loanName)) {
+                    seller = clients.get(name);
+                    totalFund = loan.totalAmountToPayBack();
+                    percentage = lender.getPercentage();
+                    fund = totalFund * percentage;
+                    sellerPayBack = lender;
+
+
+                }
+            }
+
+            seller.addMoneyToAccount(fund);
+            buyer.withdrawingMoney(fund);
+
+            lenders.remove(sellerPayBack);
+            lenders.add(new PayBack(buyer,fund,percentage));
+            version++;
+
+
+
+
+        }
+    }
+
+    public void listLoanForSale(String loanName,String client){
+        if (activeLoans.containsKey(loanName)) {
+            Loan loan = activeLoans.get(loanName);
+            if (!loansForSale.containsKey(client))
+                loansForSale.put(client,new HashMap<>());
+            loansForSale.get(client).put(loanName,loan);
+            loan.setListedForSale(true);
+            version++;
+        }
     }
 }
