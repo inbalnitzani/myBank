@@ -22,13 +22,13 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" scope="PROVIDED" name="Tomcat 10.0.11" level="application_server_libraries" />
     <orderEntry type="module" module-name="engine" exported="" />
-    <orderEntry type="library" exported="" name="gson-2.1" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1-javadoc" level="project" />
     <orderEntry type="library" exported="" name="gson-2.1-sources" level="project" />
-    <orderEntry type="library" exported="" name="controlsfx-8.40.14" level="project" />
-    <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
-    <orderEntry type="library" exported="" name="kotlin-stdlib-1.4.10" level="project" />
-    <orderEntry type="library" exported="" name="okhttp-4.9.1" level="project" />
+    <orderEntry type="library" exported="" name="gson-2.1" level="project" />
     <orderEntry type="library" exported="" name="okio-2.8.0" level="project" />
+    <orderEntry type="library" exported="" name="okhttp-4.9.1" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-1.4.10" level="project" />
+    <orderEntry type="library" exported="" name="kotlin-stdlib-common-1.4.10" level="project" />
+    <orderEntry type="library" exported="" name="annotations-13.0" level="project" />
   </component>
 </module>

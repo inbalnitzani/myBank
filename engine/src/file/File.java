@@ -1,18 +1,19 @@
 package file;
 import exception.*;
+import loan.Loan;
 import schema.AbsCustomer;
 import schema.AbsLoan;
 
 import java.util.*;
 
 public class File {
-    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, String fileName) throws CategoriesException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+    public void checkFile(Collection<String> categories, Collection<AbsLoan> loans, String fileName,Map<String, Loan> waitingLoans, Map<String, Loan> activeLoans) throws Exception {
         isXmlFile(fileName);
         checkCategories(categories, loans);
         checkTime(loans);
         checkNumbers(loans);
         checkInterest(loans);
-        checkID(loans);
+        checkID(loans,waitingLoans,activeLoans);
     }
 
     public void checkInterest(Collection<AbsLoan> loans) throws InterestException {
@@ -46,10 +47,17 @@ public class File {
         }
     }
 
-    public void checkID(Collection<AbsLoan> loans) throws IdException {
+    public void checkID(Collection<AbsLoan> loans, Map<String, Loan> waitingLoans, Map<String, Loan> activeLoans) throws Exception {
         List<String> IDs = new ArrayList<>();
         for (AbsLoan loan : loans) {
-            IDs.add(loan.getId().trim());
+            String id= loan.getId().trim();
+            Loan loan1 =waitingLoans.get(id);
+            Loan loan2 = activeLoans.get(id);
+            if(loan1!=null || loan2!=null)
+                throw new Exception("Loan id is already exist!");
+            else {
+                IDs.add(id);
+            }
         }
         for (AbsLoan loan : loans) {
             int counter = 0;

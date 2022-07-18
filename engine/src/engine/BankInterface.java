@@ -46,7 +46,7 @@ public interface BankInterface {
 
      void saveStateToFile(String fileName) throws IOException;
 
-     boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException;
+     boolean getXMLFile(String filePath) throws Exception;
 
      void promoteTime();
 
@@ -62,7 +62,7 @@ public interface BankInterface {
 
      void addNewUserToBank(String name);
 
-     void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, JAXBException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException;
+     void addNewXMLFile(String filePath, String clientName) throws Exception;
 
      boolean checkLoanNameExist(String loanName);
 

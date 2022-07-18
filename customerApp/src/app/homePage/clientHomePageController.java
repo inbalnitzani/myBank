@@ -38,6 +38,7 @@ public class clientHomePageController {
     @FXML private Label clientName;
     @FXML private Label currentYaz;
     @FXML private Label accountBalance;
+    @FXML private Label errorFile;
     private List<String> categories;
     private mainScreenClientController mainController;
     private SimpleIntegerProperty yazProperty;
@@ -53,8 +54,6 @@ public class clientHomePageController {
     @FXML private saleLoansController saleLoansComponentController;
     private int version;
     private Timer timer;
-  //  private TimerTask listRefresher;
-
 
     public int getCurrentYaz() {
         return Integer.parseInt(currentYaz.getText());
@@ -93,35 +92,31 @@ public class clientHomePageController {
         HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                    Platform.runLater(() ->
-//                            msgLabel.setText("Failure!")
-//                    );
+                Platform.runLater(() -> {
+                    errorFile.setText(e.getMessage());
+                });
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-//                    int status =response.code();
-//                    if (status != HttpServletResponse.SC_OK) {
-//                        if(status == HttpServletResponse.SC_FORBIDDEN){
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText("You must enter a name!")
-//                            );
-//                        }else {
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText(userNameTF.getText()+" is already in system. Please enter a different name")
-//                            );
-//                        }
-//                    } else {
-//                        Platform.runLater(() ->
-//                                {
-//                                    try {
-//                                        mainController.loginClientSuccess(userNameTF.getText());
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                        );
-//                    }
+                int code = response.code();
+                if (code == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->
+                            errorFile.setText("File loaded successfully!")
+                    );
+                } else {
+                    Platform.runLater(() -> {
+                        String responseBody = null;
+                        try {
+                            responseBody = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if(responseBody.equals("null"))
+                            responseBody="";
+                        errorFile.setText("ERROR! Failed to read file. " + responseBody);
+                    });
+                }
             }
         });
     }
@@ -207,15 +202,6 @@ public class clientHomePageController {
                             e.printStackTrace();
                         }
                     });
-                } else {
-                    Platform.runLater(() -> {
-                        String responseBody = null;
-                        try {
-                            responseBody = response.body().string();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
                 }
             }
         });
@@ -241,9 +227,6 @@ public class clientHomePageController {
     }
     public void setAccountBalance(Double balance){
         this.accountBalance.setText(String.valueOf(balance));
-    }
-    public void updateAccountBalance(){
-        accountBalance.setText(String.valueOf(getCurrentBalance()));
     }
     public void startDataRefresher() {
         dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind,this::setLoansForSale);
@@ -306,13 +289,13 @@ public class clientHomePageController {
     public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
-            paymentComponentController.refreshPayment(loanDTOS);
             saleLoansComponentController.setLoansLenderTables(loanDTOS.stream().filter(loanDTO -> !loanDTO.getListedForSale()).collect(Collectors.toList()));
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLoansLonerData(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
         });
     }
 }

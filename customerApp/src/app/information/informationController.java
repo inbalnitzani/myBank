@@ -47,8 +47,7 @@ public class informationController {
     private ClientDTO user;
     private clientHomePageController homePageController;
 
-    @FXML
-    void chargeListener(ActionEvent event) {
+    @FXML void chargeListener(ActionEvent event) {
         try {
             double toAdd = Double.parseDouble(amount.getText());
             if (toAdd <= 0) {
@@ -56,7 +55,6 @@ public class informationController {
             } else {
                 changeAccountBalance("charge");
                 showAllTransactionsToClient();
-                //bodyUser.updateClientInfo();
             }
         } catch (Exception e) {
             amountErrorLabel.setText("Please enter a positive number!");
@@ -64,9 +62,7 @@ public class informationController {
             amount.clear();
         }
     }
-
-    @FXML
-    void withdrawListener(ActionEvent event) {
+    @FXML void withdrawListener(ActionEvent event) {
         try {
             double toWithdraw = Double.parseDouble(amount.getText());
             if (toWithdraw <= 0) {
@@ -74,7 +70,6 @@ public class informationController {
             } else {
                 changeAccountBalance("withdraw");
                 showAllTransactionsToClient();
-//                bodyUser.updateClientInfo();
             }
         } catch (Exception e) {
             amountErrorLabel.setText("Please Enter a positive number.");
@@ -82,17 +77,13 @@ public class informationController {
             amount.clear();
         }
     }
-
-    @FXML
-    void amountListener(ActionEvent event) {
+    @FXML void amountListener(ActionEvent event) {
 
 
     }
-
     public void setHomePageController(clientHomePageController controller) {
         this.homePageController = controller;
     }
-
     public void changeAccountBalance(String typeMovement) {
 
         String finalUrl = HttpUrl
@@ -135,30 +126,22 @@ public class informationController {
         });
         clearAllLabel();
     }
-
     public void clearAllLabel() {
         amount.setText("");
     }
-
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
 
     }
-
     public void updateUserViewer(ClientDTO user) {
         this.user = user;
         balance.setText("Your current balance is: " + user.getCurrBalance());
     }
-
     public void showData() {
         showLoansByType("borrower");
         showLoansByType("lender");
-//        balance.setText("Your current balance is: "+ user.getCurrBalance());
-        //  showLonersLoans(user.getLoansAsBorrower());
-        //  showLoansAsLender(user.getLoansAsGiver());
         showAllTransactionsToClient();
     }
-
     public void createTransactionTable(Map<Integer, List<MovementDTO>> movementDTOList) {
         ObservableList<MovementDTO> transactionData = FXCollections.observableArrayList();
         List<List<MovementDTO>> movements = new ArrayList<>(movementDTOList.values());
@@ -170,7 +153,6 @@ public class informationController {
         transactionTable.getItems().clear();
         transactionTable.setItems(transactionData);
     }
-
     public void showAllTransactionsToClient() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/movements")
@@ -207,7 +189,6 @@ public class informationController {
             }
         });
     }
-
     public List<LoanDTO> getLoans(String loansJSON) {
         Gson gson = new Gson();
         List<LoanDTO> loans = new ArrayList<>();
@@ -221,7 +202,6 @@ public class informationController {
             return loans;
         }
     }
-
     public Map<Integer, List<MovementDTO>> getMovements(String movementJson) {
         Gson gson = new Gson();
         Map<Integer, List<MovementDTO>> movements = null;
@@ -235,10 +215,6 @@ public class informationController {
             return movements;
         }
     }
-
-    //    public void showLonersLoans(Collection<LoanDTO> loans) {
-//        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
-//    }
     public void showLoansByType(String loansType) {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/loans")
@@ -285,21 +261,15 @@ public class informationController {
             }
         });
     }
-
-    //    public void showLoansAsLender(Collection<LoanDTO> loans) {
-//        loansAsLender.setItems(FXCollections.observableArrayList(loans));
-//    }
     public void updateClientUser() {
         updateUserViewer(bodyUser.getClientDTO());
         showData();
     }
-
     public void setInformationDataForNewFile() {
         setLoansLonerTables(null);
         setLoansLenderTables(null);
         setTransactionTable();
     }
-
     public void setLoansLonerTables(List<LoanDTO> loanDTOS) {
         loansAsLoner.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
@@ -324,7 +294,6 @@ public class informationController {
         loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
 
     }
-
     public void setLoansLenderTables(List<LoanDTO> loanDTOS) {
         loansAsLender.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
@@ -349,7 +318,6 @@ public class informationController {
         loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
 
     }
-
     public void setTransactionTable() {
         transactionTable.getColumns().clear();
 
@@ -364,25 +332,21 @@ public class informationController {
         yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
     }
-
     public void refreshMovementsData(Map<Integer, List<MovementDTO>> movements) {
         createTransactionTable(movements);
+        setTransactionTable();
     }
-
     public void refreshLoansLonerData(List<LoanDTO> loans) {
         setLoansLonerTables(loans);
     }
-
     public void refreshLenderLonerData(List<LoanDTO> loans) {
         setLoansLenderTables(loans);
     }
-
     public void setDisable() {
         amount.setDisable(true);
         chargeButton.setDisable(true);
         withdrawButton.setDisable(true);
     }
-
     public void setAble() {
         amount.setDisable(false);
         chargeButton.setDisable(false);
