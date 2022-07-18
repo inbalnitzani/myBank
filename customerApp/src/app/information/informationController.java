@@ -318,7 +318,7 @@ public class informationController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         loansAsLoner.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
@@ -343,7 +343,7 @@ public class informationController {
         totalTimeCol.setCellValueFactory(new PropertyValueFactory<>("totalYazTime"));
         interestCol.setCellValueFactory(new PropertyValueFactory<>("interestRate"));
         paceCol.setCellValueFactory(new PropertyValueFactory<>("pace"));
-        statusCol.setCellValueFactory(new PropertyValueFactory<>("statusInfo"));
+        statusCol.setCellValueFactory(new PropertyValueFactory<>("status"));
 
         loansAsLender.getColumns().addAll(idCol, ownerNameCol, categoryCol, capitalCol, totalTimeCol, interestCol, paceCol, statusCol);
         loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));

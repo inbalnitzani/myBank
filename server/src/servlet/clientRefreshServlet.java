@@ -45,7 +45,6 @@ public class clientRefreshServlet extends HttpServlet {
                     List<LoanDTO> loansLender;
                     List<LoanDTO> loansBorrower;
                     List<LoanDTO> loansForSale = null;
-                    List<LoanDTO> allLoans;
                     Gson gson = new Gson();
                     int version = bank.getVersion();
                     if (version != versionClient) {
