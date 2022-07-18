@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -20,6 +21,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 public class createLoanController {
+    @FXML
+    private Button approveButton;
     @FXML
     private TextField name;
     @FXML
@@ -266,5 +269,27 @@ public class createLoanController {
     public void refreshData(){
         categories.getItems().clear();;
         categories.getItems().addAll(homePageController.getCategories());
+    }
+
+    public void setDisable(){
+        name.setDisable(true);
+        amount.setDisable(true);
+        interest.setDisable(true);
+        categories.setDisable(true);
+        pace.setDisable(true);
+        totalTime.setDisable(true);
+        addNewCategory.setDisable(true);
+        approveButton.setDisable(true);
+
+    }
+    public void setAble(){
+        name.setDisable(false);
+        amount.setDisable(false);
+        interest.setDisable(false);
+        categories.setDisable(false);
+        pace.setDisable(false);
+        totalTime.setDisable(false);
+        addNewCategory.setDisable(false);
+        approveButton.setDisable(false);
     }
 }

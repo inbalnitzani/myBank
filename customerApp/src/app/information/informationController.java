@@ -27,15 +27,28 @@ import java.util.*;
 
 public class informationController {
 
-    @FXML private TableView<LoanDTO> loansAsLoner;
-    @FXML private TableView<LoanDTO> loansAsLender;
-    @FXML private TableView<MovementDTO> transactionTable;
-    @FXML private TextField amount;
-    @FXML private Label amountErrorLabel;
+    @FXML
+    private TableView<LoanDTO> loansAsLoner;
+    @FXML
+    private TableView<LoanDTO> loansAsLender;
+    @FXML
+    private TableView<MovementDTO> transactionTable;
+    @FXML
+    private TextField amount;
+    @FXML
+    private Label balance;
+    @FXML
+    private Label amountErrorLabel;
+    @FXML
+    private Button chargeButton;
+    @FXML
+    private Button withdrawButton;
     private bodyUser bodyUser;
+    private ClientDTO user;
     private clientHomePageController homePageController;
 
-    @FXML void chargeListener(ActionEvent event) {
+    @FXML
+    void chargeListener(ActionEvent event) {
         try {
             double toAdd = Double.parseDouble(amount.getText());
             if (toAdd <= 0) {
@@ -51,85 +64,102 @@ public class informationController {
             amount.clear();
         }
     }
-    @FXML void withdrawListener(ActionEvent event) {
+
+    @FXML
+    void withdrawListener(ActionEvent event) {
         try {
             double toWithdraw = Double.parseDouble(amount.getText());
-            if(toWithdraw<=0){
+            if (toWithdraw <= 0) {
                 amountErrorLabel.setText("Please Enter a positive number.");
             } else {
                 changeAccountBalance("withdraw");
                 showAllTransactionsToClient();
 //                bodyUser.updateClientInfo();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             amountErrorLabel.setText("Please Enter a positive number.");
         } finally {
             amount.clear();
         }
     }
-    @FXML void amountListener(ActionEvent event) {
+
+    @FXML
+    void amountListener(ActionEvent event) {
 
 
     }
-    public void setHomePageController(clientHomePageController controller){
-        this.homePageController=controller;
+
+    public void setHomePageController(clientHomePageController controller) {
+        this.homePageController = controller;
     }
-    public void changeAccountBalance(String typeMovement){
+
+    public void changeAccountBalance(String typeMovement) {
 
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/changeAccountBalance")
                 .newBuilder()
                 .addQueryParameter("owner", homePageController.getClientName())
-                .addQueryParameter("amount",amount.getText())
-                .addQueryParameter("TypeMovement",typeMovement)
+                .addQueryParameter("amount", amount.getText())
+                .addQueryParameter("TypeMovement", typeMovement)
                 .build()
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Platform.runLater(() ->
-                amountErrorLabel.setText("Unknown error occurred! PLease try again!")
+                        amountErrorLabel.setText("Unknown error occurred! PLease try again!")
                 );
             }
 
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
-                 if (status == HttpServletResponse.SC_OK) {
+                if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         amountErrorLabel.setText("Finished successfully!");
                         homePageController.setAccountBalance(Double.valueOf(response.header("accountBalance")));
                     });
                 } else {
-                     Platform.runLater(() ->{
-                         String responseBody = null;
-                         try {
-                             responseBody = response.body().string();
-                         } catch (IOException e) {
-                             e.printStackTrace();
-                         }
-                         amountErrorLabel.setText(responseBody);
-                     });
-                 }
+                    Platform.runLater(() -> {
+                        String responseBody = null;
+                        try {
+                            responseBody = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        amountErrorLabel.setText(responseBody);
+                    });
+                }
             }
         });
         clearAllLabel();
     }
-    public void clearAllLabel(){
+
+    public void clearAllLabel() {
         amount.setText("");
     }
+
     public void setBodyUser(bodyUser bodyUser) {
         this.bodyUser = bodyUser;
 
     }
+
+    public void updateUserViewer(ClientDTO user) {
+        this.user = user;
+        balance.setText("Your current balance is: " + user.getCurrBalance());
+    }
+
     public void showData() {
         showLoansByType("borrower");
         showLoansByType("lender");
 //        balance.setText("Your current balance is: "+ user.getCurrBalance());
-      //  showLonersLoans(user.getLoansAsBorrower());
-      //  showLoansAsLender(user.getLoansAsGiver());
+        //  showLonersLoans(user.getLoansAsBorrower());
+        //  showLoansAsLender(user.getLoansAsGiver());
         showAllTransactionsToClient();
     }
-    public void createTransactionTable(Map<Integer,List<MovementDTO>> movementDTOList) {
+
+    public void createTransactionTable(Map<Integer, List<MovementDTO>> movementDTOList) {
         ObservableList<MovementDTO> transactionData = FXCollections.observableArrayList();
         List<List<MovementDTO>> movements = new ArrayList<>(movementDTOList.values());
         for (List<MovementDTO> moveList : movements) {
@@ -140,7 +170,8 @@ public class informationController {
         transactionTable.getItems().clear();
         transactionTable.setItems(transactionData);
     }
-    public void showAllTransactionsToClient(){
+
+    public void showAllTransactionsToClient() {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/movements")
                 .newBuilder()
@@ -148,17 +179,20 @@ public class informationController {
                 .build()
                 .toString();
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() ->{}
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                        }
                 );
             }
 
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
-                            Map<Integer,List<MovementDTO>> movements= getMovements(response.body().string());
+                            Map<Integer, List<MovementDTO>> movements = getMovements(response.body().string());
                             createTransactionTable(movements);
                             setTransactionTable();
                         } catch (Exception e) {
@@ -166,25 +200,29 @@ public class informationController {
                         }
                     });
                 } else {
-                    Platform.runLater(() -> {}
+                    Platform.runLater(() -> {
+                            }
                     );
                 }
             }
         });
     }
-    public List<LoanDTO> getLoans(String loansJSON){
+
+    public List<LoanDTO> getLoans(String loansJSON) {
         Gson gson = new Gson();
-        List<LoanDTO> loans=new ArrayList<>();
+        List<LoanDTO> loans = new ArrayList<>();
         try {
-            Type listType = new TypeToken<List<LoanDTO>>(){}.getType();
-            loans= gson.fromJson(loansJSON, listType);
+            Type listType = new TypeToken<List<LoanDTO>>() {
+            }.getType();
+            loans = gson.fromJson(loansJSON, listType);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             return loans;
         }
     }
-    public Map<Integer,List<MovementDTO>> getMovements(String movementJson) {
+
+    public Map<Integer, List<MovementDTO>> getMovements(String movementJson) {
         Gson gson = new Gson();
         Map<Integer, List<MovementDTO>> movements = null;
         try {
@@ -197,10 +235,11 @@ public class informationController {
             return movements;
         }
     }
-//    public void showLonersLoans(Collection<LoanDTO> loans) {
+
+    //    public void showLonersLoans(Collection<LoanDTO> loans) {
 //        loansAsLoner.setItems(FXCollections.observableArrayList(loans));
 //    }
-    public void showLoansByType(String loansType){
+    public void showLoansByType(String loansType) {
         String finalUrl = HttpUrl
                 .parse("http://localhost:8080/demo_Web_exploded/loans")
                 .newBuilder()
@@ -210,27 +249,31 @@ public class informationController {
                 .toString();
 
         HttpClientUtil.runAsync(finalUrl, new Callback() {
-            @Override public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Platform.runLater(() ->{}
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                Platform.runLater(() -> {
+                        }
                 );
             }
 
-            @Override public void onResponse(@NotNull Call call, @NotNull Response response) {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) {
                 int status = response.code();
                 if (status == HttpServletResponse.SC_FORBIDDEN) {
-                    Platform.runLater(() -> {}
+                    Platform.runLater(() -> {
+                            }
                     );
                 } else if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         try {
                             List<LoanDTO> loanDTOS = getLoans(response.body().string());
-                            switch (loansType){
+                            switch (loansType) {
                                 case "borrower":
-                                    setLoansBorrowerTables(loanDTOS);
+                                    setLoansLonerTables(loanDTOS);
                                     loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                                 case "lender":
-                                    setLoansGiverTables(loanDTOS);
+                                    setLoansLenderTables(loanDTOS);
                                     loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
                                     break;
                             }
@@ -242,18 +285,22 @@ public class informationController {
             }
         });
     }
-//    public void showLoansAsLender(Collection<LoanDTO> loans) {
+
+    //    public void showLoansAsLender(Collection<LoanDTO> loans) {
 //        loansAsLender.setItems(FXCollections.observableArrayList(loans));
 //    }
-    public void updateClientUser(){
+    public void updateClientUser() {
+        updateUserViewer(bodyUser.getClientDTO());
         showData();
     }
-    public void setInformationDataForNewFile(){
-        setLoansBorrowerTables(null);
-        setLoansGiverTables(null);
+
+    public void setInformationDataForNewFile() {
+        setLoansLonerTables(null);
+        setLoansLenderTables(null);
         setTransactionTable();
     }
-    public void setLoansBorrowerTables(List<LoanDTO> loanDTOS)  {
+
+    public void setLoansLonerTables(List<LoanDTO> loanDTOS) {
         loansAsLoner.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -277,7 +324,8 @@ public class informationController {
         loansAsLoner.setItems(FXCollections.observableArrayList(loanDTOS));
 
     }
-    public void setLoansGiverTables(List<LoanDTO> loanDTOS) {
+
+    public void setLoansLenderTables(List<LoanDTO> loanDTOS) {
         loansAsLender.getColumns().clear();
         TableColumn<LoanDTO, String> idCol = new TableColumn<>("ID ");
         TableColumn<LoanDTO, String> ownerNameCol = new TableColumn<>("Owner");
@@ -301,6 +349,7 @@ public class informationController {
         loansAsLender.setItems(FXCollections.observableArrayList(loanDTOS));
 
     }
+
     public void setTransactionTable() {
         transactionTable.getColumns().clear();
 
@@ -315,13 +364,28 @@ public class informationController {
         yazCol.setCellValueFactory(new PropertyValueFactory<>("executeTime"));
         transactionTable.getColumns().addAll(amountCol, balanceBeforeCol, balanceAfterCol, yazCol);
     }
-    public void refreshMovementsData(Map<Integer,List<MovementDTO>> movements){
+
+    public void refreshMovementsData(Map<Integer, List<MovementDTO>> movements) {
         createTransactionTable(movements);
     }
-    public void refreshLoansBorrowerData(List<LoanDTO> loans){
-        setLoansBorrowerTables(loans);
+
+    public void refreshLoansLonerData(List<LoanDTO> loans) {
+        setLoansLonerTables(loans);
     }
-    public void refreshGiverLonerData(List<LoanDTO> loans){
-        setLoansGiverTables(loans);
+
+    public void refreshLenderLonerData(List<LoanDTO> loans) {
+        setLoansLenderTables(loans);
+    }
+
+    public void setDisable() {
+        amount.setDisable(true);
+        chargeButton.setDisable(true);
+        withdrawButton.setDisable(true);
+    }
+
+    public void setAble() {
+        amount.setDisable(false);
+        chargeButton.setDisable(false);
+        withdrawButton.setDisable(false);
     }
 }

@@ -48,16 +48,13 @@ public class paymentController {
         LoanDTO loan = loans.get(choosePayment.getValue());
         try {
             if (payAllCheckBox.isSelected()) {
-                //bodyUser.mainController.payAllBack(choosePayment.getValue());
                 payAllBack();
             } else if (loan.getStatus().equals(Status.RISK)) {
                 payRiskLoan(loan);
             } else {
                 payBackNextPayment(loan);
-//                bodyUser.mainController.payBackNextPayment(choosePayment.getValue(),loan.getNextPaymentAmount(),loan.getNextPaymentTime());
             }
             paidMassage.setText("The payment was successfully made");
-        //    bodyUser.updateClientInfo();
             acceptButton.setDisable(true);
             amountToPay.setDisable(true);
             amountToPay.clear();
@@ -71,8 +68,21 @@ public class paymentController {
         }
 
     }
+    public void setDisable() {
+        amountToPay.setDisable(true);
+        acceptButton.setDisable(true);
+        choosePayment.setDisable(true);
+        payAllCheckBox.setDisable(true);
+
+    }
+    public void setAble() {
+        amountToPay.setDisable(false);
+        acceptButton.setDisable(false);
+        choosePayment.setDisable(false);
+        payAllCheckBox.setDisable(false);
+    }
     @FXML void clientChosePayment(ActionEvent event) {
-        if(choosePayment.getValue()!= null) {
+        if (choosePayment.getValue() != null) {
             paidMassage.setText("");
             LoanDTO loan = loans.get(choosePayment.getValue());
             double totalToCompleteLoan = loan.getTotalMoneyForPayingBack() - loan.getAmountPaidBack();
@@ -81,13 +91,11 @@ public class paymentController {
             payAllLabel.setText("the amount left to pay all back at once is:" + totalToCompleteLoan);
             payAllCheckBox.setDisable(false);
             amountToPay.setDisable(true);
-            int nextPaymentTime =loan.getNextPaymentTime(homePageController.getCurrentYaz());
-            if(loan.getStatus().equals(Status.RISK))
-            {
+            int nextPaymentTime = loan.getNextPaymentTime(homePageController.getCurrentYaz());
+            if (loan.getStatus().equals(Status.RISK)) {
                 acceptButton.setDisable(false);
                 amountToPay.setDisable(false);
-            }
-            else if(nextPaymentTime== homePageController.getCurrentYaz()&&!loan.getPayments().get(nextPaymentTime).isPaid())
+            } else if (nextPaymentTime == homePageController.getCurrentYaz() && !loan.getPayments().get(nextPaymentTime).isPaid())
                 acceptButton.setDisable(false);
             else acceptButton.setDisable(true);
         }
@@ -123,22 +131,18 @@ public class paymentController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         paidMassage.setText("The payment was successfully made");
-                    //    bodyUser.updateClientInfo();
                         acceptButton.setDisable(true);
                         amountToPay.setDisable(true);
                         amountToPay.clear();
                     });
                 } else {
                     Platform.runLater(() ->{
-                        payAllLabel.setText("NOTICE: you do not have enough money ");
+                        payAllLabel.setText("NOTICE: you do not have enough money");
                     });
                 }
             }
         });
     }
-   // public void setBodyUser(bodyUser bodyUser) {
-   //     this.bodyUser = bodyUser;
-  //  }
     public void payRiskLoan(LoanDTO loanDTO) throws Exception {
         String amountString = amountToPay.getText();
         if(amountString!=null && !amountString.equals(""))

@@ -1,7 +1,9 @@
 package servlet;
 import com.google.gson.Gson;
+import dto.ClientDTO;
 import dto.LoanDTO;
 import dto.MovementDTO;
+import dto.clientStateDTO;
 import engine.BankInterface;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,24 +35,41 @@ public class clientRefreshServlet extends HttpServlet {
             try {
                 BankInterface bank = ServletUtils.getBank(getServletContext());
                 synchronized (bank) {
+                    Integer timeToLookBackAt = 0;
+                    int yaz = bank.getWorldTime();
+                    List<String> categories = bank.getCategories();
+                    Double balance;
+                    Map<Integer, List<MovementDTO>> movements;
+                    List<LoanDTO> loansLender;
+                    List<LoanDTO> loansBorrower;
                     Gson gson = new Gson();
                     int version = bank.getVersion();
                     if (version != versionClient) {
-                        int yaz = bank.getWorldTime();
-                        List<String> categories = bank.getCategories();
-                        Double balance = bank.getCurrBalance(clientName);
-                        Map<Integer, List<MovementDTO>> movements = bank.getMovementsByClientName(clientName);
-                        List<LoanDTO> loansLender = bank.getLenderLoansByName(clientName);
-                        List<LoanDTO> loansBorrower = bank.getBorrowerLoansByName(clientName);
-                        Integer lookingBack = 0;
-                        if (bank.getRewind())
-                            lookingBack = bank.getLookingBack();
-                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version,lookingBack);
+                        if (bank.getRewind()) {
+                        timeToLookBackAt = bank.getLookingBack();
+                        clientStateDTO state = bank.getClientForRewind(clientName,timeToLookBackAt);
+                            ClientDTO client = state.getClient();
+
+                            balance = client.getCurrBalance();
+                            movements = client.getMovements();
+                            loansLender = client.getLoansAsGiver();
+                            loansBorrower = client.getLoansAsBorrower();
+                        }
+
+                        else {
+                            balance = bank.getCurrBalance(clientName);
+                            movements = bank.getMovementsByClientName(clientName);
+                            loansLender = bank.getLenderLoansByName(clientName);
+                            loansBorrower = bank.getBorrowerLoansByName(clientName);
+                        }
+
+                        infoForClient info = new infoForClient(categories, balance, yaz, movements, loansLender, loansBorrower,version,timeToLookBackAt);
                         String json = gson.toJson(info);
                         response.addHeader("NeedToRefresh", "true");
                         response.getWriter().println(json);
                         response.getWriter().flush();
-                    } else {
+
+                } else {
                         response.addHeader("NeedToRefresh", "false");
                         response.addHeader("version", String.valueOf(version));
                     }

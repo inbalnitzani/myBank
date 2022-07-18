@@ -30,12 +30,12 @@
                   <RowConstraints maxHeight="507.0" minHeight="10.0" prefHeight="507.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Label prefHeight="43.0" prefWidth="97.0" text="Client Name:">
+                  <Label prefHeight="43.0" prefWidth="108.0" text="Client Name:">
                      <font>
                         <Font size="15.0" />
                      </font></Label>
                   <Label fx:id="clientName" prefHeight="30.0" prefWidth="197.0" GridPane.columnIndex="1" />
-                  <Label prefHeight="30.0" prefWidth="269.0" text="Current YAZ:" GridPane.columnIndex="4">
+                  <Label prefHeight="51.0" prefWidth="89.0" text="Current YAZ:" GridPane.columnIndex="4">
                      <font>
                         <Font size="15.0" />
                      </font></Label>
@@ -44,9 +44,10 @@
                     <tabs>
                       <Tab text="Insert New File">
                         <content>
-                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="483.0" prefWidth="720.0">
                                  <children>
-                                    <Button fx:id="insertFile" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertFileToSystem" prefHeight="11.0" prefWidth="575.0" text="Insert New File With Loans" />
+                                    <Button fx:id="insertFile" contentDisplay="CENTER" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#insertFileToSystem" prefHeight="25.0" prefWidth="707.0" text="Insert New File With Loans" />
+                                    <Label fx:id="errorFile" alignment="TOP_LEFT" layoutX="14.0" layoutY="47.0" prefHeight="431.0" prefWidth="708.0" />
                                  </children>
                               </AnchorPane>
                         </content>

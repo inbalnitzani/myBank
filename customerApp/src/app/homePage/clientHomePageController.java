@@ -36,6 +36,7 @@ public class clientHomePageController {
     @FXML private Label clientName;
     @FXML private Label currentYaz;
     @FXML private Label accountBalance;
+    @FXML private Label errorFile;
     private List<String> categories;
     private mainScreenClientController mainController;
     private SimpleIntegerProperty yazProperty;
@@ -49,7 +50,6 @@ public class clientHomePageController {
     @FXML private inlayController inlayComponentController;
     private int version;
     private Timer timer;
-
 
     public int getCurrentYaz() {
         return Integer.parseInt(currentYaz.getText());
@@ -87,35 +87,23 @@ public class clientHomePageController {
         HttpClientUtil.runAsync(finalUrl, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-//                    Platform.runLater(() ->
-//                            msgLabel.setText("Failure!")
-//                    );
+                Platform.runLater(() -> {
+                    errorFile.setText(e.getMessage());
+                });
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) {
-//                    int status =response.code();
-//                    if (status != HttpServletResponse.SC_OK) {
-//                        if(status == HttpServletResponse.SC_FORBIDDEN){
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText("You must enter a name!")
-//                            );
-//                        }else {
-//                            Platform.runLater(() ->
-//                                    msgLabel.setText(userNameTF.getText()+" is already in system. Please enter a different name")
-//                            );
-//                        }
-//                    } else {
-//                        Platform.runLater(() ->
-//                                {
-//                                    try {
-//                                        mainController.loginClientSuccess(userNameTF.getText());
-//                                    } catch (IOException e) {
-//                                        e.printStackTrace();
-//                                    }
-//                                }
-//                        );
-//                    }
+                int code = response.code();
+                if (code == HttpServletResponse.SC_OK) {
+                    Platform.runLater(() ->
+                            errorFile.setText("File loaded successfully!")
+                    );
+                } else {
+                    Platform.runLater(() ->
+                            errorFile.setText("ERROR! Failed to read file. " + response.message())
+                    );
+                }
             }
         });
     }
@@ -167,6 +155,8 @@ public class clientHomePageController {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+            if (categories == null)
+                categories = new ArrayList<>();
             return categories;
         }
     }
@@ -234,10 +224,31 @@ public class clientHomePageController {
         this.accountBalance.setText(String.valueOf(balance));
     }
     public void startDataRefresher() {
-        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanGiver,this::showLoanBorrower,this::showVersion);
+        dataRefresher refresher = new dataRefresher(this::showCategories, this::showBalance, this::showYaz, this::showMovements, this::showLoanLender,this::showLoanLoner,this::showVersion,this::setRewind);
         refresher.setHomePageController(this);
         timer = new Timer();
         timer.schedule(refresher, 0, 2000);
+    }
+    public void setRewind(Integer lookingBack){
+        Platform.runLater(()->{
+            if (lookingBack != 0) {
+                currentYaz.setText("REWIND looking back on yaz: " + lookingBack);
+                insertFile.setDisable(true);
+                createLoanComponentController.setDisable();
+                informationComponentController.setDisable();
+                paymentComponentController.setDisable();
+                inlayComponentController.setDisable();
+            }
+            else {
+                insertFile.setDisable(false);
+                createLoanComponentController.setAble();
+                informationComponentController.setAble();
+                paymentComponentController.setAble();
+                inlayComponentController.setAble();
+            }
+
+
+        });
     }
     public void showCategories(List<String> newCategories) {
         Platform.runLater(() -> {
@@ -253,9 +264,9 @@ public class clientHomePageController {
         });
     }
     public void showYaz(int yaz) {
-        Platform.runLater(() -> {
-            currentYaz.setText(String.valueOf(yaz));
-        });
+        Platform.runLater(() ->
+           currentYaz.setText(String.valueOf(yaz))
+        );
     }
     public void showVersion(int version) {
         Platform.runLater(() ->
@@ -267,18 +278,15 @@ public class clientHomePageController {
             accountBalance.setText(String.valueOf(balance))
         );
     }
-    public void showLoanGiver(List<LoanDTO> loanDTOS) {
+    public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshGiverLonerData(loanDTOS);
+            informationComponentController.refreshLenderLonerData(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
         });
     }
-    public void showLoanBorrower(List<LoanDTO> loanDTOS) {
+    public void showLoanLoner(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
-            informationComponentController.refreshLoansBorrowerData(loanDTOS);
-            paymentComponentController.refreshPayment(loanDTOS);
-
-//            paymentComponentController.showPaymentsControl();
-//            paymentComponentController.updateLonerLoans(loanDTOS);
+            informationComponentController.refreshLoansLonerData(loanDTOS);
         });
     }
 }
