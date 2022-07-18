@@ -89,12 +89,12 @@ public class Bank implements Serializable, engine.BankInterface {
         return clients.get(clientName).getCurrBalance();
     }
 
-    public boolean getXMLFile(String filePath) throws CategoriesException, JAXBException, FileNotFoundException, NamesException, CustomerException, XmlException, PaceException, NegativeBalanceException, NegativeLoanCapitalException, NegativeTimeException, InterestException, IdException {
+    public boolean getXMLFile(String filePath) throws Exception {
         boolean readFile = false;
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(),filePath);
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(),filePath,waitingLoans,activeLoans);
         //convertToBank(info);
         time = 1;
         engine.Global.setWorldTime(1);
@@ -237,12 +237,6 @@ public class Bank implements Serializable, engine.BankInterface {
             return (new ConvertDTO().createListLoanDto(res));
         }
 
-    /* public void convertToBank(AbsDescriptor info) {
-            setCategories(info.getAbsCategories());
-            setClients(info.getAbsCustomers());
-            setLoans(info.getAbsLoans());
-        }
-         */
     public void addNewDataToBank(AbsDescriptor info, String clientName){
         for (String category:info.getAbsCategories().getAbsCategory()){
             if(!categories.contains(category))
@@ -450,11 +444,11 @@ public class Bank implements Serializable, engine.BankInterface {
     public void addNewUserToBank(String name){
         clients.put(name,new Client(name,0));
     }
-    public void addNewXMLFile(String filePath, String clientName) throws FileNotFoundException, NamesException, NegativeLoanCapitalException, CustomerException, PaceException, NegativeTimeException, CategoriesException, XmlException, NegativeBalanceException, InterestException, IdException, JAXBException {
+    public void addNewXMLFile(String filePath, String clientName) throws Exception {
         InputStream inputStream = new FileInputStream(filePath);
         AbsDescriptor info = deserializeFrom(inputStream);
         File file = new File();
-        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), filePath);
+        file.checkFile(info.getAbsCategories().getAbsCategory(), info.getAbsLoans().getAbsLoan(), filePath,waitingLoans,activeLoans);
         addNewDataToBank(info, clientName);
         version++;
     }
@@ -502,21 +496,13 @@ public class Bank implements Serializable, engine.BankInterface {
                     percentage = lender.getPercentage();
                     fund = totalFund * percentage;
                     sellerPayBack = lender;
-
-
                 }
             }
-
             seller.addMoneyToAccount(fund);
             buyer.withdrawingMoney(fund);
-
             lenders.remove(sellerPayBack);
             lenders.add(new PayBack(buyer,fund,percentage));
             version++;
-
-
-
-
         }
     }
 

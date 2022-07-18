@@ -12,8 +12,6 @@ import utils.ServletUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
-import java.util.Set;
-
 
 @WebServlet(name = "categoriesServlet", urlPatterns = "/categories")
 public class categoriesServlet extends HttpServlet {

@@ -31,7 +31,6 @@ import java.util.function.Consumer;
         private Consumer <List<LoanDTO>> loanLenderConsumer;
         private Consumer <List<LoanDTO>> loanLonerConsumer;
         private Consumer <List<LoanDTO>> loanToBuyConsumer;
-
         private Consumer<Integer> version;
         private Consumer<Integer> lookingBack;
 

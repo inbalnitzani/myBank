@@ -220,7 +220,6 @@ public class paymentController {
                 if (status == HttpServletResponse.SC_OK) {
                     Platform.runLater(() -> {
                         paidMassage.setText("The payment was successfully made");
-//                        bodyUser.updateClientInfo();
                         acceptButton.setDisable(true);
                         amountToPay.setDisable(true);
                         amountToPay.clear();

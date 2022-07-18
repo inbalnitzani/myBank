@@ -105,9 +105,17 @@ public class clientHomePageController {
                             errorFile.setText("File loaded successfully!")
                     );
                 } else {
-                    Platform.runLater(() ->
-                            errorFile.setText("ERROR! Failed to read file. " + response.message())
-                    );
+                    Platform.runLater(() -> {
+                        String responseBody = null;
+                        try {
+                            responseBody = response.body().string();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        if(responseBody.equals("null"))
+                            responseBody="";
+                        errorFile.setText("ERROR! Failed to read file. " + responseBody);
+                    });
                 }
             }
         });
@@ -190,15 +198,6 @@ public class clientHomePageController {
                             categories.addAll(allCategories);
                             inlayComponentController.setCategoriesOptions();
                             createLoanComponentController.setCategories();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    });
-                } else {
-                    Platform.runLater(() -> {
-                        String responseBody = null;
-                        try {
-                            responseBody = response.body().string();
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -290,13 +289,13 @@ public class clientHomePageController {
     public void showLoanLender(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLenderLonerData(loanDTOS);
-            paymentComponentController.refreshPayment(loanDTOS);
             saleLoansComponentController.setLoansLenderTables(loanDTOS.stream().filter(loanDTO -> !loanDTO.getListedForSale()).collect(Collectors.toList()));
         });
     }
     public void showLoanLoner(List<LoanDTO> loanDTOS) {
         Platform.runLater(() -> {
             informationComponentController.refreshLoansLonerData(loanDTOS);
+            paymentComponentController.refreshPayment(loanDTOS);
         });
     }
 }

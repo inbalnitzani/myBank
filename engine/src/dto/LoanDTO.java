@@ -10,7 +10,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class LoanDTO {
-    //DATA MEMBERS
     private String id;
     private String owner;
     private String category;
@@ -44,9 +43,6 @@ public class LoanDTO {
         this.finalAmount=capital*(interestRate/100+1);
         this.listedForSale = loan.getListedForSale();
         setPayBacks(loan.getPayBacks());
-//        int lastPay= loan.getActualLastPaymentTime();
-//        if(lastPay==0) {
-//            lastPay= loan.getLastPaymentTime();}
         setPayments(loan.getPayments());
     }
 
